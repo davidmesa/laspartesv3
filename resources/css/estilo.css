@@ -1,0 +1,1562 @@
+
+img {
+    border: 0 none;
+}
+textarea {
+    resize: none;
+}
+h1 {
+    font-family: Impact,Charcoal,sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+h2 {
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal; 
+    margin: 0;
+    padding: 0;
+}
+h3 {
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+h4 {
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+h5 {
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+img.floatLeft {
+    float: left;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+}
+img.floatRight {
+    float: right;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+.borde_superior {
+    background-image: url("../images/template/borde/borde_superior.gif");
+    background-position: center bottom;
+    background-repeat: repeat-x;
+    height: 10px;
+}
+.borde_inferior {
+    background-image: url("../images/template/borde/borde_inferior.gif");
+    background-position: center top;
+    background-repeat: repeat-x;
+    height: 10px;
+}
+.borde_derecho {
+    background-image: url("../images/template/borde/borde_derecho.gif");
+    background-position: left center;
+    background-repeat: repeat-y;
+    width: 10px;
+}
+.borde_izquierdo {
+    background-image: url("../images/template/borde/borde_izquierdo.gif");
+    background-position: right center;
+    background-repeat: repeat-y;
+    width: 10px;
+}
+.esquina_sup_der {
+    background-image: url("../images/template/borde/esquina_sup_der.gif");
+    background-position: center bottom;
+    background-repeat: no-repeat;
+}
+.esquina_inf_der {
+    background-image: url("../images/template/borde/esquina_inf_der.gif");
+    background-position: left center;
+    background-repeat: no-repeat;
+}
+.esquina_inf_izq {
+    background-image: url("../images/template/borde/esquina_inf_izq.gif");
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+.esquina_sup_izq {
+    background-image: url("../images/template/borde/esquina_sup_izq.gif");
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+.banner_fondo {
+    background-image: url("../images/template/header/fondo_banner.gif");
+    background-position: right top;
+    background-repeat: no-repeat;
+}
+.banner_logo {
+    text-align: center;
+    vertical-align: middle;
+}
+.banner_twitter_facebook {
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+}
+.banner_lema {
+    text-align: center;
+    vertical-align: middle;
+}
+.banner_links_superiores {
+    padding-top: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+.general_textarea {
+    border: medium none;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    padding: 5px;
+    width: 97%;
+}
+.general_link a {
+    color: #ED1C24;
+}
+.general_link a:visited {
+    color: #ED1C24;
+}
+.general_link a:link {
+    color: #ED1C24;
+}
+.general_link a:hover {
+    color: #ED1C24;
+}
+.general_link_blanco a {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.general_link_blanco a:visited {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.general_link_blanco a:link {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.general_link_blanco a:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+.navegacion_barra {
+    background-image: url("../images/template/navegacion/fondo.gif");
+    background-position: center top;
+    background-repeat: repeat-x;
+    color: #000000;
+    text-align: center;
+    vertical-align: middle;
+}
+.navegacion_barra a {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.navegacion_barra a:visited {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.navegacion_barra a:link {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.navegacion_barra a:hover {
+    color: #231F20;
+    text-decoration: none;
+}
+.navegacion_barra_selected {
+    background-image: url("../images/template/navegacion/fondo.gif");
+    background-position: center top;
+    background-repeat: repeat-x;
+    color: #231F20;
+    padding-left: 2px;
+    text-align: center;
+    vertical-align: middle;
+}
+.navegacion_barra_selected a {
+    color: #231F20;
+    text-decoration: none;
+}
+.navegacion_barra_selected a:visited {
+    color: #231F20;
+    text-decoration: none;
+}
+.navegacion_barra_selected a:link {
+    color: #231F20;
+    text-decoration: none;
+}
+.navegacion_barra_selected a:hover {
+    color: #231F20;
+    text-decoration: none;
+}
+.busqueda {
+    background-color: #231F20;
+    text-align: center;
+    vertical-align: middle;
+}
+.busqueda_cuadro_texto {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #231F20;
+    border-style: solid;
+    border-width: 1px;
+    color: #000000;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: normal;
+    height: 30px;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    width: 400px;
+}
+.busqueda_boton {
+    background: none repeat scroll 0 0 #ED1C24;
+    border-color: #ED1C24;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-family: Impact,Charcoal,sans-serif;
+    font-size: 17px;
+    height: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+.busqueda_boton:hover {
+    color: #231F20;
+    cursor: pointer;
+}
+.breadcrumbs {
+    color: #626366;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-top: 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+.breadcrumbs a:link {
+    color: #626366;
+    text-decoration: underline;
+}
+.breadcrumbs a:visited {
+    color: #626366;
+    text-decoration: underline;
+}
+.breadcrumbs a:hover {
+    color: #626366;
+    text-decoration: underline;
+}
+.breadcrumbs a:active {
+    color: #626366;
+    text-decoration: underline;
+}
+.footer_separador_principal {
+    background-color: #B7B7B7;
+}
+.footer {
+    background-color: #E7E7E7;
+    padding: 10px;
+}
+.footer_panel_izq {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    vertical-align: top;
+}
+.footer_panel_der {
+    border-left: 2px solid #000000;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+.footer_copyright {
+    color: #626366;
+    padding: 10px;
+    text-align: center;
+    vertical-align: top;
+}
+.box_fondo {
+    background-color: #E7E7E7;
+}
+.box_borde_der {
+    background-image: url("../images/template/box/borde_derecho.gif");
+    background-position: left center;
+    background-repeat: repeat-y;
+    width: 14px;
+}
+.box_borde_izq {
+    background-image: url("../images/template/box/borde_izquierdo.gif");
+    background-position: right center;
+    background-repeat: repeat-y;
+    width: 14px;
+}
+.box_borde_inf {
+    background-image: url("../images/template/box/borde_inferior.gif");
+    background-position: center top;
+    background-repeat: repeat-x;
+    height: 14px;
+}
+.box_borde_sup {
+    background-image: url("../images/template/box/borde_superior.gif");
+    background-position: center bottom;
+    background-repeat: repeat-x;
+    height: 14px;
+}
+.box_esquina_inf_der {
+    background-image: url("../images/template/box/esquina_inf_der.gif");
+    background-position: left top;
+    background-repeat: no-repeat;
+    height: 14px;
+}
+.box_esquina_inf_izq {
+    background-image: url("../images/template/box/esquina_inf_izq.gif");
+    background-position: center top;
+    background-repeat: no-repeat;
+    height: 14px;
+}
+.box_esquina_sup_der {
+    background-image: url("../images/template/box/esquina_sup_der.gif");
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    height: 14px;
+}
+.box_titulo {
+    background-image: url("../images/template/box/tab.gif");
+    background-position: right center;
+    background-repeat: no-repeat;
+    color: #000000;
+    padding-left: 5px;
+    text-align: left;
+    vertical-align: top;
+}
+.box_paginacion {
+    color: #000000;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+.box_paginacion a {
+    color: #ED1C24;
+}
+.box_paginacion a:visited {
+    color: #ED1C24;
+}
+.box_paginacion a:link {
+    color: #ED1C24;
+}
+.box_paginacion a:hover {
+    color: #ED1C24;
+}
+.box_ordenamiento {
+    color: #000000;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    padding-right: 25px;
+    text-align: right;
+    vertical-align: middle;
+}
+.box_ordenamiento a {
+    color: #ED1C24;
+}
+.box_ordenamiento a:visited {
+    color: #ED1C24;
+}
+.box_ordenamiento a:link {
+    color: #ED1C24;
+}
+.box_ordenamiento a:hover {
+    color: #ED1C24;
+}
+.listado_autopartes {
+    padding: 5px;
+}
+.listado_autopartes_selected {
+    background-color: #E7E7E7;
+    padding: 5px;
+}
+.general_fondo_impar {
+    background-color: #E7E7E7;
+}
+.listado_autopartes_btn_compra {
+    background: url("../images/autopartes/etiqueta_precio.png") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    height: 33px;
+    padding-bottom: 5px;
+    text-align: right;
+    width: 110px;
+}
+.titulo_fondo {
+    background: none repeat scroll 0 0 #ED1C24;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 21px;
+    padding-left: 5px;
+    text-align: left;
+    vertical-align: middle;
+}
+.titulo_fondo_der {
+    background-image: url("../images/template/box/punta_der.jpg");
+    background-position: left center;
+    background-repeat: no-repeat;
+    height: 21px;
+}
+.titulo_fondo_izq {
+    background-image: url("../images/template/box/punta_izq.jpg");
+    background-position: right center;
+    background-repeat: no-repeat;
+    height: 21px;
+}
+.titulo_fondo_centrado {
+    background: none repeat scroll 0 0 #ED1C24;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 21px;
+    text-align: center;
+    vertical-align: middle;
+}
+.filtros_categoria {
+    color: #000000;
+    padding-left: 25px;
+    padding-top: 5px;
+    text-align: left;
+}
+.filtros_categoria_selected {
+    font-weight: bold;
+}
+.filtros_categoria a:link {
+    color: #000000;
+    text-decoration: underline;
+}
+.filtros_categoria a:visited {
+    color: #000000;
+    text-decoration: underline;
+}
+.filtros_categoria a:hover {
+    color: #000000;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.filtros_categoria a:active {
+    color: #000000;
+    text-decoration: underline;
+}
+.general_separador_transparente_borde_sup {
+    border-top: 1px solid #626366;
+    height: 10px;
+}
+.general_borde_inferior {
+    border-bottom: 1px solid #626366;
+}
+.general_separador_transparente {
+    height: 15px;
+}
+.general_texto_importante {
+    color: #ED1C24;
+}
+.general_texto_secundario {
+    color: #626366;
+}
+.general_texto_secundario_tab {
+    color: #626366;
+    font-weight: bold;
+    text-decoration: none;
+}
+.general_boton_primario {
+    background: none repeat scroll 0 0 #ED1C24;
+    border-color: #ED1C24;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-family: Impact,Charcoal,sans-serif;
+    font-size: 17px;
+    height: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+.general_boton_primario:hover {
+    color: #231F20;
+    cursor: pointer;
+}
+.general_boton_secundario {
+    background: none repeat scroll 0 0 #ED1C24;
+    border-color: #ED1C24;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 13px;
+    height: 23px;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+.general_boton_secundario:hover {
+    cursor: pointer;
+}
+.box_fondo_contenido {
+    background-color: #FFFFFF;
+}
+.box_fondo_contenido.limites {
+    padding: 0 35px;
+}
+.autoparte_establecimientos {
+    color: #626366;
+}
+.autoparte_establecimientos_selected {
+    background-color: #E7E7E7;
+    color: #000000;
+}
+.autoparte_establecimientos_precio {
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+.autoparte_descripcion {
+    background-color: #E7E7E7;
+    padding: 10px;
+}
+.listado_establecimientos_btn_detalle {
+    background-color: #ED1C24;
+    background-image: url("../images/establecimientos/boton_go.gif");
+    background-position: right center;
+    background-repeat: no-repeat;
+    border: medium none;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    height: 25px;
+    padding: 5px;
+    text-align: left;
+    vertical-align: middle;
+    width: 95px;
+}
+.establecimiento_texto_ficha {
+    padding: 2px;
+    text-align: left;
+    vertical-align: middle;
+}
+.establecimiento_comentarios {
+    background-color: #231F20;
+}
+.establecimiento_comentarios_texto_form {
+    color: #FFFFFF;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    text-align: left;
+    vertical-align: middle;
+}
+.establecimiento_comentarios_boton_form {
+    padding-bottom: 5px;
+    padding-top: 5px;
+    text-align: right;
+    vertical-align: middle;
+}
+.establecimiento_comentarios_boton_form:hover {
+    cursor: pointer;
+}
+.establecimiento_comentarios_califica_form {
+    padding: 5px;
+    text-align: left;
+    vertical-align: middle;
+}
+.establecimiento_comentarios_texto {
+    color: #626366;
+    padding: 5px;
+    text-align: left;
+}
+.establecimiento_comentarios_fecha {
+    color: #626366;
+    padding: 5px;
+    text-align: right;
+}
+.carrito_compras_listado {
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+.carrito_compras_listado_selected {
+    background-color: #E7E7E7;
+}
+.carrito_compras_total {
+    padding: 5px;
+    text-align: left;
+    vertical-align: middle;
+}
+.carrito_compras_total_numeros {
+    padding: 5px 20px 5px 5px;
+    text-align: right;
+    vertical-align: middle;
+}
+.carrito_compras_btn_comprar {
+    background: url("../images/botones/btn_comprar.png") no-repeat scroll 0 0 transparent;
+    border-style: none;
+    display: block;
+    height: 74px;
+    width: 150px;
+    cursor: pointer;
+}
+.carrito_compras_btn_comprar:hover {
+    background-position: 0 -74px;
+}
+.carrito_compras_btn_comprar span {
+    position: absolute;
+    top: -999em;
+}
+.micuenta_btn_login {
+    background: none repeat scroll 0 0 #ED1C24;
+    border-color: #ED1C24;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0;
+    padding: 3px;
+    text-align: center;
+    vertical-align: middle;
+}
+.general_cuadro_texto {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #231F20;
+    border-style: solid;
+    border-width: 1px;
+    color: #000000;
+    float: left;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    height: 22px;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+}
+.general_formulario_texto {
+    background-color: #231F20;
+    color: #FFFFFF;
+}
+.aprende_texto_home {
+    background-color: #0E4080;
+    color: #FFFFFF;
+    padding: 15px;
+}
+.inicio_sesion_formulario {
+    padding: 5px 10px 5px 5px;
+    vertical-align: middle;
+}
+.registro_formulario_texto {
+    padding-left: 10px;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+.b1, .b2, .b3, .b4 {
+    display: block;
+    font-size: 2px;
+    overflow: hidden;
+}
+.b1 {
+    background: none repeat scroll 0 0 #FFFFFF;
+    height: 1px;
+    margin: 0 5px;
+}
+.b2 {
+    background: none repeat scroll 0 0 #FF0000;
+    border-left: 2px solid #FF0000;
+    border-right: 2px solid #FF0000;
+    height: 1px;
+    margin: 0 3px;
+}
+.b3 {
+    background: none repeat scroll 0 0 #FF0000;
+    border-left: 2px solid #FF0000;
+    border-right: 2px solid #FF0000;
+    height: 1px;
+    margin: 0 2px;
+}
+.b4 {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-left: 2px solid #FF0000;
+    border-right: 2px solid #FF0000;
+    height: 1px;
+    margin: 0 1px;
+}
+.contentb {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-left: 2px solid #FF0000;
+    border-right: 2px solid #FF0000;
+}
+.contentb div {
+    margin-left: 5px;
+}
+.tab-selected {
+    text-decoration: none;
+}
+.tallerenlinea_btn_preguntar {
+    background: url("../images/botones/btn_preguntar.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 70px;
+    width: 70px;
+}
+.tallerenlinea_btn_preguntar:hover {
+    background-position: 0 -70px;
+}
+.tallerenlinea_btn_preguntar span {
+    position: absolute;
+    top: -999em;
+}
+.tallerenlinea_btn_responder {
+    background: url("../images/botones/btn_responder.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 70px;
+    width: 70px;
+}
+.tallerenlinea_btn_responder:hover {
+    background-position: 0 -68px;
+}
+.tallerenlinea_btn_responder span {
+    position: absolute;
+    top: -999em;
+}
+.general_texto_centrado {
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+.tallerenlinea_texto_pregunta {
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+.general_separador_transparente_borde_sup2 {
+    border-top: 3px solid #626366;
+    height: 10px;
+}
+.general_btn_megusta {
+    background: url("../images/botones/btn_megusta.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 52px;
+    width: 51px;
+}
+.general_btn_megusta:hover {
+    background-position: 0 -52px;
+}
+.general_btn_megusta span {
+    position: absolute;
+    top: -999em;
+}
+.general_btn_nomegusta {
+    background: url("../images/botones/btn_nomegusta.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 52px;
+    width: 51px;
+}
+.general_btn_nomegusta:hover {
+    background-position: 0 -52px;
+}
+.general_btn_nomegusta span {
+    position: absolute;
+    top: -999em;
+}
+.general_lista {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #231F20;
+    border-style: solid;
+    border-width: 1px;
+    color: #000000;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    height: 25px;
+    padding-bottom: 0.1em;
+    padding-top: 0.1em;
+}
+.micuenta_input_textbox {
+    float: left;
+}
+.micuenta_div_input {
+    height: 30px;
+    overflow: hidden;
+    position: relative;
+    width: 100px;
+}
+.micuenta_input_button {
+    position: absolute;
+    top: 0;
+    width: 100px;
+}
+.micuenta_input_hidden {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.aprende_listado_consejos {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.general_box_borde_derecho {
+    border-right: 2px solid #626366;
+}
+.titulo_fondo_selected {
+    background: none repeat scroll 0 0 #000000;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 21px;
+    padding-left: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+.titulo_fondo_der_selected {
+    background-image: url("../images/template/box/punta_der_negro.gif");
+    background-position: left center;
+    background-repeat: no-repeat;
+    height: 21px;
+}
+.titulo_fondo_izq_selected {
+    background-image: url("../images/template/box/punta_izq_negro.gif");
+    background-position: right center;
+    background-repeat: no-repeat;
+    height: 21px;
+}
+.titulo_fondo_medio_negro_rojo {
+    background-image: url("../images/template/box/medio_negro_rojo.gif");
+    background-position: right center;
+    background-repeat: no-repeat;
+    height: 21px;
+    width: 12px;
+}
+.titulo_fondo_medio_rojo_negro {
+    background-image: url("../images/template/box/medio_rojo_negro.gif");
+    background-position: right center;
+    background-repeat: no-repeat;
+    height: 21px;
+    width: 12px;
+}
+.titulo_fondo_medio_rojo_rojo {
+    background-image: url("../images/template/box/medio_rojo_rojo.gif");
+    background-position: right center;
+    background-repeat: no-repeat;
+    height: 21px;
+    width: 12px;
+}
+.boton_link {
+    background-color: transparent;
+    border: 0 none;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+}
+.home_carrito {
+    background-image: url("../images/home/Carrito.png");
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+.home_carrito a:link {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+.home_carrito a:visited {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+.home_carrito a:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+.home_carrito a:active {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+#link-sugerencia {
+    background: url("../images/template/sugerencias/sugerencias_btn.png") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 138px;
+    left: 0;
+    overflow: hidden;
+    position: fixed !important;
+    top: 30%;
+    width: 26px;
+    z-index: 99999;
+}
+#link-sugerencia:hover {
+    background-position: -26px 0;
+}
+.general_texto_muy_importante {
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+}
+.titulo-banner {
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+.link_banner a:link {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+.link_banner a:visited {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+.link_banner a:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+.link_banner a:active {
+    color: #FFFFFF;
+    text-decoration: underline;
+}
+div#home_fondo {
+    background: url("../images/home/fondo.jpg") repeat-x scroll center top #ED1C24;
+    height: 100%;
+}
+.footer_copyright_home {
+    color: #FFFFFF;
+    padding: 20px;
+    text-align: center;
+    vertical-align: top;
+}
+.header_space {
+    position: relative;
+}
+.logo {
+    background: url("../../resources/images/home/logo.png") no-repeat scroll 40px center white;
+    border-bottom: 2px solid #505050;
+    height: 93px;
+    width: 960px;
+}
+.login-form {
+    background-color: #505050;
+    font-family: "Lucida Sans";
+    font-size: 12px;
+    height: 103px;
+    left: 65%;
+    position: absolute;
+    top: 0;
+    width: 281px;
+}
+table.login-form-table {
+    margin: 12px 10px;
+    width: 261px;
+}
+table.login-form-table a, table.login-form-table a:active, table.login-form-table a:hover {
+    color: white;
+}
+table.form_registro {
+    margin-top: 65px;
+    width: 960px;
+}
+h3.titulo {
+    border-bottom: 2px solid #505050;
+    font-family: "Impact";
+    font-size: 28px;
+    font-weight: bold;
+}
+td.left, td.right {
+    width: 50%;
+}
+td.left {
+    padding: 25px 40px 80px 30px;
+    vertical-align: top;
+}
+td.left h3 {
+    font-family: "Impact";
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 36px;
+}
+td.left p {
+    font-family: "Lucida Sans";
+    font-size: 15px;
+    text-align: justify;
+}
+td.left h3 span.grande {
+    font-size: 33px;
+}
+td.right {
+    border-left: 2px solid #505050;
+    padding: 20px 15px 15px 20px;
+}
+#formulario_registrar_usuario td.general_formulario_texto {
+    background-color: white;
+    color: black;
+    height: 25px;
+    padding: 3px 0;
+}
+br {
+    clear: both;
+}
+input.error {
+    border: 1px solid red;
+}
+label {
+    float: left;
+    font-family: "Lucida Sans";
+    font-size: 12px;
+}
+label.error {
+    background: url("../../resources/images/template/iconos/wrong-small.gif") no-repeat scroll left center white;
+    color: red;
+    height: 16px;
+    margin: 6px 0.3em;
+    padding-left: 18px;
+}
+label.valid {
+    background: url("../../resources/images/template/iconos/check-small.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 16px;
+    margin: 6px 0.3em;
+    padding-left: 0;
+    width: 16px;
+}
+div.timeline {
+    background-color: #FFFFFF;
+}
+#timeline_content {
+    padding: 10px 0;
+}
+div.item-timeline {
+    background-color: #FFFFFF;
+    border: 2px solid #6C6E70;
+    font-family: "Lucida Sans";
+    height: 120px;
+    margin: 10px 5px 10px 85px;
+    width: 720px;
+}
+div.content-item-timeline {
+    border-right: 2px solid #6C6E70;
+    float: left;
+    height: 70px;
+    margin: 30px 0 0 10px;
+    width: 490px;
+}
+div.seleccion-item-timeline {
+    border-right: 2px solid #6C6E70;
+    float: left;
+    height: 60px;
+    margin: 30px 0 0 20px;
+    padding-right: 20px;
+    width: 50px;
+}
+h3.seleccion-item-timeline {
+    font-weight: bold;
+    text-align: center;
+}
+img.seleccion-item-timeline {
+    margin: 0 10px;
+}
+h3.titulo-item-timeline {
+    font-weight: bold;
+}
+p.descripcion-item-timeline {
+    font-size: 12px;
+    margin: 2px;
+}
+p.links-item-timeline {
+    float: right;
+    font-size: 12px;
+    margin: 2px 20px;
+}
+input.seleccion-item-timeline[type="checkbox"] {
+    background-color: white;
+    border: 2px solid #6C6E70;
+    height: 15px;
+    margin: 0 20px;
+    width: 15px;
+}
+div.prioridad-item-timeline {
+    float: left;
+    height: 60px;
+    margin: 30px 10px 0;
+    width: 95px;
+}
+p.prioridad-item-timeline {
+    font-weight: bold;
+    text-align: center;
+}
+img.prioridad-item-timeline {
+    background-color: white;
+    height: 25px;
+    margin: 0 30px;
+    width: 25px;
+}
+table.info_perfil td {
+}
+#descripcion {
+    float: left;
+    font-family: "Lucida Sans";
+    font-size: 15px;
+    padding: 20px 0;
+    text-align: left;
+    width: 330px;
+}
+div.perfil {
+    float: right;
+    width: 500px;
+}
+div.perfil div.texto {
+    float: right;
+    width: 350px;
+}
+div.perfil div.texto h2 {
+    font-family: "Lucida Sans";
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+}
+div.perfil div.texto h3 {
+    font-family: "Lucida Sans";
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.7em;
+    text-align: right;
+}
+div.perfil div.texto h4 {
+    text-align: right;
+}
+div.perfil img {
+    border: 8px solid #6C6E70;
+    float: right;
+    margin-left: 30px;
+}
+td.indice.secciones {
+    border-bottom: 2px solid #6C6E70;
+    width: 870px;
+}
+ul.indice {
+    float: left;
+    font-family: "Lucida Sans";
+    font-size: 14px;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+ul.indice li {
+    border-right: 2px solid #6C6E70;
+    bottom: 0;
+    float: left;
+    list-style: none outside none;
+    margin: 0 15px 0 0;
+    padding: 0 15px 0 0;
+    position: relative;
+    vertical-align: bottom;
+}
+ul.indice li.ultimo {
+    border: medium none;
+    margin: 0;
+}
+ul.indice.vehiculos {
+    margin-top: 10px;
+}
+ul.indice.vehiculos li {
+    height: 1.1em;
+}
+ul.indice.secciones li.tab-selected {
+    color: #626366;
+    font-weight: bold;
+    position: relative;
+    text-decoration: none;
+}
+ul.indice li a {
+    color: #ED1C24;
+}
+ul.indice li.tab-selected a {
+    color: #626366;
+    text-decoration: none;
+}
+table.info-vehiculo-general {
+    display: none;
+}
+#info-vehiculo .imagen {
+    float: left;
+}
+#info-vehiculo .imagen img {
+    border: 8px solid #6C6E70;
+}
+#info-vehiculo table {
+    float: left;
+    margin-left: 20px;
+}
+#info-vehiculo table td {
+    height: 25px;
+    padding: 5px 0;
+}
+#info-vehiculo table h4 {
+    color: black;
+    font-size: 17px;
+}
+div.ultimo-actualizacion {
+    border-bottom: 2px solid #797A77;
+    color: #797A77;
+    font-family: "Lucida Sans";
+    font-size: 14px;
+    width: 820px;
+}
+#loading-vehiculo {
+    display: none;
+    width: 800px;
+}
+#loading-vehiculo img {
+    display: block;
+    margin: 10px auto;
+    width: 22px;
+}
+td.formulario {
+    padding: 20px 0;
+}
+table.login_float {
+    background: url("../images/template/header/fondo_login.png") repeat scroll left top transparent;
+    border: thin solid #FFFFFF;
+    left: 115px;
+    position: absolute;
+    top: -108px;
+}
+.tooltip-kilometraje {
+    background-color: red;
+    border: medium none;
+    color: white;
+    font-family: "Lucida Sans";
+    font-size: 10px;
+    height: 50px;
+    line-height: 1.4em;
+    padding: 2px 15px 0;
+    text-align: justify;
+    width: 300px;
+}
+.tooltip-placa {
+    background-color: red;
+    border: medium none;
+    color: white;
+    font-family: "Lucida Sans";
+    font-size: 10px;
+    height: 50px;
+    line-height: 1.4em;
+    padding: 2px 15px 0;
+    text-align: justify;
+    width: 300px;
+}
+.future-items {
+    background-color: #CCCCCC;
+    color: #FFFFFF;
+    font-family: "Lucida Sans";
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 10px;
+    text-align: left;
+    width: 100%;
+}
+div.task-info {
+    font-family: "Lucida Sans";
+    font-size: 12px;
+    margin: 10px;
+    width: 100%;
+}
+.tarea_realizar {
+    border: 3px solid gray;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    box-shadow: 0 1px 0 #fbfbfb;
+    display: block;
+    height: 100%; 
+    margin-top: 10px;
+    padding: 15px 0px 0px 35px;
+
+}
+.categoria_tarea_realizar {
+    height: 100%;
+}
+.titulo_categoria {
+    background-color: gray;
+    padding: 5px 0px 5px 15px;
+    color: white;
+    margin-bottom: 15px;
+    margin-top: 20px;
+}
+
+.titulo_promo_categoria {
+    background: none repeat scroll 0 0 red;
+    color: white;
+    margin-left: 40px;
+    margin-right: 255px;
+    padding-left: 30px;
+    margin-top: 10px;
+    padding-top: 5px;
+    cursor:pointer;
+}
+.categoria_tarea_realizar .titulo_categoria {
+    background: none repeat scroll 0 0 red;
+    color: white;
+    padding-left: 30px;
+    padding-top: 5px;
+    cursor:pointer;
+}
+.wrapper_tarea_realizar {
+    height: 100%;
+}
+
+.progress-bar {
+    bottom: auto;
+    display: inline-block;
+    float: right;
+    height: 30px;
+    margin-right: 80px;
+    position: relative;
+    text-align: center;
+    top: 25px;
+    width: 250px;
+}
+.porcentaje_progreso {
+    display: none;
+}
+.fecha_porcentaje_progreso {
+}
+.imagen_tarea{
+    float: left;
+    position: relative;
+    top: 10px; 
+    margin-right: 10px;
+}
+.checkbox_tarea_realizar {
+    float: left;
+    
+    margin-right: 10px;
+    position: relative;
+    top: 15px;
+}
+
+.fecha_porcentaje_progreso .numero{
+    padding: 4px 10px 4px 10px;
+    border:2px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    color: white;
+    box-shadow: 0 1px 0 #fbfbfb;
+    behavior: url(ie-css3.htc);
+}
+
+.nommbre_tarea_realizar{ 
+    padding:  13px 0px 0px 0px;
+}
+.nombre_tarea_realizar{ 
+    padding:  13px 0px 10px 0px;
+}
+
+.oferta_tarea{
+    position: relative;
+    height: 100%;
+    margin: 10px 0px 10px 30px;
+}
+
+.oferta_tarea .descripcion{
+    float:left;
+    width: 580px; 
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+
+.oferta_tarea .boton_pago_servicios{
+    float: left;
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
+}
+.oferta_tarea .logo_establecimiento{
+    width: 100px;
+    float: left;
+    position: relative;
+    top:10px;
+}
+
+
+.oferta_tarea .titulo{
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
+    padding-left: 10px;
+    -moz-box-shadow: 3px 3px 4px #888;
+    -webkit-box-shadow: 3px 3px 4px #888;
+    box-shadow: 3px 3px 4px #888;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-family: "Lucida Sans Unicode","Lucida Grande",Garuda,sans-serif;;
+    font-size: 16px;
+}
+
+.oferta_tarea .oferta{
+    position: relative;
+    border-bottom: 1px solid gray;
+    padding-left: 10px;
+    -moz-box-shadow: 3px 3px 4px #888;
+    -webkit-box-shadow: 3px 3px 4px #888;
+    box-shadow: 3px 3px 4px #888;
+    margin-bottom: 8px;
+    height: 100%;
+    font-family: "Lucida Sans Unicode","Lucida Grande",Garuda,sans-serif;;
+    font-size: 14px;
+}
+
+.clear{
+    clear: both;
+    height: 0px;
+    
+}
+
+.oferta .progress_bar {
+    display: inline-block;
+   background: url("../../resources/images/iconos/calificacion_gris.png") no-repeat left center;
+   width: 125px;
+   height: 25px;
+   margin: 0 auto;
+}
+.oferta .progress_level {
+   background: url("../../resources/images/iconos/calificacion.png") no-repeat left center;
+   height: 25px;
+}
+
+/*css para el tab de ofertas*/
+
+.all_oferta_tarea{
+    width: 800px;
+    position: relative;
+    height: 100%;
+    margin: 10px 0px 10px 30px;
+}
+
+.all_oferta_tarea .descripcion{
+    float:left;
+    width: 580px; 
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    text-align: left; 
+}
+
+
+.all_oferta_tarea .boton_pago_servicios{
+    float: left;
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
+}
+.all_oferta_tarea .logo_establecimiento{
+    width: 100px;
+    float: left;
+    position: relative;
+    top:10px;
+}
+
+
+.all_oferta_tarea .titulo{
+    border-bottom: 1px solid gray;
+    border-right: 1px solid gray;
+    padding-left: 10px;
+    -moz-box-shadow: 3px 3px 4px #888;
+    -webkit-box-shadow: 3px 3px 4px #888;
+    box-shadow: 3px 3px 4px #888;
+    margin-bottom: 5px;
+    font-family: "Lucida Sans Unicode","Lucida Grande",Garuda,sans-serif;;
+    font-size: 16px;
+}
+
+.all_oferta_tarea .all_oferta{
+    position: relative;
+    border-bottom: 1px solid gray;
+    padding-left: 10px;
+    -moz-box-shadow: 3px 3px 4px #888;
+    -webkit-box-shadow: 3px 3px 4px #888;
+    box-shadow: 3px 3px 4px #888;
+    margin-bottom: 8px;
+    height: 100%;
+    font-family: "Lucida Sans Unicode","Lucida Grande",Garuda,sans-serif;;
+    font-size: 14px;
+}
+
+
+.all_oferta .progress_bar {
+    display: inline-block;
+   background: url("../../resources/images/iconos/calificacion_gris.png") no-repeat left center;
+   width: 125px;
+   height: 25px;
+   margin: 0 auto;
+}
+.all_oferta .progress_level {
+   background: url("../../resources/images/iconos/calificacion.png") no-repeat left center;
+   height: 25px;
+}
+
+.texto_general{
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal; 
+}
+
+.titulo_promo_ofertas{
+    padding: 10px 20px 0px 0px;
+    font-size: 20px;
+    text-decoration: underline;
+    color: red;
+}

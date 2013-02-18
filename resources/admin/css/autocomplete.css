@@ -1,0 +1,10 @@
+.vehiculos_disponibles { width:600px; padding:3px 3px 0; margin:0 auto; border:1px solid #aaa; background-color:#fff; cursor:text; }
+.vehiculos_disponibles span { display:block; width:auto; margin:0 3px 3px 0; padding:3px 20px 4px 8px; position:relative; float:left; text-indent:0; background-color:#eee; border:1px solid #333; -moz-border-radius:7px; -webkit-border-radius:7px; border-radius:7px; color:#333; font:normal 11px Verdana, Sans-serif; }
+.vehiculos_disponibles span a { position:absolute; right:8px; top:2px; color:#666; font:bold 12px Verdana, Sans-serif; text-decoration:none; }
+.vehiculos_disponibles span a:hover { color:#ff0000; }
+
+#vehiculos_disponibles { width:600px; padding:3px 3px 0; margin:0 auto; border:1px solid #aaa; background-color:#fff; cursor:text; }
+#vehiculos_disponibles span { display:block; width:auto; margin:0 3px 3px 0; padding:3px 20px 4px 8px; position:relative; float:left; text-indent:0; background-color:#eee; border:1px solid #333; -moz-border-radius:7px; -webkit-border-radius:7px; border-radius:7px; color:#333; font:normal 11px Verdana, Sans-serif; }
+#vehiculos_disponibles span a { position:absolute; right:8px; top:2px; color:#666; font:bold 12px Verdana, Sans-serif; text-decoration:none; }
+#vehiculos_disponibles span a:hover { color:#ff0000; }
+#vehiculosLabel { margin-top:0; }

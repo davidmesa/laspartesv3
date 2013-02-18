@@ -1,0 +1,1855 @@
+#usuario-div-degrade{
+    position: absolute;
+    z-index: -1;
+    width: 980px;
+    height: 150px;
+    top: 400px;
+    left:0 px;
+    background-image:url(../../resources/images/home/bg1.png);
+    background-repeat:repeat-x;
+}
+
+.sesion{
+    background-image:url(../../resources/images/micuenta/separador-sesiones.png);
+    background-position:bottom;
+    background-repeat: no-repeat;
+}
+
+.subsesion{
+    background-image:url(../../resources/images/micuenta/sub-separador-sesiones.png);
+    background-position:bottom;
+    background-repeat: no-repeat;
+}
+
+#usuario-div-mi-perfil.fixed {
+    position: fixed;
+    top: 0;
+}
+
+#usuario-div-mi-perfil{
+    position: absolute;
+    display:block;
+    margin-top: 0px;
+    width: 980px;
+    background-color: #fcfcfc;
+    z-index: 10;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 1px;
+    -moz-box-shadow: 
+        7px 0 9px -1px #ccc, 
+        -7px 0 9px -1px #ccc;
+    -webkit-box-shadow: 
+        7px 0 9px -1px #ccc, 
+        -7px 0 9px -1px #ccc;
+    box-shadow: 
+        7px 0 9px -1px #ccc,  
+        -7px 0 9px -1px #ccc;
+}
+
+#usuario-div-foto{
+    width: 150px;
+    height: 125px;
+    position: relative;
+    float: left;
+    margin-right: 10px;
+}
+
+#usuario-div-foto-marco{
+    padding: 10px 20px 10px 20px;
+}
+
+
+#usuario-div-foto-marco img{
+    height: 104px;
+    width: 104px;
+    box-shadow: 0 0 3px #ccc;
+    -webkit-box-shadow: 0 0 3px #ccc;
+    -moz-box-shadow: 0 0 3px #ccc;
+    border-radius: 2px;
+}
+
+.usuario-div-foto-editar{
+    position: absolute;
+    right: 12px;
+    bottom: 8px;	
+    background-color: white;
+    box-shadow: 0 0 5px #666666;
+    -webkit-box-shadow: 0 0 5px #666666;
+    -moz-box-shadow: 0 0 5px #666666;
+    border-radius: 2px;
+    border-color: #666666;
+    cursor: pointer;
+    width: 12px;
+    height: 11px;
+    padding: 3px;
+    background-repeat:no-repeat;
+    background-image:url(../../resources/images/micuenta/icono-editar.png);	
+    background-position:center;	
+}
+
+
+
+#usuario-div-perfil-info{
+    float: left;
+    position: relative;
+    width: 300px;
+    padding-top: 15px;
+    padding-right: 20px;
+    border-right: 1px solid #ccc;
+    padding-bottom: 19px;
+}
+
+#usuario-div-perfil-info h1{
+    font-size: 20px;
+}
+
+#usuario-div-perfil-info-user{
+    margin-top: 5px;
+    font-size: 13px;
+    color: #404040;
+    overflow: hidden;
+    width: 230px;
+}
+
+#usuario-div-perfil-info-email{
+    overflow: hidden;
+    width: 230px;
+    display: block;
+}
+
+#usuario-div-perfil-info .usuario-div-editar{
+    position: absolute;
+    right: 25px;
+    bottom: 13px;
+}
+
+.usuario-div-editar{
+    text-align: right;
+    width: 40px;
+    background-image:url(../../resources/images/micuenta/icono-editar.png);
+    background-repeat: no-repeat;
+    padding-left: 12px;
+    font-family: 'open_sansregular';	
+    font-style: normal;
+    text-decoration:underline;
+    color: #C60200;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#usuario-div-perfil-tareas{
+    position: relative;
+    float: left;
+    height: 110px;
+    width: 426px;
+    padding-top: 10px;	
+    font-size: 13px;
+    text-align:center;
+    padding-left: 25px;
+    padding-bottom: 12px;
+}
+
+.usuario-div-perfil-tarea{
+    cursor: pointer;
+}
+
+.usuario-div-perfil-misvehiculos{
+    position: relative;
+    float: left;
+    width: 92px;
+    height: 100%;
+    margin-left: 15px;
+    color: #C60200;
+}
+
+.usuario-div-perfil-sobrevehiculo{
+    position: relative;
+    float: left;
+    width: 120px;
+    height: 100%;	
+}
+
+.usuario-div-perfil-ofertas{
+    position: relative;
+    float: left;
+    width: 92px;
+    height: 100%;		
+}
+
+.usuario-div-perfil-compras{
+    position: relative;
+    float: left;
+    width: 92px;
+    height: 100%;	
+    margin-left: 15px;		
+}
+
+.usuario-div-perfil-comunidad{
+    position: relative;
+    float: left;
+    width: 92px;
+    height: 100%;	
+    margin-left: 15px;	
+}
+
+#usuario-div-mi-perfil-bottom{
+    position: relative;
+    display: block;
+    top: 145px;
+    background-color: #262626;
+    height: 20px;
+    width: 100%;
+}
+
+.usuario-div-perfil-contenedor{
+    position: relative;
+    margin-top: 145px;
+    background-image:url(../../resources/images/home/bg1.png); 
+    background-position:top;
+    background-repeat:repeat-x;
+    width: 910px;
+    padding-top: 15px;
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-bottom: 20px;
+}
+
+.usuario-div-breadcrumb{
+    font-size: 11px;
+    text-transform: uppercase; 
+}
+
+.usuario-div-breadcrumb-espaciador{
+    float: left;
+    width: 2px;
+    height: 11px;
+    margin-right: 5px;
+    background-color: #777777;
+}
+
+.usuario-div-breadcrumb div{
+    float: left;
+    margin-right: 5px;
+}
+
+.usuario-div-breadcrumb a{
+    font-style:normal;
+    text-decoration: none;
+    color: black;
+}
+
+
+#usuario-div-mv-titulo{
+    float: left;	
+    height: 100%;
+}
+
+#usuario-div-mv-titulo h1{
+    display: inline-block;	
+}
+
+#usuario-div-mv-anadir{
+    float: right;
+    height: 100%;
+    font-family: 'open_sansregular';
+    font-size: 12px;
+    text-decoration:underline;
+    color: #C60200;
+    cursor: pointer;
+}	
+
+#usuario-div-mv-top{
+    margin-top: 25px;
+}
+
+#usuario-div-mv-titulo{
+    font-family: 'univers_condensedbold';
+    font-size: 28px;	
+}
+
+#usuario-div-mv-anadir a{
+
+}
+
+#usuario-div-mis-vehiculos .div-separador-titulo{
+    margin-top: 20px;	
+}
+
+#usuario-div-mv-all{
+    position:relative;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 40px;
+}
+
+.usuario-div-mv-vehiculo{
+    float: left;
+    position: relative;
+    width: 420px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+#usuario-div-mv-all .impar{
+    margin-right: 70px;	
+}
+
+
+.usuario-div-mv-vehiculo-left{
+    position: relative;
+    float: left;
+    width: 188px;
+    height: 100%;
+}
+
+.usuario-div-mv-vehiculo-marco{
+    box-shadow: 0 0 6px #666666;
+    -webkit-box-shadow: 0 0 6px #666666;
+    -moz-box-shadow: 0 0 6px #666666;	
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.usuario-div-mv-vehiculo-marco-contenedor{
+    padding: 10px 4px 10px 4px;	
+}
+
+.adicionar .usuario-div-mv-vehiculo-left .usuario-div-mv-vehiculo-marco{		
+    background-color: white;
+    height: 177px;
+    width: 177px;
+    padding: 10px 4px 10px 4px;
+}
+.usuario-div-mv-vehiculo-left img{
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;		
+    width: 177px;	
+}
+
+.adicionar .usuario-div-mv-vehiculo-left img{		
+    width: 152px;
+    height: 45px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.usuario-div-mv-vehiculo-left div{
+    font-size: 12px;
+    color: #404040;
+}
+
+.usuario-div-mv-vehiculo-left .usuario-div-foto-editar{
+    top: 190px;
+    right: -6px;
+}
+
+.usuario-div-mv-vehiculo-left .usuario-div-foto-editar img{
+    width: 12px;
+    height: 11px;
+    background-color: white;
+}
+
+.usuario-div-mv-vehiculo-center{
+    float: left;	
+    height: 100%;
+    width: 210px;
+    margin-top: 6px;
+    margin-left: 5px;
+    position: relative;
+}
+
+.usuario-div-mv-vehiculo-marca{
+    text-decoration: underline;
+    color: black;	
+    font-size: 20px;
+}
+
+.usuario-div-mv-vehiculo-subtitulo{
+    position: relative;
+    margin-top: 15px;
+    font-size: 13px;
+    color: black;
+    font-family: 'open_sansregular';	
+    width: 100%;
+
+}
+
+.usuario-div-mv-vehiculo-subtitulo img{
+
+}
+
+.usuario-div-mv-vehiculo-subtitulo .imagen-interogacion{
+    position: relative;
+    display: inline;
+    width: 18px;
+    height: 18px;
+}
+
+.usuario-div-mv-vehiculo-center .dato{
+    color: #404040;
+    font-size: 13px;
+    font-family: 'open_sansregular';	
+}
+
+.usuario-div-mv-vehiculo-center .usuario-div-editar{
+    float: right;
+    display: none;
+}
+
+.carroseleccionado .usuario-div-editar{
+    display: block;
+}
+.usuario-div-mv-vehiculo-center .usuario-div-mensaje{
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    display: none;
+}
+.usuario-div-mensaje{
+    background-image: url(../../resources/images/micuenta/mensaje.png);
+    background-repeat:no-repeat;
+    width: 110px;
+    height: 54px;
+    padding-top: 10px;
+    padding-left: 4px;
+    padding-bottom:	7px;
+    padding-right: 4px; 
+    font-size: 10px;
+    color: black;
+    font-family: 'open_sansregular';
+}
+
+.adicionar .usuario-div-mv-vehiculo-adicionar-texto{
+    text-align: center;
+    font-family: 'univers_condensedbold';
+    font-style: normal;
+}
+
+.adicionar .usuario-div-mv-vehiculo-adicionar-texto-registra{
+    font-size: 24px;
+    color: #c60200;
+    font-style: normal;
+}
+
+.adicionar .usuario-div-mv-vehiculo-adicionar-texto-mantente{
+    font-size: 15px;
+    font-style: normal;
+    margin-top: 0px;
+}
+
+.adicionar .editar-vehiculo-show, .adicionar .editar-vehiculo-hidden{
+    display: none;	
+}
+
+.usuario-div-mv-vehiculo-actualizacion{
+    margin-top: 12px;	
+}
+
+.carroinactivo .usuario-div-mv-vehiculo-actualizacion, .carroinactivo .usuario-div-mv-vehiculo-subtitulo, .carroinactivo .dato,
+.carroinactivo .usuario-div-editar{
+    color: #9c9c9c;
+}
+
+.carroinactivo .usuario-div-editar, .carroinactivo .usuario-div-foto-editar{
+    background-repeat:no-repeat;
+    background-image:url(../../resources/images/micuenta/icono-editar-inactivo.png);	
+    cursor: default;
+}
+
+.carroinactivo .usuario-div-mv-vehiculo-marco{
+    opacity: 0.3;
+    -moz-opacity: 0.30;
+    filter: alpha(opacity=30);
+}
+
+.carroinactivo .usuario-div-foto-editar{
+    cursor: none;
+}
+
+#usuario-div-smv{
+    position: relative;
+    width: 910px;
+    padding-right: 35px;
+    padding-left: 35px;
+}
+
+#usuario-div-smv-header{
+    width: 100%;
+    height: 100%;
+}
+
+#usuario-div-smv img{
+    width:25px;
+    height: 26px;
+}
+
+#usuario-div-smv-header-izq{
+    display: inline;
+    float: left;
+    width: 40%;
+}
+
+#usuario-div-smv-header-izq h1{
+    display: inline;
+    margin-left: 15px;
+}
+
+#usuario-div-smv-header-derecha{
+    float: right;
+    position: relative;
+    width: 60%;
+    margin-top: 10px;
+}
+
+.usuario-div-smv-header-separador{
+    width: 1px;
+    background-color: #ccc;
+    height: 11px;
+    margin-left: 15px;
+    margin-right: 15px;
+    float: right;
+    display: block;
+}
+
+#usuario-div-smv-header-derecha span{
+    text-decoration: underline;
+    font-family: 'open_sansregular';
+    font-size: 11px;
+    float: right;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#usuario-div-smv-header .div-separador-titulo{
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+#usuario-div-smv-content-header{
+    height: 100%;
+    width: 100%;
+    margin-bottom: 30px;	
+}
+
+#usuario-div-smv-content-header img{
+    height:15px;
+    width: 10px;
+    float: left;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+#usuario-div-smv-content-carro{
+    float: left;
+    display: inline;
+    color: #c60200;
+    font-size: 20px;
+}
+
+#usuario-div-smv-content-te-contamos{
+    float: left;
+    display: inline;
+    width: 720px;
+    margin-left: 20px;
+}
+
+#usuario-div-smv-content-te-contamos-txt1{
+    font-size: 15px;
+    color: black;
+    font-weight: bold;
+}
+
+#usuario-div-smv-content-te-contamos-txt2{
+    font-size: 12px;
+    color: #404040;
+    margin-top: 10px;
+}
+
+#usuario-div-smv-content-sub{
+    width: 910px;
+    padding-bottom: 9px;
+    background-image:url(../../resources/images/micuenta/titulo-smv.png);
+    background-repeat: no-repeat;
+}
+
+.usuario-div-smv-subtitulo{
+    font-size: 24px;
+    font-family: 'univers_condensedbold';
+    color: white;
+    margin-top: 2px;
+    padding-left: 45px;
+}
+
+#usuario-div-smv-debo-hacer{
+    float:left;
+    width: 305px;
+    position: relative;
+}
+
+#usuario-div-smv-db-content, #usuario-div-smv-tp-content, #usuario-div-smv-hecho-content{
+    background-color: #f4f4f4;
+    height: 100%;
+    padding-top: 15px;
+    position: relative;
+}
+
+#usuario-div-smv-db-content-t1{
+    font-size: 14px;
+    font-weight: bold;
+    color: #c60200;
+    padding-left: 25px;
+}
+
+#usuario-div-smv-db-content-t2{
+    font-size: 14px;
+    color: #404040;
+    padding-left: 25px;	
+}
+
+#usuario-div-smv-db-content-t3{
+    font-size: 10px;
+    color: #c60200;
+    text-decoration: underline;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+#usuario-div-smv-db-content .div-separador-titulo{
+    margin-top: 15px;	
+}
+
+
+
+.usuario-div-smv-tarea{
+    position: relative;
+    display: block;
+    margin-top: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 90%;
+}
+
+.usuario-div-tp-tarea{
+    position: relative;
+    display: block;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 90%;
+    margin-top: 20px;
+}
+
+#usuario-div-smv-debo-hacer .usuario-div-smv-tarea-izq,  #usuario-div-smv-pendiente .usuario-div-tp-tarea-izq{
+    position: relative;
+    float: left;
+}
+
+
+
+#usuario-div-smv-debo-hacer .usuario-div-smv-tarea-foto, #usuario-div-smv-pendiente .usuario-div-tp-tarea-foto{
+    background-color: white;
+    width: 98px;
+    height: 97px;
+    border-radius: 2px;
+    box-shadow: 0px 0px 10px #ccc;
+    -moz-box-shadow: 0px 0px 10px #ccc;
+    -webkit-box-shadow: 0px 0px 10px #ccc;
+
+}
+
+#usuario-div-smv-debo-hacer .usuario-div-smv-tarea-foto img, #usuario-div-smv-pendiente .usuario-div-tp-tarea-foto img{
+    width: 91px;
+    height: 91px;
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+.usuario-div-smv-tarea-chkbox{
+    font-size: 11px;
+    color: #404040;
+    background-color: #cfcfcf;
+    width: 100%;
+}
+
+.usuario-div-smv-tarea-chkbox input{
+    margin-left: 9px;
+}
+
+.usuario-div-smv-tarea-der{
+    float: left;
+    margin-left: 15px;
+    width: 155px;	
+}
+
+.usuario-div-tp-tarea-chkbox{
+    font-size: 11px;
+    color: #404040;
+    background-color: #cfcfcf;
+    width: 100%;
+}
+
+.usuario-div-tp-tarea-chkbox input{
+    margin-left: 9px;
+}
+
+.usuario-div-tp-tarea-der{
+    float: left;
+    margin-left: 15px;
+    width: 150px;	
+}
+
+.usuario-div-tarea-nombre{
+    font-size: 13px;
+    text-decoration:underline;
+    color: black;	
+}
+
+.usuario-div-tarea-progreso{
+    font-size: 14px;
+    font-family: 'univers_condensedbold';
+    color: white;
+    margin-top: 10px;
+    width: 140px;
+    height: 100%;
+}
+
+.usuario-div-tarea-progreso span{
+
+    padding: 3px 6px 3px 6px;
+}
+
+.usuario-div-tarea-descripcion{
+    color: #404040;
+    margin-top: 15px;
+    font-size: 12px;
+}
+
+.usuario-div-tarea-bottom{
+    margin-top: 20px;
+
+}
+
+.usuario-div-tarea-bottom-titulo{
+    color: black;
+    font-size: 12px;
+}
+
+.usuario-div-tarea-taller{
+    margin-top: 20px;
+    color: #404040;
+    font-size: 12px;
+}
+
+.usuario-div-tarea-taller-url a{
+    font-size: 12px;
+}
+
+.usuario-div-tarea-taller-direccion{
+    margin-top: 20px;
+}
+
+.usuario-div-tarea-taller-direccion, .usuario-div-tarea-taller-telefono, .usuario-div-tarea-taller-movil{
+    font-size: 11px;
+    color: #404040;
+}
+
+.usuario-div-tarea-talleres-vermas{
+    text-align: right;
+    width: 100%;
+    margin-right: 10px;
+}
+
+.usuario-div-tarea-talleres-vermas a{
+    font-size: 11px;
+}
+#usuario-div-smv-debo-hacer .usuario-div-tarea-talleres-vermas img, #usuario-div-smv-pendiente .usuario-div-tarea-talleres-vermas img{
+    width: 7px;
+    height: 11px;
+}
+
+#usuario-div-smv-pendiente{
+    float: left;
+    width: 305px;
+    position: relative;
+}
+
+#usuario-div-smv-tp-content{
+    background-color: transparent;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+#usuario-div-smv-hecho-content{
+    background-color: transparent;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+#usuario-div-smv-tp-content-t{
+    font-size: 14px;
+    color: #404040;
+    padding-left: 25px;	
+}
+
+#usuario-div-smv-hecho-content-t{
+    font-size: 14px;
+    color: #404040;
+    padding-left: 25px;	
+}
+
+#usuario-div-smv-tp-content .div-separador-titulo{
+    margin-top: 15px;
+}
+
+#usuario-div-smv-hecho-content .div-separador-titulo{
+    margin-top: 32px;
+}
+
+#usuario-div-smv-hecho{
+    float: left;
+    width: 300px;
+    position: relative;
+}
+
+.usuario-div-smv-hecho-tareas{
+    font-size: 12px;
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.usuario-div-smv-hecho-tareas span{
+    color: #709e00;	
+}
+
+.usuario-div-smv-hecho-tareas ul{
+    list-style: circle;
+    line-height: 2;
+    list-style-image:url(../../resources/images/micuenta/bullet.png);
+}
+
+
+/*ofertas*/
+
+#usuario-div-ofertas{
+    margin-top: 10px;
+    position: relative;
+    width: 910px;
+    padding-right: 35px;
+    padding-left: 35px;
+    padding-bottom:9px;
+}
+
+
+#usuario-div-ofertas-header{
+    width: 100%;
+}
+
+#usuario-div-ofertas-header-izq{
+    display: inline;
+    width: 100%;
+}
+
+#usuario-div-ofertas-header-izq h1{
+    display: inline;
+    margin-left: 15px;
+}
+
+#usuario-div-ofertas-header .div-separador-titulo{
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+#usuario-div-ofertas-all{
+
+}
+
+.usuario-div-oferta{
+    width: 400px;
+    float: left;
+    padding-bottom: 39px;
+    margin-top: 20px;
+}
+
+.usuario-div-oferta-left{
+    float: left;
+    height: 100%;
+    width: 101px;
+    margin-right: 15px;
+}
+
+.usuario-div-oferta-precio{
+    height: 28px;
+    padding-top: 10px;
+    padding-left: 8px;
+    background-image:url(../../resources/images/micuenta/precio-oferta.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.usuario-div-oferta-precio-sin-descuento{
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.usuario-div-oferta-precio span{
+    color:white;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.usuario-div-oferta-marco{
+    padding: 2px;
+    border-radius: 2px;
+    background-color: white;
+    box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 10px #ccc;
+    -moz-box-shadow: 0 0 10px #ccc;	
+    background-color: white;
+    cursor: pointer;
+}
+
+.usuario-div-oferta-marco img{
+    width: 90px;
+}
+
+.usuario-div-oferta-right{
+    float: left;
+    width: 284px;
+}
+
+.usuario-div-oferta-titulo{
+    font-size: 13px;
+    color: black;	
+    text-decoration: underline;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.usaurio-div-oferta-validez-desde{
+    margin-top: 10px;	
+}
+
+.usaurio-div-oferta-validez-desde,	 .usuario-div-oferta-validez-hasta{
+    color: #C60200;
+    font-size: 12px;
+    text-transform: uppercase;
+}	
+
+.usuario-div-oferta-incluye{
+    color: #404040;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.usuario-div-oferta-comprar{
+    width: 110px;
+    height: 31px;
+    cursor: pointer;
+    float: right;
+    margin-top: 20px;
+    background-image: url(../../resources/images/micuenta/boton-comprar.png);
+    background-repeat: no-repeat;
+    background-position:center;
+}
+.usuario-div-oferta-lightbox .usuario-div-oferta-comprar{
+    margin-top: 0px;
+}
+
+.usuario-div-oferta-tarjetas{
+    width: 210px;
+    height: 38px;
+    cursor: pointer;
+    float: right;
+}
+.usuario-div-oferta-tarjetas img{
+    width: 61px;
+    height: 38px;
+    margin-left: 5px;
+}
+
+.usuario-div-oferta-comprar input{
+    width: 90px;
+    height: 21px;
+    border: none;
+    cursor: pointer;
+    background: none;
+    color: white;
+    font-size: 12px;
+    margin-top: 6px;
+    margin-left: 10px;
+    text-align: left;
+}
+
+
+/* lightbox */
+
+
+.usuario-div-oferta-lightbox{
+    position: relative;
+    width: 865px;
+    padding-bottom: 5px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;	
+    box-shadow: 0px 0px 5px #ccc;
+    -moz-box-shadow: 0px 0px 5px #ccc;
+    -webkit-box-shadow: 0px 0px 5px #ccc;
+    display: none;
+}
+
+.usuario-div-oferta-lightbox-etiqueta{
+    float: left;
+    width: 233px;
+    height: 432px;
+    margin-left: 5px;
+    background-image: url(../../resources/images/micuenta/oferta-lightbox-etiqueta.png);
+    background-repeat: no-repeat;	
+}
+
+.usuario-div-oferta-lightbox-informacion{
+    float: left	
+}
+
+.usuario-div-oferta-lightbox-titulo{
+    color: white;
+    font-size: 15px;
+    width: 105px;	
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 25px;
+    margin-top: 160px;
+    font-weight: bold;
+}
+
+.usuario-div-oferta-lightbox-precio{
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bold;
+    color: white;
+    font-size: 22px;
+    width: 130px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.usuario-div-oferta-lightbox-precio-sin-descuento{
+    font-size: 13px;
+}
+
+.usuario-div-oferta-lightbox-condiciones{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 60px;
+    color: black;
+    width: 200px;
+    font-size: 12px;
+}
+
+.usuario-div-oferta-lightbox-condiciones-vehiculos{
+    font-size: 10px;
+}
+
+.usuario-div-oferta-lightbox-condiciones-vehiculos a{
+    font-size: 10px;
+    text-decoration: underline;
+    color: black;
+}
+
+.usuario-div-oferta-lightbox-cerrar{
+    background-image:url(../../resources/images/micuenta/lightbox-cerrar.png);
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 19px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+}	
+
+.usuario-div-oferta-lightbox-informacion{
+    float: left;
+    width: 617px;
+    margin-top: 5px;
+    margin-left: 5px;
+    background-image:url(../../resources/images/micuenta/egrade-lightbox.png);
+    background-position: 100% 100%;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.usuario-div-oferta-lightbox-info-titulo{
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+.usuario-div-oferta-lightbox-info-titulo a{
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.usuario-div-oferta-lightbox-validez{
+    margin-left: 20px;
+    margin-top: 10px;
+    color: #404040;	
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.usuario-div-oferta-lightbox-fotoincluye{
+    margin-left: 20px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.usuario-div-oferta-lightbox-marco{
+    float: left;
+    padding: 3px;
+    border-radius: 2px;
+    background-color: white;
+    box-shadow: 0 0 5px #ccc;
+    -webkit-box-shadow: 0 0 5px #ccc;
+    -moz-box-shadow: 0 0 5px #ccc;	
+    background-color: white;
+    cursor: pointer;
+}
+
+.usuario-div-oferta-lightbox-marco img{
+    width: 90px;
+    border: none;
+}
+
+
+
+.usaurio-div-oferta-lightbox-incluye{
+    margin-left: 10px;
+    float: left;	
+    width: 450px;
+}
+
+.usaurio-div-oferta-lightbox-incluye-items{
+    line-height: 25px;
+    color: #404040;
+    font-size: 12px;
+}
+
+.usaurio-div-oferta-lightbox-incluye-items ul{
+    list-style-image:url(../../resources/images/micuenta/bullet-rojo.png);
+    list-style-position: inside;
+    padding-left: 5px;
+    color: #404040;
+    font-size: 12px;
+}
+
+.usuario-div-oferta-lightbox-fototaller{
+    margin-left: 20px;
+    margin-top: 15px;
+}
+
+.usaurio-div-oferta-lightbox-tallerinfo{
+    width: 300px;
+    margin-left: 10px;
+    float: left;	
+}
+
+.usuario-div-oferta-lightbox-calificacion{
+    font-size: 12px;
+    color: #404040;
+    padding-top: 80px;
+    width: 140px;
+    margin-left: 10px;
+    padding-left: 20px;
+    float: left;	
+}
+
+.usaurio-div-oferta-lightbox-taller-direccion{
+    margin-top: 20px;
+}
+
+.usaurio-div-oferta-lightbox-taller-url{
+    margin-top: 15px;
+}
+
+.usaurio-div-oferta-lightbox-taller-nombre{
+    color: black;
+    text-decoration: underline;
+    font-size: 13px;
+    font-weight: bold;	
+}
+
+.usaurio-div-oferta-lightbox-taller-nombre a{
+    color: black;
+    font-style: italic;
+    text-decoration: underline;
+    font-size: 13px;
+    font-weight: bold;	
+}
+
+.usaurio-div-oferta-lightbox-taller-movil, .usaurio-div-oferta-lightbox-taller-telefono, .usaurio-div-oferta-lightbox-taller-direccion{
+    font-size: 11px;	
+}
+
+.usaurio-div-oferta-lightbox-taller-url{
+    font-size: 12px;	
+}
+
+
+/*mis compras*/
+
+#usuario-div-compras{
+    margin-top: 10px;
+    position: relative;
+    width: 910px;
+    padding-right: 35px;
+    padding-left: 35px;
+    padding-bottom:9px;
+}
+
+
+#usuario-div-compras-header{
+    width: 100%;
+    height: 100%;
+}
+
+#usuario-div-compras-header-izq{
+    display: inline;
+    width: 100%;
+}
+
+#usuario-div-compras-header-izq h1{
+    display: inline;
+    margin-left: 15px;
+}
+
+#usuario-div-compras-header .div-separador-titulo{
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.usuario-div-compra{
+    width: 400px;
+    float: left;
+    padding-bottom: 39px;
+    margin-top: 20px;
+}
+
+.usuario-div-compra-left{
+    float: left;
+    height: 100%;
+    width: 101px;
+    margin-right: 15px;
+}
+
+.usuario-div-compra-marco{
+    padding: 2px;
+    border-radius: 2px;
+    background-color: white;
+    box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 10px #ccc;
+    -moz-box-shadow: 0 0 10px #ccc;	
+    background-color: white;
+    cursor: pointer;
+}
+
+.usuario-div-compra-marco img{
+    max-width: 90px;
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+.usuario-div-compra-right{
+    float: left;
+    width: 284px;
+}
+
+.usuario-div-compra-titulo{
+    font-size: 13px;
+    color: black;	
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.usuario-div-compra-precio{
+    color: #C60200;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 5px;
+}	
+
+.usuario-div-compra-fecha{
+    color: #404040;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.usuario-div-compra-estado{
+    font-size: 12px;
+    margin-top: 5px;
+}
+.usuario-div-compra-estado span{
+    color: #C60200;
+    text-decoration: underline;
+}
+
+.usuario-div-compra-valor{
+    color: #404040;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.usuario-div-compra-factura{
+    margin-top: 20px;	
+    margin-left: 130px;
+}
+
+.usuario-div-compra-factura a{
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+
+.oferta-derecha, .compraderecha{
+    margin-left: 110px;	
+}
+
+/* MI COMUNIDAD */
+#usuario-div-comunidad{
+    margin-top: 10px;
+    position: relative;
+    width: 910px;
+    padding-right: 35px;
+    padding-left: 35px;
+    padding-bottom:9px;
+}
+
+
+#usuario-div-comunidad-header{
+    width: 100%;
+    height: 100%;
+}
+
+#usuario-div-comunidad-header-izq{
+    display: inline;
+    width: 100%;
+}
+
+#usuario-div-comunidad-header-izq h1{
+    display: inline;
+    margin-left: 15px;
+}
+
+#usuario-div-comunidad-all h1{
+    display: inline;
+    margin-left: 15px;
+    font-size: 23px;
+}
+
+#usuario-div-comunidad-talleres h1{
+    font-size: 23px;
+}
+
+#usuario-div-comunidad-header .div-separador-titulo{
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+#usuario-div-comunidad-all .div-separador-titulo{
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+#usuario-div-comunidad-preguntas{
+    float: left;
+    width: 290px;	
+    margin-right: 10px;
+}
+
+#usuario-div-comunidad-respuestas{
+    float: left;
+    width: 290px;	
+    margin-right: 10px;
+}
+
+#usuario-div-comunidad-talleres{
+    float: left;
+    width: 310px;	
+}
+
+.usuario-div-comunidad-contenedor{
+    background-color: #f6f6f6;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 250px;
+    padding-bottom: 30px;
+}
+
+.usuario-div-comunidad-pregunta{
+    padding-top: 20px;	
+}
+
+.usuario-div-comunidad-pregunta img{
+    float: left;
+    width: 10px;
+}
+
+.usuario-div-comunidad-pregunta-derecha{
+    float: left;
+    width: 230px;	
+    margin-left: 10px;
+}
+
+.usuario-div-comunidad-pregunta-titulo{
+    font-size: 12px;
+}
+
+.usuario-div-comunidad-pregunta-titulo a{
+    color: black;
+    font-weight: bold;
+}
+
+.usuario-div-comunidad-pregunta-contenido{
+    font-size: 12px;
+    color: #404040;
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+.usuario-div-comunidad-pregunta-respuestas{
+    margin-top: 20px;
+}
+
+.usuario-div-comunidad-pregunta-respuestas a{
+    color: black;
+    font-size: 11px;
+}
+
+.usuario-div-comunidad-vermas{
+    font-size: 11px;
+    margin-top: 15px;
+    text-align: right;
+    margin-right: 30px;	
+}
+
+.usuario-div-comunidad-vermas span{
+    color: #c60200;
+    text-decoration: underline;
+    cursor: pointer;
+}
+#usuario-div-comunidad-respuestas .usuario-div-comunidad-pregunta-contenido{
+    position: relative;
+    top: 6px;
+    padding: 7px;
+    background-color: #f6f6f6;
+    border: 1px solid #dedede;
+    padding-left: 3px;	
+    overflow: hidden;
+}
+
+#usuario-div-comunidad-respuestas .usuario-div-comunidad-pregunta-respuestas a{
+    color: black;
+    font-size: 11px;
+    float: right;
+}
+
+.usuario-div-comunidad-pregunta-autor{
+    float: left;
+    font-size: 11px;
+    width: 150px;
+    color: black;	
+}
+
+#usuario-div-comunidad-talleres .usuario-div-comunidad-contenedor{
+    background-color: transparent;	
+    padding-left: 0px;
+}
+
+.usuario-div-comunidad-talleres-fototaller{
+    margin-bottom: 30px;
+}
+
+.usaurio-div-comunidad-talleres-tallerinfo{
+    margin-left: 10px;
+    float: left;	
+    width: 142px;
+}
+
+.usaurio-div-comunidad-talleres-taller-direccion{
+    margin-top: 20px;
+}
+
+.usaurio-div-comunidad-talleres-taller-url{
+    margin-top: 15px;
+}
+
+.usaurio-div-comunidad-talleres-taller-nombre{
+    font-size: 13px;	
+}
+
+.usaurio-div-comunidad-talleres-taller-nombre a{
+    color: black;
+    font-weight: bold;	
+}
+
+.usaurio-div-comunidad-talleres-taller-movil, .usaurio-div-comunidad-talleres-taller-telefono, .usaurio-div-comunidad-talleres-taller-direccion{
+    font-size: 11px;	
+}
+
+.usaurio-div-comunidad-talleres-taller-url{
+    font-size: 12px;	
+}
+
+
+
+.usuario-div-comunidad-talleres-marco{
+    float: left;
+    padding: 3px;
+    border-radius: 2px;
+    background-color: white;
+    box-shadow: 0 0 5px #ccc;
+    -webkit-box-shadow: 0 0 5px #ccc;
+    -moz-box-shadow: 0 0 5px #ccc;	
+    background-color: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.usuario-div-comunidad-talleres-marco img{
+    width: 90px;
+    border: none;
+}
+
+#usuario-div-comunidad-triguangulo{
+    position: absolute;
+    left: 20px;	
+    top: 1px;
+    z-index: 3;
+}
+
+.usuario-div-comunidad-talleres-comentario{
+    width: 310px;
+    position: relative;
+    top: 7px;
+    background-color: #f6f6f6;
+    border: 1px solid #dedede;	
+    font-size: 11px;
+}
+
+.usuario-div-comunidad-talleres-comentario-imagen{
+    position: relative;
+    margin: 5px;
+    height: 100%;
+    width: 34px;	
+    float: left;
+}
+
+.usuario-div-comunidad-talleres-comentario-imagen img{
+    border: 1px solid #ccc;
+    width: 32px;
+    height: 33px;
+}
+
+.usuario-div-comunidad-talleres-comentario-nombrefecha{
+    float: left;
+    width: 100px;
+    margin-top: 7px;	
+}
+
+.usuario-div-comunidad-talleres-comentario-nombre{
+    font-weight: bold;	
+    color: black;
+}
+
+.usuario-div-comunidad-talleres-comentario-fecha{
+    margin-top: 5px;	
+}
+
+.usuario-div-comunidad-talleres-comentario-comentariocalificacion{
+    float: right;
+    margin-top: 7px;
+    width:160px;
+}
+
+.usuario-div-comunidad-talleres-comentario-comentario{
+    overflow: hidden;
+}
+
+.usuario-div-comunidad-talleres-comentario-calificacion{
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.usuario-div-comunidad-talleres-comentario-calificacion-activa{
+}
+
+#usuario-div-smv-header #usuario-div-smv-header-derecha span.tituloseleccionado {
+    color: #C60200;
+    text-decoration: none;
+}
+
+.usuario-div-comunidad-header-izq-numero{
+    color: #404040;
+    font-size: 12px;
+}
+
+.usuario_div_id_vehiculo, .usuario-div-id_oferta, .usuario_div_id_usuario_vehiculo{
+    display: none;
+}
+
+.usuario-div-compra-vermas, .usuario-div-ofertas-vermas{
+    text-align: right;
+    width: 100%;
+    margin-right: 10px;
+    font-size: 16px;
+    text-decoration: underline;
+    font-weight: bold;
+    color: #c60200;
+    cursor: pointer;
+    padding:  10px;
+}
+.usuario-div-compra-vermas img, .usuario-div-ofertas-vermas img{
+    width: 7px;
+    height: 11px;
+}
+
+.editar-vehiculo-hidden, .editar-perfil-hidden{
+    display: none;
+}
+
+.usuario_div_id_usuario_vehiculo .usuario-div-foto-editar{
+    padding: 0px;
+    width: 18px;
+    height: 18px;
+}
+
+.usuario-div-foto-editar .input_imageUpload_automovil, .input_imageUpload_perfil{
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: default;
+}
+
+#usuario_input_perfil_nombres, #usuario_input_perfil_apellidos{
+    width: 114px;
+}
+
+#usuario_input_perfil_apellidos{
+    margin-left: 10px;
+}
+
+label.error{
+    display: block;
+    font-size: 9px;
+    font-family: 'open_sansregular';
+}
+
+.usuario-div-editar-submit input{
+    border: none;
+    background-image: url(../../resources/images/micuenta/icono-editar.png);
+    padding-left: 13px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    text-decoration: underline;
+    color: #c60200;
+    cursor: pointer;
+}
+.usuario-div-editar-submit button{
+    border: none;
+    padding-left: 13px;
+    background-color: transparent;
+    text-decoration: underline;
+    color: #c60200;
+    cursor: pointer;
+}
+
+.usuario-div-editar-submit{
+    text-align: right;
+    padding-right: 12px;
+    margin-top: 5px;
+}
+
+.loading_subir_imagen_automovil{
+    background-image: url(../../resources/template/iconos/loading2.gif);
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 177px;
+    width: 177px;
+}
+
+.loading_subir_imagen_automovil_perfil{
+    background-image: url(../../resources/template/iconos/loading2.gif);
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 130px;
+    width: 130px;
+}
+
+#usuario_formulario_agregar_vehiculo{
+    display: none;
+}
+
+.usuario-span-tareas-deshacer{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.tarea_hidden, .tarea_realizada_hidden{
+    display: none;
+}
+
+.usuario-div-smv-hecho-tareas-id-tarea{
+    display: none;
+}
+
+#usuario_formulario_perfil input{
+    font-family: 'open_sansregular';
+}
+
+.usuario-div-smv-cronograma{
+    margin-top: 15px; 
+    color: #c60200;
+    font-size: 14px;
+    cursor: pointer;
+    float: right;
+    font-family: 'open_sansregular';
+}
+
+.usuario-div-smv-cronograma:hover{
+    text-decoration: underline;
+}
+
+.usuario-div-smv-soat{
+    color: #c60200;
+    font-size: 14px;
+    font-family: 'open_sansregular';
+    float: left;
+}
+
+.usuario-div-smv-soat-agentes{
+    font-size: 10px;
+}
+
+.usuario-input-smv-soat{
+    background-color: #c60200;
+    color: white;
+    padding: 3px;
+    cursor: pointer;
+    border: none;
+}
+
+.usuario-div-smv-soat-telefono{
+    float: left;
+    margin-left: 20px;
+    font-family: 'open_sansregular';
+}
+
+#usuario-div-lightbox-tarea{
+    height: 450px;
+    width: 930px;
+    overflow-y: scroll;
+    background-color: white;
+    padding: 40px 50px;
+    display: none;
+}
+
+#usuario-lightbox-tarea-marco{
+  float: left;
+  padding: 2px;
+  border: 1px solid #ccc;
+  max-width: 120px;
+}
+
+#usuario-lightbox-tarea-marco img{
+  max-width:  120px;
+}
+
+#usuario-lightbox-tarea-info{
+    float: left;
+    margin-left: 20px;
+    width: 700px;
+    font-family: 'open_sansregular';
+}
+
+#usuario-div-lightbox-tarea-nombre{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#usuario-div-lightbox-tarea-progreso{
+    padding: 10px;
+    background-color: #c60200;
+    font-size: 14px;
+    margin-top: 5px;
+    color: white;
+    max-width: 120px;
+}
+
+#usuario-div-lightbox-tarea-descripcion{
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.usuario-div-oferta-tarea-comprar{
+    width: 110px;
+    height: 31px;
+    cursor: pointer;
+    float: right;
+    margin-top: 20px;
+    float: right;
+}
+
+.usuario-div-oferta-tarea-comprar a{
+    font-size: 16px;
+}
+
+.usuario-div-smv-vermas, .usuario-div-ofertas-vermas{
+    width: 860px;
+    font: 12px 'open_sansregular';
+    text-align: center;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.usuario-div-smv-vermas.rojo, .usuario-div-ofertas-vermas.rojo {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #fff5fa), color-stop(1, #ffdcdc) );
+	background:-moz-linear-gradient( center top, #fff5fa 5%, #ffdcdc 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5fa', endColorstr='#ffdcdc');
+	background-color:#fff5fa;
+	border:1px solid #c66664;
+	color:#c60300;
+	font-weight:normal;
+	text-decoration:none;
+}.usuario-div-smv-vermas.rojo:hover, .usuario-div-ofertas-vermas.rojo:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ffdcdc), color-stop(1, #fff5fa) );
+	background:-moz-linear-gradient( center top, #ffdcdc 5%, #fff5fa 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdcdc', endColorstr='#fff5fa');
+	background-color:#ffdcdc;
+}.usuario-div-smv-vermas.rojo:active, .usuario-div-ofertas-vermas.rojo:active {
+	position:relative;
+	top:1px;
+}
+
+/*.usuario-div-smv-vermas.rojo{
+    border: 1px solid #c66664;
+    color: #c60200;
+    background-color: #FFF5FA;
+}*/
+
+
+
+
+
+
+
+
+

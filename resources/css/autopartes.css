@@ -1,0 +1,2856 @@
+#autopart-div-banner{
+	position: relative; 
+	display:block;
+	margin-top: 0px;
+	width: 980px;
+	height: 125px;
+	background-color: white;
+	background-image:url(../../resources/images/autopartes/imagen-banner.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	border-style: solid;
+	border-color: #ccc;
+	border-width: 1px;
+	-moz-box-shadow: 
+	5px 0 10px -2px #ccc, 
+	-5px 0 10px -2px #ccc;
+    -webkit-box-shadow: 
+		5px 0 10px -2px #ccc, 
+		-5px 0 10px -2px #ccc;
+    box-shadow: 
+		5px 0 10px -2px #ccc,  
+		-5px 0 10px -2px #ccc; 
+}
+
+#tallerlinea-div-banner{
+	position: relative;
+	display:block;
+	margin-top: 0px;
+	width: 980px;
+	height: 125px;
+	background-color: white;
+	background-image:url(../../resources/images/tallerenlinea/banner.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	border-style: solid;
+	border-color: #ccc;
+	border-width: 1px;
+	-moz-box-shadow: 
+	5px 0 10px -2px #ccc, 
+	-5px 0 10px -2px #ccc;
+    -webkit-box-shadow: 
+		5px 0 10px -2px #ccc, 
+		-5px 0 10px -2px #ccc;
+    box-shadow: 
+		5px 0 10px -2px #ccc,  
+		-5px 0 10px -2px #ccc;
+}
+
+#carrito-div-banner{
+	position: relative;
+	display:block;
+	margin-top: 0px;
+	width: 980px;
+	height: 125px;
+	background-color: white;
+	background-image:url(../../resources/images/carrito/banner.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	border-style: solid;
+	border-color: #ccc;
+	border-width: 1px;
+	-moz-box-shadow: 
+	5px 0 10px -2px #ccc, 
+	-5px 0 10px -2px #ccc;
+    -webkit-box-shadow: 
+		5px 0 10px -2px #ccc, 
+		-5px 0 10px -2px #ccc;
+    box-shadow: 
+		5px 0 10px -2px #ccc,  
+		-5px 0 10px -2px #ccc;
+}
+
+#novedades-div-banner{
+	position: relative;
+	display:block;
+	margin-top: 0px;
+	width: 980px;
+	height: 125px;
+	background-color: white;
+	background-image:url(../../resources/images/novedades/banner.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	border-style: solid;
+	border-color: #ccc;
+	border-width: 1px;
+	-moz-box-shadow: 
+	5px 0 10px -2px #ccc, 
+	-5px 0 10px -2px #ccc;
+    -webkit-box-shadow: 
+		5px 0 10px -2px #ccc, 
+		-5px 0 10px -2px #ccc;
+    box-shadow: 
+		5px 0 10px -2px #ccc,  
+		-5px 0 10px -2px #ccc;
+}
+
+#talleres-div-banner{
+	position: relative;
+	display:block;
+	margin-top: 0px;
+	width: 980px;
+	height: 125px;
+	background-color: white;
+	background-image:url(../../resources/images/autopartes/imagen-banner-talleres.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	border-style: solid;
+	border-color: #ccc;
+	border-width: 1px;
+	-moz-box-shadow: 
+	5px 0 10px -2px #ccc, 
+	-5px 0 10px -2px #ccc;
+    -webkit-box-shadow: 
+		5px 0 10px -2px #ccc, 
+		-5px 0 10px -2px #ccc;
+    box-shadow: 
+		5px 0 10px -2px #ccc,  
+		-5px 0 10px -2px #ccc;
+}
+
+#autopart-div-banner-bottom{
+	position: relative;
+	display: block;
+	background-color: #262626;
+	height: 20px;
+	width: 100%;
+}
+
+#autopart-div-titulo-icono{
+	float: left;	
+}
+
+#autopart-div-banner-encuentra{
+	float: right;
+	margin-right: 50px;
+	height: 100%;	
+}
+
+#autopart-div-banner-encuentra-titulo h1{
+	color: #black;
+	font-size: 22px;
+	margin-top: 25px;
+}
+
+.autopart-div-banner-encuentra-paso h1{
+	color: #9c9c9c;
+	font-size: 16px;
+	float: left;
+	width: 120px;
+	margin-left: 1px;
+        padding-top: 11px;
+}
+
+.no-padding h1{  
+      padding-top: 0px;  
+}
+
+#autopart-h1-banner-encuentra{
+	width: 150px;
+}
+
+#autopart-div-banner-encuentra-pasos{
+	margin-top: 15px;	
+}
+.autopart-div-banner-encuentra-paso{
+	float: left;
+	position: relative;
+	width: 191px;
+        padding: 2px;
+}
+
+.autopart-div-banner-encuentra-paso-imagen{
+	background-image:url(../../resources/images/autopartes/numero-paso.png);
+	background-repeat: no-repeat;
+        background-position: center;
+	padding: 0px 15px 0px 8px;
+	text-align:center;
+	color: white;
+	font-size:33px;
+	font-weight: bold;
+	font-family: 'univers_condensedbold';
+	float: left;
+}
+
+#autopart-div-titulo{
+	margin-top: 15px;
+}
+
+#autopart-div-titulo h1{
+	font-size: 22px;
+}
+
+#autopart-div-buscar{
+	margin-top: 15px;
+	width: 190px;
+	height: 36px;
+	position:relative;
+}
+
+#autopart-div-buscar-input{
+	position: absolute;
+	right: 30px;
+	width: 163px;
+	height: 36px;
+	background-image:url(../template/header/buscar-text-field.png);
+	background-repeat: no-repeat;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #676767;
+	
+}
+
+#autopart-div-buscar-boton{
+	position: absolute;
+	top: 4px;
+	right: 0px;
+	width: 35px;
+	height: 28px;
+	border: none;
+	background-image:url(../../resources/template/header/buscar-boton.png);
+	background-repeat:no-repeat;
+}
+
+#autopart-div-buscar-input input{
+		margin-top: 10px;
+		margin-left:10px;
+		width:85%;
+		height: 16px;
+		background-color:transparent;
+		color: #676767;
+		font-size: 11px;
+		border: 0px solid;
+}
+
+#autopart-div-buscar-input input:focus{
+		outline: none;
+}
+
+#autopart-div-buscar-boton input{
+		width: 100%;
+		height: 100%;
+		border: none;
+		background-color:transparent;
+		cursor: pointer;
+} 
+
+.autopart-div-espaciador-rallas{
+	background-image:url(../../resources/images/autopartes/espaciador-rallas.png);
+	height: 3px;	
+	margin-top: 15px;
+}
+
+.div-content-left .autopart-div-espaciador-rallas{
+	width: 100%;
+}
+
+.autopart-div-categoria{
+	position: relative;
+	margin-top: 5px;
+}
+
+.autopart-div-categoria h4{
+	display: block;
+	margin-top: 0px;
+
+}
+
+.autopart-div-categoria-bullet{
+	float: left;	
+	margin-top: 6px;
+}
+
+.autopart-div-categoria-content{
+	float: left;
+	margin-left: 5px;
+	width: 179px;
+}
+.autopart-h4-categoria-titulo .utopart-h4-span-cantidad{
+	color: #c60200;	
+}
+
+.autopart-div-categoria-content h4{
+	cursor: pointer;
+	margin: 0px;
+	padding: 4px 0px 4px 0px;
+}
+
+.autopart-div-categoria-content ul{
+	margin-top: 5px;
+	margin-bottom: 0px;
+	padding-left: 20px;
+	display: none;	
+	color: black;
+	padding-left: 5px;
+}
+
+.autopart-div-categoria-content li{
+	margin-top: 0px;
+}
+
+
+
+
+.autopart-div-espacio{
+	height: 50px;
+	width: 100%;	
+}
+
+.autopart-div-pagination{
+	float: right;	
+	font-family: 'open_sansregular';
+	color: black;
+	font-size: 12px;
+}
+
+.autopart-div-pagination input{
+	border: solid 1px #ccc;
+	width: 25px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+.autopart-div-pagination img{
+	cursor: pointer;
+        border: none;
+}
+
+.div-content-center #autopart-div-titulo{
+	float: left;	
+	margin-top: 0px;
+	margin-left: 10px;
+}
+
+.div-content-center #autopart-div-titulo h1{
+	font-size:28px;	
+}
+#autopart-div-autopartes-titulo{
+}
+
+.autopart-div-filtros{
+	margin-top:15px;	
+}
+
+.autopart-div-filtros .autopart-div-filtro{
+	float: left;	
+	position: relative;
+	background-color: #e9e9e9;
+	padding: 2px 15px 2px 2px;
+	margin-right: 10px;
+	font-family: 'univers_condensedbold';
+}
+
+.autopart-div-filtros  .autopart-div-filtro span{
+	color: black;
+	font-size: 18px;
+}
+
+.autopart-div-filtros  .autopart-div-filtro-x{
+	position: absolute;
+	right: 3px;
+	top: 3px;	
+	font-size: 12px;
+	color: #8c8c8c8;
+	cursor: pointer;
+	font-weight: normal;
+}
+
+#autopart-div-autopartes{
+	margin-top: 25px;	
+	position: relative;
+}
+
+.autopart-div-autoparte{
+	position: relative;
+	padding-bottom: 30px;
+	margin-bottom: 20px;
+	background-image: url(../../resources/images/autopartes/seccion-autoparte.png);
+	background-repeat: no-repeat;
+	background-position:bottom;
+	font-family: 'open_sansregular';
+}
+
+.autopart-div-autoparte-marco{
+	padding: 3px;
+	width: 90px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;	
+	box-shadow: 0px 0px 5px #ccc;
+	-moz-box-shadow: 0px 0px 5px #ccc;
+	-webkit-box-shadow: 0px 0px 5px #ccc;
+        float: left;
+        background-color: white;
+}
+
+.autopart-div-autoparte-marco img{
+	width: 90px;	
+        border: none;
+}
+
+.autopart-div-autoparte-datos{
+	float: right;
+	width: 530px;
+}
+
+.autopart-div-autoparte-info{
+	width: 70%;
+	float: left;
+}
+
+.autopart-div-autoparte-titulo a{
+	font-size:12px;
+	color: black;
+	text-decoration: underline;	
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.talleres-div-taller .autopart-div-autoparte-descripcion{
+        width: 490px;
+}
+.autopart-div-autoparte-descripcion{
+	margin-top: 20px;
+	font-size: 12px;
+	color: #404040;
+        line-height: 19px;
+}
+
+.autopart-div-autoparte-infoprecio{
+	width: 30%;
+	float: right;
+	 text-align: right;	
+}
+
+.autopart-div-autoparte-infoprecio span{
+	font-size: 12px;
+	color: black;
+}
+
+.autopart-div-autoparte-precio{
+	color: #c60200;
+	font-size: 20px;
+	font-weight: bold;	
+}
+
+.autopart-div-autoparte-vendedores{
+	font-size: 12px;
+	color: #404040;	
+}
+
+.autopart-div-autoparte-vermas{
+	font-size: 12px;	
+	margin-top: 15px;
+	position: relative;
+	padding-right: 15px;
+}
+
+.autopart-div-autoparte-vermas span{
+	color: #c60200;
+	text-decoration: underline;
+}
+
+.autopart-div-autoparte-vermas img{
+	position: absolute;	
+	top: 3px;
+}
+
+.autopart-detalle-div-autoparte{
+	position: relative;
+	margin-bottom: 20px;
+	font-family: 'open_sansregular';
+}
+
+.autopart-detalle-div-imagenes{
+	background-image:url(../../resources/images/autopartes/autopartes-detalle-fondo-marco.png);
+	background-repeat: no-repeat;
+	width: 135px;
+	height: 170px;	
+	padding-top: 10px;
+        float: left;
+}
+
+.autopart-detalle-div-autoparte .autopart-div-autoparte-info{
+	width: 100%;
+	float: none;
+}
+
+.autopart-detalle-div-autoparte .autopart-div-autoparte-datos{
+	float: right;
+	margin-top: 20px;
+	width: 500px;
+	
+}
+
+.autopart-detalle-div-autoparte-marco-marca{
+	padding: 2px;
+	width: 45px;
+	display: block;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;	
+	box-shadow: 0px 0px 5px #ccc;
+	-moz-box-shadow: 0px 0px 5px #ccc;
+	-webkit-box-shadow: 0px 0px 5px #ccc;
+	position: relative;
+	margin-left: 20px;
+}
+
+.autopart-detalle-div-autoparte-marco-marca img{
+	width: 45px;	
+	height: 32px;
+}
+
+.autopart-detalle-div-imagenes .autopart-div-autoparte-marco{
+	padding: 2px;
+        width: 125px;
+	display: block;
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
+}
+
+.autopart-detalle-div-imagenes .autopart-div-autoparte-marco img{
+	width: 125px; 
+}
+
+.autopart-detalle-div-vendedores{
+        font-family: 'open_sansregular';
+	margin-bottom: 30px;
+}
+
+.autopart-detalle-div-vendedores #autopart-div-titulo img{
+}
+
+.autopart-detalle-div-vendedores #autopart-div-titulo, .autopart-detalle-div-vehiculos #autopart-div-titulo{
+	float: none;	
+}
+.autopart-detalle-div-vendedores #autopart-div-titulo h1{
+	font-size:20px;
+	display: inline;
+	position: relative;
+	top: -8px;
+	margin-left: 5px;
+}
+
+.autopart-detalle-div-vehiculos #autopart-div-titulo h1{
+	font-size:20px;
+	display: inline;
+	position: relative;
+	margin-left: 5px;
+}
+
+#autopart-detalle-div-tabla-vendedores{
+	position: relative;
+	margin-top: 15px;	
+	font-family: 'open_sansregular';
+}
+
+#autopart-detalle-div-tabla-terminos{
+    font-size: 11px;
+    color: #404040;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+
+#autopart-detalle-div-tabla-vendedores table{
+	
+}
+
+#autopart-detalle-div-tabla-vendedores table th{
+	background-color: #c60200;
+	color: white;
+	font-size: 15px;
+	font-weight: bold;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+#autopart-detalle-th-taller{
+	width: 285px;	
+	padding-left: 60px;
+	text-align: left;
+}
+
+#autopart-detalle-th-precio{
+	width:160px;
+}
+
+#autopart-detalle-div-tabla-vendedores table #autopart-detalle-th-agregar{
+	width:158px;
+	background-color: #404040;
+}
+
+#autopart-detalle-div-tabla-vendedores table td{
+	background-color: #efefef;
+	color: black;
+	font-size: 12px;
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+.autopart-detalle-td-nombre{
+	padding-left:20px;	
+}
+
+.autopart-detalle-td-precio{
+	text-align:center;	
+	color: #404040;
+}
+
+.autopart-detalle-td-anadir input{
+    border:  none;
+    background-color: #c60200;
+    color:  white;
+    font-size: 11px;
+    padding: 3px 20px 3px 10px;
+    background-image: url(../../resources/images/autopartes/doble-mayor-blanco.png);
+    background-repeat:  no-repeat;
+    background-position: 97% 45%;
+    cursor: pointer;
+}
+
+
+.autopart-detalle-div-vehiculos{
+	margin-bottom: 20px;
+}
+
+.autopart-div-vehiculos-lista{
+  margin-top: 15px;
+}
+
+.autopart-div-vehiculos-lista  table{
+	width: 100%;
+	background-color: #f2f2f2;
+}
+
+.autopart-div-vehiculos-lista ul{
+    padding-left: 20px;
+	line-height: 2;
+}
+  
+.autopart-div-vehiculos-lista   table td{
+	font-size: 12px;
+	font-family: 'open_sansregular';
+	color: #404040;
+        width: 33.3%;
+}
+
+.autopart-detalle-div-vermas{
+    text-align: right;
+    width: 100%;
+    margin-right: 10px;
+    font-size: 12px;
+    text-decoration: underline;
+    font-weight: bold;
+    color: #c60200;
+    cursor: pointer;
+    padding:  10px;
+}
+.autopart-detalle-div-vermas img{
+    width: 7px;
+    height: 11px;
+    border: none;
+}
+
+/** sección de talleres*/
+
+.talleres-div-taller-marco{
+	padding: 3px;
+	width: 147px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;	
+	box-shadow: 0px 0px 5px #ccc;
+	-moz-box-shadow: 0px 0px 5px #ccc;
+	-webkit-box-shadow: 0px 0px 5px #ccc;
+        float: left;
+}
+
+.talleres-div-taller-marco img{
+	width: 147px;	
+        border: none;
+}
+
+.talleres-div-taller-datos{
+	position: relative;
+        float: right;
+	width: 480px;
+}
+
+.talleres-div-taller-info{
+	float: left;
+}
+
+.talleres-div-taller-direccion{
+	font-size: 12px;
+	margin-top: 20px;
+}
+
+.talleres-div-vermas{
+    text-align: right;
+    margin-right: 10px;
+    font-size: 10px;
+    text-decoration: underline;
+    font-weight: bold;
+    color: #c60200;
+    cursor: pointer;
+    padding:  10px;
+}
+.talleres-div-vermas img{
+    width: 7px;
+    height: 11px;
+    border: none;
+}
+
+.talleres-div-taller{
+	position: relative;
+	padding-bottom: 6px;
+	margin-bottom: 20px;
+	background-image: url(../../resources/images/autopartes/seccion-autoparte.png);
+	background-repeat: no-repeat;
+	background-position: bottom;
+	font-family: 'open_sansregular';
+	
+}
+
+.talleres-div-taller-calificaciones{
+	background-image:url(../../resources/images/autopartes/degrade-puntuacion.png);
+	background-repeat: no-repeat;
+	background-position: right, bottom;
+	width: 100%;	
+	padding: 10px 30px 25px 0px;
+	text-align: right;
+	position: relative;
+}
+
+.talleres-div-taller-calificacion{
+	font-family: 'univers_condensedbold';
+	color: black;
+}
+
+.talleres-span-taller-calificaUsuario{
+	font-size: 16px;
+}
+
+.talleres-span-taller-calificaNumero{
+	font-size: 25px;	
+}
+
+.talleres-div-taller-calificacion img{
+	position: relative;	
+}
+
+.talleres-div-taller-barra-progreso{
+	width: 126px;
+	height: 26px;
+	position: relative;
+	float: right;
+	margin-right: 60px;
+}
+
+.talleres-div-taller-progreso{
+	width: 80%;
+	background-image:url(../home/calificacion-completa.png);
+	background-repeat: no-repeat;	
+	height: 100%;
+}
+
+.talleres-div-ordenar{
+	float: right;
+	background-color: #585858;
+	padding: 3px 7px 3px 7px;
+        cursor: pointer;
+}
+
+.talleres-div-ordenar span{
+	color: white;	
+	font-size: 14px;
+	text-decoration: underline;
+	font-family: 'univers_condensedbold';
+}
+
+.talleres-div-ordenar img{
+	margin-right: 5px;	
+}
+
+/** detalles de los talleres*/
+
+.talleres-detalle-div-taller-marco{
+	padding: 1px;
+	max-width: 285px;
+        max-height: 100px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;	
+	box-shadow: 0px 0px 5px #ccc;
+	-moz-box-shadow: 0px 0px 5px #ccc;
+	-webkit-box-shadow: 0px 0px 5px #ccc;
+        margin-bottom: 25px;
+
+}
+
+.talleres-detalle-div-taller-marco img{
+	max-width: 285px;	
+        max-height: 100px;
+}
+
+.talleres-detalle-div-taller-datos{
+	width: 100%;
+}
+
+.talleres-detalle-div-taller-info{
+	float: left;
+	width: 290px;
+}
+
+.talleres-detalle-div-taller-telefono{
+	font-size: 12px;
+	margin-top: 10px;
+}
+
+.talleres-detalle-div-contacto{
+	float: left;	
+	cursor: pointer;
+}
+
+.talleres-detalle-div-contacto span{
+	font-size: 11px;
+	text-decoration: underline;
+	color: #c60200;
+}
+
+.talleres-detalle-div-contactover{
+	margin-top: 10px;
+}
+
+.talleres-detalle-div-contactover .talleres-div-vermas{
+	padding-top: 23px;
+	font-weight: normal;
+	font-size: 11px;
+}
+
+.talleres-detalle-div-taller{
+	position: relative;
+	margin-bottom: 20px;
+	font-family: 'open_sansregular';
+	
+}
+
+.autopart-div-autoparte-titulo{
+    font-weight: bold;
+    color: black;
+}
+
+.talleres-detalle-div-taller-localizacion{
+	float: right;
+	width: 340px;	
+	
+}
+
+.talleres-detalle-div-taller-gmaps{
+	height: 270px;
+	width: 100%;
+	background-color: black;	
+}
+
+.talleres-detalle-div-taller-calificacion-numero{
+	margin-top: 10px;	
+	font-size: 10px;
+	color: black;
+}
+
+.talleres-detalle-div-taller-calificacion-numero-gusta{
+	float: left;
+	width: 120px;	
+}
+
+.talleres-detalle-div-taller-calificacion-numero-nogusta{
+	float: right;
+	width: 120px;	
+	text-align: right;
+}
+
+.talleres-detalle-div-taller-calificacion-thumbs{
+	margin-top: 10px;	
+	font-size: 10px;
+	color: black;
+}
+
+.talleres-detalle-div-taller-calificacion-thumbs-gusta{
+	float: left;
+	width: 120px;	
+	color: #c60200;
+}
+
+.talleres-detalle-div-taller-calificacion-thumbs-gusta div{
+	width: 70px;
+	float: left;
+}
+
+.talleres-detalle-div-taller-calificacion-thumbs-gusta img{
+	float: right;
+	margin-right: 30px;
+	cursor: pointer;
+}
+
+.talleres-detalle-div-taller-calificacion-thumbs-nogusta{
+	float: right;
+	width: 120px;	
+	text-align: right;
+}
+
+.talleres-detalle-div-taller-calificacion-thumbs-nogusta div{
+	width: 70px;
+	float: right;
+}
+
+.talleres-detalle-div-taller-calificacion-thumbs-nogusta img{
+	float: left;
+	margin-left: 25px;
+	cursor: pointer;
+}
+
+#talleres-detalle-div-talleres{
+	margin-top: 25px;	
+	position: relative;
+}
+
+.talleres-detalle-div-calificacion-titulo {
+	margin-top: 15px;	
+	float: left;
+}
+
+.talleres-detalle-div-calificacion-titulo span{
+	font-size: 20px;
+}
+
+.talleres-detalle-div-calificacion-titulo #autopart-div-titulo img{
+	position: relative;
+}
+
+.talleres-detalle-div-calificacion-estrellas{
+	
+}
+
+.talleres-detalle-div-calificacion-estrellas span{
+	font-size: 13px;
+	font-family: 'univers_condensedbold';
+	color: black;
+        
+}
+
+.talleres-detalle-div-calificacion-estrellas-imagen{
+	margin-bottom: 5px;
+	margin-right: 30px;	
+	margin-top: 5px;
+}
+.talleres-detalle-div-calificacion-estrellas-imagen-calificada{
+
+}
+
+.talleres-detalle-div-galeria-titulo {
+	margin-top: 15px;	
+	float: left;
+}
+
+.talleres-detalle-div-galeria-titulo span{
+	font-size: 20px;
+}
+
+.talleres-detalle-div-galeria-titulo #autopart-div-titulo img{
+	position: relative;
+}
+
+.talleres-detalle-div-galeria-fotos{
+	margin-top: 10px;
+	position: relative;	
+}
+
+.talleres-detalle-div-galeria-foto{
+	padding: 2px;
+	border: 1px solid #ccc;
+	width: 105px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;	
+	box-shadow: 0px 0px 10px #ccc;
+	-moz-box-shadow: 0px 0px 10px #ccc;
+	-webkit-box-shadow: 0px 0px 10px #ccc;	
+	float: left;
+	margin: 8px;
+}
+
+.talleres-detalle-div-galeria-foto img{
+	width: 105px;	
+        border: none;
+}
+
+
+.talleres-detalle-div-servicios-titulo {
+	margin-top: 15px;	
+	float: left;
+}
+
+.talleres-detalle-div-servicios-titulo span{
+	font-size: 20px;
+}
+
+.talleres-detalle-div-servicios-lista{
+  
+}
+
+.talleres-detalle-div-servicios-lista  table{
+	width: 100%;
+}
+
+.talleres-detalle-div-servicios-lista ul{
+	line-height: 2;
+}
+  
+.talleres-detalle-div-servicios-lista   table td{
+	font-size: 12px;
+	font-family: 'open_sansregular';
+	color: #404040;
+}
+
+.talleres-detalle-div-opiniones-titulo {
+	margin-top: 15px;	
+	float: left;
+}
+
+.talleres-detalle-div-opiniones{
+	position: relative;
+	
+}
+
+.talleres-detalle-div-opiniones-header{
+	padding-bottom: 24px;
+	background-image:url(../../resources/images/autopartes/seccion-autoparte.png);
+	background-repeat: no-repeat;
+	background-position:bottom;	
+}
+
+.talleres-detalle-div-opiniones-titulo #autopart-div-titulo-icono{
+	background-image: url(../../resources/images/autopartes/opiniones.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 50px;
+	height: 40px;	
+	padding-top: 2px;
+	text-align: center;
+	font-size: 25px;
+	font-weight: bold;
+	color: white;
+}
+
+.talleres-detalle-div-opiniones-titulo #autopart-div-titulo{
+	margin-top: 5px;
+}
+
+.talleres-detalle-div-opiniones-titulo #autopart-div-titulo-icono div{
+	font-size: 25px;
+	font-weight: bold;
+	color: white;	
+}
+
+.talleres-detalle-div-opiniones-titulo span{
+	font-size: 20px;
+}
+
+.talleres-detalle-div-opiniones-aportar{
+	float: right;	
+	margin-top: 20px;
+	background-color: #c60200;
+	color: white;
+	font-size: 11px;
+	padding: 3px;
+	cursor: pointer;
+}
+
+.talleres-detalle-div-opiniones-aportar img{
+	position: relative;	
+}
+
+.talleres-detalle-div-opiniones{
+	margin-bottom: 30px;
+	font-family: 'open_sansregular';
+}
+
+.talleres-detalle-div-opinion{
+	margin-top: 20px;	
+}
+
+.talleres-detalle-div-opinion-left{
+	width: 450px;	
+	font-family: 'open_sansregular';
+	font-size: 12px;
+	margin-left: 10px;
+	float: left;
+}
+
+.talleres-detalle-div-opinion-comentario{
+    max-height: 30px;
+    overflow-y: hidden;
+}
+
+.talleres-detalle-div-opinion-por{
+	text-align: right;	
+	color: #c60200;
+}
+
+.talleres-detalle-div-opinion-fecha{
+	text-align: right;	
+}
+
+.talleres-detalle-div-opinion-right{
+	float: right;
+	width: 150px;
+	margin-right: 20px;	
+	text-align: right;
+}
+
+.talleres-detalle-div-opinion-calificacion{
+	font-size: 25px; 
+	color: black;
+	font-family: 'univers_condensedbold';
+}
+
+.talleres-detalle-div-opinion-expandir{
+	font-size: 11px;
+	font-family: 'open_sansregular';
+	color: #c60200;
+	text-decoration: underline;
+	margin-top: 20px;
+	cursor: pointer;
+}
+
+.talleres-detalle-div-opinion-calificacion-porcentaje{
+	margin-top: 10px;
+}
+
+.talleres-detalle-div-opinion-calificacion-calificado{
+}
+
+.talleres-detalle-div-opinion-separador{
+	height: 3px;
+	width: 100%;
+	background-color: #e7e7e7;
+	margin-top: 10px;	
+}
+
+.talleres-detalle-contactar{
+	width: 500px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	display: none;
+	background-color: white;
+	font-family: 'open_sansregular';
+	padding: 35px 70px 0px 35px;
+}
+
+#form_contacto_linea input[type=submit], #form_calificar_taller input[type=submit], #form_reportar_pregunta input[type=submit], #form_reportar_respuesta input[type=submit],
+#formulario_olvido_contrasena input[type=submit], #formulario_cambio_contrasena input[type=submit], #formulario_contactenos input[type=submit], #formulario_califica_experiencia input[type=submit]{
+    cursor: pointer;
+    float: right;
+    margin-top:  10px;
+    border: none;
+    background-color: #c60200;
+    color: white;
+    font-family: 'open_sansregular';
+    padding: 3px 10px 3px 10px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.talleres-detalle-contactar-titulo{
+	font-size: 20px;
+	color: black;	
+}
+
+.talleres-detalle-contactar-nombres{
+	margin-top: 30px;	
+	float: left;
+}
+
+.talleres-detalle-contactar-nombres label, .talleres-detalle-contactar-correo label, .talleres-detalle-contactar-mensaje label{
+	font-size: 12px;
+	color: #404040;	
+}
+
+.talleres-detalle-contactar-nombres input, .talleres-detalle-contactar-correo input{
+	border: 1px solid #ccc;
+	background-image: url(../../resources/images/autopartes/formulario-input.png);
+	height:25px;
+	margin-top: 5px;
+        font-family: 'open_sansregular';
+}
+
+.talleres-detalle-contactar-nombres input{
+	width: 250px;
+}
+
+.talleres-detalle-contactar-correo input{
+	width:200px;	
+}
+
+
+.talleres-detalle-contactar-correo{
+	margin-top: 30px;
+	float: right;	
+}
+
+.talleres-detalle-contactar-mensaje{
+	margin-top: 30px;
+}
+
+
+.talleres-detalle-contactar-mensaje textarea{
+	margin-top: 5px;
+	width:492px;
+	height: 130px;	
+	border: 1px solid #ccc;
+	background-image: url(../../resources/images/autopartes/formulario-texto.png);
+        font-family: 'open_sansregular';
+}
+
+.talleres-detalle-opinar{
+	width: 580px;
+	height: 213px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;	
+	background-color: white;
+	font-family: 'open_sansregular';
+	padding: 14px 20px 0px 20px;
+	display: none;
+}
+
+.talleres-detalle-opinar-escribe{
+	float: left;
+	width: 370px;
+}
+
+.talleres-detalle-opinar-escribe label{
+	font-size: 14px;
+	color: #404040;
+}
+
+.talleres-detalle-opinar-escribe textarea{
+	margin-top: 15px;
+	width: 357px;
+	height:140px;
+	background-color: #f4f4f4;
+	border: none;
+        font-family: 'open_sansregular';
+}
+
+.talleres-detalle-opinar-calificacion{
+	float: right;
+	width: 200px;
+	margin-top: 30px;	
+}
+
+.talleres-detalle-opinar-calificacion-titulo{
+	font-size: 14px;
+	color: #404040;	
+}
+
+.talleres-detalle-opinar-calificacion-estrella{
+	width: 40px;
+	float: left;
+	font-size: 10px;
+	color: #717171;
+	text-align:center;
+	margin-top: 20px;
+	cursor: pointer;	
+}
+
+.talleres-detalle-opinar-agregar{
+	font-size: 11px;
+	color: white;
+	padding: 3px 10px 3px 10px;
+	background-color: #c60200;
+	width: 115px;		
+	float: right;
+	margin-top: 30px;
+	cursor: pointer;
+}
+
+/** TALLER EN LÍNEA */
+
+#tallerlinea-div-top{
+	margin-top: 20px;
+	background-image: url(../../resources/images/autopartes/seccion-autoparte.png);
+	background-repeat:no-repeat;
+	background-position: bottom;
+	padding-bottom:26px;	
+	margin-bottom: 10px;
+	width:100%;
+/*	background-image:url(../../resources/images/tallerenlinea/degrade-resuelve.png);*/
+}
+#tallerlinea-div-top-resuelve{
+	float: left;
+	color: black;
+	font-size:24px;
+	font-family: 'univers_condensedbold';
+	
+}
+
+#tallerlinea-div-top-preguntar{
+	color: white;
+	background-image:url(../../resources/images/home/quiero-preguntar.png);
+	background-repeat: no-repeat;
+	width: 120px;
+	height: 25px;
+	float: right;
+	font-family: 'open_sansregular';
+	font-size: 11px;
+	text-align: center;
+	padding-top: 5px;
+	cursor: pointer;
+}
+
+#tallerlinea-div-content{
+	font-family: 'open_sansregular';
+			
+}
+
+.tallerlinea-div-pregunta{
+    background-image: url(../../resources/images/autopartes/seccion-autoparte.png);
+    background-repeat:no-repeat;
+    background-position: bottom;
+    padding-bottom:8px;
+    margin-top: 20px;
+    
+}
+
+.tallerlinea-div-pregunta-imagen{
+	padding:1px;
+	float: left;
+	margin-right: 15px;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+	background-color: white;
+	box-shadow: 0px 0px 5px #ccc;
+	-webkit-box-shadow: 0px 0px 5px #ccc;
+	-moz-box-shadow: 0px 0px 5px #ccc;
+	max-width: 100px;	
+}
+
+.tallerlinea-div-pregunta-imagen img{
+	border-radius: 2px;
+        max-width: 100px;
+        border: none;
+}
+
+.tallerlinea-div-pregunta-content{
+	float: right;	
+	width: 530px;
+}
+
+.tallerlinea-div-pregunta-titulo a{
+	text-decoration: underline;
+	color: black;
+	font-size: 12px;
+}
+
+.tallerlinea-div-pregunta-por{
+	margin-top: 20px;
+	color: #c60200;
+	font-size: 	12px;
+}
+
+.tallerlinea-div-pregunta-fecha{
+		color: #787878;
+		font-size: 12px;
+}
+
+.tallerlinea-div-pregunta-descripcion{
+	margin-top: 20px;
+	font-size: 12px;
+	color: black;	
+}
+
+.tallerlinea-div-pregunta-bot{
+	float:right;
+	color: black;	
+	font-size: 11px;
+	padding: 6px 15px 6px;
+	background-image:url(../../resources/images/tallerenlinea/degrade-bot-pregunta.png);
+	background-repeat: no-repeat;
+	background-position:right;
+	width: 100%;
+	text-align: right;
+}
+
+.tallerlinea-span-pregunta-categoria{
+	text-decoration: underline;
+	color: #c60200;
+	margin-left:5px;
+        cursor: pointer;
+}
+
+.tallerlinea-span-pregunta-respuestas{	
+}
+
+#tallerlinea-div-banner-comunidad{
+	margin-left: 360px;
+	height: 100%;	
+        margin-top: 15px;
+}
+
+#tallerlinea-div-banner-comunidad-titulo h1{
+	color: black;
+	font-size: 22px;
+}
+
+#tallerlinea-div-banner-comunidad-preguntanos{
+    float: left;
+    background-image:url(../../resources/images/tallerenlinea/preguntanos.png);
+    background-repeat:  no-repeat;
+    padding: 1px 40px 1px 16px;
+    margin-top:  10px;
+    cursor: pointer;
+}
+
+#tallerlinea-div-banner-comunidad-preguntanos h1{
+    font-size: 17px;
+    color: white;
+    text-decoration: none;
+    font-family: 'univers_condensedbold';
+}
+
+#tallerlinea-div-banner-comunidad-comparte{
+    float: left; 
+    margin-left: 30px;
+    background-image:url(../../resources/images/tallerenlinea/comparte.png);
+    background-repeat:  no-repeat;
+    padding: 1px 40px 1px 16px;
+    margin-top:  10px;
+}
+
+#tallerlinea-div-banner-comunidad-comparte h1{
+    font-size: 17px;
+    color: white;
+    text-decoration: none;
+    font-family: 'univers_condensedbold';
+}
+
+#tallerlinea-div-banner-comunidad-comparte h1 a{
+    font-size: 17px;
+    color: white;
+    text-decoration: none;
+    font-family: 'univers_condensedbold';
+}
+
+/** lightbox preguntar*/
+
+
+#pregunta-div-form{
+	width: 550px;
+	padding: 20px 0px 20px 50px;
+	background-color: white;
+	border: 1px solid #ccc;
+	font-family: 'open_sansregular';
+        display: none;
+}
+
+
+#pregunta-div-form-titulo{
+	font-size: 20px;
+}
+
+#form-preguntar label{
+	display:block;	
+	margin-top: 20px;
+	font-size: 12px;
+}
+
+#form-preguntar input[type=text]{
+	border: 1px solid #ccc;
+	font-family: 'open_sansregular';
+	width: 480px;
+	font-size: 20px;
+	height: 35px;
+	background-image: linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);
+	background-image: -o-linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);
+	background-image: -moz-linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);
+	background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);
+	background-image: -ms-linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);
+}
+
+#pregunta-textarea-descripcion{
+	border: 1px solid #ccc;
+	font-family: 'open_sansregular';
+	width: 480px;
+	height: 135px;
+	background-image: linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);
+	background-image: -o-linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);
+	background-image: -moz-linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);
+	background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);
+	background-image: -ms-linear-gradient(bottom, rgb(255,255,255) 25%, rgb(224,221,224) 200%);	
+}
+
+
+#pregunta-label-pregunta{
+		
+}
+
+
+
+#pregunta-div-clasifica input{
+	width: 200px;
+}
+
+#pregunta-div-clasifica input[type=text]{
+	width: 200px;
+}
+
+#pregunta-div-clasifica{
+	width: 200px;
+}
+
+#pregunta-input-submit{
+	border: none;
+	background-color: #c60200;
+	color: white;
+	font-size: 11px;
+	padding: 2px 10px 2px 10px;
+	font-family: 'open_sansregular';
+	float: right;
+	margin-top: 20px;
+	margin-right: 70px;
+	cursor: pointer;
+}	
+
+#id_pregunta_categoria{
+    width: 170px;
+}
+
+/** taller en línea detalle*/
+.div-content-left-tallerlinea{ 
+	width: 620px;
+	float: left;
+	margin-left: 30px;
+	margin-top: 30px;
+	font-family: 'open_sansregular';
+}
+
+.div-content-center-tallerlinea{
+	width: 260px;
+	float: right;
+	margin-right: 30px;
+	margin-top: 30px;
+	font-family: 'open_sansregular';
+}
+
+.div-content-left-tallerlinea .autopart-div-espaciador-rallas{
+	width: 100%;
+}
+
+#tallerlinea-detalle-div-pregunta{
+	margin-top: 25px;
+	padding-bottom: 36px;
+	background-image:url(../../resources/images/autopartes/seccion-autoparte.png);
+	background-repeat: no-repeat;
+	background-position:bottom;
+}
+
+#tallerlinea-detalle-div-pregunta-marco{
+	padding: 2px;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	box-shadow: 0px 0px 3px 2px #ccc;	
+	-moz-box-shadow: 0px 0px 3px 2px #ccc;	
+	-webkit-box-shadow: 0px 0px 3px 2px #ccc;	
+	float: left;
+	max-width: 100px;
+	margin-right: 20px;
+}
+
+#tallerlinea-detalle-div-pregunta-marco img{
+	max-width: 100px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+#tallerlinea-detalle-div-pregunta-content{
+	float: right;
+	width: 480px;	
+}
+
+#tallerlinea-detalle-div-pregunta-titulo{
+	font-size: 16px;
+	font-weight: bold;
+	color: black;	
+}
+
+#tallerlinea-detalle-div-pregunta-autor{
+	color: #c60200;
+	margin-top: 20px;
+	font-size:12px;	
+}
+
+#tallerlinea-detalle-div-pregunta-fecha{
+	font-size: 11px;
+	color: #787878;	
+}
+
+#tallerlinea-detalle-div-pregunta-cuerpo{
+	font-size: 12px;
+	color: #404040;
+	margin-top: 20px;	
+}
+
+#tallerlinea-detalle-div-pregunta-reportar{
+	text-decoration: underline;
+	color: #c60200;
+	font-size:11px;
+	font-style: italic;	
+	margin-top: 20px;
+	cursor: pointer;
+}
+
+#form_reportar_pregunta img{
+    display: block
+}
+
+#tallerlinea-detalle-div-pregunta-redes{
+    float: right;
+    
+}
+
+#talleres-detalle-div-taller-redes{
+    margin-top: 10px;
+}
+
+#talleres-detalle-div-taller-recomendar-fb{
+    margin-top: 10px;
+}
+
+.fb-like{
+    margin-top: 0px;
+    top: -5px;
+}
+
+#tallerlinea-detalle-div-pregunta-responder{
+	color: white; 	
+	font-family: 'open_sansregular';
+	float: right;
+	cursor: pointer;
+}
+
+#tallerlinea-detalle-div-respuesta-content{
+	margin-top: 20px;
+	color: #404040;
+	font-family: 'open_sansregular';
+	font-size: 12px;
+	float: right;
+	width: 480px;
+}
+
+#tallerlinea-detalle-div-respuesta-respuesta{
+
+}
+
+#tallerlinea-detalle-div-respuesta-autor{
+        color: #c60200;
+	margin-top: 5px;
+}	
+
+#tallerlinea-detalle-div-respuesta-cuerpo{
+	margin-top: 25px;		
+}
+
+.tallerlinea-detalle-div-respuesta{
+	background-image:url(../../resources/images/autopartes/taller-linea-respuesta.png);
+	background-position: top;
+	background-repeat: no-repeat;
+	padding-top: 6px;
+        padding-bottom: 15px
+}
+
+.tallerlinea-detalle-div-respuesta #tallerlinea-detalle-div-pregunta-marco{
+	margin-top: 20px;
+}
+
+#textarea_reportar_comentario{
+   font-family: 'open_sansregular'; 
+}
+
+#tallerlinea-detalle-div-respuesta-reportar{
+	text-decoration: underline;
+	color: #c60200;
+	font-size:11px;
+	font-style: italic;	
+	margin-top: 20px;
+	cursor: pointer;
+	float: right;
+}
+
+#tallerlinea-detalle-div-responder{
+	margin-top: 15px;	
+	background-image: url(../../resources/images/autopartes/seccion-autoparte.png);
+	background-repeat: no-repeat;
+	background-position: top;
+	padding-top: 6px;
+	
+}
+
+
+
+
+#tallerlinea-detalle-div-responder #autopart-div-titulo{
+	background-image:url(../../resources/images/autopartes/taller-tlinea-titulo-degrade.png);
+	background-repeat:repeat-x;
+	margin-top: -5px;
+	padding-bottom: 15px;
+	padding-top: 10px;
+	padding-left: 30px;
+}
+
+#tallerlinea-detalle-div-responder #autopart-div-titulo span{
+	font-size: 20px;	
+}
+
+#forma-responder{
+	display: block;
+	margin-left:auto;
+	margin-right: auto;
+	width: 490px;
+	margin-top: 10px;	
+}
+
+#tallerlinea-textarea-respuesta{
+	width: 98%;
+	border: 1px solid #ccc;
+	height: 135px;
+	background-image: linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+        font-family: 'open_sansregular';
+}
+
+#tallerlinea-input-submit, #tallerlinea-input-submit-link{
+	float: right;	
+	border: none;
+	background-color: #c60200;
+	padding: 5px 25px 3px 10px;
+	color: white;
+	font-family: 'open_sansregular';
+	font-size: 11px;
+	margin-top: 15px;
+	background-image:url(../../resources/images/autopartes/mayor-que-blanco-doble.png);
+	background-repeat: no-repeat;
+	background-position: 90% 50%;
+	cursor: pointer;
+        margin-bottom: 15px;
+}
+
+#div-content-center-tallerlinea #autopart-div-autopartes-titulo span{
+	font-size: 20px;
+}
+
+.tallerlinea-detalle-div-relacionada{
+	margin-top: 15px;
+	background-image:url(../../resources/images/tallerenlinea/separador-establecimiento.png);
+	background-position: bottom;
+	background-repeat: no-repeat;	
+	padding-bottom: 21px;
+
+}
+
+.tallerlinea-detalle-div-relacionada-titulo{
+	font-size: 10px;
+	font-weight: bold;	
+	color: black;
+}
+
+.tallerlinea-detalle-div-relacionada-cuerpo{
+	margin-top: 15px;
+	color: #404040;
+	font-size: 11px;	
+}
+
+
+
+
+
+/** novedades*/
+.div-content-left-novedades{
+    position: relative;
+	width: 660px;
+	float: left;
+	margin-left: 30px;
+	margin-top: 30px;
+	font-family: 'open_sansregular';
+}
+
+.div-content-center-novedades{
+        position: relative;
+	width: 210px;
+	float: right;
+	margin-right: 30px;
+	margin-top: 30px;
+	font-family: 'open_sansregular';
+}
+
+.div-content-left-novedades .autopart-div-espaciador-rallas{
+	width: 100%;
+}
+
+#novedades-div-pregunta{
+	margin-top: 25px;
+	padding-bottom: 36px;
+	background-image:url(../../resources/images/autopartes/seccion-autoparte.png);
+	background-repeat: no-repeat;
+	background-position:bottom;
+}
+
+#novedades-div-pregunta-marco{
+	padding: 2px;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	box-shadow: 0px 0px 3px 2px #ccc;	
+	-moz-box-shadow: 0px 0px 3px 2px #ccc;	
+	-webkit-box-shadow: 0px 0px 3px 2px #ccc;	
+	float: left;
+	max-width: 170px;
+	margin-right: 20px;
+}
+
+#novedades-div-pregunta-marco img{
+	max-width: 170px;
+        border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+#novedades-div-pregunta-content{
+	float: left;
+	width: 440px;	
+}
+
+#novedades-div-pregunta-titulo a{
+	font-size: 16px;
+	font-weight: bold;
+	text-decoration: underline;
+	color: black;	
+}
+
+#novedades-div-pregunta-autor{
+	color: #c60200;
+	margin-top: 20px;
+	font-size:12px;	
+}
+
+#novedades-div-pregunta-fecha{
+	font-size: 11px;
+	color: #787878;	
+}
+
+#novedades-div-pregunta-cuerpo{
+	font-size: 12px;
+	color: #404040;
+	margin-top: 20px;
+        display: block;
+}
+
+#novedades-div-pregunta-reportar{
+	text-decoration: underline;
+	color: #c60200;
+	font-size:11px;
+	font-style: italic;	
+	margin-top: 20px;
+	cursor: pointer;
+}
+
+#novedades-div-pregunta-responder{
+	background-color: #c60200;
+	color: white; 	
+	font-size: 11px;
+	font-family: 'open_sansregular';
+	padding: 3px 10px 3px 10px;
+	float: right;
+	cursor: pointer;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#novedades-div-pregunta-responder img{
+	margin-top: 2px;
+	margin-left: 4px;
+}
+
+#novedades-div-respuesta-content{
+	margin-top: 20px;
+	color: #404040;
+	font-family: 'open_sansregular';
+	font-size: 12px;
+	float: right;
+	max-width: 480px;
+}
+
+#novedades-div-respuesta-respuesta{
+
+}
+
+#novedades-div-respuesta-autor{
+
+	margin-top: 5px;
+}	
+
+#novedades-div-respuesta-cuerpo{
+	margin-top: 25px;		
+}
+
+#novedades-div-responder #autopart-div-titulo span{
+	font-size: 20px;	
+}
+
+#forma-responder{
+	display: block;
+	margin-left:auto;
+	margin-right: auto;
+	width: 490px;
+	margin-top: 10px;	
+}
+
+#novedades-textarea-respuesta{
+	width: 98%;
+	border: 1px solid #ccc;
+	height: 135px;
+	background-image: linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(255,255,255) 1%, rgb(245,245,245) 100%);
+}
+
+
+#div-content-center-novedades #autopart-div-autopartes-titulo span{
+	font-size: 20px;
+}
+
+.novedades-div-tip{
+	margin-top: 25px;
+	background-position: bottom;
+	background-repeat: no-repeat;	
+
+}
+
+.novedades-div-tip-titulo{
+	text-decoration: underline;
+	font-size: 10px;
+	font-weight: bold;	
+	color: #404040;
+}
+
+.novedades-div-tip-cuerpo{
+	margin-top: 15px;
+	color: #404040;
+	font-size: 11px;
+        display: block;
+}
+
+.novedades-div-tip-separador{
+	margin-top: 10px;	
+}
+
+.novedades-div-tip-autorfecha{
+    float: right;
+    text-align: right;
+    font-size:11px;
+    margin-top: 10px;
+    font-style: italic;
+    margin-left: 5px;
+}
+
+.novedades-div-tip-autor{
+    color: #c60200;	
+    display: none;
+}
+
+.novedades-div-tip-fecha{
+	color: #404040;
+}
+
+.novedades-div-tip-icon{
+	float: right;
+	margin-top: 10px;	
+}
+
+.div-content-center-novedades #autopart-div-titulo-icono{
+	margin-right: 5px;
+        margin-top: 7px;
+}
+
+.div-content-center-novedades #autopart-div-titulo{
+	margin-top: 8px;
+}
+
+.div-content-left-novedades #autopart-div-titulo-icono{
+	margin-right: 5px;
+}
+
+.div-content-left-novedades #autopart-div-titulo span{
+	font-size: 28px;	
+}
+
+.div-content-left-novedades #autopart-div-titulo {
+    float: left;
+    margin-top: 0px;
+}
+
+.div-content-center-novedades .talleres-div-vermas{
+    padding-right:  0px;
+    margin-right:  0px;
+    padding-top: 16px;
+    background-image: url(../../resources/images/tallerenlinea/separador-establecimiento.png);
+    background-position: top;
+    background-repeat: no-repeat;
+    margin-top: 10px;
+}
+
+.novedades-div-tips-content{
+    position: relative;
+}
+
+/** NOVEDADES DETALLE*/
+#novedades-detalle-div-pregunta{
+	margin-top: 25px;
+	padding-bottom: 36px;
+	background-image:url(../../resources/images/autopartes/seccion-autoparte.png);
+	background-repeat: no-repeat;
+	background-position:bottom;
+}
+
+#novedades-detalle-div-pregunta-marco{
+	padding: 2px;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	box-shadow: 0px 0px 3px 2px #ccc;	
+	-moz-box-shadow: 0px 0px 3px 2px #ccc;	
+	-webkit-box-shadow: 0px 0px 3px 2px #ccc;	
+	float: left;
+	max-width: 310px;
+	margin-right: 20px;
+        margin-bottom: 10px;
+}
+
+#novedades-detalle-div-pregunta-marco img{
+	max-width: 310px;
+        border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+
+#novedades-detalle-div-pregunta-titulo{
+	font-size: 16px;
+	font-weight: bold;
+	color: black;	
+}
+
+#novedades-detalle-div-pregunta-autor{
+	color: #c60200;
+	margin-top: 20px;
+	font-size:12px;	
+}
+
+#novedades-detalle-div-pregunta-fecha{
+	font-size: 11px;
+	color: #787878;	
+        margin-top: 15px;
+}
+
+#novedades-detalle-div-pregunta-cuerpo{
+	font-size: 12px;
+	color: #404040;
+	margin-top: 20px;
+        display: block;
+}
+
+#novedades-detalle-div-pregunta-reportar{
+	text-decoration: underline;
+	color: #c60200;
+	font-size:11px;
+	font-style: italic;	
+	margin-top: 20px;
+	cursor: pointer;
+}
+
+#novedades-detalle-div-pregunta-responder{
+	background-color: #c60200;
+	color: white; 	
+	font-size: 11px;
+	font-family: 'open_sansregular';
+	padding: 3px 10px 3px 10px;
+	float: right;
+	cursor: pointer;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#novedades-detalle-detalle-div-pregunta-responder img{
+	margin-top: 2px;
+	margin-left: 4px;
+}
+
+.novedades-detalle-div-noticia-titulo{
+	text-decoration: underline;
+	font-size: 10px;
+	font-weight: bold;	
+	color: #404040;
+}
+
+#novedades-detalle-div-noticias-content{
+    margin-top: 15px;
+}
+
+.novedades-detalle-div-noticia{
+	margin-top: 25px;
+	background-position: bottom;
+	background-repeat: no-repeat;	 
+}
+
+.div-content-left-novedades-detalle{
+    position: relative;
+	width: 600px;
+	float: left;
+	margin-left: 30px;
+	margin-top: 30px;
+	font-family: 'open_sansregular';
+}
+
+.div-content-center-novedades-detalle{
+        position: relative;
+	width: 270px;
+	float: right;
+	margin-right: 30px;
+	margin-top: 30px;
+	font-family: 'open_sansregular';
+}
+
+.novedades-detalle-div-noticias-marco{
+	padding: 2px;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	box-shadow: 0px 0px 3px 2px #ccc;	
+	-moz-box-shadow: 0px 0px 3px 2px #ccc;	
+	-webkit-box-shadow: 0px 0px 3px 2px #ccc;	
+	float: left;
+	max-width: 100px;
+	margin-right: 20px;
+        margin-bottom: 10px;
+}
+
+.novedades-detalle-div-noticias-marco img{
+	max-width: 100px;
+        border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+.novedades-detalle-div-noticia-cuerpo{
+	margin-top: 15px;
+	color: #404040;
+	font-size: 11px;
+        display: block;
+}
+
+#novedades-detalle-div-noticia-content #tallerlinea-detalle-div-pregunta-redes{
+    margin-top: 20px;
+    margin-bottom:  20px;
+}
+
+#tallerlinea-detalle-div-publicar{
+    width: 340px;
+    margin-top: 20px;
+    margin-bottom:  20px;
+    float: left;
+    font-size: 12px;
+    font-family: 'open_sansregular';
+    font-style: italic;
+}
+
+/** carrito de compras*/
+#carrito-div-detalles-compra-titulo{
+	background-color: #58585a;
+	color: white;	
+}
+
+#carrito-div-detalles-compra-titulo-izq{
+	float:left;
+	padding: 4px 10px 4px 10px;
+	width: 300px;
+	font-family: 'univers_condensedbold';
+	font-size: 18px;	
+}
+
+#carrito-div-detalles-compra-titulo-der{
+	float:right;
+	padding: 8px 30px 8px 30px;
+	font-size: 12px;
+	font-family: 'open_sansregular';
+	background-image: linear-gradient(bottom, #989898 28%, #58585a 100%);
+	background-image: -o-linear-gradient(bottom, #989898 28%, #58585a 100%);
+	background-image: -moz-linear-gradient(bottom, #989898 28%, #58585a 100%);
+	background-image: -webkit-linear-gradient(bottom, #989898 28%, #58585a 100%);
+	background-image: -ms-linear-gradient(bottom, #989898 28%, #58585a 100%);
+}
+
+#carrito-div-detalle-pago{
+	padding: 20px;
+	color: black;
+	font-family: 'open_sansregular'	;
+	font-size: 15px;
+	background-image: url(../../resources/images/autopartes/degrade-puntuacion.png);
+	background-repeat: no-repeat;
+	background-position: right;
+}
+
+#carrito-div-detalle-pago-subtotal{
+	float: left;	
+}
+
+#carrito-div-detalle-pago-iva{
+	float:left;	
+	margin-left: 60px;
+}
+
+#carrito-div-detalle-pago-total{
+	float: right;	
+}
+
+.div-content-left-carrito #autopart-div-titulo-icono{
+	margin-right: 5px;
+}
+
+.div-content-left-carrito #autopart-div-titulo span{
+	font-size: 28px;	
+}
+
+.div-content-left-carrito{
+	width: 660px;
+	float: left;
+	margin-left: 30px;
+	margin-top: 30px;
+	font-family: 'open_sansregular';
+}
+
+.div-content-left-carrito #carrito-div-no-margin{
+	margin: 0px;	
+}
+
+#carrito-div-tajetas-pagar{
+	margin-top:15px;	
+}
+
+#carrito-div-tarjetas img{
+	margin-top: 5px;
+	float: left;
+	margin-left: 15px;	
+}
+
+#carrito-div-pagar{
+	float: right;
+}	
+
+#carrito-div-pagar input{
+	border: none;
+	cursor: pointer;
+	color: white;
+        text-decoration: none;
+	font-size: 18px;
+	font-weight: bold;
+	font-family: 'open_sansregular';
+	padding: 5px 35px 5px 15px;
+	background-color: #c60200;
+	background-image:url(../../resources/images/carrito/doble-mayor-blanco.png);
+	background-repeat: no-repeat;
+	background-position: 90% 45%;
+}	
+
+.carrito-div-item{
+	margin-top: 30px;
+	background-image:url(../../resources/images/autopartes/seccion-autoparte.png);
+	background-position: bottom;
+	background-repeat: no-repeat;
+	padding-bottom: 21px;
+}
+
+.carrito-div-item-detalles{ 
+	width: 500px;
+	float: left;
+	min-height: 140px;
+	padding-top: 33px;
+	background-image: linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	background-image: -o-linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	background-image: -moz-linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	background-image: -webkit-linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	background-image: -ms-linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	padding-bottom: 10px;
+}
+
+.carrito-div-item-detalles-marco{
+	border: 1px solid #ccc;
+	background-color: white;
+	padding: 2px;
+	box-shadow: 0px 0px 3px 2px #ccc;	
+	-moz-box-shadow: 0px 0px 3px 2px #ccc;
+	-webkit-box-shadow: 0px 0px 3px 2px #ccc;
+	float: left;
+	max-width:100px;
+	margin-right: 20px;
+	margin-left:15px;
+}
+
+.carrito-div-item-detalles-marco img{
+	max-width:100px;
+        border: none;
+}
+
+.carrito-div-item-detalles-desc{
+	float: right;
+	width: 355px;	 
+}
+
+.carrito-div-item-detalles-pago{
+	float: right;	
+}
+
+.carrito-div-item-detalle-titulo a{
+	text-decoration:underline;
+	color: black;
+	font-size: 12px;
+        text-transform: uppercase;
+}
+
+.carrito-div-item-detalle-descrip{
+	margin-top: 10px;	
+	font-size: 12px;
+	color: #404040;
+}
+
+.carrito-div-item-detalles-pago{
+	padding: 0px 25px 20px 25px;
+	max-width: 100px;
+	font-family: 'open_sansregular';
+		background-image: linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	background-image: -o-linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	background-image: -moz-linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	background-image: -webkit-linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	background-image: -ms-linear-gradient(bottom, rgb(237,237,237) 0%, rgb(251,251,251) 94%);
+	padding-bottom: 10px;	
+}
+
+.carrito-input-item-cantidad{
+	width: 35px;	
+	text-align: center;
+}
+.carrito-div-item-detalles-pago label{
+	color: #c60200;	
+	font-size: 12px;
+}
+
+.carrito-div-item-subtitulo{
+	color: #404040;
+	font-size: 12px;
+	margin-top: 15px;	
+}
+
+.carrito-div-item-subtitulo-total{
+	color: #c60200;
+	font-size: 20px;
+	margin-top: 15px;		
+}
+
+.carrito-div-item-subtotal, .carrito-div-item-iva{
+	font-size: 12px;
+	font-weight: bold;	
+}
+
+.carrito-div-item-total{
+	color: #c60200;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.carrito-div-item-condiciones{
+	float: left;
+	width: 500px;	
+	padding-top: 10px;
+	color: #888888;
+	font-size: 12px;
+	font-style: italic;
+	font-family: 'open_sansregular';
+}
+
+.carrito-div-item-eliminar{
+	float: right;	
+	margin-top: 10px;
+	font-family: 'open_sansregular';
+	color: #404040;
+	text-decoration: underline;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.carrito-div-item-eliminar:hover, .carrito-div-item-actualizar:hover{
+	color: #c60200;
+}
+
+.carrito-div-item-actualizar{
+	text-align: right;	
+	font-family: 'open_sansregular';
+	color: #404040;
+	text-decoration: underline;
+	font-size: 12px;
+	cursor: pointer;
+	display: none;
+}
+
+#carrito-div-publicidad-titulo{
+	width: 100%;
+	height: 30px;
+	text-align: right;
+	background-color: #EDEDED;	
+}
+
+#carrito-div-publicidad-titulo div {
+	color: #515151;
+	padding-top: 9px;
+	padding-right: 10px;
+	height: 30px;
+	font-size: 12px;
+}
+
+.carrito-div-publicidad-imagen{
+	height: 100%;
+	width: 210px;
+	padding-top: 5px;
+}
+
+#carrito-div-banner-comunidad{
+	margin-left: 360px;
+	height: 100%;	
+        margin-top: 15px;
+}
+
+#carrito-div-banner-comunidad-titulo{
+    float:  left;
+}
+
+#carrito-div-banner-comunidad-titulo h1{
+	color: #404040;
+	font-size: 28px;
+}
+
+#carrito-div-banner-comunidad img{
+    float: right;
+    width: 170px;
+    margin-top: 30px;
+    margin-right: 15px;
+}
+
+/** formulario lightbox reportar abuso*/
+.pregunta-detalle-reportar{
+    display: none;
+}
+
+.pregunta-detalle-reportar{
+	width: 460px;
+	padding-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;	
+	background-color: white;
+	font-family: 'open_sansregular';
+	padding: 14px 20px 0px 20px;
+	display: none;
+}
+
+#datos-div-detalles-compra-titulo{
+	color: white;	
+        background-image: linear-gradient(bottom, #989898 28%, #58585a 100%);
+	background-image: -o-linear-gradient(bottom, #989898 28%, #58585a 100%);
+	background-image: -moz-linear-gradient(bottom, #989898 28%, #58585a 100%);
+	background-image: -webkit-linear-gradient(bottom, #989898 28%, #58585a 100%);
+	background-image: -ms-linear-gradient(bottom, #989898 28%, #58585a 100%);
+        background-color: #58585A; 
+}
+
+#datos-div-detalles-compra-titulo-izq{
+	float:left;
+        text-align: center;
+	padding: 8px 10px 8px 10px;
+	width: 30%;
+	font-family: 'open_sansregular';
+	font-size: 12px;	
+}
+
+#datos-div-detalles-compra-titulo-center{
+	float:left;
+        text-align: center;
+	padding: 4px 10px 4px 10px;
+	width: 30%;
+	font-family: 'univers_condensedbold';
+	font-size: 18px;	
+}
+
+#datos-div-detalles-compra-titulo-der{
+	float:right;
+        text-align: center;
+	padding: 8px 10px 8px 10px;
+        width: 30%;
+	font-size: 12px;
+	font-family: 'open_sansregular';
+}
+
+#confirmacion_div-detalle-compra-titulo-center{
+    float:left;
+    text-align: center;
+    padding: 8px 10px 8px 10px;
+    width: 30%;
+    font-family: 'open_sansregular';
+    font-size: 12px;
+}
+
+#confirmacion-div-detalles-compra-titulo-der{
+    float:right;
+    text-align: center;
+    padding: 4px 10px 4px 10px;
+    width: 30%;
+    font-family: 'univers_condensedbold';
+    font-size: 18px;	
+}
+
+#datos-div-compra table{
+    background-color: white;
+    padding: 15px;
+    width: 660px;
+    border: 1px solid #ccc;
+}
+
+#datos-envio-form{
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 50px;
+    font-family: 'open_sansregular';
+    margin-bottom: 30px;
+}
+
+#datos-envio-div-titulo{
+    color: #c60200;
+}
+
+#datos-envio-form input, #datos-envio-form label, #datos-envio-form select{
+    display: block;
+    font-family: 'open_sansregular';
+}
+
+#datos-envio-form input[type=text]{
+    width: 300px;
+}
+
+#datos-envio-form input[type=submit]{
+    float: right;
+    margin-top: 20px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    background-color: #404040;
+    padding: 5px 20px;
+    margin-right: 40px;
+}
+
+#datos-envio-form label{
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+/** QUIENES SOMOS Y PRENSA*/
+#div-content-quienes somos{
+	margin-left: 30px;
+	margin-top: 30px;
+	font-family: 'open_sansregular';
+}
+
+#quienes-detalle-div-marco{
+	margin-left: 30px;
+	padding: 2px;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	box-shadow: 0px 0px 3px 2px #ccc;	
+	-moz-box-shadow: 0px 0px 3px 2px #ccc;	
+	-webkit-box-shadow: 0px 0px 3px 2px #ccc;	
+	float: left;
+	margin-right: 20px;
+}
+
+#quienes-detalle-div-marco img{
+	width: 200px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+#quienes-detalle-div-cuerpo{
+	font-size: 18px;
+	color: #404040;
+	margin-top: 20px;	
+	font-family: 'open_sansregular';
+}
+
+#quienes-detalle-div{
+    margin-top: 25px;
+    padding-bottom: 36px;
+    
+    background-image: url(../../resources/images/autopartes/seccion-autoparte.png);
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+#quienes-detalle-div-content{
+    float: left;
+    width: 440px;
+    font-family: 'open_sansregular';
+}
+
+#califica-detalle-div-content{
+    float: left;
+    width: 617px;
+    font-family: 'open_sansregular';
+}
+
+#prensa-div-titulo a{
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: underline;
+    color: black;	
+}
+
+#prensa-div-fecha{
+    margin-top: 15px;
+    color: #787878;
+    font-size: 12px;
+}
+
+#prensa-detalle-div-cuerpo{
+	font-size: 14px;
+	color: #404040;
+	margin-top: 20px;	
+	font-family: 'open_sansregular';
+}
+
+#prensa-detalle-div-marco{
+	padding: 30px;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	box-shadow: 0px 0px 3px 2px #ccc;	
+	-moz-box-shadow: 0px 0px 3px 2px #ccc;	
+	-webkit-box-shadow: 0px 0px 3px 2px #ccc;	
+	float: left;
+	margin-right: 20px;
+}
+
+#prensa-detalle-div-marco img{
+	width: 200px;
+        border: none;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+
+#prensa-detalle-div-content{
+    float: left;
+    width: 310px;
+    font-family: 'open_sansregular';
+}
+
+#prensa-div-redes{
+    margin-top: 10px;
+    float: right;
+}
+
+#terminos-detalle-div{
+    padding: 25px;
+    font-family: 'open_sansregular';
+}
+#terminos-detalle-div li{
+    margin-top: 10px;
+}
+
+#terminos-detalle-div li strong{
+    text-decoration: underline;
+}
+
+/**css de olvide contraseña*/
+#olvide-detalle-div-descripcion{
+    float: left;
+    width: 300px;
+    margin-left: 30px;
+    font-family: 'open_sansregular';
+}
+
+#formulario_califica_experiencia{
+    float: left;
+    margin-left: 30px;
+    font-family: 'open_sansregular';
+}
+
+#formulario_olvido_contrasena, #formulario_cambio_contrasena{
+    margin-left: 30px;
+    width: 300px;
+}
+
+#formulario_olvido_contrasena input[type=text], #formulario_cambio_contrasena input[type=text], #formulario_califica_experiencia input[type=text]{
+    font-family: 'open_sansregular';
+}
+
+#formulario_olvido_contrasena img{
+    margin-top: 10px;
+}
+
+#formulario_olvido_contrasena label, #formulario_cambio_contrasena label{
+    margin-top: 15px;
+    display: block;
+}
+
+#contactenos-detalle-div{
+    float: left;
+    margin-left: 70px;
+    font-family: 'open_sansregular'; 
+}
+
+#formulario_contactenos textArea{
+    font-family: 'open_sansregular';
+}
+
+#contacto-detalle-div-foto{
+    float: right;
+    margin-right: 100px;
+}
+
+#contacto-detalle-div-foto img{
+    height: 500px;
+}
+
+.busqueda-div-resultados h3 a{
+    color: black;
+    font-style: italic;
+    font-size: 13px;
+}
+
+.busqueda-div-resultados h4 a{
+}
+
+.busqueda-div-resultados h4{
+    color: #404040;
+    font-size: 12px;
+}
+
+#formulario_contactenos h3{
+    margin-bottom: 5px;
+}
+
+.autopart-div-autoparte-fecha{
+    color: #c60200;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+#escoger-carro-lightbox{
+    width: 300px;
+    display: none;
+    background-color: #7B7B7B;
+    color: white;
+    padding: 20px;
+}
+
+#escoger-carro-lightbox h1{
+    color: white;
+    display: inline;
+    margin-left: 5px;
+}
+
+#escoger-carro-lightbox label, #escoger-carro-lightbox input{
+    font-family: 'open_sansregular';
+    font-size: 13px;
+}
+
+#escoger-carro-lightbox input[type="submit"]{
+    background-color: #404040;
+    border: none;
+    cursor: pointer;
+    padding: 3px 10px 3px 10px;
+    color: white;
+    float: right;
+}
+
+#escoger-carro-lightbox input[type="text"]{
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #b5b5b5;
+    width: 230px;
+    outline: none;
+    font-family: 'open_sansregular';
+    color: white;
+}
+
+#escoger-carro-lightbox p{
+    margin-left: 30px;
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,79 @@
+#solicitud-div-datos-personales{
+    float: left;
+    width: 60%;
+    font-family: 'open_sansregular';
+}
+
+#form_solicitud label{
+    margin-top: 20px;
+    display: block;
+    font-family: 'open_sansregular';
+    font-size: 12px;
+}
+
+#solicitud-div-datos-personales input{
+    width: 250px;
+}
+
+#solicitud-div-datos-auto input{
+    width: 200px;
+}
+
+#form_solicitud select, #form_solicitud input, #form_solicitud textArea{
+    display: block;
+    font-family: 'open_sansregular';
+}
+
+#form_solicitud textArea{
+    width: 545px;
+    height: 150px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    font-family: 'open_sansregular';
+}
+
+#form_solicitud input[type=submit]{
+    border: none;
+    background-color: #404040;
+    color: white;
+    float: right;
+    margin-right: 25px;
+    padding: 5px 20px 5px 20px;
+    font-family: 'open_sansregular';
+    cursor: pointer;
+}
+
+#solicitud-div-datos-auto{
+    float: right;
+    width: 40%;
+    font-family: 'open_sansregular';
+}
+
+#solicitud-div-datos-personales-titulo{
+    color: #c60200;
+    font-size: 13px;
+}
+
+#form_solicitud{
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 40px;
+}
+
+.home-div-home-twitter-tweet .twtr-widget-profile img.twtr-profile-img{
+    display: none;
+}
+
+.home-div-home-twitter-tweet .twtr-hd{
+    display: none;
+}
+
+#ayuda-div-condiciones{
+    float: right;
+    margin-bottom: 10px;
+}
+
+#form_solicitud #ayuda-div-condiciones input, #form_solicitud #ayuda-div-condiciones label{
+    display: inline;
+    margin-left: 5px;
+}

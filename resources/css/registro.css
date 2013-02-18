@@ -1,0 +1,525 @@
+/** css del formulario de registro login*/
+.div-content-registro{
+    position: relative;
+    margin-left: 30px;
+    padding-top: 30px;
+    font-family: 'open_sansregular';
+}
+
+#registrar-div-content{
+    margin-top: 20px;
+    font-family: 'open_sansregular';
+}
+
+#registar-div-content-header1{ 
+    font-style: italic;  
+    color: black;
+    font-size: 20px;
+}
+
+#registar-div-content-header2{
+    font-size: 14px;
+    color: #404040;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+#loging-div div.form-valid{
+    position: absolute;
+    right: -20px;
+    top: 30px;
+    background-image: url('../../resources/admin/images/checkmark.gif');
+    background-repeat: no-repeat;
+    width: 12px;
+    height: 9px;
+}
+
+#loging-div div.form-invalid{
+    position: absolute;
+    right: -20px;
+    top: 30px;
+    background-image: url('../../resources/admin/images/x-red.gif');
+    background-repeat: no-repeat;
+    width: 9px;
+    height: 9px;
+}
+
+#loging-div label.form-valid{
+    margin-top: 0px;
+}
+
+#loging-div label.form-invalid{
+    margin-top: 0px;
+}  
+
+#form_historial label.form-invalid{
+    width: 150px;
+}  
+
+.form_login_div_campo{
+    position: relative;
+}
+
+#loging-div
+{ width: 90%; 
+margin-left: auto;
+margin-right: auto;}
+
+#loging-div.login-div-vehiculo, #loging-div.login-div-historial
+{ width:600px; 
+  display: none;
+}
+
+#login-div-top
+{ width:605px; }
+
+
+#login-div-top-texto
+{ font:12px open_sansregular;
+  position:relative;
+  background-color: #ef0600;
+  text-align:center;
+  color: white;
+  border: 1px solid #c60200;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  padding:10px; }
+
+#login-div-center
+{ margin-top:2px;
+  position:relative;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+#login-div-center.sesion-login{
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px; 
+}
+
+#login-div-center.sesion-vehiculo, #login-div-center.sesion-historial{
+    border-radius: 5px;
+    padding:10px;
+}
+
+#login-div-registrate
+{ background-color: #f5f5f5;
+  float:right;
+  width: 36%;
+  color: #404040;
+  font-family:open_sansregular; 
+  background-image:url(../../resources/images/login/separador.png);
+  background-position:left;
+  background-repeat:repeat-y;
+  padding-left: 50px;
+  padding-right: 90px;
+}
+
+.sesion-login #login-div-sesion
+{ background-color: #f5f5f5;
+  float:left;
+  width: 256px;
+  color: #404040;
+  font-family:open_sansregular;
+  padding-left: 20px;}
+
+#login-div-titulo
+{ padding-top:15px;
+  margin-left:10px;
+  font:25px univers_condensedbold; }
+
+.sesion-vehiculo #login-div-titulo, .sesion-historial #login-div-titulo{
+    font:20px univers_condensedbold;
+}
+
+
+#login-div-titulo span
+{ margin-left:5px;
+  position:relative;
+  top:3px; }
+
+
+
+#form_login label, #form_login input, #form_registro label, #form_registro input
+{ display:block; }
+
+#form_registro label,#form_login label, #form_historial label
+{ 
+    margin-top: 10px;
+}
+
+#loging-div input[type=text], #loging-div input[type=password], #loging-div select{
+    background-color: #f9f9f9;
+    border: 2px solid #b5b5b5;
+    moz-border-radius: 5px;
+    webkit-border-radius: 5px; 
+    border-radius: 5px;
+    outline:none;
+    color: black;
+    font-family:open_sansregular; 
+}
+
+#loging-div label{
+    color: #404040;
+    font-size:11px;
+    display: block;
+
+}
+
+.form_registro_input , #form_registro select, #form_login input[type=text], #form_login input[type=password], .form_vehiculo_input, #form_vehiculo select
+{ 
+
+    padding: 10px 10px; 
+    margin-top: 3px;}
+
+#form_registro .form_registro_input, #form_registro select{
+    width: 250px;
+}
+#form_registro .form_registro_ie_select{
+    width: 274px;  
+}
+#form_vehiculo .form_vehiculo_input{
+    width: 255px;	
+}
+
+.form_login_input
+{ width:200px;}
+
+#form_historial input[type=text]{
+    width:70px;
+    padding: 5px 5px;
+    margin-top: 3px;
+}
+
+#loging-div input[type=text]:focus, #loging-div input[type=password]:focus
+{ outline:none;
+  border: 2px solid #c60200;
+  background-color: #fbfbfb;
+  -webkit-box-shadow: 0px 0px 5px #c60200;
+  -moz-box-shadow:    0px 0px 5px #c60200;
+  box-shadow:         0px 0px 5px #c60200;
+}
+
+
+#form_registro #ckbox-registrate-chkbox
+{ display:inline; }
+
+#form_registro #label-registrate-condiciones
+{ font-size:11px;
+  margin-top:0;
+  margin-left:10px;
+  position:absolute;
+  top:4px; 
+  left: 20px;}
+
+#form_registro #label-registrate-condiciones span
+{ text-decoration:underline;
+  font-style:italic;
+  cursor:pointer;
+  color: #404040; }
+
+#form_registro #label-registrate-condiciones a
+{ cursor:pointer;
+  color:#FFF;
+  text-decoration:none; }
+
+#loging-div input[type=submit] {
+    float:right;
+    margin-top:20px;
+    cursor: pointer;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ebe8eb), color-stop(1, #a8a5a8) );
+    background:-moz-linear-gradient( center top, #ebe8eb 5%, #a8a5a8 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebe8eb', endColorstr='#a8a5a8');
+    background-color:#ebe8eb;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    border:1px solid #8f8f8f;
+    display:inline-block;
+    color:#4a4a4a;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #c7c7c7;
+}
+
+#form_login input[type=submit]{
+    margin-top: 0px;	
+}
+
+#loging-div input[type=submit]:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a8a5a8), color-stop(1, #ebe8eb) );
+    background:-moz-linear-gradient( center top, #a8a5a8 5%, #ebe8eb 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#a8a5a8', endColorstr='#ebe8eb');
+    background-color:#a8a5a8;
+}
+#loging-div input[type=submit]:active {
+    position:relative;
+    top:1px;
+}
+/* This imageless css button was generated by CSSButtonGenerator.com */
+
+#login-div-ingresarolvidar input
+{ float:right;}
+
+#login-div-olvide
+{ float:left;
+  width:50px; }
+
+#login-div-olvide a
+{ text-decoration:underline;
+  color:#404040;
+  font-size:11px;
+  cursor:pointer; }
+
+#form_registro label.error,#form_login label.error
+{ margin-top:0; }
+
+#form_registro,#form_login
+{ margin-left:30px; }
+
+#form_registro #select-registrate-modelo,#login-div-ingresarolvidar
+{ margin-top:20px; position: relative;}
+
+#home-div-facebook-button{
+    display: block;
+    width: 100%;	
+    cursor: pointer;
+}
+
+.div_campo_chkbox{
+    margin-top: 5px;
+}
+
+#form_vehiculo select{
+    width: 110px;	
+}
+
+#vehiculo_form_div_kilo{
+    float: left;
+}
+
+#vehiculo_form_div_model{
+    float: right;
+}
+
+#vehiculo_div_form{
+    margin-top: 10px;
+    font-family:open_sansregular;
+    padding-left: 30px; 
+    float: left; 
+    margin-left: 50px;	
+}
+
+#form_vehiculo input 
+{ display:block; }
+
+#form_vehiculo label
+{ font-size:11px;
+  margin-top: 10px;
+}
+
+#form_vehiculo_file label{
+    font-size:11px;
+    margin-bottom: 5px;
+    font-family:open_sansregular;
+}
+
+#foto_div_form{
+    float: left;
+    margin-top: 30px;
+    max-width:188px;
+    color: transparent;
+}
+
+#foto_form_marco{
+    padding: 2px;
+    background-color: white;
+    border: 1px solid #ccc;	
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+#foto_form_marco img{	
+    border-radius: 5px;
+    max-width:182px;
+}
+
+#login-div-progreso{
+    text-align: center;	
+}
+
+#login-div-progreso div{
+    float:left;
+    color: white;
+    padding: 10 13px;
+    font:25px univers_condensedbold;
+}
+
+#login-div-progreso-vehiculo{
+    background-color:#ccc;
+    border:1px solid #ccc;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
+    float: left;
+    color:#4a4a4a;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 14px;
+    text-decoration:none;
+}
+
+#login-div-progreso-historial{
+    background-color:#ccc;
+    border:1px solid #ccc;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    float: left;
+    color:#4a4a4a;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 12px;
+    text-decoration:none;
+}
+
+#login-div-progreso .login-div-progreso-selected{
+    background-color:#ef0600;
+    border:1px solid #c60200;
+}
+#form_historial{
+    margin-top: 10px;
+    font-family:open_sansregular;
+    margin-left: 50px;	
+}
+
+#slider{
+    width: 300px;	
+    display: block;
+}
+
+.historial_div_slider div{
+    float: left;	
+}
+
+.historial_div_slider{
+    color: #404040;		
+}
+
+.historial_div_slider_kms{
+    position: relative;
+    margin-left: 20px;	
+}
+
+.historial_div_slider_kms span{
+    position: absolute;
+    top: 31px;
+    left: 88px;
+}
+
+.historial_div_slider_tarea{
+    position:relative;
+    padding-bottom: 20px;
+    padding-right: 30px;
+    margin-bottom: 20px;
+}
+.historial_div_slider_tarea label{
+    margin-bottom: 5px;	
+}
+
+.historial_div_slider_tarea_dotted{
+    position: absolute;
+    right: 30px;
+    bottom: 13px;
+    width: 300px;
+    height: 3px;
+    border-bottom: 1px dashed #ccc;
+    border-right: 1px solid #ccc; 	
+    border-left: 1px solid #ccc; 
+}
+
+.historial_div_slider_tarea_rango{
+    position: absolute;
+    bottom: 0px;
+    font:10px open_sansregular;
+}
+
+.historial_div_slider_tarea_rango.meses_6{
+    left: 130px;
+}
+
+.historial_div_slider_tarea_rango.meses_12{
+    right: 10px;	
+}
+
+.historial_div_slider_tarea_msj{
+    position: absolute;
+    padding: 4px;
+    left: -18px;
+    bottom: -13px;
+    border: 1px solid #c60200;
+    background-color: #FF0000;
+    border-radius: 5px;
+    color:white;	
+    font-size: 12px;
+    z-index: 100;
+}
+
+.historial_div_slider_tarea_apuntador{
+    position: absolute;
+    top: 47px;
+    left: -4px;
+    background-image:url(../../resources/images/login/triangulo-rojo.fw.png);
+    background-repeat:no-repeat;
+    width: 13px;
+    height: 7px;
+    z-index: 101;
+}
+
+.ajax_img_loader{
+    position: absolute;
+    bottom: 10px;
+    right: -20px;
+    display: none;
+}
+
+.div-registrate-submit{
+    position: relative;
+}
+
+.ui-menu .ui-menu-item a{
+    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size:13px;
+    font-style:normal;
+    font-weight:normal;
+    padding:2px;
+    margin:0;
+}
+
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+    padding-right: 20px;
+}
+
+/* IE 6 doesn't support max-height
+ * we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+    height: 200px;
+}

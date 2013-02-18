@@ -1,0 +1,178 @@
+#home-div-footer{
+	position: relative;
+	width: 100%;
+	bottom: 0px;
+	left: 0px;
+	height: 235px;
+	background-color: #f0f0f0;
+        min-width: 980px;
+}
+
+#home-div-footer-wrapper{
+}
+#home-div-footer-top{
+	width: 960px;
+	position: relative; 
+	margin-left: auto;
+	margin-right: auto;
+	height: 60px;
+}
+
+#home-div-footer-bottom{
+	width: 960px;
+	position: relative; 
+	margin-left: auto;
+	margin-right: auto;
+	height: 175px;
+}
+
+#home-div-footer-bottom-content{
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+#home-div-footer-logo{
+	height: 175px;
+	float:left;
+	width: 75px;	
+	
+}
+
+#home-div-footer-logo img{
+	margin-top: 7px;
+	width: 75px;
+	border: none;	
+}
+
+
+.home-div-footer-fixed{
+	position:absolute;
+	height:175px;
+	background-color: #2b2b2b;	
+	width: 100%;
+	left: 0px;
+	bottom: 0px;
+}
+
+.home-div-footer-titulos-2{
+	float: left;
+	position: relative;
+	margin-top: 0px;
+	color: 	white;
+	margin-right: 15px;
+	padding-top: 30px;
+	font-size: 11px;
+	cursor: pointer;
+	font-weight: bold;
+	letter-spacing:0.5px;
+	font-style: normal;
+}
+
+.home-div-footer-titulos-2:hover{
+	text-decoration: underline;
+}
+
+.home-div-footer-titulos-2 a{
+	color: 	#777777;
+}
+
+.home-div-footer-titulos-1{
+	float: left;
+	color: 	#777777;
+	margin-right: 15px;
+	height: 60px;
+	padding-top: 30px;
+	font-size: 12px;
+	cursor: pointer;
+	font-style: normal;
+}
+
+.home-div-footer-titulos-1:hover{
+	text-decoration:underline;
+}
+
+.home-div-footer-titulos-1 a{
+	color: 	#777777;
+}
+
+.home-div-footer-titulos-espaciador{
+	float: left;
+	width: 1px;
+	height: 12px;
+	margin-right: 15px;
+	background-color: #777777;
+	margin-top: 30px;
+}
+
+.home-div-footer-espacio{
+	float: left;
+	width: 50px;
+	height: 60px;
+}
+
+#home-div-footer-top .iconos{
+	float: right;	
+}
+
+/* iconos de redes sociales para el header */
+#home-div-footer-top .iconos .gplus{
+	position:absolute;
+	top: 33px;
+	left: 10px;
+}
+
+#home-div-footer-top .iconos .fb{
+	position:absolute;
+	top: 33px;
+	left: 51px;
+}
+
+#home-div-footer-top .iconos .twitter{
+	position:absolute;
+	top: 33px;
+	left: 92px;
+}
+
+#home-div-footer-bottom-derechos-diseño{
+	position: relative;
+}
+
+#home-div-footer-bottom-derechos{
+	color: #eeeeee;
+	position: relative;
+	float: left;
+	margin-top: 20px;
+	font-size: 11px;
+}
+
+#home-div-footer-bottom-diseño{
+	color: #eeeeee;
+	position: relative;
+	float: right;
+	margin-top: 20px;
+	font-size: 11px;
+}
+
+#home-div-footer-bottom-diseño a{
+	text-decoration: none;
+	color: #eeeeee;	
+	font-style: normal;
+}
+
+#home-div-footer-top a:link{
+	text-decoration: none;
+}
+
+#home-div-footer-top a:visited{
+	text-decoration: none;
+}
+
+#home-div-footer-bottom-content a:link{
+	text-decoration: none;
+}
+
+#home-div-footer-bottom-content a:visited{
+	text-decoration: none;
+}

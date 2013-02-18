@@ -1,0 +1,255 @@
+    /** css del formulario de registro login*/
+ /** REGISTRO DE VEHÍCULO */
+#registrar-div-content{
+    margin-top: 20px;
+    font-family: 'open_sansregular';
+}
+
+#registar-div-content-header1{
+   font-style: italic;  
+   color: black;
+   font-size: 20px;
+}
+
+#registar-div-content-header2{
+   font-size: 14px;
+   color: #404040;
+   margin-top: 15px;
+}
+
+#registrar-div-form-registro{
+    background-color: #7b7b7b;
+    margin-top: 20px;
+}
+
+#loging-div{
+	width: 620px;	
+}
+#login-div-top{
+	width: 600px;
+	
+}
+
+#login-div-top-triangulo{
+	background-image:url(../../resources/images/login/triangulo.png);
+	background-repeat: no-repeat;
+	height: 7px;
+	width: 15px;
+	position: relative;
+	top: 2px;
+	left: 560px;
+}
+
+#login-div-top-texto{
+	font-family: 'open_sansregular';
+	font-size: 12px;
+	position: relative;
+	background-color: #404040;
+	text-align:center;
+	color: white;
+	width: 100%;
+	padding:10px;	
+}
+
+#login-div-center{
+	margin-top: 1px;
+	width: inherit;
+	position: relative;	
+	background-color: #7b7b7b;
+	height: 100%;	
+}
+
+#login-div-registrate{
+	width: 50%;	
+	float: left;
+	color: white;
+	font-family: 'open_sansregular';
+}
+
+#login-div-sesion{
+	width: 50%;	
+	float: right;
+	height: 560px;
+	color: white;
+	font-family: 'open_sansregular';
+}
+
+#login-div-registrate-titulo{
+	padding-top: 15px;
+	margin-left: 10px;
+	font-family: 'univers_condensedbold';
+	font-size: 25px;
+}
+
+#login-div-registrate-titulo span{
+	margin-left: 5px;
+	position: relative;
+	top: 3px;
+}
+
+#form_registro{
+	margin-left: 30px;	
+}
+
+#form_login{	
+}
+
+#form_registro label, #form_registro input, #form_login label, #form_login input{
+	display: block;
+}
+
+#form_registro label, #form_login label{
+	font-size: 11px; 
+	margin-top: 30px;	
+}
+
+#form_registro label.error, #form_login label.error{
+    margin-top: 0px;
+}
+
+#form_registro input[type=text], #form_registro input[type=password]{
+	background-color: transparent;
+	border: none;
+	border-bottom: 2px solid #b5b5b5;
+	width: 250px;
+	outline: none;
+	color: white;
+	font-family: 'open_sansregular';
+}
+
+#form_login input[type=text], #form_login input[type=password]{
+	background-color: transparent;
+	border: none;
+	border-bottom: 2px solid #b5b5b5;
+	width: 195px;
+	outline: none;
+	color: #404040;
+	font-family: 'open_sansregular';
+}
+
+#form_registro input:focus{
+	outline: none;
+}
+
+
+#form_registro select{
+	width: 190px;
+	display: block;
+}
+
+#form_registro #select-registrate-vehiculo{
+	
+}
+
+#form_registro #select-registrate-modelo{
+	margin-top: 20px;
+}
+
+#form_registro #ckbox-registrate-chkbox{
+	margin-top: 20px;
+	display:inline;
+	
+}
+#form_registro #label-registrate-condiciones{
+	font-size: 11px;
+	margin-top: 0px;
+	margin-left: 10px;
+	display: inline;
+	position: relative;
+	top: -3px;
+}
+
+#form_registro #label-registrate-condiciones a{
+	text-decoration: underline;
+	font-style:italic;
+	cursor: pointer;
+        color: white;
+}
+
+#form_registro input[type=submit]{
+	float: right;
+}
+
+#div-registrate-submit{
+	margin-right: 30px;	
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
+
+#form_registro #input-registrate-submit{
+	font-family: 'open_sansregular';
+	background-color: #404040;
+	color:white;
+	border: none;
+	padding: 3px 10px 3px 10px;
+	cursor: pointer;
+}
+
+#login-div-ingresarolvidar{
+	margin-top: 20px;	
+}
+
+#login-div-ingresarolvidar input{
+	float: right;
+	margin-right: 20px;
+	border: none;
+	background-color: #777777;
+	color: white;
+	font-family: 'open_sansregular';
+	padding: 3px 8px 3px 8px;
+	font-size: 11px;
+	cursor: pointer;
+}
+
+#login-div-olvide{
+	float: left;
+	width: 50px;
+}
+
+#login-div-olvide a{
+	text-decoration:underline;
+	color: #404040;
+	font-size: 11px;	
+	cursor: pointer;
+}
+
+#registrar-div-form-registro-datos{
+   margin-top: 25px;
+   font-size: 13px;
+}
+
+
+#registrar-div-form-registro-datos-vehiculo{
+   margin-top: 55px;
+   font-size: 13px;
+}
+
+#login-div-condiciones{
+    float: right;
+    margin-right: 30px;
+    color: white;
+}
+
+#registrar-div-login-captcha{
+    float: left;
+}
+#form_registro #input_login_captcha{
+    float: left;
+    margin-left: 15px;
+    width: 80px;
+}
+
+#registrar-div-form-login{
+    background-color: #ececec;
+    height: 738px;
+    padding-left: 5px;
+    padding-top: 30px;
+}
+
+#form_login #registrar-label-email{
+    margin-top: 0px;
+}
+
+.margin-bottom-registro{
+    margin-bottom: 40px;
+}
