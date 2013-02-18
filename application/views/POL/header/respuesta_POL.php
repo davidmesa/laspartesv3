@@ -1,0 +1,2 @@
+<link href="<?php echo base_url(); ?>resources/css/autopartes.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo base_url(); ?>resources/js/jquery.formatCurrency-1.4.0.js" type="text/javascript"></script>
