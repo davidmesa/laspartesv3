@@ -545,10 +545,13 @@ class Usuario extends CI_Controller {
         $refVenta = $this->refventa_model->generar_RefVenta_Unico();
         $id_usuario = $this->input->post('id_usuario');
         $nombres = $this->input->post('nombres');
+        $documento = $this->input->post('documento');
         $email = $this->input->post('email');
         $ciudadEnvio = $this->input->post('ciudadEnvio');
         $direccionEnvio = $this->input->post('direccionEnvio');
         $telefonoMovil = $this->input->post('telefonoMovil');
+        $carro = $this->input->post('id_vehiculos');
+        $placa = $this->input->post('placa');
         $id_autopartes = $this->input->post('idAutoparte');
         $cant_autoparte = $this->input->post('cantAutoparte');
         $id_ofertas = $this->input->post('idOferta');
@@ -579,7 +582,7 @@ class Usuario extends CI_Controller {
             }
         endforeach;
         
-        $id_carrito = $this->usuario_model->agregar_carrito_compras($usuario->id_usuario, 'Transacción aprobada', round($total), $nombres, $ciudadEnvio, $telefonoMovil, $direccionEnvio, $email);
+        $id_carrito = $this->usuario_model->agregar_carrito_compras($usuario->id_usuario, 'Transacción aprobada', round($total), $nombres, $ciudadEnvio, $telefonoMovil, $direccionEnvio, $email, $documento, $carro, $placa);
         foreach ($id_ofertas as $index => $id_oferta):
             if ($id_oferta != 0 && $cant_ofertas[$index] != 0)
                 $this->usuario_model->agregar_carrito_compras_ofertas($id_carrito, $id_oferta, $cant_ofertas[$index]);
@@ -645,9 +648,12 @@ class Usuario extends CI_Controller {
                     <td colspan="2">
                         <div style="border:5px solid #c60200;">
                             <br/>&nbsp;&nbsp;CLIENTE: ' . $venta->nombre_apellido . ' <br/>
+                            &nbsp;&nbsp;DOCUMENTO: ' . $venta->documento . '<br/>
                             &nbsp;&nbsp;CIUDAD: ' . $venta->ciudad . '<br/>
                             &nbsp;&nbsp;DIRECCIÓN: ' . $venta->direccion . '<br/>
                             &nbsp;&nbsp;TELEFONO: ' . $venta->telefono . '<br/>
+                            &nbsp;&nbsp;CARRO: ' . $venta->carro . '<br/>
+                            &nbsp;&nbsp;PLACA DEL CARRO: ' . $venta->placa . '<br/>
                         </div>
                     </td>
                     <td>
@@ -789,10 +795,13 @@ class Usuario extends CI_Controller {
             Estado de la compra: ' . $mensaje . '<br/>
             Usuario: ' . $venta->usuario . ' <br />
             Nombres: ' . $venta->nombre_apellido . '<br />
+            Documento: ' . $venta->documento . '<br />
             Email: ' . $venta->email . ' <br />   
             Ciudad: ' . $venta->ciudad . ' <br />  
             Direccion: ' . $venta->direccion . ' <br />  
             Telefono: ' . $venta->telefono . ' <br />  
+            Documento: ' . $venta->documento . '<br />
+            Placa del carro: ' . $venta->placa . '<br /> 
             Precio: $' . number_format($venta->total, 0, ',', '.') . '    <br/><br/>
             Items ordenados:<br/>';
         foreach ($autopartes as $row):

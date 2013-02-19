@@ -176,6 +176,10 @@
                       <input name="nombres" type="text" class="text medium" value="<?php echo $usuario->nombres.' '.$usuario->apellidos; ?>" />
                     </p>
                     <p>
+                        <label>Documento de identidad: (*opcional)</label>
+                        <input type="text" name="documento" class="text medium" id="documento"/>
+                    </p>
+                    <p>
                       <label>Correo Electrónico</label><br />
                       <input name="email" type="text" class="text medium" value="<?php echo $usuario->email; ?>" />
                     </p>
@@ -197,11 +201,11 @@
                         ?>
                     </p>
                     <p>
-                        <label>Dirección de envío:</label>
+                        <label>Dirección de envío:  (*opcional)</label>
                         <input type="text" name="direccionEnvio" class="text medium" id="direccionEnvio"/>
                     </p>
                     <p>
-                        <label>Teléfono de contacto:</label>
+                        <label>Teléfono de contacto:  (*opcional)</label>
                         <input type="text" name="telefonoMovil" class="text medium" id="telefonoMovil"/>
                     </p>
                     <p>
@@ -212,14 +216,18 @@
                     <p>
                         
                             <div id="autopart-div-buscar-input" class="ui-widget">
-                                <label>Vehículo:</label>
+                                <label>Vehículo: (*opcional)</label>
                                 <input type="hidden" value="na" name="vehiculo_id" class="hidden_carro_selected">
                                 <?php if(sizeof($vehiculoMarcaBusqueda)>0 && sizeof($vehiculoLineaBusqueda)>0): ?>
-                                    <input class="vehiculos text medium" name="id_vehiculos[]" type="text" value="<?php echo $vehiculoMarcaBusqueda.' '.$vehiculoLineaBusqueda;?>">
+                                    <input class="vehiculos text medium" name="id_vehiculos" type="text" value="<?php echo $vehiculoMarcaBusqueda.' '.$vehiculoLineaBusqueda;?>">
                                 <?php else:?>
-                                    <input class="vehiculos text medium" name="id_vehiculos[]" onclick="this.value='';" type="text" value="ESCRIBE AQUÍ LA MARCA">
+                                    <input class="vehiculos text medium" name="id_vehiculos" onclick="this.value='';" type="text" value="ESCRIBE AQUÍ LA MARCA">
                                 <?php endif; ?>
                             </div>
+                    </p>
+                    <p>
+                        <label>Placas del carro: (*opcional)</label>
+                        <input type="text" name="placa" class="text medium" id="placaEnvio"/>
                     </p>
                     <table width="100%">
                         <tr>

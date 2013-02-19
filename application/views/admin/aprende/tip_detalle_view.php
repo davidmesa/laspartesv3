@@ -32,6 +32,22 @@
                 <h2>Ver o Actualizar Tip</h2>
                 <?php echo validation_errors('<div class="notification failure canhide"><p>', '</p></div>'); ?>
                 <?php echo form_open_multipart('admin/aprende/actualizar_tip'); ?>
+                <?php
+                $config_mini = array();
+
+                $config_mini['toolbar'] = array(
+                    array('Source', '-', 'Bold', 'Italic', 'Underline', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'NumberedList', 'BulletedList',
+                        'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
+                        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'
+                        , 'SelectAll', '-', 'SpellChecker', 'Scayt')
+                );
+
+                /* Y la configuración del kcfinder, la debemos poner así si estamos trabajando en local */
+                $config_mini['filebrowserBrowseUrl'] = base_url() . "ckeditor/kcfinder/browse.php";
+                $config_mini['filebrowserImageBrowseUrl'] = base_url() . "ckeditor/kcfinder/browse.php?type=images";
+                $config_mini['filebrowserUploadUrl'] = base_url() . "ckeditor/kcfinder/upload.php?type=files";
+                $config_mini['filebrowserImageUploadUrl'] = base_url() . "ckeditor/kcfinder/upload.php?type=images";
+                ?>
                     <input type="hidden" name="id_tip" value="<?php echo $tip->id_tip; ?>" />
                     <p>
                       <label>Título</label><br />
@@ -39,7 +55,7 @@
                     </p>
                     <p>
                       <label>Tip</label><br />
-                      <textarea name="tip" cols="20" rows="15" class="wysiwyg"><?php echo $tip->tip; ?></textarea>
+                      <?php echo $this->ckeditor->editor("tip", $tip->tip, $config_mini); ?>
                     </p>
                     <p>
                         <label>Imagen</label><br />
