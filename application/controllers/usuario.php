@@ -23,7 +23,7 @@ class Usuario extends Laspartes_Controller {
      * Genera la factura de la compra en formato PDF
      * @param string $refVenta 
      */
-    function _generar_factura($refVenta, $estado = "", $mensaje = "") {
+    function _generar_factura($refVenta, $estado = "", $mensaje = "") { 
 
 
         if ($estado == "email") {
@@ -2900,7 +2900,7 @@ class Usuario extends Laspartes_Controller {
 
         $config = array(
             'img_path' => 'resources/images/captcha/',
-            'img_url' => base_url() . 'resources/images/captcha/'
+            'img_url' => base_url() . 'resources/images/captcha/' 
         );
         $data['captcha'] = create_captcha($config);
         $this->usuario_model->agregar_captcha(round($data['captcha']['time']), $this->input->ip_address(), $data['captcha']['word']);
@@ -3058,31 +3058,10 @@ class Usuario extends Laspartes_Controller {
             $this->usuario_model->actualizar_usuario_codigo_activacion($usuario->id_usuario, $codigo_activacion);
 
 
-            // Enviar mail
-            $mensajeHTML = ('
-                Para recuperar tu contrase&ntilde;a, haz click <a style="text-decoration: none; color: red;" href="' . $link_seguro . '">aqu&iacute;</a>.<br />
-                <br />
-                En caso de que no veas este link, copia y pega lo siguiente en tu explorador de internet: <br />' . $link_seguro . '
-                <br />
-                <br />
-                Cordialmente,<br />
-                -------------------------------------------------------<br />
-                Servicio al cliente<br />
-                <a style="text-decoration: none; color: red;" href="' . base_url() . '">Laspartes.com.co</a> - Todo para tu vehículo
-            ');
-
             ob_start();
             $this->load->helper('date');
-            $this->load->model('tip_model');
-            $this->load->model('pregunta_model');
-            $tips = $this->tip_model->dar_tips_ultimos(3);
-            $preguntas = $this->pregunta_model->dar_preguntas_ultimas(3);
-            $data1['tema'] = 'Olvido de contraseña ';
-            $data1['tip'] = $tips;
-            $data1['preguntas'] = $preguntas;
-            $data1['fecha'] = strftime("%B %d de %Y");
-            $data1['html'] = $mensajeHTML;
-            $this->load->view('template/correo_generico_HTML', $data1);
+            $data1['link_seguro'] = $link_seguro;  
+            $this->load->view('emails/recuperar_contrasena_view', $data1);
             $contenidoHTML = ob_get_contents();
             ob_end_clean();
             ob_flush();
