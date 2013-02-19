@@ -1535,6 +1535,14 @@ class Establecimiento extends CI_Controller {
      */
     function formulario_establecimiento() {
         $data = $this->_formulario_establecimiento();
+         ////caja de texto
+        # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+
+        # Al hacer LogOut deberíamos cambiar disabled a true: $_SESSION['KCFINDER']['disabled'] = true;
+
+        $this->load->library('ckeditor', array('instanceName' => 'CKEDITOR1', 'basePath' => base_url() . "ckeditor/", 'outPut' => true));
         $this->load->view('admin/establecimiento/establecimiento_agregar_view', $data);
     }
 
@@ -1608,6 +1616,14 @@ class Establecimiento extends CI_Controller {
      */
     function ver_establecimiento() {
         $id_establecimiento = $this->uri->segment(4);
+        //caja de texto
+        # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+
+        # Al hacer LogOut deberíamos cambiar disabled a true: $_SESSION['KCFINDER']['disabled'] = true;
+
+        $this->load->library('ckeditor', array('instanceName' => 'CKEDITOR1', 'basePath' => base_url() . "ckeditor/", 'outPut' => true));
         $data = $this->_ver_establecimiento($id_establecimiento);
         $this->load->view('admin/establecimiento/establecimiento_detalle_view', $data);
     }

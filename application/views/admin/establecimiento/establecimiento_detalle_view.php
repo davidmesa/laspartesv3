@@ -68,6 +68,22 @@
                 <?php } ?>
 
                 <?php echo form_open_multipart('admin/establecimiento/actualizar_establecimiento'); ?>
+                <?php
+                $config_mini = array();
+
+                $config_mini['toolbar'] = array(
+                    array('Source', '-', 'Bold', 'Italic', 'Underline', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'NumberedList', 'BulletedList',
+                        'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
+                        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'
+                        , 'SelectAll', '-', 'SpellChecker', 'Scayt')
+                );
+
+                /* Y la configuración del kcfinder, la debemos poner así si estamos trabajando en local */
+                $config_mini['filebrowserBrowseUrl'] = base_url() . "ckeditor/kcfinder/browse.php";
+                $config_mini['filebrowserImageBrowseUrl'] = base_url() . "ckeditor/kcfinder/browse.php?type=images";
+                $config_mini['filebrowserUploadUrl'] = base_url() . "ckeditor/kcfinder/upload.php?type=files";
+                $config_mini['filebrowserImageUploadUrl'] = base_url() . "ckeditor/kcfinder/upload.php?type=images";
+                ?>
                     <input type="hidden" name="id_establecimiento" value="<?php echo $establecimiento->id_establecimiento; ?>" />
                     <p>
                       <label>Nombre</label><br />
@@ -104,7 +120,7 @@
                     </p>
                     <p>
                         <label>Descripción</label><br />
-                        <textarea name="descripcion" cols="8" rows="6"><?php echo $establecimiento->descripcion; ?></textarea>
+                        <?php echo $this->ckeditor->editor("descripcion", $establecimiento->descripcion, $config_mini); ?>
                     </p>
                     <p>
                       <label>Correo Electrónico</label><br />

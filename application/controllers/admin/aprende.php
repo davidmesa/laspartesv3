@@ -945,6 +945,14 @@ class Aprende extends CI_Controller{
      * Muestra el formulario para agregar una noticia
      */
     function formulario_agregar_noticia(){
+         ////caja de texto
+        # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+
+        # Al hacer LogOut deberíamos cambiar disabled a true: $_SESSION['KCFINDER']['disabled'] = true;
+
+        $this->load->library('ckeditor', array('instanceName' => 'CKEDITOR1', 'basePath' => base_url() . "ckeditor/", 'outPut' => true));
         $this->load->view('admin/aprende/noticia_agregar_view');
     }
 
@@ -952,6 +960,14 @@ class Aprende extends CI_Controller{
      * Muestra el formulario para agregar un tip
      */
     function formulario_agregar_tip(){
+         ////caja de texto
+        # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+
+        # Al hacer LogOut deberíamos cambiar disabled a true: $_SESSION['KCFINDER']['disabled'] = true;
+
+        $this->load->library('ckeditor', array('instanceName' => 'CKEDITOR1', 'basePath' => base_url() . "ckeditor/", 'outPut' => true));
         $this->load->view('admin/aprende/tip_agregar_view');
     }
 
@@ -994,6 +1010,14 @@ class Aprende extends CI_Controller{
     function ver_noticia(){
         $this->load->model('noticia_model');
         $id_noticia = $this->uri->segment(4);
+        //caja de texto
+        # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+
+        # Al hacer LogOut deberíamos cambiar disabled a true: $_SESSION['KCFINDER']['disabled'] = true;
+
+        $this->load->library('ckeditor', array('instanceName' => 'CKEDITOR1', 'basePath' => base_url() . "ckeditor/", 'outPut' => true));
         $data = $this->_ver_noticia($id_noticia);
         $this->load->view('admin/aprende/noticia_detalle_view', $data);
     }
@@ -1003,7 +1027,14 @@ class Aprende extends CI_Controller{
      */
     function ver_tip(){
         $this->load->model('tip_model');
-        $id_tip = $this->uri->segment(4);
+        $id_tip = $this->uri->segment(4);//caja de texto
+        # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+
+        # Al hacer LogOut deberíamos cambiar disabled a true: $_SESSION['KCFINDER']['disabled'] = true;
+
+        $this->load->library('ckeditor', array('instanceName' => 'CKEDITOR1', 'basePath' => base_url() . "ckeditor/", 'outPut' => true));
         $data = $this->_ver_tip($id_tip);
         $this->load->view('admin/aprende/tip_detalle_view', $data);
     }

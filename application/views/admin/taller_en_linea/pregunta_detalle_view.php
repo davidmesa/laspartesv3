@@ -38,14 +38,30 @@
                 <?php } ?>
 
                 <?php echo form_open('admin/taller_en_linea/actualizar_pregunta'); ?>
+                <?php
+                $config_mini = array();
+
+                $config_mini['toolbar'] = array(
+                    array('Source', '-', 'Bold', 'Italic', 'Underline', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'NumberedList', 'BulletedList',
+                        'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
+                        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'
+                        , 'SelectAll', '-', 'SpellChecker', 'Scayt')
+                );
+
+                /* Y la configuración del kcfinder, la debemos poner así si estamos trabajando en local */
+                $config_mini['filebrowserBrowseUrl'] = base_url() . "ckeditor/kcfinder/browse.php";
+                $config_mini['filebrowserImageBrowseUrl'] = base_url() . "ckeditor/kcfinder/browse.php?type=images";
+                $config_mini['filebrowserUploadUrl'] = base_url() . "ckeditor/kcfinder/upload.php?type=files";
+                $config_mini['filebrowserImageUploadUrl'] = base_url() . "ckeditor/kcfinder/upload.php?type=images";
+                ?>
                     <input type="hidden" name="id_pregunta" value="<?php echo $pregunta->id_pregunta; ?>" />
                     <p>
                       <label>Título</label><br />
-                      <textarea cols="10" rows="10" name="titulo_pregunta"><?php echo $pregunta->titulo_pregunta; ?></textarea>
+                       <?php echo $this->ckeditor->editor("titulo_pregunta", $pregunta->titulo_pregunta, $config_mini); ?>
                     </p>
                     <p>
                       <label>Detalles</label><br />
-                      <textarea cols="10" rows="10" name="cuerpo_pregunta"><?php echo $pregunta->cuerpo_pregunta; ?></textarea>
+                      <?php echo $this->ckeditor->editor("cuerpo_pregunta", $pregunta->cuerpo_pregunta, $config_mini); ?>
                     </p>
                     <p>
                         <label>Categoría</label><br />

@@ -184,7 +184,7 @@
                 
                 <?php foreach ($autopartes as $autoparte):?>
                 <div class="autopart-div-autoparte">
-                    <?php  $urlAutoparte = base_url().'autopartes/'.$autoparte->id_autoparte.'-'.str_replace(' ', '-', convert_accented_characters($autoparte->nombre)); ?>
+                    <?php  $urlAutoparte = base_url().'autopartes/'.$autoparte->id_autoparte.'-'.preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $autoparte->nombre); ?>
                         <?php if($encontro){
                             $urlAutoparte .= '/buscar';
                             if(isset($categoriaBusqueda) && sizeof($categoriaBusqueda)>0): 

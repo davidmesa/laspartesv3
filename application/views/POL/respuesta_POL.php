@@ -92,48 +92,57 @@
 
 
             <div id="carrito-div-items">
-                <?php $numero_items_carrito = 0;
-                                    foreach($this->cart->contents() as $autoparte): ?>
-                <?php  $urlAutoparte = base_url().'autopartes/'.$autoparte['id'].'-'.str_replace(' ', '-', convert_accented_characters($autoparte['nombre'])); ?>
-                <div class="carrito-div-item"> 
-                    <div class="carrito-div-item-detalles">
-                        <div class="carrito-div-item-detalles-marco">
-                            <a href="<?php echo $urlAutoparte;?>">
-                                <img src="<?php if($autoparte['foto'] ==''||$autoparte['foto']==NULL){ echo base_url().'resources/images/micuenta/tmpl_img_micuenta_vehiculo_nd1.png'; } else { echo base_url().$autoparte['foto']; } ?>" alt="<?php echo $autoparte['nombre']; ?>" />
-                            </a>
-                        </div>
-                        <div class="carrito-div-item-detalles-desc">
-                            <div class="carrito-div-item-detalle-titulo">
-                                
-                                <a href="<?php echo $urlAutoparte;?>"><?php echo $autoparte['nombre']; ?></a>
+                <?php
+                $numero_items_carrito = 0;
+                foreach ($items as $item):
+                    ?>
+                    <div class="carrito-div-item"> 
+                        <div class="carrito-div-item-detalles">
+                            <div class="carrito-div-item-detalles-marco">
+                                <a href="<?php echo $item->url; ?>">
+                                    <img src="<?php if ($item->foto == '' || $item->foto == NULL) {
+                        echo base_url() . 'resources/images/micuenta/tmpl_img_micuenta_vehiculo_nd1.png';
+                    } else {
+                        echo base_url() . $item->foto;
+                    } ?>" alt="<?php echo $item->titulo; ?>" />
+                                </a>
                             </div>
+                            <div class="carrito-div-item-detalles-desc">
+                                <div class="carrito-div-item-detalle-titulo">
 
-                            <div class="carrito-div-item-detalle-descrip">
-                                <?php echo $autoparte['options']['descripcion']; ?>
+                                    <a href="<?php echo $item->url; ?>"><?php echo $item->titulo; ?></a>
+                                </div>
+
+                                <div class="carrito-div-item-detalle-descrip">
+    <?php echo strip_tags(character_limiter($item->contenido), 300); ?> 
+                                </div>
                             </div>
+                            <div class="clear"></div>
                         </div>
+                        <div class="carrito-div-item-detalles-pago">
+                            <input type="hidden" class="carrito-input-row-item" value="<?php echo $item->rowid; ?>"/>
+                            <input type="hidden" class="carrito-input-id-item" value="<?php echo $item->id; ?>"/>
+                            <input type="hidden" class="carrito-input-precio" value="<?php echo $item->precio; ?>"/>
+                            <input type="hidden" class="carrito-input-iva" value="<?php echo $item->iva; ?>"/>
+                            <label>Cantidad: </label> <span class="carrito-div-item-subtitulo"><?php echo $item->qty; ?></span>
+                            <div class="carrito-div-item-subtitulo">Sub total</div>
+                            <div class="carrito-div-item-subtotal format-precio">$<?php echo number_format((($item->precio - $item->iva) * $item->qty), 0, ',', '.'); ?></div>
+                            <div class="carrito-div-item-subtitulo">IVA</div>
+                            <div class="carrito-div-item-iva format-precio">$<?php echo number_format(($item->iva * $item->qty), 0, ',', '.'); ?></div>
+                            <div class="carrito-div-item-subtitulo-total">TOTAL</div>
+                            <div class="carrito-div-item-total format-precio">$<?php echo number_format(($item->precio * $item->qty), 0, ',', '.'); ?></div>
+                        </div>
+
+                        <div class="clear"></div>
+
+                        <div class="carrito-div-item-condiciones">
+                            *Costos de envío no están incluídos, dependen del peso y destino de la autoparte.<br/>
+                            *Precios sujetos a disponibilidad.
+                        </div>
+
                         <div class="clear"></div>
                     </div>
-
-                    <div class="carrito-div-item-detalles-pago">
-                        <label>Cantidad: </label> <span class="carrito-div-item-subtitulo"><?php echo $autoparte['qty'];?></span>
-                        <div class="carrito-div-item-subtitulo">Sub total</div>
-                        <div class="carrito-div-item-subtotal format-precio">$<?php echo number_format((($autoparte['price']-$autoparte['iva'])*$autoparte['qty']),0,',','.'); ?></div>
-                        <div class="carrito-div-item-subtitulo">IVA</div>
-                        <div class="carrito-div-item-iva format-precio">$<?php echo number_format( ($autoparte['iva']*$autoparte['qty']),0,',','.'); ?></div>
-                        <div class="carrito-div-item-subtitulo-total">TOTAL</div>
-                        <div class="carrito-div-item-total format-precio">$<?php echo number_format(($autoparte['price']*$autoparte['qty']),0,',','.'); ?></div>
-                    </div>
-
-                    <div class="clear"></div>
-
-                    <div class="carrito-div-item-condiciones">
-<!--                        Condiciones de la autoparte que se quiere decir.-->
-                    </div>
-
-                    <div class="clear"></div>
-                </div>
-                <?php endforeach;?>
+<?php endforeach; ?>
             </div>
 
 

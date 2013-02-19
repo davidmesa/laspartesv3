@@ -54,7 +54,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td bgcolor="#c80000;" style="text-align:center; font-size: 30px; padding: 20px 10px;"><a href="<?php echo base_url();?>?utm_source=email&utm_medium=soat&utm_campaign=revision%2Bsoat" style="text-decoration:none; color:white;">
+                            <td bgcolor="#c80000;" style="text-align:center; font-size: 30px; padding: 20px 10px;"><a href="<?php echo base_url();?>ayuda?utm_source=email&utm_medium=soat&utm_campaign=revision%2Bsoat" style="text-decoration:none; color:white;">
                             	<strong>¡Cotiza el SOAT con nosotros</strong> y te lo enviamos a la casa sin costo alguno!</a>
                             </td>
                         </tr>

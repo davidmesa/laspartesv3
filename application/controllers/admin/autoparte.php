@@ -605,6 +605,14 @@ class Autoparte extends CI_Controller{
         $data['categorias'] = $this->autoparte_model->dar_autopartes_categorias();
         $data['marcas'] = $this->autoparte_model->dar_autopartes_marcas();
         $data['vehiculos'] = $this->vehiculo_model->dar_vehiculos();
+        ////caja de texto
+        # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+
+        # Al hacer LogOut deberíamos cambiar disabled a true: $_SESSION['KCFINDER']['disabled'] = true;
+
+        $this->load->library('ckeditor', array('instanceName' => 'CKEDITOR1', 'basePath' => base_url() . "ckeditor/", 'outPut' => true));
         $this->load->view('admin/autoparte/autoparte_agregar_view', $data);
     }
 
@@ -702,6 +710,14 @@ class Autoparte extends CI_Controller{
      */
     function ver_autoparte(){
         $id_autoparte = $this->uri->segment(4);
+        //caja de texto
+        # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+
+        # Al hacer LogOut deberíamos cambiar disabled a true: $_SESSION['KCFINDER']['disabled'] = true;
+
+        $this->load->library('ckeditor', array('instanceName' => 'CKEDITOR1', 'basePath' => base_url() . "ckeditor/", 'outPut' => true));
         $data = $this->_ver_autoparte($id_autoparte);
         $this->load->view('admin/autoparte/autoparte_detalle_view', $data);
     }

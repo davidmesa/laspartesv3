@@ -315,6 +315,14 @@ class Taller_en_linea extends CI_Controller{
      */
     function ver_pregunta(){
         $id_pregunta = $this->uri->segment(4);
+        //caja de texto
+        # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
+        $_SESSION['KCFINDER'] = array();
+        $_SESSION['KCFINDER']['disabled'] = false;
+
+        # Al hacer LogOut deberíamos cambiar disabled a true: $_SESSION['KCFINDER']['disabled'] = true;
+
+        $this->load->library('ckeditor', array('instanceName' => 'CKEDITOR1', 'basePath' => base_url() . "ckeditor/", 'outPut' => true));
         $data = $this->_ver_pregunta($id_pregunta);
         $this->load->view('admin/taller_en_linea/pregunta_detalle_view', $data);
     }

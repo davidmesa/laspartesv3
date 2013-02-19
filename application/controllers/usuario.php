@@ -76,9 +76,12 @@ class Usuario extends Laspartes_Controller {
                     <td colspan="2">
                         <div style="border:5px solid #c60200;">
                             <br/>&nbsp;&nbsp;CLIENTE: ' . $venta->nombre_apellido . ' <br/>
+                            &nbsp;&nbsp;DOCUMENTO: ' . $venta->documento . '<br/>
                             &nbsp;&nbsp;CIUDAD: ' . $venta->ciudad . '<br/>
                             &nbsp;&nbsp;DIRECCIÓN: ' . $venta->direccion . '<br/>
                             &nbsp;&nbsp;TELEFONO: ' . $venta->telefono . '<br/>
+                            &nbsp;&nbsp;CARRO: ' . $venta->carro . '<br/>
+                            &nbsp;&nbsp;PLACA DEL CARRO: ' . $venta->placa . '<br/>
                         </div>
                     </td>
                     <td>
@@ -219,10 +222,13 @@ class Usuario extends Laspartes_Controller {
             Estado de la compra: ' . $mensaje . '<br/>
             Usuario: ' . $venta->usuario . ' <br />
             Nombres: ' . $venta->nombre_apellido . '<br />
+            Documento: ' . $venta->documento . '<br />
             Email: ' . $venta->email . ' <br />   
             Ciudad: ' . $venta->ciudad . ' <br />  
             Direccion: ' . $venta->direccion . ' <br />  
             Telefono: ' . $venta->telefono . ' <br />  
+            Documento: ' . $venta->documento . '<br />
+            Placa del carro: ' . $venta->placa . '<br />
             Precio: $' . number_format($venta->total, 0, ',', '.') . '    <br/><br/>
             Items ordenados:<br/>';
             foreach ($autopartes as $row):
@@ -744,6 +750,7 @@ class Usuario extends Laspartes_Controller {
      */
     function actualizar_carrito_compras() {
         try {
+            $this->load->model('promocion_model');
             $rowid = $this->input->post('row', TRUE);
             $cantidad = $this->input->post('cantidad', TRUE);
 
@@ -752,12 +759,47 @@ class Usuario extends Laspartes_Controller {
                 'qty' => $cantidad
             );
             $this->cart->update($item);
-            $err['total'] = $this->cart->total();
             foreach ($this->cart->contents() as $item) {
-                $iva += ($item['iva'] * $item['qty']);
+                if ($item['name'] == 'oferta') {
+                    $oferta = $this->promocion_model->dar_oferta($item['id']);
+                    $ofertatemp = new stdClass();
+                    $ofertatemp->dco_feria = $oferta->dco_feria;
+                    $ofertatemp->qty = $item['qty'];
+                    if ($oferta->dco_feria != 0):
+                        $precio = $oferta->precio;
+                        $iva = round($oferta->iva);
+                        $dco = $oferta->dco_feria;
+                        $base = $precio - $iva;
+                        $ivaPorce = $iva / $base;
+                        $valorDco = $base * ((100 - $dco) / 100);
+                        $precionConDco = ($valorDco * (1 + $ivaPorce));
+                        $ofertatemp->iva = round($precionConDco - $valorDco);
+                        $ofertatemp->precio = round($precionConDco);
+                        $precioTotal += ($ofertatemp->precio * $ofertatemp->qty);
+                        $ivaTotal += ($ofertatemp->iva * $ofertatemp->qty);
+                    else:
+                        $ofertatemp->iva = round($oferta->iva);
+                        $ofertatemp->precio = $oferta->precio;
+                        $precioTotal += ($ofertatemp->precio * $ofertatemp->qty);
+                        $ivaTotal += ($ofertatemp->iva * $ofertatemp->qty);
+                    endif;
+                }else if ($item['name'] == 'autoparte') {
+                    $this->load->model('autoparte_model');
+                    $autoparte_establecimiento = $this->autoparte_model->dar_autoparte_establecimiento($item['id'], $item['id_establecimiento']);
+                    $autopartetemp = new stdClass();
+                    $autopartetemp->qty = $item['qty'];
+                    $autopartetemp->rowid = $item['rowid'];
+                    $autopartetemp->precio = round($autoparte_establecimiento->precio);
+                    $autopartetemp->iva = round($autoparte_establecimiento->precio - ($autoparte_establecimiento->precio / 1.16));
+                    $precioTotal += ($autopartetemp->precio * $autopartetemp->qty);
+                    $ivaTotal += ($autopartetemp->iva * $autopartetemp->qty);
+                }
             }
-            $err['devolucion'] = $err['total'] - $iva;
-            $err['iva'] = $iva;
+
+
+            $err['total'] = round($precioTotal);
+            $err['devolucion'] = $err['total'] - round($ivaTotal);
+            $err['iva'] = round($ivaTotal);
             $err['items'] = $this->cart->total_items();
             echo 'true|' . json_encode($err);
         } catch (Exception $exc) {
@@ -818,15 +860,15 @@ class Usuario extends Laspartes_Controller {
                     'id' => $autoparte_establecimiento->id_autoparte,
                     'qty' => 1,
                     'price' => $autoparte_establecimiento->precio,
-                    'iva' => round($autoparte_establecimiento->precio - ($autoparte_establecimiento->precio / 1.16)),
+//                    'iva' => round($autoparte_establecimiento->precio - ($autoparte_establecimiento->precio / 1.16)),
                     'name' => 'autoparte',
-                    'nombre' => str_replace('/', '-', $autoparte_establecimiento->nombre) . ' MARCA ' . $autoparte_establecimiento->marca . ' PARA ' . $autoparte_establecimiento->vehiculo_marca,
-                    'options' => array(
-                        'id_establecimiento' => $autoparte_establecimiento->id_establecimiento,
-                        'nombre_establecimiento' => $autoparte_establecimiento->establecimiento,
-                        'foto' => $autoparte_establecimiento->imagen,
-                        'descripcion' => character_limiter($autoparte_establecimiento->descripcion, 400)
-                    )
+//                    'nombre' => str_replace('/', '-', $autoparte_establecimiento->nombre) . ' MARCA ' . $autoparte_establecimiento->marca . ' PARA ' . $autoparte_establecimiento->vehiculo_marca,
+//                    'options' => array(
+                    'id_establecimiento' => $autoparte_establecimiento->id_establecimiento
+//                        'nombre_establecimiento' => $autoparte_establecimiento->establecimiento,
+//                        'foto' => $autoparte_establecimiento->imagen,
+//                        'descripcion' => character_limiter($autoparte_establecimiento->descripcion, 400)
+//                    )
                 );
 
                 $this->cart->insert($item);
@@ -871,44 +913,44 @@ class Usuario extends Laspartes_Controller {
             }
 //
             if ($existe == FALSE) {
-                if ($oferta->dco_feria != 0):
-                    $precio = $oferta->precio;
-                    $iva = round($oferta->iva);
-                    $dco = $oferta->dco_feria;
-                    $base = $precio - $iva;
-                    $ivaPorce = $iva / $base;
-                    $valorDco = $base * ((100 - $dco) / 100);
-                    $precionConDco = ($valorDco * (1 + $ivaPorce));
-                    $item = array(
-                        'id' => $oferta->id_oferta,
-                        'qty' => 1,
-                        'price' => round($precionConDco),
-                        'iva' => round($precionConDco - $valorDco),
-                        'name' => 'oferta',
-                        'nombre' => $oferta->titulo,
-                        'options' => array(
-                            'id_establecimiento' => $oferta->id_establecimiento,
-                            'nombre_establecimiento' => $oferta->establecimientoNombre,
-                            'foto' => $oferta->foto,
-                            'descripcion' => character_limiter($oferta->incluye, 400)
-                        )
-                    );
-                else:
-                    $item = array(
-                        'id' => $oferta->id_oferta,
-                        'qty' => 1,
-                        'price' => $oferta->precio,
-                        'iva' => $oferta->iva,
-                        'name' => 'oferta',
-                        'nombre' => $oferta->titulo,
-                        'options' => array(
-                            'id_establecimiento' => $oferta->id_establecimiento,
-                            'nombre_establecimiento' => $oferta->establecimientoNombre,
-                            'foto' => $oferta->foto,
-                            'descripcion' => character_limiter($oferta->incluye, 400)
-                        )
-                    );
-                endif;
+//                if ($oferta->dco_feria != 0):
+//                    $precio = $oferta->precio;
+//                    $iva = round($oferta->iva);
+//                    $dco = $oferta->dco_feria;
+//                    $base = $precio - $iva;
+//                    $ivaPorce = $iva / $base;
+//                    $valorDco = $base * ((100 - $dco) / 100);
+//                    $precionConDco = ($valorDco * (1 + $ivaPorce));
+//                    $item = array(
+//                        'id' => $oferta->id_oferta,
+//                        'qty' => 1,
+//                        'price' => round($precionConDco),
+//                        'iva' => round($precionConDco - $valorDco),
+//                        'name' => 'oferta',
+//                        'nombre' => $oferta->titulo,
+//                        'options' => array(
+//                            'id_establecimiento' => $oferta->id_establecimiento,
+//                            'nombre_establecimiento' => $oferta->establecimientoNombre,
+//                            'foto' => $oferta->foto,
+//                            'descripcion' => character_limiter($oferta->incluye, 400)
+//                        )
+//                    );
+//                else:
+                $item = array(
+                    'id' => $oferta->id_oferta,
+                    'qty' => 1,
+                    'price' => $oferta->precio,
+//                        'iva' => $oferta->iva,
+                    'name' => 'oferta'
+//                        'nombre' => $oferta->titulo,
+//                        'options' => array(
+//                            'id_establecimiento' => $oferta->id_establecimiento,
+//                            'nombre_establecimiento' => $oferta->establecimientoNombre,
+//                            'foto' => $oferta->foto,
+//                            'descripcion' => character_limiter($oferta->incluye, 400)
+//                        )
+                );
+//                endif;
                 // Agrega un nuevo item al carrito
 
 
@@ -2165,9 +2207,9 @@ class Usuario extends Laspartes_Controller {
 
         $existe = $this->usuario_model->existe_usuario($usuario);
         if (!$existe)
-            return $usuario ;
+            return $usuario;
         else
-            return $this->_generar_usuario($usuario. $code);
+            return $this->_generar_usuario($usuario . $code);
     }
 
     /**
@@ -2432,7 +2474,7 @@ class Usuario extends Laspartes_Controller {
                             $precionConDco = ($valorDco * (1 + $ivaPorce));
                             $total += ($precionConDco * $item['qty']);
                         else:
-                            $total += ($ofertamodel->precio * $item['qty']); 
+                            $total += ($ofertamodel->precio * $item['qty']);
                         endif;
                     }
                 endforeach;
@@ -2443,7 +2485,7 @@ class Usuario extends Laspartes_Controller {
                 $this->refventa_model->agregar_RefVenta($refVenta, $id_carrito);
                 foreach ($this->cart->contents() as $item):
                     if ($item['name'] == 'autoparte') {
-                        $autoparteModel = $this->autoparte_model->dar_autoparte_establecimiento($item['id'], $item['options']['id_establecimiento']);
+                        $autoparteModel = $this->autoparte_model->dar_autoparte_establecimiento($item['id'], $item['id_establecimiento']);
                         $usuario = $this->usuario_model->agregar_carrito_compras_articulo($id_carrito, $autoparteModel->id_establecimiento, $autoparteModel->id_autoparte, $autoparteModel->precio, $item['qty'], $autoparteModel->descripcion);
                     } else if ($item['name'] == 'oferta') {
                         $this->usuario_model->agregar_carrito_compras_ofertas($id_carrito, $item['id'], $item['qty']);
@@ -2468,37 +2510,63 @@ class Usuario extends Laspartes_Controller {
             $valorSum = 0;
             $ivaSum = 0;
             foreach ($this->cart->contents() as $item) {
-                $id = $item['id'];
-                $id_establecimiento = $item['options']['id_establecimiento'];
-                if ($item['name'] == 'autoparte') {
-                    $autoparte = $this->autoparte_model->dar_autoparte_establecimiento($id, $id_establecimiento);
-                    $valorSum += ($autoparte->precio * $item['qty']);
-                    $ivaSum += round($autoparte->precio - ($autoparte->precio / 1.16)) * $item['qty'];
-                } else if ($item['name'] == 'oferta') {
-                    $ofertamodel = $this->promocion_model->dar_oferta($id);
-                    if ($ofertamodel->dco_feria != 0):
-                        $precio = $ofertamodel->precio;
-                        $iva = round($ofertamodel->iva);
-                        $dco = $ofertamodel->dco_feria;
+                if ($item['name'] == 'oferta') {
+                    $this->load->model('promocion_model');
+                    $oferta = $this->promocion_model->dar_oferta($item['id']);
+                    $ofertatemp = new stdClass();
+                    $ofertatemp->id = $oferta->id_oferta;
+                    $ofertatemp->titulo = $oferta->titulo;
+                    $ofertatemp->contenido = $oferta->incluye;
+                    $ofertatemp->dco_feria = $oferta->dco_feria;
+                    $ofertatemp->qty = $item['qty'];
+                    $ofertatemp->rowid = $item['rowid'];
+                    $ofertatemp->url = base_url() . 'promociones/' . $ofertatemp->id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $ofertatemp->titulo);
+                    if ($oferta->dco_feria != 0):
+                        $precio = $oferta->precio;
+                        $iva = round($oferta->iva);
+                        $dco = $oferta->dco_feria;
                         $base = $precio - $iva;
                         $ivaPorce = $iva / $base;
                         $valorDco = $base * ((100 - $dco) / 100);
                         $precionConDco = ($valorDco * (1 + $ivaPorce));
-                        $valorSum += ($precionConDco * $item['qty']);
-                        $ivaSum += round($precionConDco - $valorDco) * $item['qty'];
+                        $ofertatemp->iva = round($precionConDco - $valorDco);
+                        $ofertatemp->precio = round($precionConDco);
+                        $precioTotal += ($ofertatemp->precio * $ofertatemp->qty);
+                        $ivaTotal += ($ofertatemp->iva * $ofertatemp->qty);
                     else:
-                        $valorSum += ($ofertamodel->precio * $item['qty']);
-                        $ivaSum += round($ofertamodel->iva) * $item['qty'];
+                        $ofertatemp->iva = $oferta->iva;
+                        $ofertatemp->precio = $oferta->precio;
+                        $precioTotal += ($ofertatemp->precio * $ofertatemp->qty);
+                        $ivaTotal += ($ofertatemp->iva * $ofertatemp->qty);
                     endif;
+                    $items[] = $ofertatemp;
+                }else if ($item['name'] == 'autoparte') {
+                    $this->load->model('autoparte_model');
+                    $autoparte_establecimiento = $this->autoparte_model->dar_autoparte_establecimiento($item['id'], $item['id_establecimiento']);
+                    $autopartetemp = new stdClass();
+                    $autopartetemp->id = $autoparte_establecimiento->id_autoparte;
+                    $autopartetemp->titulo = $autoparte_establecimiento->nombre;
+                    $autopartetemp->contenido = $autoparte_establecimiento->descripcion;
+                    $autopartetemp->qty = $item['qty'];
+                    $autopartetemp->rowid = $item['rowid'];
+                    $autopartetemp->precio = $autoparte_establecimiento->precio;
+                    $autopartetemp->iva = round($autoparte_establecimiento->precio - ($autoparte_establecimiento->precio / 1.16));
+                    $precioTotal += round($autopartetemp->precio * $autopartetemp->qty);
+                    $ivaTotal += round($autopartetemp->iva * $autopartetemp->qty);
+                    $autopartetemp->url = base_url() . 'autopartes/' . $autopartetemp->id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $autopartetemp->titulo);
+                    $items[] = $autopartetemp;
                 }
-            }
-            $valorSum = round($valorSum);
-            $ivaSum = round($ivaSum);
-            $baseDevolucionIva = $valorSum - $ivaSum;
+            } 
+            
+            $data['items'] = $items;
+            $valorSum = round($precioTotal);
+            $data['valor'] = $valorSum;
+            $data['iva'] = round($ivaTotal);
+            $data['baseDevolucionIva'] = $precioTotal - $ivaTotal;
             $llave_encripcion = "13733cb5a73";
             $urlPagosOnline = "https://gateway.pagosonline.net/apps/gateway/index.html";
             $usuarioId = 84442;
-            $refVenta = 1;
+            $refVenta = 0;
             $this->load->model('refventa_model');
             $refVenta = $this->refventa_model->generar_RefVenta_Unico();
             $descripcion = "Compra de servicios";
@@ -2508,12 +2576,12 @@ class Usuario extends Laspartes_Controller {
             $idUsuario = $this->session->userdata('id_usuario');
             $usuario = $this->usuario_model->dar_usuario($idUsuario);
             $emailComprador = $usuario->email;
-            $prueba = 0;
+            $prueba = 1;
             $moneda = "COP";
             $url_respuesta = base_url() . "usuario/pago_confirmacion";
             $url_confirmacion = base_url() . "usuario/confirmacion_pol";
 
-
+            
             $firma_cadena = "$llave_encripcion~$usuarioId~$refVenta~$valorSum~$moneda"; //concatenación para realizar la firma
             $firma = md5($firma_cadena);
 
@@ -2521,9 +2589,6 @@ class Usuario extends Laspartes_Controller {
             $data['usuarioId'] = $usuarioId;
             $data['refVenta'] = $refVenta;
             $data['descripcion'] = $descripcion;
-            $data['valor'] = $valorSum;
-            $data['iva'] = $ivaSum;
-            $data['baseDevolucionIva'] = $baseDevolucionIva;
             $data['emailComprador'] = $emailComprador;
             $data['prueba'] = $prueba;
             $data['moneda'] = $moneda;
@@ -2536,7 +2601,7 @@ class Usuario extends Laspartes_Controller {
             $data['navegacion_view'] = 'micarrito';
             $data['contenido_view'] = 'usuario/datos_envio_view';
             $this->load->view('template/template', $data);
-        }else {
+        } else {
             redirect('carrito');
         }
     }
@@ -2546,13 +2611,57 @@ class Usuario extends Laspartes_Controller {
      */
     function ver_carrito_compras($mensaje = '') {
         foreach ($this->cart->contents() as $item) {
-            $precio += ($item['price'] * $item['qty']);
-            $iva += ($item['iva'] * $item['qty']);
+            if ($item['name'] == 'oferta') {
+                $this->load->model('promocion_model');
+                $oferta = $this->promocion_model->dar_oferta($item['id']);
+                $ofertatemp = new stdClass();
+                $ofertatemp->id = $oferta->id_oferta;
+                $ofertatemp->titulo = $oferta->titulo;
+                $ofertatemp->contenido = $oferta->incluye;
+                $ofertatemp->dco_feria = $oferta->dco_feria;
+                $ofertatemp->qty = $item['qty'];
+                $ofertatemp->rowid = $item['rowid'];
+                $ofertatemp->url = base_url() . 'promociones/' . $ofertatemp->id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $ofertatemp->titulo);
+                if ($oferta->dco_feria != 0):
+                    $precio = $oferta->precio;
+                    $iva = round($oferta->iva);
+                    $dco = $oferta->dco_feria;
+                    $base = $precio - $iva;
+                    $ivaPorce = $iva / $base;
+                    $valorDco = $base * ((100 - $dco) / 100);
+                    $precionConDco = ($valorDco * (1 + $ivaPorce));
+                    $ofertatemp->iva = round($precionConDco - $valorDco);
+                    $ofertatemp->precio = round($precionConDco);
+                    $precioTotal += ($ofertatemp->precio * $ofertatemp->qty);
+                    $ivaTotal += ($ofertatemp->iva * $ofertatemp->qty);
+                else:
+                    $ofertatemp->iva = $oferta->iva;
+                    $ofertatemp->precio = $oferta->precio;
+                    $precioTotal += ($ofertatemp->precio * $ofertatemp->qty);
+                    $ivaTotal += ($ofertatemp->iva * $ofertatemp->qty);
+                endif;
+                $items[] = $ofertatemp;
+            }else if ($item['name'] == 'autoparte') {
+                $this->load->model('autoparte_model');
+                $autoparte_establecimiento = $this->autoparte_model->dar_autoparte_establecimiento($item['id'], $item['id_establecimiento']);
+                $autopartetemp = new stdClass();
+                $autopartetemp->id = $autoparte_establecimiento->id_autoparte;
+                $autopartetemp->titulo = $autoparte_establecimiento->nombre;
+                $autopartetemp->contenido = $autoparte_establecimiento->descripcion;
+                $autopartetemp->qty = $item['qty'];
+                $autopartetemp->rowid = $item['rowid'];
+                $autopartetemp->precio = $autoparte_establecimiento->precio;
+                $autopartetemp->iva = round($autoparte_establecimiento->precio - ($autoparte_establecimiento->precio / 1.16));
+                $precioTotal += round($autopartetemp->precio * $autopartetemp->qty);
+                $ivaTotal += round($autopartetemp->iva * $autopartetemp->qty);
+                $autopartetemp->url = base_url() . 'autopartes/' . $autopartetemp->id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $autopartetemp->titulo);
+                $items[] = $autopartetemp;
+            }
         }
-
-        $data['precio'] = $precio;
-        $data['iva'] = $iva;
-        $data['base'] = $precio - $iva;
+        $data['items'] = $items;
+        $data['precio'] = round($precioTotal);
+        $data['iva'] = round($ivaTotal);
+        $data['base'] = $precioTotal - $ivaTotal;
 
         $data['metaDescripcion'] = 'Compra en línea los repuestos que necesites de manera rápida y segura. Envíos a todo el país';
         $data['titulo'] = 'Laspartes.com: Carrito de Compras';
@@ -2674,6 +2783,58 @@ class Usuario extends Laspartes_Controller {
             $data['respuesta'] = "Tu transacción no se pudo realizar!";
             $data['mensaje'] = "El pago no se debito de tu cuenta vuelve a intentar hacer la compra por favor.";
         }
+        foreach ($this->cart->contents() as $item) {
+            if ($item['name'] == 'oferta') {
+                $this->load->model('promocion_model');
+                $oferta = $this->promocion_model->dar_oferta($item['id']);
+                $ofertatemp = new stdClass();
+                $ofertatemp->id = $oferta->id_oferta;
+                $ofertatemp->titulo = $oferta->titulo;
+                $ofertatemp->contenido = $oferta->incluye;
+                $ofertatemp->dco_feria = $oferta->dco_feria;
+                $ofertatemp->qty = $item['qty'];
+                $ofertatemp->rowid = $item['rowid'];
+                $ofertatemp->url = base_url() . 'promociones/' . $ofertatemp->id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $ofertatemp->titulo);
+                if ($oferta->dco_feria != 0):
+                    $precio = $oferta->precio;
+                    $iva = round($oferta->iva);
+                    $dco = $oferta->dco_feria;
+                    $base = $precio - $iva;
+                    $ivaPorce = $iva / $base;
+                    $valorDco = $base * ((100 - $dco) / 100);
+                    $precionConDco = ($valorDco * (1 + $ivaPorce));
+                    $ofertatemp->iva = round($precionConDco - $valorDco);
+                    $ofertatemp->precio = round($precionConDco);
+                    $precioTotal += ($ofertatemp->precio * $ofertatemp->qty);
+                    $ivaTotal += ($ofertatemp->iva * $ofertatemp->qty);
+                else:
+                    $ofertatemp->iva = $oferta->iva;
+                    $ofertatemp->precio = $oferta->precio;
+                    $precioTotal += ($ofertatemp->precio * $ofertatemp->qty);
+                    $ivaTotal += ($ofertatemp->iva * $ofertatemp->qty);
+                endif;
+                $items[] = $ofertatemp;
+            }else if ($item['name'] == 'autoparte') {
+                $this->load->model('autoparte_model');
+                $autoparte_establecimiento = $this->autoparte_model->dar_autoparte_establecimiento($item['id'], $item['id_establecimiento']);
+                $autopartetemp = new stdClass();
+                $autopartetemp->id = $autoparte_establecimiento->id_autoparte;
+                $autopartetemp->titulo = $autoparte_establecimiento->nombre;
+                $autopartetemp->contenido = $autoparte_establecimiento->descripcion;
+                $autopartetemp->qty = $item['qty'];
+                $autopartetemp->rowid = $item['rowid'];
+                $autopartetemp->precio = $autoparte_establecimiento->precio;
+                $autopartetemp->iva = round($autoparte_establecimiento->precio - ($autoparte_establecimiento->precio / 1.16));
+                $precioTotal += round($autopartetemp->precio * $autopartetemp->qty);
+                $ivaTotal += round($autopartetemp->iva * $autopartetemp->qty);
+                $autopartetemp->url = base_url() . 'autopartes/' . $autopartetemp->id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $autopartetemp->titulo);
+                $items[] = $autopartetemp;
+            }
+        }
+        $data['items'] = $items;
+        $data['precio'] = round($precioTotal);
+        $data['iva'] = round($ivaTotal);
+        $data['base'] = $precioTotal - $ivaTotal;
         $data['titulo'] = 'Laspartes.com: Confirmación de pago';
         $data['header_view'] = 'POL/header/respuesta_POL';
         $data['breadcrumb'] = '<div><a href="' . base_url() . '">Inicio</a></div> <div class="div-breadcrumb-espaciador"></div> <div><a href="' . base_url() . 'carrito">Mi carrito</a></div> <div class="div-breadcrumb-espaciador"></div>Confirmación de pago';
@@ -4215,7 +4376,7 @@ class Usuario extends Laspartes_Controller {
                 $this->usuario_model->validar_usuario_fb($fb_data['me']['email']);
                 $usuario = $this->usuario_model->dar_usuario($this->session->userdata("id_usuario"));
                 //envia correo de bienvenida a nuestro portal
-                $this->load->helper('mail');  
+                $this->load->helper('mail');
                 ob_start();
                 $data1['usuario'] = $usuario;
                 $this->load->view('emails/registro_correo_view', $data1);
@@ -4230,7 +4391,6 @@ class Usuario extends Laspartes_Controller {
                 $destinatario->email = 'tallerenlinea@laspartes.com.co';
                 $destinatarios[] = $destinatario;
                 send_mail($destinatarios, "[LasPartes.com] Gracias por registrarte con nosotros", $contenidoHTML, "", $fileName);
-
             } else {
                 $usuario = $this->usuario_model->dar_usuario_segun_mail($fb_data['me']['email']);
                 if ($usuario->imagen_url == '') {
@@ -4441,7 +4601,7 @@ class Usuario extends Laspartes_Controller {
         if (!$this->form_validation->run()) {
             
         } else {
-            $this->load->helper('mail'); 
+            $this->load->helper('mail');
             $this->load->model('establecimiento_model');
             $llave = $this->input->post('llave');
             $temp = $this->usuario_model->dar_carrito_califica_experiencia($llave);
@@ -4454,7 +4614,7 @@ class Usuario extends Laspartes_Controller {
             $carrito = $this->usuario_model->dar_carrito_compra($temp->id_carrito);
             $data1['usuario'] = $this->usuario_model->dar_usuario($carrito->id_usuario);
             $this->establecimiento_model->agregar_establecimiento_comentario($establecimiento->id_establecimiento, $carrito->id_usuario, $mensaje, $calificacion);
-            $url = base_url().'talleres/' . $establecimiento->id_establecimiento . '-' . str_replace(' ', '-', convert_accented_characters($establecimiento->nombre)).'#talleres-detalle-div-opiniones?utm_source=email&utm_medium=calificado&utm_campaign=calificar%2Bexperiencia';
+            $url = base_url() . 'talleres/' . $establecimiento->id_establecimiento . '-' . str_replace(' ', '-', convert_accented_characters($establecimiento->nombre)) . '#talleres-detalle-div-opiniones?utm_source=email&utm_medium=calificado&utm_campaign=calificar%2Bexperiencia';
             $data1['url'] = $url;
             $destinatarios = array();
             $destinatario = new stdClass();
@@ -4472,10 +4632,10 @@ class Usuario extends Laspartes_Controller {
             $contenidoHTML = ob_get_contents();
             ob_end_clean();
             ob_flush();
-            send_mail($destinatarios, $data1['usuario']->nombres.' ha calificado a '.$data1['establecimiento']->nombre, $contenidoHTML, "");
+            send_mail($destinatarios, $data1['usuario']->nombres . ' ha calificado a ' . $data1['establecimiento']->nombre, $contenidoHTML, "");
 
             $this->usuario_model->eliminar_llave_califica_experiencia($temp->id_califica_experiencia);
-            
+
             echo "<script type='text/javascript'>top.location = '" . $url . "';</script>";
         }
     }
