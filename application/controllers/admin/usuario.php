@@ -595,7 +595,9 @@ class Usuario extends CI_Controller {
         endforeach;
         $this->refventa_model->agregar_RefVenta($refVenta, $id_carrito);
         $this->_generar_factura($refVenta, $mensaje = "");
-        redirect('admin/usuario/recibo/' . $id_usuario);
+        $url = base_url().'admin/usuario/recibo/' . $id_usuario;
+        echo "<script type='text/javascript'>top.location = '" . $url . "';</script>";
+//        redirect('admin/usuario/recibo/' . $id_usuario);
     }
 
     function _generar_factura($refVenta, $mensaje = "") {
@@ -791,41 +793,21 @@ class Usuario extends CI_Controller {
         $destinatario->email = "ventas@laspartes.com.co";
         $destinatarios[] = $destinatario;
 
-        $mensajeCorreo = 'Gracias por tu compra, a continuacion puedes ver el resumen de tu compra:<br/><br/>
-            Estado de la compra: ' . $mensaje . '<br/>
-            Usuario: ' . $venta->usuario . ' <br />
-            Nombres: ' . $venta->nombre_apellido . '<br />
-            Documento: ' . $venta->documento . '<br />
-            Email: ' . $venta->email . ' <br />   
-            Ciudad: ' . $venta->ciudad . ' <br />  
-            Direccion: ' . $venta->direccion . ' <br />  
-            Telefono: ' . $venta->telefono . ' <br />  
-            Documento: ' . $venta->documento . '<br />
-            Placa del carro: ' . $venta->placa . '<br /> 
-            Precio: $' . number_format($venta->total, 0, ',', '.') . '    <br/><br/>
-            Items ordenados:<br/>';
-        foreach ($autopartes as $row):
-            $mensajeCorreo .= $row->cantidad . ' de: ' . $row->autoparte . ' por $' . number_format($row->precio, 0, ',', '.') . '<br/>';
-        endforeach;
-        foreach ($ofertas as $row):
-            if ($row->dco_feria != 0):
-                $precio = $row->precio;
-                $iva = $row->iva;
-                $dco = $row->dco_feria;
-                $base = $precio - $iva;
-                $ivaPorce = $iva / $base;
-                $valorDco = $base * ((100 - $dco) / 100);
-                $precionConDco = ($valorDco * (1 + $ivaPorce));
-                $mensajeCorreo .= $row->cantidad . ' de: ' . $row->titulo . ' por $' . number_format($precionConDco, 0, ',', '.') . '<br/>';
-            else:
-                $mensajeCorreo .= $row->cantidad . ' de: ' . $row->titulo . ' por $' . number_format($row->precio, 0, ',', '.') . '<br/>';
-            endif;
+        ob_start();
+        $data1['mensaje'] = $mensaje;
+        $data1['venta'] = $venta;
+        $data1['autopartes'] = $autopartes;
+        $data1['ofertas'] = $ofertas; 
 
-        endforeach;
+
+        $this->load->view('emails/recibo_compra_view', $data1);
+        $contenidoHTML = ob_get_contents();
+        ob_end_clean();
+        ob_flush();
         $filePath = 'resources/facturas';
         $fileName = 'recibo-' . $refVenta . '.pdf';
         $this->pdf->Output($filePath . '/' . $fileName, 'F');
-        send_mail($destinatarios, "Recibo de compra LasPartes.com - " . strftime("%B %d de %Y"), $mensajeCorreo, "", $fileName);
+        send_mail($destinatarios, "Recibo de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
     }
 
     /**

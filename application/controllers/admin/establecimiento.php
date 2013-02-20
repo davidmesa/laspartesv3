@@ -853,31 +853,8 @@ class Establecimiento extends CI_Controller {
 
             //envía correo de bienvenida
             $this->load->helper('mail');
-            $mensajeHTML = ('
-                            Bienvenido a <a style="text-decoration: none; color: red;" href="' . base_url() . '">Laspartes.com</a>.
-                            <br /> <br /> 
-                            Es un gusto para nosotros contar con su presencia dentro de la única comunidad virtual de autopartes en Colombia.
-                            <br />
-                            Cualquier duda, queja o comentario, con gusto la atenderemos por medio de esta dirección de correo electrónico soporte@laspartes.com.co<br />
-                            <br /> 
-                            <br />
-                            Cordialmente,<br />
-                            -------------------------------------------------------<br />
-                            Servicio al cliente<br />
-                            <a style="text-decoration: none; color: red;" href="' . base_url() . '">Laspartes.com</a> - Todo para su vehículo
-                    ');
-
             ob_start();
-            $this->load->helper('date');
-            $this->load->model('tip_model');
-            $this->load->model('pregunta_model');
-            $tips = $this->tip_model->dar_tips_ultimos(3);
-            $preguntas = $this->pregunta_model->dar_preguntas_ultimas(3);
-            $data1['tip'] = $tips;
-            $data1['preguntas'] = $preguntas;
-            $data1['fecha'] = strftime("%B %d de %Y");
-            $data1['html'] = $mensajeHTML;
-            $this->load->view('template/correo_generico_HTML', $data1);
+            $this->load->view('emails/registro_taller_correo_view', $data1);
             $contenidoHTML = ob_get_contents();
             ob_end_clean();
             ob_flush();
@@ -886,7 +863,7 @@ class Establecimiento extends CI_Controller {
             $destinatario->email = $email;
             $destinatarios[] = $destinatario;
             $destinatario = new stdClass();
-            $destinatario->email = 'tallerenlinea@laspartes';
+            $destinatario->email = 'tallerenlinea@laspartes.com.co';
             $destinatarios[] = $destinatario;
             send_mail($destinatarios, "[LasPartes.com] Gracias por registrarse con nosotros", $contenidoHTML, "", $fileName);
 
@@ -1146,7 +1123,7 @@ class Establecimiento extends CI_Controller {
             $vehiculos = $this->input->post('vehiculo_id', TRUE);
             $otra_categoria = $this->input->post('categoria_otra', TRUE);
             $imagen = $this->input->post('imagen', TRUE);
-            if ($otra_categoria) { 
+            if ($otra_categoria) {
                 $tempCat[] = 'nombre';
                 $tempCat[] = $otra_categoria;
                 $cat[] = $tempCat;
@@ -1394,17 +1371,17 @@ class Establecimiento extends CI_Controller {
             if ($this->upload->do_upload('imagen')) {
                 $img = $this->upload->data();
                 $id = $this->establecimiento_model->agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo, $upload_path . $img['file_name']);
-                $url= base_url().'promociones/'.$id.'-'.preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
-                $msj = 'La oferta ha sido agregada. La url de la oferta es: <a style="display:inline;" href="'.$url.'">'.$url.'</a>';
+                $url = base_url() . 'promociones/' . $id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
+                $msj = 'La oferta ha sido agregada. La url de la oferta es: <a style="display:inline;" href="' . $url . '">' . $url . '</a>';
             } else {
                 if (!$imagen) {
                     $id = $this->establecimiento_model->agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo);
-                    $url= base_url().'promociones/'.$id.'-'.preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
-                    $msj = 'La oferta ha sido agregada. La url de la oferta es: <a style="display:inline;"  href="'.$url.'">'.$url.'</a>';
+                    $url = base_url() . 'promociones/' . $id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
+                    $msj = 'La oferta ha sido agregada. La url de la oferta es: <a style="display:inline;"  href="' . $url . '">' . $url . '</a>';
                 } else {
                     $id = $this->establecimiento_model->agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo);
-                    $url= base_url().'promociones/'.$id.'-'.preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
-                    $msj = 'La oferta ha sido actualizada con éxito, sin foto y error: ' . $this->upload->display_errors('', '').'. La url de la oferta es: <a style="display:inline;"  href="'.$url.'">'.$url.'</a>';
+                    $url = base_url() . 'promociones/' . $id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
+                    $msj = 'La oferta ha sido actualizada con éxito, sin foto y error: ' . $this->upload->display_errors('', '') . '. La url de la oferta es: <a style="display:inline;"  href="' . $url . '">' . $url . '</a>';
                 }
             }
 
@@ -1535,7 +1512,7 @@ class Establecimiento extends CI_Controller {
      */
     function formulario_establecimiento() {
         $data = $this->_formulario_establecimiento();
-         ////caja de texto
+        ////caja de texto
         # Variables de sesion de KCFinder, deben declararse al hacer LogIn con un usuario
         $_SESSION['KCFINDER'] = array();
         $_SESSION['KCFINDER']['disabled'] = false;

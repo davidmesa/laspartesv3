@@ -17,7 +17,7 @@ class Usuario extends Laspartes_Controller {
     }
 
 //    function mifactura(){
-//        $this->_generar_factura('3eb144655c', 'email');
+//        $this->_generar_factura('6b76d17092', 'email');
 //    }
     /**
      * Genera la factura de la compra en formato PDF
@@ -217,42 +217,23 @@ class Usuario extends Laspartes_Controller {
             $destinatario = new stdClass();
             $destinatario->email = "ventas@laspartes.com.co";
             $destinatarios[] = $destinatario;
-
-            $mensajeCorreo = 'Gracias por tu compra, a continuacion puedes ver el resumen de tu compra:<br/><br/>
-            Estado de la compra: ' . $mensaje . '<br/>
-            Usuario: ' . $venta->usuario . ' <br />
-            Nombres: ' . $venta->nombre_apellido . '<br />
-            Documento: ' . $venta->documento . '<br />
-            Email: ' . $venta->email . ' <br />   
-            Ciudad: ' . $venta->ciudad . ' <br />  
-            Direccion: ' . $venta->direccion . ' <br />  
-            Telefono: ' . $venta->telefono . ' <br />  
-            Documento: ' . $venta->documento . '<br />
-            Placa del carro: ' . $venta->placa . '<br />
-            Precio: $' . number_format($venta->total, 0, ',', '.') . '    <br/><br/>
-            Items ordenados:<br/>';
-            foreach ($autopartes as $row):
-                $mensajeCorreo .= $row->cantidad . ' de: ' . $row->autoparte . ' por $' . number_format($row->precio, 0, ',', '.') . '<br/>';
-            endforeach;
-            foreach ($ofertas as $row):
-                if ($row->dco_feria != 0):
-                    $precio = $row->precio;
-                    $iva = $row->iva;
-                    $dco = $row->dco_feria;
-                    $base = $precio - $iva;
-                    $ivaPorce = $iva / $base;
-                    $valorDco = $base * ((100 - $dco) / 100);
-                    $precionConDco = ($valorDco * (1 + $ivaPorce));
-                    $mensajeCorreo .= $row->cantidad . ' de: ' . $row->titulo . ' por $' . number_format($precionConDco, 0, ',', '.') . '<br/>';
-                else:
-                    $mensajeCorreo .= $row->cantidad . ' de: ' . $row->titulo . ' por $' . number_format($row->precio, 0, ',', '.') . '<br/>';
-                endif;
-
-            endforeach;
+            
+            ob_start();
+            $data1['mensaje'] = $mensaje;
+            $data1['venta'] = $venta;
+            $data1['autopartes'] = $autopartes;
+            $data1['ofertas'] = $ofertas;
+            
+            
+            $this->load->view('emails/recibo_compra_view', $data1);
+            $contenidoHTML = ob_get_contents();
+            ob_end_clean();
+            ob_flush();
+            
             $filePath = 'resources/facturas';
             $fileName = 'recibo-' . $refVenta . '.pdf';
             $this->pdf->Output($filePath . '/' . $fileName, 'F');
-            send_mail($destinatarios, "Recibo de compra LasPartes.com - " . strftime("%B %d de %Y"), $mensajeCorreo, "", $fileName);
+            send_mail($destinatarios, "Recibo de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
         } else if ($estado == "error") {
             $destinatarios = array();
             $destinatario = new stdClass();
@@ -2576,7 +2557,7 @@ class Usuario extends Laspartes_Controller {
             $idUsuario = $this->session->userdata('id_usuario');
             $usuario = $this->usuario_model->dar_usuario($idUsuario);
             $emailComprador = $usuario->email;
-            $prueba = 1;
+            $prueba = 0;
             $moneda = "COP";
             $url_respuesta = base_url() . "usuario/pago_confirmacion";
             $url_confirmacion = base_url() . "usuario/confirmacion_pol";
@@ -2978,31 +2959,10 @@ class Usuario extends Laspartes_Controller {
             $this->usuario_model->actualizar_usuario_estado($id_usuario, 'Activo');
 
             $this->usuario_model->validar_usuario($usuario->email, $usuario->contrasena);
-
-            // Enviar mail
-            $mensajeHTML = ('
-                Tu contraseña se ha cambiada satisfactoriamente. <br />
-                Tu nueva contraseña es la siguiente: *******' . substr($contrasena, (strlen($contrasena) / 2)) . '
-                <br />
-                <br />
-                Cordialmente,<br />
-                -------------------------------------------------------<br />
-                Servicio al cliente<br />
-                <a style="text-decoration: none; color: red;" href="' . base_url() . '">Laspartes.com.co</a> - Todo para su vehículo
-            ');
+            
             ob_start();
-            $this->load->helper('date');
-            $this->load->model('tip_model');
-            $this->load->model('pregunta_model');
-            $tips = $this->tip_model->dar_tips_ultimos(3);
-
-            $preguntas = $this->pregunta_model->dar_preguntas_ultimas(3);
-            $data1['tema'] = 'Cambio de contraseña ';
-            $data1['tip'] = $tips;
-            $data1['preguntas'] = $preguntas;
-            $data1['fecha'] = strftime("%B %d de %Y");
-            $data1['html'] = $mensajeHTML;
-            $this->load->view('template/correo_generico_HTML', $data1);
+            $data1['contrasena'] = $contrasena;
+            $this->load->view('emails/cambiar_contrasena_view', $data1);
             $contenidoHTML = ob_get_contents();
             ob_end_clean();
             ob_flush();
