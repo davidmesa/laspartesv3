@@ -43,7 +43,10 @@
                                 digitGroupSymbol: '.'
                             });
                         }else{
-                            alert(corrio[1]);
+                            confirm(corrio[1], function () {
+                                                        $.modal.close();
+                                                    });
+//                            alert(corrio[1]);
                         }
                     }
                 }); 
@@ -74,7 +77,10 @@
                                 digitGroupSymbol: '.'
                             });
                         }else{
-                            alert(corrio[1]);
+                            confirm(corrio[1], function () {
+                                                        $.modal.close();
+                                                    });
+//                            alert(corrio[1]);
                         }
                     }
                 }); 

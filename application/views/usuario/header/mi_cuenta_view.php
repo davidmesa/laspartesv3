@@ -670,10 +670,13 @@
                         var errors = "";
                         if (validator.errorList.length > 0) {
                             for (x=0;x<validator.errorList.length;x++) {
-                                errors += "\n\u25CF " + validator.errorList[x].message;
+                                errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message;
                             }
                         }
-                        alert(message + errors);
+                        confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                        alert(message + errors);
                     }
                     validator.focusInvalid();
                 }
@@ -747,8 +750,10 @@
                                     error = respuesta;
                                   
                                 }
-                               
-                                alert(error);
+                               confirm(error, function () {
+                                                        $.modal.close();
+                                                    });
+//                                alert(error);
                             }
                         }
                     });
@@ -800,10 +805,13 @@
                     var errors = "";
                     if (validator.errorList.length > 0) {
                         for (x=0;x<validator.errorList.length;x++) {
-                            errors += "\n\u25CF " + validator.errorList[x].message;
+                            errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message;
                         }
                     }
-                    alert(message + errors);
+                    confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert(message + errors);
                 }
                 validator.focusInvalid();
             },submitHandler: function(form){
@@ -853,8 +861,10 @@
                                 error = respuesta;
                                   
                             }
-                               
-                            alert(error);
+                            confirm(error, function () {
+                                                        $.modal.close();
+                                                    });   
+//                            alert(error);
                         }
                     }
                 }); 
@@ -942,10 +952,13 @@
                     var errors = "";
                     if (validator.errorList.length > 0) {
                         for (x=0;x<validator.errorList.length;x++) {
-                            errors += "\n\u25CF " + validator.errorList[x].message;
+                            errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message;
                         }
                     }
-                    alert(message + errors);
+                    confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert(message + errors);
                 }
                 validator.focusInvalid();
             }
@@ -996,8 +1009,10 @@
                                 error = respuesta;
                                   
                             }
-                               
-                            alert(error);
+                            confirm(error, function () {
+                                                        $.modal.close();
+                                                    });   
+//                            alert(error);
                         }
                     }
                 }); 
@@ -1125,11 +1140,17 @@
                     async: false,
                     data: "id_usuario_vehiculo=" + id_usuario_vehiculo+"&telefono=" +telefono,
                     success: function(data){
-                        alert('Tu solicitud ha sido enviada, en breve vas a recibir respuesta de uno de nuestros agentes.');
+                        confirm('Tu solicitud ha sido enviada, en breve vas a recibir respuesta de uno de nuestros agentes.', function () {
+                                                        $.modal.close();
+                                                    });
+//                        alert('Tu solicitud ha sido enviada, en breve vas a recibir respuesta de uno de nuestros agentes.');
                     }
                 });    
             }else{
-                alert('Debes ingresar el modelo de tu carro para poder cotizar el valor de tu SOAT');
+                confirm('Debes ingresar el modelo de tu carro para poder cotizar el valor de tu SOAT', function () {
+                                                        $.modal.close();
+                                                    });
+//                alert('Debes ingresar el modelo de tu carro para poder cotizar el valor de tu SOAT');
             }
         });
         

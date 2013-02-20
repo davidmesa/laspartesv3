@@ -181,7 +181,10 @@
                             errors += "\n\u25CF " + validator.errorList[x].message
                         }
                     }
-                    alert(message + errors)
+                    confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert(message + errors)
                 }
                 validator.focusInvalid()
             },
@@ -227,7 +230,10 @@
                             divHecho.prepend(tareaRealizada);
                             divHecho.show('slow', function(){ divHecho.add(); }); 
                         }else{
-                            alert(data.msg);
+                            confirm(data.msg, function () {
+                                                        $.modal.close();
+                                                    });
+//                            alert(data.msg);
                         }
                     }
                 });

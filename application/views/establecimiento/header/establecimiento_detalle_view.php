@@ -450,10 +450,13 @@ foreach ($establecimientos as $e) {
                     var errors = "";
                     if (validator.errorList.length > 0) {
                         for (x=0;x<validator.errorList.length;x++) {
-                            errors += "\n\u25CF " + validator.errorList[x].message;
+                            errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message;
                         }
                     }
-                    alert(message + errors);
+                    confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert(message + errors);
                 }
             },submitHandler: function(form){
                 var idestablecimiento = ((window.location.pathname.split('/'))[2].split('-'))[0];
@@ -475,12 +478,18 @@ foreach ($establecimientos as $e) {
                                 var calificacion = respuesta.calificacion;
                                 agregarComentario(usuario, comentario, calificacion);
                             }catch(e){
-                                alert(e);
+                                confirm(e, function () {
+                                                        $.modal.close();
+                                                    });
+//                                alert(e);
                             }
                                
                                
                         }else{
-                            alert(data);
+                            confirm(data, function () {
+                                                        $.modal.close();
+                                                    });
+//                            alert(data);
                         }
                             
                         return false;
@@ -569,10 +578,13 @@ foreach ($establecimientos as $e) {
                     var errors = "";
                     if (validator.errorList.length > 0) {
                         for (x=0;x<validator.errorList.length;x++) {
-                            errors += "\n\u25CF " + validator.errorList[x].message;
+                            errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message;
                         }
                     }
-                    alert(message + errors);
+                    confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert(message + errors);
                 }
             },submitHandler: function(form){
                 var idestablecimiento = ((window.location.pathname.split('/'))[2].split('-'))[0];
@@ -586,7 +598,10 @@ foreach ($establecimientos as $e) {
                     success: function(data){
                         if(data)
                             $('.lightboxme-contacto').trigger('close'); 
-                        alert('Tu mensaje ha sido enviado');
+                        confirm('Tu mensaje ha sido enviado', function () {
+                                                        $.modal.close();
+                                                    });
+//                        alert('Tu mensaje ha sido enviado');
                     }
                 }); 
             }

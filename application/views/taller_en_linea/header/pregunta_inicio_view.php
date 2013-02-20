@@ -311,10 +311,13 @@
                     var errors = "";
                     if (validator.errorList.length > 0) {
                         for (x=0;x<validator.errorList.length;x++) {
-                            errors += "\n\u25CF " + validator.errorList[x].message;
+                            errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message;
                         }
                     }
-                    alert(message + errors);
+                    confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert(message + errors);
                 }
                 validator.focusInvalid();
             }

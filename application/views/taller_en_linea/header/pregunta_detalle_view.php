@@ -49,10 +49,13 @@
                     var errors = "";
                     if (validator.errorList.length > 0) {
                         for (x=0;x<validator.errorList.length;x++) {
-                            errors += "\n\u25CF " + validator.errorList[x].message;
+                            errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message;
                         }
                     }
-                    alert(message + errors);
+                    confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert(message + errors);
                 }
             },submitHandler: function(form){
                 var motivo_reporte = $('#motivo_reporte', form).val();
@@ -66,7 +69,10 @@
                     async: false,
                     success: function(data){
                             $('.lightbox-reportar-respuesta').trigger('close'); 
-                            alert(data);
+                            confirm(data, function () {
+                                                        $.modal.close();
+                                                    });
+//                            alert(data);
                     }
                 }); 
             }
@@ -100,10 +106,13 @@
                     var errors = "";
                     if (validator.errorList.length > 0) {
                         for (x=0;x<validator.errorList.length;x++) {
-                            errors += "\n\u25CF " + validator.errorList[x].message;
+                            errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message;
                         }
                     }
-                    alert(message + errors);
+                    confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert(message + errors);
                 }
             },submitHandler: function(form){
                 var id = ((window.location.pathname.split('/'))[2].split('-'))[0];
@@ -117,7 +126,10 @@
                     async: false,
                     success: function(data){
                             $('.lightboxme-reportar').trigger('close'); 
-                            alert(data); 
+                            confirm(data, function () {
+                                                        $.modal.close();
+                                                    });
+//                            alert(data); 
                     }
                 }); 
             }
@@ -151,10 +163,13 @@
                 var errors = "";
                 if (validator.errorList.length > 0) {
                     for (x=0;x<validator.errorList.length;x++) {
-                        errors += "\n\u25CF " + validator.errorList[x].message;
+                        errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message;
                     }
                 }
-                alert(message + errors);
+                confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                alert(message + errors);
             }
             validator.focusInvalid();
         },submitHandler: function(form){
@@ -174,7 +189,10 @@
                             success: function(data){
                                 var corrio = data.split('|');
                                 if(corrio[0] == 'false')
-                                    alert('No se pudo agregar su respuesta, favor intentar denuevo más tarde\n'. corrio[1]);
+                                    confirm('No se pudo agregar su respuesta, favor intentar denuevo más tarde\n'. corrio[1], function () {
+                                                        $.modal.close();
+                                                    });
+//                                    alert('No se pudo agregar su respuesta, favor intentar denuevo más tarde\n'. corrio[1]);
                                 else{
                                     $('#tallerlinea-detalle-div-respuestas').append(data);
                                     $('#tallerlinea-textarea-respuesta').val('');
@@ -214,11 +232,17 @@
             success: function(data){
                 var corrio = data.split('|');
                 if(corrio[0] == 'false')
-                    alert('No se pudo agregar su respuesta, favor intentar denuevo más tarde\n'. corrio[1]);
+                    confirm('No se pudo agregar su respuesta, favor intentar denuevo más tarde\n'. corrio[1], function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert('No se pudo agregar su respuesta, favor intentar denuevo más tarde\n'. corrio[1]);
                 else{
                     $('#tallerlinea-detalle-div-respuestas').append(data);
                     $('#tallerlinea-textarea-respuesta').val('');
-                    alert('Tu respuesta ha sido agregada');
+                    confirm('Tu respuesta ha sido agregada', function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert('Tu respuesta ha sido agregada');
                 }
                         
             }

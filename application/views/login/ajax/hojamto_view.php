@@ -68,10 +68,13 @@
                     var errors = "";
                     if (validator.errorList.length > 0) {
                         for (x = 0; x < validator.errorList.length; x++) {
-                            errors += "\n\u25CF " + validator.errorList[x].message
+                            errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message
                         }
                     }
-                    alert(message + errors)
+                    confirm(message + errors, function () {
+                                                        $.modal.close();
+                                                    });
+//                    alert(message + errors)
                 }
                 validator.focusInvalid()
             },
@@ -99,10 +102,16 @@
                             try {
                                 window[callback]()
                             } catch (e) {
-                                alert(e)
+                                confirm(e, function () {
+                                                        $.modal.close();
+                                                    });
+//                                alert(e)
                             }
                         } else if (data == 'false') {
-                            alert('Ocurrio un error en el registro, favor intentar más tarde')
+                            confirm('Ocurrio un error en el registro, favor intentar más tarde', function () {
+                                                        $.modal.close();
+                                                    });
+//                            alert('Ocurrio un error en el registro, favor intentar más tarde')
                         } else{
                             window.location = '<?php echo base_url();?>usuario';
                         }
