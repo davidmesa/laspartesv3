@@ -633,15 +633,20 @@ position: relative;
     left: -1px;
 }
 
-#sesion-div-header-que-es, #sesion-div-header-prensa, #sesion-div-header-contactenos{
+#sesion-div-header-que-es, #sesion-div-header-prensa, #sesion-div-header-contactenos, #sesion-div-header-telefonos{
     float: left;
     padding: 7px;
 }
 
-#sesion-div-header-que-es a, #sesion-div-header-prensa a, #sesion-div-header-contactenos a{
+#sesion-div-header-que-es a, #sesion-div-header-prensa a, #sesion-div-header-contactenos a, #sesion-div-header-telefonos a, #sesion-div-header-telefonos span{ 
     color: white;
     text-decoration: none;
     font-size: 11px;
+}
+ 
+#sesion-div-header-telefonos img{
+    position: relative;
+    top: 1px; 
 }
 
 #sesion-div-header-que-es a:hover, #sesion-div-header-prensa a:hover, #sesion-div-header-contactenos a:hover{

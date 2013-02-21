@@ -1614,6 +1614,27 @@ class Usuario_model extends CI_Model {
         return $query->result();
     }
     
+    /**
+     * Da los usuarios que realizaron la compra hace 15 días
+     * @return type
+     */
+//    function dar_usuarios_califica_experiencia_temp(){  
+//        $query = $this->db->query('
+//           select cc.id_carrito_compra , u.nombres, u.apellidos, u.id_usuario, u.email, Tcco.id_establecimiento,  Tcco.nombre as taller, Tcco.email as emailTaller
+//            from carritos_compras cc
+//                join usuarios u on u.id_usuario = cc.id_usuario 
+//                left join 
+//                    (select cco.id_carrito_compra, e.id_establecimiento, e.nombre, e.email  from carritos_compras_ofertas cco join establecimientos_ofertas eo on eo.id_oferta = cco.id_oferta
+//                    join establecimientos e on e.id_establecimiento = eo.id_establecimiento
+//                    union
+//                    select cca.id_carrito_compra, e.id_establecimiento, e.nombre, e.email  from carritos_compras_autopartes cca join establecimientos_autopartes ea on ea.id_autoparte = cca.id_autoparte
+//                    join establecimientos e on e.id_establecimiento = ea.id_establecimiento
+//                    ) as Tcco
+//                on Tcco.id_carrito_compra = cc.id_carrito_compra 
+//            where  cc.fecha <= "2013-02-08" and (cc.estado = "Transacción aprobada" or cc.estado = "")  and Tcco.id_establecimiento != "" and u.id_usuario != 390');
+//        return $query->result();
+//    }
+    
      /**
      * Da los usuarios que realizaron la compra hace 15 días
      * @return type

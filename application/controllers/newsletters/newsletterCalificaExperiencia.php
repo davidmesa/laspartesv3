@@ -66,6 +66,46 @@ class NewsletterCalificaExperiencia extends Laspartes_Controller {
             endif;
         }
     }
+    
+    /**
+     * enviar los correos de calificar experiencia con fecha anterior a el 8 de febrero de 2013
+     */
+    function enviar_emails_calificar(){
+         
+//            $this->load->model('usuario_model');
+//            $this->load->helper('date');
+//            $this->load->helper('mail');
+//            setlocale(LC_ALL, 'es_ES');
+//                $this->load->model('usuario_model');
+//
+//                $this->load->helper('date');
+//                $this->load->helper('mail');
+//
+//                setlocale(LC_ALL, 'es_ES');
+//                define("CHARSET", "iso-8859-1");
+//
+//                $data['fecha'] = strftime("%B %d de %Y");
+//                $suscritos = $this->usuario_model->dar_usuarios_califica_experiencia_temp();
+//                foreach ($suscritos as $suscrito) {
+//                    $destinatarios = array();
+//                    $destinatario = new stdClass();
+//                    $destinatario->email = $suscrito->email;
+//                    $destinatario->nombres = $suscrito->nombres . " " . $suscrito->apellidos;
+//                    $destinatarios[] = $destinatario;
+//                    $data['usuario'] = $suscrito;
+//                    $llave = $this->usuario_model->generar_codConfirmacion_Unico();
+//                    $this->usuario_model->guardar_codConfirmacion_Unico($llave, $suscrito->id_carrito_compra, $suscrito->id_establecimiento);
+//                    ob_start();
+//                    $data['url'] = base_url() . 'usuario/califica_tu_experiencia/' . $llave . '?utm_source=email&utm_medium=calificar&utm_campaign=calificar%2Bexperiencia';
+//                    $this->load->view('newsletter/califica_experiencia_view', $data);
+//                    $contenidoHTML = ob_get_contents();
+//                    ob_end_clean();
+////                    echo $contenidoHTML; 
+//                send_mail($destinatarios, 'Califica tu experiencia en el taller '.$suscrito->taller, $contenidoHTML, "", "");
+//
+//                    echo "Correo enviado a: " . $suscrito->nombres . " " . $suscrito->apellidos . " al correo: <strong>" . $suscrito->email . "</strong><br/>";
+//                }
+    }
 
     /**
      * Valida que el hash que entra como parámetro se haya generado a partir

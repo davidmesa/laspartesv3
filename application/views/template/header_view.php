@@ -1,5 +1,5 @@
 <?php $sesion = $this->session->userdata('esta_registrado'); ?>
-<div id="sesion-div-header">
+<div id="sesion-div-header"> 
 
 
     <div id="sesion-div-header-content"> 
@@ -11,8 +11,12 @@
             <a href="<?php echo base_url(); ?>aprende">Tips y consejos</a>
         </div>
         <div class="sesion-div-titulos-espaciador" style="margin-right: 0px;"></div>
-        <div id="sesion-div-header-contactenos" class="sesion-div-header-contactenos">
+        <div id="sesion-div-header-contactenos" class="sesion-div-header-contactenos" style="padding-left: 15px; padding-right: 15px;">
             <a href="<?php echo base_url(); ?>ayuda">Cuéntanos lo que necesitas</a>
+        </div>
+        <div class="sesion-div-titulos-espaciador" style="margin-right: 0px; margin-left: 0px;"></div>  
+        <div id="sesion-div-header-telefonos">
+            <span>BOG </span><img src="<?php echo base_url(); ?>resources/images/iconos/banderas/co.gif" alt="telefono colombia"/><span> <a href="tel:+5713819790">3819790</a> - <a href="tel:+5713134207281">(313) 420-7281</a></span>
         </div>
         
         <?php if ($sesion): ?>
