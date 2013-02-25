@@ -262,23 +262,23 @@
         });//click
 
         $.validator.addMethod("textoDiferenteTitulo",
-            function(value, element){
-                if(value!="Escribe aquí tu pregunta...")
-                    return true;
-                else
-                    return false;
-            },
-            "Escriba una pregunta"
-        );
+        function(value, element){
+            if(value!="Escribe aquí tu pregunta...")
+                return true;
+            else
+                return false;
+        },
+        "Escriba una pregunta"
+    );
         $.validator.addMethod("textoDiferenteCuerpo",
-            function(value, element){
-                if(value!="Escribe aquí los detalles de tu pregunta...")
-                    return true;
-                else
-                    return false;
-            },
-            "Escriba detalles de la pregunta" 
-        );
+        function(value, element){
+            if(value!="Escribe aquí los detalles de tu pregunta...")
+                return true;
+            else
+                return false;
+        },
+        "Escriba detalles de la pregunta" 
+    );
         
         $("form#form-preguntar").validate({
             rules: {
@@ -302,7 +302,7 @@
                     textoDiferenteCuerpo: "*Escribe una descripción de tu pregunta"
                 }
             },
-            invalidHandler: function(form, validator){
+            invalidHandler: function(form, validator){ 
                 var errors = validator.numberOfInvalids();
                 if (errors) {
                     var message = errors == 1
@@ -315,10 +315,10 @@
                         }
                     }
                     confirm(message + errors, function () {
-                                                        $.modal.close();
-                                                    });
-//                    alert(message + errors);
-                }
+                        $.modal.close();
+                    });
+                    //                    alert(message + errors);
+                } 
                 validator.focusInvalid();
             }
         });
@@ -341,7 +341,7 @@
                 if(sesion){
                     $('#pregunta-div-form').lightbox_me({
                         fixedNavigation:true,
-                            centered: true
+                        centered: true
                     });  
                 }else{
                     $.ajax({
@@ -353,7 +353,7 @@
                             $('#registro-login-div').html(data);
                             $('#input-registro-callback').val('lightboxmepregunta');
                             $('#registro-login-div').lightbox_me({fixedNavigation:true,
-                            centered: true }); 
+                                centered: true }); 
                         }
                     }); 
                 }

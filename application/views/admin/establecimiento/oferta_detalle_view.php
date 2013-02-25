@@ -182,10 +182,7 @@
                 $config_mini = array();
 
                 $config_mini['toolbar'] = array(
-                    array('Source', '-', 'Bold', 'Italic', 'Underline', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo', '-', 'NumberedList', 'BulletedList',
-                        'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv',
-                        '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Styles', 'Format', 'Font', 'FontSize', 'TextColor', 'BGColor'
-                        , 'SelectAll', '-', 'SpellChecker', 'Scayt')
+                    array('Source', '-', 'Bold', 'Italic', 'Underline', '-',  'NumberedList', 'BulletedList')
                 );
 
                 /* Y la configuración del kcfinder, la debemos poner así si estamos trabajando en local */

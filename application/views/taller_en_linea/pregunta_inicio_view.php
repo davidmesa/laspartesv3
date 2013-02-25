@@ -211,11 +211,11 @@
         </div>
         
         <div id="pregunta-div-claves">
-        	<label id="pregunta-label-claves">Agregar palabras clave:</label>
+        	<label id="pregunta-label-claves">Agregar palabras clave:</label>  
         	<input type="text" name="palabras_clave" id="pregunta-input-claves" onfocus="if(this.value=='Por ejemplo: Llantas, Renault, Twingo'){this.value=''};" onblur="if(this.value==''){this.value='Por ejemplo: Llantas, Renault, Twingo'}" value="Por ejemplo: Llantas, Renault, Twingo"/>
         </div>
         
-        <input type="submit" id="pregunta-input-submit" value="PREGUNTAR" onclick="alert('Estamos revisando tu pregunta y será publicada en breve...');"/>
+        <input type="submit" id="pregunta-input-submit" value="PREGUNTAR" onclick="publicar_actividad_fb(); alert('Estamos revisando tu pregunta y será publicada en breve...');"/>
         <div class="clear"></div>
     </form>
 </div>

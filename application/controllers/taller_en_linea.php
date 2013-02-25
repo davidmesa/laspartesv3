@@ -12,6 +12,8 @@ class Taller_en_linea extends Laspartes_Controller {
      */
     function __construct() {
         parent::__construct();
+        $this->load->model('fb_model');
+        
     }
 
     /**
@@ -221,7 +223,6 @@ class Taller_en_linea extends Laspartes_Controller {
                 $usuario = $this->usuario_model->dar_usuario($id_usuario);
 
                 // Enviar mail
-
                 $destinatarios = array();
 
                 $destinatario = new stdClass();
@@ -230,7 +231,6 @@ class Taller_en_linea extends Laspartes_Controller {
                 $destinatario = new stdClass();
                 $destinatario->email = 'ventas@laspartes.com.co';
                 $destinatarios[] = $destinatario;
-
                 ob_start();
                 $llave = $this->pregunta_model->generar_codConfirmacion_Unico();
                 $this->pregunta_model->guardar_codConfirmacion_Unico($llave, $id_pregunta);
@@ -247,7 +247,8 @@ class Taller_en_linea extends Laspartes_Controller {
                 $this->load->helper('mail');
 
                 send_mail($destinatarios, "[Las Partes] [Nueva pregunta]", $contenidoHTML, "", $fileName);
-                echo "<script type='text/javascript'>top.location = '" . $url . "';</script>";
+       
+                echo "<script type='text/javascript'>top.location = '" . base_url() . "preguntas';</script>";
             }
         }
     }
@@ -716,7 +717,7 @@ class Taller_en_linea extends Laspartes_Controller {
 
                 $destinatario = new stdClass();
                 $destinatario->email = $data['pregunta']->email;
-                $destinatarios[] = $destinatario; 
+                $destinatarios[] = $destinatario;
                 $destinatario = new stdClass();
                 $destinatario->email = 'tallerenlinea@laspartes.com.co';
                 $destinatarios[] = $destinatario;
@@ -1054,10 +1055,13 @@ class Taller_en_linea extends Laspartes_Controller {
         $data['numero_establecimientos'] = $this->establecimiento_model->dar_num_talleres();
         $data['pagina'] = $pagina;
         $data['limit'] = 10;
-
-        $data['metaDescripcion'] = 'Pregúntale a los talleres. Una comunidad de más de <número de talleres> aliados dispuestos a resolver tus dudas';
+        
+        
+        $data['headPrefix'] = 'prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# laspartes: http://ogp.me/ns/fb/laspartes#"';
+        $data['metaTipo'] = 'laspartes:repair_shops';
+        $data['metaDescripcion'] = 'Pregúntale a los talleres. Una comunidad de más de 83 aliados dispuestos a resolver tus dudas';
         $data['metaImagen'] = 'resources/images/home/preguntas.png';
-        $data['titulo'] = 'Laspartes.com :: Pregúntale a los talleres';
+        $data['titulo'] = 'Laspartes.com :: Pregúntale a los talleres';  
         $data['breadcrumb'] = '<div><a href="' . base_url() . '">Inicio</a></div> <div class="div-breadcrumb-espaciador"></div> <div>Preguntas</div>';
         $data['header_view'] = 'taller_en_linea/header/pregunta_inicio_view';
         $data['navegacion_view'] = 'tallerenlinea';

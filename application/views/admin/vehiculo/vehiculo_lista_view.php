@@ -101,9 +101,9 @@
                 <h2>Lista de Vehículos</h2>
                 <a title="Agregar vehículo" href="<?php echo base_url(); ?>admin/vehiculo/formulario_vehiculo"><img src="<?php echo base_url(); ?>resources/admin/images/add.png" alt="Agregar una vehículo" /> Agregar un vehículo</a>
 
-                <table width="100%">
+                <table width="100%"  id="backend_tabla" class="tablesorter">
                     <thead>
-                    <tr>
+                    <tr class="tablesorter-headerRow">
                         <th data-placeholder="ID">ID</th>
                         <th data-placeholder="Marca">Marca</th>
                         <th data-placeholder="Línea">Linea</th>
