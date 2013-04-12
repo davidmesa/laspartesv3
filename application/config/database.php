@@ -38,13 +38,33 @@
 | the active record class
 */
 
+
+//credenciales para la DB del CRM
+$active_group = "CRM";
+$active_record = TRUE;
+$db['CRM']['hostname'] = '98.130.0.94';
+$db['CRM']['username'] = 'laspart_pruebas';
+$db['CRM']['password'] = 'Pr52b1s';
+$db['CRM']['database'] = 'laspart_crm';
+$db['CRM']['dbdriver'] = 'mysql';
+$db['CRM']['dbprefix'] = '';  
+$db['CRM']['pconnect'] = TRUE;
+$db['CRM']['db_debug'] = TRUE;
+$db['CRM']['cache_on'] = FALSE;
+$db['CRM']['cachedir'] = '';
+$db['CRM']['char_set'] = 'utf8';
+$db['CRM']['dbcollat'] = 'utf8_general_ci';
+$db['CRM']['swap_pre'] = '';
+$db['CRM']['autoinit'] = TRUE;
+$db['CRM']['stricton'] = FALSE;
+
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '98.130.0.94';
-$db['default']['username'] = 'laspart_version2';
-$db['default']['password'] = 'V2rs34n2';
-$db['default']['database'] = 'laspart_version2';
+$db['default']['hostname'] = '98.130.0.94'; 
+$db['default']['username'] = 'laspart_pruebas';
+$db['default']['password'] = 'Pr52b1s';
+$db['default']['database'] = 'laspart_pruebas';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';  
 $db['default']['pconnect'] = TRUE;
@@ -56,7 +76,6 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
-
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

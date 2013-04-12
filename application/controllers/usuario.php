@@ -4405,7 +4405,7 @@ class Usuario extends Laspartes_Controller {
             $kilometraje = $vehiculos[0]->kilometraje;
             $usuario = $this->usuario_model->dar_usuario($id_usuario);
             $kilometraje_mensual = $this->usuario_model->dar_kilometraje_ciudad($usuario->lugar) / 12;
-            $kilometraje_mensual = $this->usuario_model->dar_kilometraje_ciudad('Bogotá') / 12;
+            //$kilometraje_mensual = $this->usuario_model->dar_kilometraje_ciudad('Bogotá') / 12;
             $data['kilometraje_mensual'] = $kilometraje_mensual;
 
             $hojaMto = $this->usuario_model->dar_tareas_vehiculo($id_vehiculo, $model);
@@ -4418,7 +4418,7 @@ class Usuario extends Laspartes_Controller {
     /**
      * Agrega el historial de mto del vehículo creado
      */
-    function agregar_historial_mto_ajax() {
+    function agregar_historial_mto_ajax($vehiculo) {
         if ($this->hay_sesion_activa()) {
             $this->load->model('usuario_model');
             $this->load->helper('date');
@@ -4578,5 +4578,28 @@ class Usuario extends Laspartes_Controller {
             echo "<script type='text/javascript'>top.location = '" . $url . "';</script>";
         }
     }
+    
+    
+    /**
+     * Valida el correo electrónico y contraseña para iniciar sesión
+     * @return String-bool true si es correcto el correo electrónico y contraseña
+     */
+    function validar_usuario_majax() {
+            $this->load->model('usuario_model');
+            $email = strtolower($this->input->post('input_login_email', TRUE));
+            $contrasena = sha1($this->input->post('input_login_contrasena', TRUE));
+            $resultado = $this->usuario_model->validar_usuario($email, $contrasena);
 
+            if (!$resultado)
+                echo json_encode(array('status' => false));
+            else {
+                echo json_encode(array('status' => true, 'msg' => $this->session->userdata('id_usuario')));
+            }
+    }
+
+    
+    function crm(){
+        $this->load->model('usuario_model');
+        $contacts = $this->usuario_model->_CRM_agregar_usuario();
+    }
 }

@@ -149,7 +149,6 @@ a:hover{ text-decoration: underline;}
 /* ---------------------------------------
                 NAVIGATION
 ----------------------------------------- */
-#navigation { margin-top: 40px; }
 
 #navigation ul li a {
     float: left;
@@ -1255,3 +1254,120 @@ form label.form-invalid, form label.form-valid{
   -o-transition: height 0.1s ease;
   transition: height 0.1s ease;
 }
+
+/** inicio chat */
+#div-chat-wrapper{
+   border: 1px solid #ccc; 
+   max-height: 550px;
+   overflow: hidden;
+}
+#div-chat-users{
+    float: left;
+    width: 250px;
+    border-right: 1px solid #ccc;
+}
+
+#div-chat-users-list{
+    overflow-y: scroll;
+    width: 100%;
+    overflow-x: hidden;
+    height: 500px;
+}
+
+#div-chat-users h4{
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 0px;
+}
+
+.div-usuario-chat{
+    text-transform: uppercase;
+    font-size: 11px;
+    border: 1px solid #F2F2F2;
+    border-width: 1px 0 1px;
+    color: #555;
+    padding: 4px 15px;
+    white-space: nowrap;
+    margin-bottom: -1px;
+    cursor: pointer;
+}
+
+.div-usuario-chat:hover, .div-usuario-chat.active{
+   background-color: #f5f5f5;
+   color: #111;
+   border-color: #ddd;
+}
+
+.span-usuario-chat{
+    white-space: nowrap;
+    line-height: 20px;
+}
+
+#div-chat-content-box{
+    height: 533px;
+    float: left;
+    width: 706px;
+}
+
+#div-chat-content{
+    overflow-y: scroll;
+    height: 461px;
+}
+
+.div-chat-content-text{
+    padding: 20px;
+    display: none;
+}
+
+#div-chat-text-write{
+    background-color: #f0f0f0;
+    padding: 3px;
+    max-height: 38px;
+    border: 1px solid #ccc;
+    border-width: 1px 0px;
+    margin-top: 5px;
+}
+
+#chat-message-text{
+    width: 620px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+#chat-message-text:focus{
+    border-color: #c60200;
+}
+
+#div-chat-text-write form input.submit{
+    position: relative;
+    top: -2px;
+    line-height: 14px;
+}
+
+#div-chat-box-usuario{
+    padding: 7px;
+    font-size: 12px;
+    text-transform: uppercase;
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #666;
+    font-family: Tahoma, Geneva, sans-serif;
+    border-bottom: 1px solid #ccc;
+}
+
+#div-chat-content-cargando{
+    margin: 100px auto;
+    text-align: center;
+    display: block;
+    font-size: 20px;
+}
+
+.username-chat {
+   color: #c60200;
+}
+
+.chat-msj{
+    color: black;
+    margin-bottom: 3px;
+}
+/** fin chat */

@@ -191,13 +191,13 @@ class NewsletterTareas extends Laspartes_Controller {
         $usuarios = $this->usuario_model->dar_cola_usuarios();
         foreach ($usuarios as $usuario) {
             $contenido = $this->usuario_model->dar_cola_correos_enviar($usuario->id_usuario);
+            $this->usuario_model->eliminar_correo_cola($contenido->id_cola_correos);
             $destinatarios = array();
             $destinatario = new stdClass();
             $destinatario->email = $usuario->email;
             $destinatarios[] = $destinatario;
             send_mail($destinatarios, $contenido->titulo, $contenido->contenido, "", "");
             echo "Correo enviado al correo: <strong>" . $usuario->email . "</strong><br/>";
-            $this->usuario_model->eliminar_correo_cola($contenido->id_cola_correos);
         }
         
     }

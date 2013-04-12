@@ -20,6 +20,7 @@
                 <li><a href="<?php echo base_url(); ?>admin/aprende">Aprende</a></li>
                 <li><a href="<?php echo base_url(); ?>admin/usuario">Usuarios</a></li>
                 <li><a href="<?php echo base_url(); ?>admin/vehiculo">Vehículos</a></li>
+                <li><a href="<?php echo base_url(); ?>admin/mobile">Chats</a></li>
             </ul>
         </div>
     </div>

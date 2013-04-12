@@ -10,6 +10,7 @@ class Usuario_model extends CI_Model {
      */
     function __construct() {
         parent::__construct();
+//        $this->db = $this->load->database('default', TRUE);
     }
 
     /**
@@ -204,12 +205,12 @@ class Usuario_model extends CI_Model {
             $this->db->set('direccion', $direccion);
         if ($email != '')
             $this->db->set('email', $email);
-        if($di != '')
+        if ($di != '')
             $this->db->set('documento', $di);
-        if($carro != '')
+        if ($carro != '')
             $this->db->set('carro', $carro);
-        if($placa != '')
-            $this->db->set('placa', $placa); 
+        if ($placa != '')
+            $this->db->set('placa', $placa);
         $this->db->insert('carritos_compras');
         return mysql_insert_id();
     }
@@ -292,7 +293,11 @@ class Usuario_model extends CI_Model {
         $this->db->set('pais', $pais);
         $this->db->set('fecha_creacion', 'curdate()', FALSE);
         $this->db->insert('usuarios');
-        return mysql_insert_id();
+        $insertedID = mysql_insert_id;
+        //agrega el usuario al CRM
+        $this->_CRM_agregar_usuario();
+        
+        return $insertedID;
     }
 
     /**
@@ -362,7 +367,7 @@ class Usuario_model extends CI_Model {
      * @param int $id_carrito_compra
      * @return object $carrito_compra
      */
-    function dar_carrito_compra($id_carrito_compra) { 
+    function dar_carrito_compra($id_carrito_compra) {
         $this->db->escape($id_carrito_compra);
         $this->db->select('id_carrito_compra, fecha, total, carritos_compras.estado, usuario, usuarios.id_usuario');
         $this->db->join('usuarios', 'usuarios.id_usuario = carritos_compras.id_usuario');
@@ -551,7 +556,7 @@ class Usuario_model extends CI_Model {
                     join carritos_compras_ofertas cco on cc.id_carrito_compra = cco.id_carrito_compra
                     join oferta o on o.id_oferta = cco.id_oferta) as tbl1
             join carritos_refVentas cr on cr.id_carritos_compras = tbl1.id_carrito_compra
-            where tbl1.id_usuario = '.$id_usuario.'
+            where tbl1.id_usuario = ' . $id_usuario . '
             order by fecha desc');
         return $query->result();
     }
@@ -1043,7 +1048,7 @@ class Usuario_model extends CI_Model {
 //            return $id;
 //        }
     }
-    
+
     /**
      * Registra una tarea para un vehículo
      * @param id_usuario_vehiculo id del vehículo
@@ -1055,23 +1060,23 @@ class Usuario_model extends CI_Model {
         $this->db->escape($fecha);
         $this->db->escape($kilometraje);
         $this->db->escape($adjunto);
-        $this->db->where('id_usuario_vehiculo',$id_usuario_vehiculo);
-        $this->db->where('id_tarea',$id_tarea);
+        $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
+        $this->db->where('id_tarea', $id_tarea);
         $query = $this->db->get('tareas_servicio_por_usuario_vehiculo');
-        
-        if($query->num_rows() == 0){
-        $this->db->set('id_tarea', $id_tarea);
-        if ($kilometraje != '' || !empty($kilometraje))
-            $this->db->set('kilometraje', $kilometraje);
-        if ($adjunto != '' || !empty($adjunto))
-            $this->db->set('adjunto', $adjunto);
-        $this->db->set('ultima_fecha', $fecha);
-        $this->db->set('id_usuario_vehiculo', $id_usuario_vehiculo);
-        $this->db->insert('tareas_servicio_por_usuario_vehiculo');
-        return mysql_insert_id();
-        }else{
+
+        if ($query->num_rows() == 0) {
+            $this->db->set('id_tarea', $id_tarea);
+            if ($kilometraje != '' || !empty($kilometraje))
+                $this->db->set('kilometraje', $kilometraje);
+            if ($adjunto != '' || !empty($adjunto))
+                $this->db->set('adjunto', $adjunto);
+            $this->db->set('ultima_fecha', $fecha);
+            $this->db->set('id_usuario_vehiculo', $id_usuario_vehiculo);
+            $this->db->insert('tareas_servicio_por_usuario_vehiculo');
+            return mysql_insert_id();
+        }else {
             $id = $query->row(0)->id_tarea_realizada;
-            if($kilometraje != '' || !empty($kilometraje))
+            if ($kilometraje != '' || !empty($kilometraje))
                 $this->db->set('kilometraje', $kilometraje);
             $this->db->set('ultima_fecha', $fecha);
             $this->db->where('id_tarea_realizada', $id);
@@ -1215,7 +1220,7 @@ class Usuario_model extends CI_Model {
             $this->db->set('fecha', 'curdate()', FALSE);
             $this->db->set('tipo', 'tareamto');
             $this->db->insert('cron_jobs');
-        }else{
+        } else {
             $this->db->set('fecha', 'curdate()', FALSE);
             $this->db->set('tipo', $tipo);
             $this->db->insert('cron_jobs');
@@ -1592,12 +1597,12 @@ class Usuario_model extends CI_Model {
         $this->db->where('id_cola_correos', $id_cola_correo);
         $this->db->delete('cola_correos');
     }
-    
+
     /**
      * Da los usuarios que realizaron la compra hace 15 días
      * @return type
      */
-    function dar_usuarios_califica_experiencia(){
+    function dar_usuarios_califica_experiencia() {
         $query = $this->db->query('
             select cc.id_carrito_compra , u.nombres, u.apellidos, u.id_usuario, u.email, Tcco.id_establecimiento,  Tcco.nombre as taller, Tcco.email as emailTaller
             from carritos_compras cc
@@ -1613,7 +1618,7 @@ class Usuario_model extends CI_Model {
             where  (cc.fecha + INTERVAL 15 DAY) = CURDATE()');
         return $query->result();
     }
-    
+
     /**
      * Da los usuarios que realizaron la compra hace 15 días
      * @return type
@@ -1634,12 +1639,12 @@ class Usuario_model extends CI_Model {
 //            where  cc.fecha <= "2013-02-08" and (cc.estado = "Transacción aprobada" or cc.estado = "")  and Tcco.id_establecimiento != "" and u.id_usuario != 390');
 //        return $query->result();
 //    }
-    
-     /**
+
+    /**
      * Da los usuarios que realizaron la compra hace 15 días
      * @return type
      */
-    function dar_carrito_califica_experiencia($llave){
+    function dar_carrito_califica_experiencia($llave) {
         $this->db->escape($llave);
         $this->db->select('califica_experiencia.*');
         $this->db->from('califica_experiencia');
@@ -1647,46 +1652,44 @@ class Usuario_model extends CI_Model {
         $query = $this->db->get();
         return $query->row(0);
     }
-    
+
     /**
      * elimina el registro de la llave
      * @param type $califica_experiencia
      */
-    function eliminar_llave_califica_experiencia($id_califica_experiencia){
+    function eliminar_llave_califica_experiencia($id_califica_experiencia) {
         $this->db->escape($id_califica_experiencia);
         $this->db->where('id_califica_experiencia', $id_califica_experiencia);
         $this->db->delete('califica_experiencia');
     }
-    
-    
-     /**
-     *Genera un número único de confirmación de pregunta en la DB
+
+    /**
+     * Genera un número único de confirmación de pregunta en la DB
      * @return string referencia de venta
      */
-    function generar_codConfirmacion_Unico() { 
+    function generar_codConfirmacion_Unico() {
         $key = $this->getUniqueCode(20);
         $result = false;
         $value = "-1";
         while (!$result) {
-                $this->db->where('llave', $key);
-                $this->db->from('califica_experiencia');
-                $q = $this->db->count_all_results();
-                if ($q == 0 ) {
-                    $value = $key;
-                    $result = true;
-                }else
+            $this->db->where('llave', $key);
+            $this->db->from('califica_experiencia');
+            $q = $this->db->count_all_results();
+            if ($q == 0) {
+                $value = $key;
+                $result = true;
+            }else
                 $key = $this->getUniqueCode(10);
-
         }
         return $value;
     }
 
-        /**
+    /**
      * Guarda el registro de la llave única de pregunta en la DB
      * @param type $llave
      * @param type $id_carrito
      */
-    function guardar_codConfirmacion_Unico($llave, $id_carrito, $id_establecimiento){
+    function guardar_codConfirmacion_Unico($llave, $id_carrito, $id_establecimiento) {
         $this->db->escape($llave);
         $this->db->escape($id_carrito);
         $this->db->escape($id_establecimiento);
@@ -1695,15 +1698,108 @@ class Usuario_model extends CI_Model {
         $this->db->set('id_establecimiento', $id_establecimiento);
         $this->db->insert('califica_experiencia');
     }
-    
-     /*Función que genera un valor alfanumérico para el valor de la referencia de la confirmación de la pregunta
+
+    /* Función que genera un valor alfanumérico para el valor de la referencia de la confirmación de la pregunta
      * @param type $length
      * @return String código único 
      */
-    function getUniqueCode($length = "")
-    {	
-            $code = md5(uniqid(rand(), true));
-            if ($length != "") return substr($code, 0, $length);
-            else return $code;
+
+    function getUniqueCode($length = "") {
+        $code = md5(uniqid(rand(), true));
+        if ($length != "")
+            return substr($code, 0, $length);
+        else
+            return $code;
     }
+
+    /**
+     * Este espacio está destinado a las funciones con relación al CRM
+     */
+
+    /**
+     * Agrega un usuario a la DB del CRM 
+     * @return type
+     */
+    function _CRM_agregar_usuario() {
+        $this->_db_crm = $this->load->database('CRM', TRUE);
+        $uID = $this->create_guid();
+        $this->_db_crm->set('id', $uID);
+        $this->_db_crm->set('first_name', 'prueba DB nombre');
+        $this->_db_crm->set('last_name', 'prueba DB apellido');
+        $this->_db_crm->set('phone_home', '221137');
+        $this->_db_crm->set('primary_address_city', 'bogota');
+        $this->_db_crm->set('primary_address_country', 'Colombia');
+        $this->_db_crm->insert('contacts');
+        
+        //inserta el id del usuario en laspartes
+        $this->_db_crm->set('id_c', $uID);
+        $this->_db_crm->set('laspartes_id_usuario_c', '390');
+        $this->_db_crm->insert('contacts_cstm');
+        $this->load->database('default', TRUE);
+    }
+    
+    function cambiarDB(){
+        $this->load->database('default', TRUE);
+    }
+
+    /**
+     * A temporary method of generating GUIDs of the correct format for our DB.
+     * @return String contianing a GUID in the format: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+     *
+     * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
+     * All Rights Reserved.
+     * Contributor(s): ______________________________________..
+     */
+    function create_guid() {
+        $microTime = microtime();
+        list($a_dec, $a_sec) = explode(" ", $microTime);
+
+        $dec_hex = dechex($a_dec * 1000000);
+        $sec_hex = dechex($a_sec);
+
+        $this->ensure_length($dec_hex, 5);
+        $this->ensure_length($sec_hex, 6);
+
+        $guid = "";
+        $guid .= $dec_hex;
+        $guid .= $this->create_guid_section(3);
+        $guid .= '-';
+        $guid .= $this->create_guid_section(4);
+        $guid .= '-';
+        $guid .= $this->create_guid_section(4);
+        $guid .= '-';
+        $guid .= $this->create_guid_section(4);
+        $guid .= '-';
+        $guid .= $sec_hex;
+        $guid .= $this->create_guid_section(6);
+
+        return $guid;
+    }
+
+    function create_guid_section($characters) {
+        $return = "";
+        for ($i = 0; $i < $characters; $i++) {
+            $return .= dechex(mt_rand(0, 15));
+        }
+        return $return;
+    }
+
+    function ensure_length(&$string, $length) {
+        $strlen = strlen($string);
+        if ($strlen < $length) {
+            $string = str_pad($string, $length, "0");
+        } else if ($strlen > $length) {
+            $string = substr($string, 0, $length);
+        }
+    }
+
+    function microtime_diff($a, $b) {
+        list($a_dec, $a_sec) = explode(" ", $a);
+        list($b_dec, $b_sec) = explode(" ", $b);
+        return $b_sec - $a_sec + $b_dec - $a_dec;
+    }
+
+    /**
+     * Fin de funciones CRM
+     */
 }
