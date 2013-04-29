@@ -222,7 +222,7 @@
                             
                             <?php foreach ($establecimientos as $establecimiento):?>
                             <tr>
-                                <td class="autopart-detalle-td-nombre"><?php echo $establecimiento->nombre;?></td>
+                                <td class="autopart-detalle-td-nombre">Laspartes</td> 
                                 <td class="autopart-detalle-td-precio">$<?php echo number_format($establecimiento->precio, 0, ',', '.');?></td>
                                 <td class="autopart-detalle-td-anadir" align="center">
                                     <div>
