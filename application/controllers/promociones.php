@@ -31,6 +31,8 @@ class Promociones extends Laspartes_Controller {
         $this->load->model('promocion_model');
         $data['promocion'] = $this->promocion_model->dar_oferta($id_oferta);
         $data['promocion_vehiculos'] = $this->promocion_model->dar_oferta_vehiculos($id_oferta);
+        $data['establecimiento'] = $this->establecimiento_model->dar_establecimiento(85);
+        $data['comentarios'] = $this->establecimiento_model->dar_establecimiento_calificacion_promedio(85);
         
         //-----------
         $a = str_replace('-', ' ', convert_accented_characters($categoria));
