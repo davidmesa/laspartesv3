@@ -228,20 +228,20 @@
                     </div>
                     <div class="usuario-div-oferta-lightbox-fototaller">
                     <div class="usuario-div-oferta-lightbox-marco">
-                        <a href="<?php echo base_url() . 'talleres/' . $promocion->id_establecimiento . '-' . str_replace(" ", "-", convert_accented_characters($promocion->establecimientoNombre)); ?>" target="_blank">
-                            <img src="<?php echo base_url().$promocion->logo; ?>" alt="icono oferta" />
+                        <a href="<?php echo base_url() . 'talleres/' . $establecimiento->id_establecimiento . '-' . str_replace(" ", "-", convert_accented_characters($establecimiento->nombre)); ?>" target="_blank">
+                            <img src="<?php echo base_url().$establecimiento->logo_url; ?>" alt="icono oferta" />
                         </a>
                     </div>
                     <div class="usaurio-div-oferta-lightbox-tallerinfo">
                         <div class="usaurio-div-oferta-lightbox-taller-nombre">
-                            <a href="<?php echo base_url() . 'talleres/' . $promocion->id_establecimiento . '-' . str_replace(" ", "-", convert_accented_characters($promocion->establecimientoNombre)); ?>" target="_blank">
-                                <?php echo $promocion->establecimientoNombre; ?>
+                            <a href="<?php echo base_url() . 'talleres/' . $establecimiento->id_establecimiento . '-' . str_replace(" ", "-", convert_accented_characters($establecimiento->nombre)); ?>" target="_blank">
+                                <?php echo $establecimiento->nombre; ?>
                             </a>
                         </div>
 
                         <div class="usaurio-div-oferta-lightbox-taller-url">
-                            <div class=""><?php echo $promocion->establecimientoDescripcion; ?></div>
-                            <a href="http://<?php echo $promocion->web; ?>" target="_blank"><?php echo $promocion->web; ?></a>
+                            <div class=""><?php echo $establecimiento->descripcion; ?></div>
+                            <a href="http://<?php echo $establecimiento->web; ?>" target="_blank"><?php echo $establecimiento->web; ?></a>
                         </div>
 
 <!--                        <div class="usaurio-div-oferta-lightbox-taller-direccion">
@@ -255,16 +255,16 @@
                     </div>
 
                         <div class="talleres-detalle-div-calificacion-estrellas" style="float: right;">
-                            <?php if($promocion->calificacion != ''):?>
+                            <?php if($comentarios->promedio != ''):?>
                             <div class="talleres-detalle-div-calificacion-estrellas-imagen estrellas-sin-clasificar-grandes">
-                                <div class="talleres-detalle-div-calificacion-estrellas-imagen-calificada estrellas-clasificadas-grandes"><span><?php echo (round($promocion->calificacion)*20).'%';?></span></div>
+                                <div class="talleres-detalle-div-calificacion-estrellas-imagen-calificada estrellas-clasificadas-grandes"><span><?php echo (round($comentarios->promedio)*20).'%';?></span></div>
                             </div>
                             <?php endif; ?>   
-                            <span><?php if($promocion->calificacion != '' && round($promocion->calificacion)== 5 ): echo '<strong>EXCELENTE</strong> - '.$promocion->num_comentarios.' opiniones de usuarios';
-                            elseif($promocion->calificacion != '' && round($promocion->calificacion)== 4 ): echo '<strong>MUY BUENO</strong> - '.$promocion->num_comentarios.' opiniones de usuarios';
-                            elseif($promocion->calificacion != '' && round($promocion->calificacion)== 3 ): echo '<strong>BUENO</strong> - '.$promocion->num_comentarios.' opiniones de usuarios';
-                            elseif($promocion->calificacion != '' && round($promocion->calificacion)== 2 ): echo '<strong>REGULAR</strong> - '.$promocion->num_comentarios.' opiniones de usuarios';
-                            elseif($promocion->calificacion != '' && round($promocion->calificacion)== 1 ): echo '<strong>MALO</strong> - '.$promocion->num_comentarios.' opiniones de usuarios';
+                            <span><?php if($comentarios->promedio != '' && round($comentarios->promedio)== 5 ): echo '<strong>EXCELENTE</strong> - '.$comentarios->count.' opiniones de usuarios';
+                            elseif($comentarios->promedio != '' && round($comentarios->promedio)== 4 ): echo '<strong>MUY BUENO</strong> - '.$comentarios->count.' opiniones de usuarios';
+                            elseif($comentarios->promedio != '' && round($comentarios->promedio)== 3 ): echo '<strong>BUENO</strong> - '.$comentarios->count.' opiniones de usuarios';
+                            elseif($comentarios->promedio != '' && round($comentarios->promedio)== 2 ): echo '<strong>REGULAR</strong> - '.$comentarios->count.' opiniones de usuarios';
+                            elseif($comentarios->promedio != '' && round($comentarios->promedio)== 1 ): echo '<strong>MALO</strong> - '.$comentarios->count.' opiniones de usuarios';
                             else: echo '<strong>SIN CALIFICACIÓN</strong> - 0 opiniones de usuarios';
                             endif; ?></span>
                     </div>
