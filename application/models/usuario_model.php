@@ -36,6 +36,15 @@ class Usuario_model extends CI_Model {
         $this->db->set('lugar', $lugar);
         $this->db->where('id_usuario', $id_usuario);
         $this->db->update('usuarios');
+        
+        //agrega el usuario al CRM
+        $params = array();
+        $params['laspartes_id_usuario_c'] = $id_usuario;
+        $params['first_name'] = $nombres;
+        $params['last_name'] = $apellidos;
+        $params['email'] = $email;
+        $params['primary_address_city'] = $lugar;
+        $this->crm->actualizar_usuario($params);
     }
 
     /**
@@ -158,6 +167,17 @@ class Usuario_model extends CI_Model {
         $this->db->set('fecha', 'curdate()', FALSE);
         $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
         $this->db->update('usuarios_vehiculos');
+        
+        $vehiculo = $this->dar_vehiculo($id_usuario_vehiculo);
+        $params['id_usuario_vehiculo']  = $id_usuario_vehiculo;
+        $params['id_usuario']  = $vehiculo->id_usuario;
+        $params['id_vehiculo']  = $id_vehiculo;
+        $params['modelo']  = $vehiculo->modelo;
+        $params['kilometraje']  = $vehiculo->kilometraje;
+        $params['marca']  = $vehiculo->marca;
+        $params['linea']  = $vehiculo->linea;
+        $params['placa']  = $vehiculo->numero_placa;
+        $this->crm->actualizar_vehiculo($params);
     }
 
     /**
@@ -211,6 +231,7 @@ class Usuario_model extends CI_Model {
             $this->db->set('carro', $carro);
         if ($placa != '')
             $this->db->set('placa', $placa);
+        
         $this->db->insert('carritos_compras');
         return mysql_insert_id();
     }
@@ -293,9 +314,18 @@ class Usuario_model extends CI_Model {
         $this->db->set('pais', $pais);
         $this->db->set('fecha_creacion', 'curdate()', FALSE);
         $this->db->insert('usuarios');
-        $insertedID = mysql_insert_id;
+        $insertedID = mysql_insert_id();
+        
         //agrega el usuario al CRM
-        $this->_CRM_agregar_usuario();
+        $params = array();
+        $params['laspartes_id_usuario_c'] = $insertedID;
+        $params['first_name'] = $nombre;
+        $params['last_name'] = $apellidos;
+        $params['email'] = $email;
+        $params['primary_address_city'] = $lugar;
+        $params['primary_address_country'] = $pais;
+        $params['phone_home'] = $telefono;
+        $this->crm->agregar_usuario($params);
         
         return $insertedID;
     }
@@ -311,6 +341,7 @@ class Usuario_model extends CI_Model {
      * @return int $id_usuario_vehiculo
      */
     function agregar_vehiculo_usuario($id_usuario, $id_vehiculo = -1, $nombre = -1, $modelo = -1, $kilometraje = -1, $serie = -1, $placa = -1) {
+        $params = array();
         $this->db->escape($id_vehiculo);
         $this->db->escape($serie);
         $this->db->escape($nombre);
@@ -339,7 +370,19 @@ class Usuario_model extends CI_Model {
         }
         $this->db->set('fecha', 'curdate()', FALSE);
         $this->db->insert('usuarios_vehiculos');
-        return mysql_insert_id();
+        $id_usuario_vehiculo =  mysql_insert_id();
+
+        $vehiculo = $this->dar_vehiculo($id_usuario_vehiculo);
+        $params['id_usuario_vehiculo']  = $id_usuario_vehiculo;
+        $params['id_vehiculo']  = $id_vehiculo;
+        $params['id_usuario']  = $vehiculo->id_usuario;
+        $params['modelo']  = $vehiculo->modelo;
+        $params['kilometraje']  = $vehiculo->kilometraje;
+        $params['marca']  = $vehiculo->marca;
+        $params['linea']  = $vehiculo->linea;
+        $params['placa']  = $vehiculo->numero_placa;
+        $this->crm->agregar_vehiculo($params);
+        return $id_usuario_vehiculo;
     }
 
     /**
@@ -560,6 +603,48 @@ class Usuario_model extends CI_Model {
             order by fecha desc');
         return $query->result();
     }
+    
+    /**
+     * Da los items de compra que el usuario dado ha comprado
+     * @param type $id_usuario
+     * @return type
+     */
+    function dar_items_compras_usuarios() {
+        $query = $this->db->query('
+            select tbl1.*, cr.refVenta from
+                (select cc.id_carrito_compra, fecha, cantidad, nombre as titulo, cc.id_usuario, "Autoparte" as tipo, cca.precio from carritos_compras cc
+                    join carritos_compras_autopartes cca on cc.id_carrito_compra = cca.id_carrito_compra
+                    join autopartes a on a.id_autoparte = cca.id_autoparte
+                union
+                select cc.id_carrito_compra, fecha, cantidad, titulo, cc.id_usuario, "Oferta" as tipo, o.precio from carritos_compras cc
+                    join carritos_compras_ofertas cco on cc.id_carrito_compra = cco.id_carrito_compra
+                    join oferta o on o.id_oferta = cco.id_oferta) as tbl1
+            join carritos_refVentas cr on cr.id_carritos_compras = tbl1.id_carrito_compra
+            order by fecha desc');
+        return $query->result();
+    }
+    
+        /**
+     * Da los items de compra que el usuario dado ha comprado
+     * @param type $id_usuario
+     * @return type
+     */
+    function dar_items_compra_idcarrito($id_carrito) {
+        $this->db->escape($id_carrito);
+        $query = $this->db->query('
+            select tbl1.*, cr.refVenta from
+                (select cc.id_carrito_compra, fecha, cantidad, nombre as titulo, cc.id_usuario, "Autoparte" as tipo, cca.precio from carritos_compras cc
+                    join carritos_compras_autopartes cca on cc.id_carrito_compra = cca.id_carrito_compra
+                    join autopartes a on a.id_autoparte = cca.id_autoparte
+                union
+                select cc.id_carrito_compra, fecha, cantidad, titulo, cc.id_usuario, "Oferta" as tipo, o.precio from carritos_compras cc
+                    join carritos_compras_ofertas cco on cc.id_carrito_compra = cco.id_carrito_compra
+                    join oferta o on o.id_oferta = cco.id_oferta) as tbl1
+            join carritos_refVentas cr on cr.id_carritos_compras = tbl1.id_carrito_compra
+            where tbl1.id_carrito_compra = ' . $id_carrito . '
+            order by fecha desc');
+        return $query->result();
+    }
 
     /**
      *
@@ -570,7 +655,7 @@ class Usuario_model extends CI_Model {
     function dar_id_vehiculo($marca, $linea) {
         $this->db->escape($marca);
         $this->db->escape($linea);
-        $this->db->select('id_vehiculo');
+        $this->db->select("id_vehiculo");
         $this->db->where('marca', $marca);
         $this->db->where('linea', $linea);
         $query = $this->db->get('vehiculos');
@@ -688,6 +773,16 @@ class Usuario_model extends CI_Model {
         $query = $this->db->get('usuarios_vehiculos');
         return $query->row(0);
     }
+    
+    /**
+     * Da la información de los vehículos
+     * @return object $vehiculos
+     */
+    function dar_usuarios_vehiculos() {
+        $this->db->join('vehiculos', 'vehiculos.id_vehiculo = usuarios_vehiculos.id_vehiculo');
+        $query = $this->db->get('usuarios_vehiculos');
+        return $query->result();
+    }
 
     /**
      * Da los usuarios que tengan la revisión proximas a vencer antes del
@@ -755,7 +850,7 @@ class Usuario_model extends CI_Model {
     function dar_vehiculo($id_usuario_vehiculo) {
         $this->db->escape($id_usuario_vehiculo);
         $this->db->select('id_usuario_vehiculo, serie, nombre, modelo, kilometraje, fecha, imagen_thumb_url, 
-            marca, linea, numero_placa, ciudad_placa, soat, revision, usuarios_vehiculos.id_vehiculo AS id_vehiculo');
+            marca, linea, numero_placa, ciudad_placa, soat, revision, usuarios_vehiculos.id_vehiculo AS id_vehiculo, id_usuario');
         $this->db->join('vehiculos', 'vehiculos.id_vehiculo = usuarios_vehiculos.id_vehiculo');
         $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
         $query = $this->db->get('usuarios_vehiculos');
@@ -1489,7 +1584,24 @@ class Usuario_model extends CI_Model {
         $this->db->escape($id_carrito_compra);
         $this->db->set('id_carritos_compras', $id_carrito_compra);
         $this->db->insert('consecutivo_factura');
-        return mysql_insert_id();
+        $id_consecutivo =  mysql_insert_id();
+        
+        $carritos = $this->usuario_model->dar_items_compra_idcarrito($id_carrito_compra);//el id está vacío
+        foreach ($carritos as $carrito) {
+            $params = array();
+            $params['id_carrito'] = $id_carrito_compra;
+            $params['id_usuario'] = $carrito->id_usuario;
+            $params['name'] = $carrito->titulo;
+            $params['amount'] = $carrito->precio;
+            $params['tipo'] = $carrito->tipo;
+            $params['titulo'] = $carrito->titulo;
+            $params['cantidad'] = $carrito->cantidad;
+            $params['fecha_compra'] = $carrito->fecha;
+            $params['recibo'] = 'http://www.laspartes.com/usuario/recibo/'.$carrito->refVenta;
+            $this->crm->agregar_carrito_compras($params);
+        }
+        
+        return $id_consecutivo;
     }
 
     function dar_usuarios_registrados($fecha) {
@@ -1712,94 +1824,4 @@ class Usuario_model extends CI_Model {
             return $code;
     }
 
-    /**
-     * Este espacio está destinado a las funciones con relación al CRM
-     */
-
-    /**
-     * Agrega un usuario a la DB del CRM 
-     * @return type
-     */
-    function _CRM_agregar_usuario() {
-        $this->_db_crm = $this->load->database('CRM', TRUE);
-        $uID = $this->create_guid();
-        $this->_db_crm->set('id', $uID);
-        $this->_db_crm->set('first_name', 'prueba DB nombre');
-        $this->_db_crm->set('last_name', 'prueba DB apellido');
-        $this->_db_crm->set('phone_home', '221137');
-        $this->_db_crm->set('primary_address_city', 'bogota');
-        $this->_db_crm->set('primary_address_country', 'Colombia');
-        $this->_db_crm->insert('contacts');
-        
-        //inserta el id del usuario en laspartes
-        $this->_db_crm->set('id_c', $uID);
-        $this->_db_crm->set('laspartes_id_usuario_c', '390');
-        $this->_db_crm->insert('contacts_cstm');
-        $this->load->database('default', TRUE);
-    }
-    
-    function cambiarDB(){
-        $this->load->database('default', TRUE);
-    }
-
-    /**
-     * A temporary method of generating GUIDs of the correct format for our DB.
-     * @return String contianing a GUID in the format: aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
-     *
-     * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-     * All Rights Reserved.
-     * Contributor(s): ______________________________________..
-     */
-    function create_guid() {
-        $microTime = microtime();
-        list($a_dec, $a_sec) = explode(" ", $microTime);
-
-        $dec_hex = dechex($a_dec * 1000000);
-        $sec_hex = dechex($a_sec);
-
-        $this->ensure_length($dec_hex, 5);
-        $this->ensure_length($sec_hex, 6);
-
-        $guid = "";
-        $guid .= $dec_hex;
-        $guid .= $this->create_guid_section(3);
-        $guid .= '-';
-        $guid .= $this->create_guid_section(4);
-        $guid .= '-';
-        $guid .= $this->create_guid_section(4);
-        $guid .= '-';
-        $guid .= $this->create_guid_section(4);
-        $guid .= '-';
-        $guid .= $sec_hex;
-        $guid .= $this->create_guid_section(6);
-
-        return $guid;
-    }
-
-    function create_guid_section($characters) {
-        $return = "";
-        for ($i = 0; $i < $characters; $i++) {
-            $return .= dechex(mt_rand(0, 15));
-        }
-        return $return;
-    }
-
-    function ensure_length(&$string, $length) {
-        $strlen = strlen($string);
-        if ($strlen < $length) {
-            $string = str_pad($string, $length, "0");
-        } else if ($strlen > $length) {
-            $string = substr($string, 0, $length);
-        }
-    }
-
-    function microtime_diff($a, $b) {
-        list($a_dec, $a_sec) = explode(" ", $a);
-        list($b_dec, $b_sec) = explode(" ", $b);
-        return $b_sec - $a_sec + $b_dec - $a_dec;
-    }
-
-    /**
-     * Fin de funciones CRM
-     */
 }

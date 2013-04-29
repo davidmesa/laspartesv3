@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://www.laspartes.com/'; 
+$config['base_url']	= 'http://desarrollo.laspartes.com/'; 
 
 
 /*

@@ -295,8 +295,8 @@ class Usuario extends Laspartes_Controller {
         $kilometraje = $this->input->post('kilometraje', TRUE);
         $placa = $this->input->post('placa', TRUE);
         //echo json_encode(array('status' => true, 'nombres' => $nombres, 'email' => $email, 'marca' => $marca, 'tareas_mes' => $tareas_mes));
-        $usuario = $this->_generar_usuario($usuario);
-        $id_usuario = $this->usuario_model->agregar_usuario($nombres, $apellidos, $usuario, $email, $contrasena, $ciudad, 30, "", "Colombia", $telefono);
+        $usuario = $this->_generar_usuario($usuario); 
+        $id_usuario = $this->usuario_model->agregar_usuario($nombres, $apellidos, $usuario, $email, $contrasena, $ciudad, 30, "App movil", "Colombia", $telefono);
 
         $this->load->helper('mail');
         $usuario = $this->usuario_model->dar_usuario($id_usuario);

@@ -269,7 +269,20 @@ class Usuario_model extends CI_Model {
         $this->db->set('pais', $pais);
         $this->db->set('fecha_creacion', 'curdate()', FALSE);
         $this->db->insert('usuarios');
-        return mysql_insert_id();
+        $insertedID = mysql_insert_id();
+        
+        //agrega el usuario al CRM
+        $params = array();
+        $params['laspartes_id_usuario_c'] = $insertedID;
+        $params['first_name'] = $nombre;
+        $params['last_name'] = $apellidos;
+        $params['email'] = $email;
+        $params['primary_address_city'] = $lugar;
+        $params['primary_address_country'] = $pais;
+        $params['phone_home'] = $telefono;
+        $this->crm->agregar_usuario($params);
+        
+        return $insertedID;
     }
     
     /**
@@ -326,7 +339,33 @@ class Usuario_model extends CI_Model {
         }
         $this->db->set('fecha', 'curdate()', FALSE);
         $this->db->insert('usuarios_vehiculos');
-        return mysql_insert_id();
+        $id_usuario_vehiculo =  mysql_insert_id();
+
+        $vehiculo = $this->dar_vehiculo($id_usuario_vehiculo);
+        $params['id_usuario_vehiculo']  = $id_usuario_vehiculo;
+        $params['id_usuario']  = $vehiculo->id_usuario;
+        $params['modelo']  = $vehiculo->modelo;
+        $params['kilometraje']  = $vehiculo->kilometraje;
+        $params['marca']  = $vehiculo->marca;
+        $params['linea']  = $vehiculo->linea;
+        $params['placa']  = $vehiculo->numero_placa;
+        $this->crm->agregar_vehiculo($params);
+        return $id_usuario_vehiculo;
+    }
+    
+    /**
+     * Da los vehículos de un usuario
+     * @param int $id_usuario
+     * @return array $vehiculos
+     */
+    function dar_vehiculo($id_usuario_vehiculo) {
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->select('id_usuario_vehiculo, serie, nombre, modelo, kilometraje, fecha, imagen_thumb_url, 
+            marca, linea, numero_placa, ciudad_placa, soat, revision, usuarios_vehiculos.id_vehiculo AS id_vehiculo, id_usuario');
+        $this->db->join('vehiculos', 'vehiculos.id_vehiculo = usuarios_vehiculos.id_vehiculo');
+        $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
+        $query = $this->db->get('usuarios_vehiculos');
+        return $query->row(0);
     }
     
     /**
