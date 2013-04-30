@@ -183,10 +183,7 @@
                                         <span>CONTACTAR EN LÍNEA</span>
                                     </div>
                                     <div class="talleres-div-vermas div-ver-mas open-sans">
-                                        <?php if($establecimiento->web): ?>
-                                        <span class="autopart-detalle-span-vermas"><a target="_blank" href="http://<?php echo $establecimiento->web; ?>">IR AL SITIO</a></span>
-                                        <img style="margin-left:3px;" src="<?php echo base_url(); ?>/resources/images/home/mayor-que-rojo.png" alt="mayor que" /><img src="<?php echo base_url(); ?>/resources/images/home/mayor-que-rojo.png" alt="mayor que" />
-                                        <?php endif; ?>
+                                        
                                     </div>
                                 <div class="clear"></div>
                                 </div>
@@ -194,7 +191,9 @@
                             
                             <div class="talleres-detalle-div-taller-localizacion">
                                 <div class="talleres-detalle-div-taller-gmaps" id="googlemap">
-                                
+                                   <div class="talleres-detalle-div-contacto lightbox-contacto" id="lightbox-cita">
+                                       <span>AGENDAR CITA CON <?PHP echo strtoupper($establecimiento->nombre);?></span>
+                                    </div>     
                                 </div>
                                 <?php  $urlTaller = base_url().'talleres/'.$establecimiento->id_establecimiento.'-'.str_replace(' ', '-', convert_accented_characters($establecimiento->nombre)); ?>
                                  
@@ -204,33 +203,6 @@
                                     <a href="https://twitter.com/share" class="twitter-share-button" data-text="#tallerenlinea Recomiendo <?php echo $establecimiento->nombre; ?>" data-count="vertical" data-lang="es">Tweet</a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
                                      <g:plusone size="tall"></g:plusone>
                                 </div>
-<!--                                <div id="talleres-detalle-div-taller-recomendar-fb">
-                                     <div class="fb-like" data-send="false" data-width="450" data-show-faces="true" data-action="recommend" data-font="arial"></div>
-                                </div>-->
-<!--                                <div class="talleres-detalle-div-taller-calificacion-numero">
-                                	<div class="talleres-detalle-div-taller-calificacion-numero-gusta">
-                                    	A <strong>5</strong> PERSONAS LES GUSTA ESTE TALLER
-                                    </div>
-                                    <div class="talleres-detalle-div-taller-calificacion-numero-nogusta">
-                                    	A <strong>5</strong> PERSONAS NO LES GUSTA ESTE TALLER
-                                    </div>
-                                    
-                                    <div class="clear"></div>
-                                </div>-->
-                                
-<!--                                <div class="talleres-detalle-div-taller-calificacion-thumbs">
-                                	<div class="talleres-detalle-div-taller-calificacion-thumbs-gusta">
-                                    	<div>ME GUSTA ESTE TALLER</div>
-                                        <img src="<?php echo base_url();?>resources/images/autopartes/si-gusta.png" alt="si me gusta" />
-                                    </div>
-                                    <div class="talleres-detalle-div-taller-calificacion-thumbs-nogusta">
-                                    	<div>NO ME GUSTA ESTE TALLER</div>
-                                        <img src="<?php echo base_url();?>resources/images/autopartes/no-gusta.png" alt="no me gusta" />
-                                    </div>
-                                    
-                                    <div class="clear"></div>
-                                </div>-->
-                                
                             </div>
                             
                             <div class="clear"></div>
@@ -240,36 +212,6 @@
                         <div class="clear"></div>
                         
                     </div>
-                    
-<!--                    <div class="autopart-div-espaciador-rallas"></div>-->
-                    
-<!--                    <div class="talleres-detalle-div-calificacion">
-                    	<div class="talleres-detalle-div-calificacion-titulo">
-                        	<div id="autopart-div-titulo-icono">
-                                <img src="<?php echo base_url();?>resources/images/autopartes/calificacion.png" alt="estrella calificaciones" />
-                            </div>
-                             <div id="autopart-div-titulo">
-                                <h1>
-                                    <span>CALIFICACIÓN</span>
-                                    <span style="color: #C60200;">USUARIOS</span>
-                                    <img style="right: -6px;" src="<?php // echo base_url(); ?>/resources/images/home/mayor-que.png" alt="mayor que" />
-                                    <img src="<?php // echo base_url(); ?>/resources/images/home/mayor-que.png" alt="mayor que" />
-                                </h1>
-                            </div>
-                        </div>
-                        
-                        <div class="talleres-detalle-div-calificacion-estrellas">
-                                <?php // if($establecimiento_calificacion->promedio != ''):?>
-                        	<div class="talleres-detalle-div-calificacion-estrellas-imagen estrellas-sin-clasificar-grandes">
-                                    <div class="talleres-detalle-div-calificacion-estrellas-imagen-calificada estrellas-clasificadas-grandes"><span><?php // echo (round($establecimiento_calificacion->promedio)*20).'%';?></span></div>
-                                </div>
-                                <?php // endif; ?>   
-                            
-                            <span><?php // if($establecimiento_calificacion->promedio != ''): echo (round($establecimiento_calificacion->promedio)*20).'%'; else: echo 'Sin calificación'; endif; ?></span>
-                        </div>
-                        
-                        <div class="clear"></div>
-                    </div>-->
                     
                     <div style="margin-top:0px;" class="autopart-div-espaciador-rallas"></div>
                     

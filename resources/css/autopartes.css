@@ -865,8 +865,7 @@
 
 .talleres-detalle-div-taller-gmaps{
 	height: 270px;
-	width: 100%;
-	background-color: black;	
+	width: 100%;	
 }
 
 .talleres-detalle-div-taller-calificacion-numero{
@@ -2845,6 +2844,14 @@
 
 #escoger-carro-lightbox p{
     margin-left: 30px;
+}
+
+#lightbox-cita span{
+    font-size: 20px;
+    display: block;
+    margin-bottom: auto;
+    margin-right:  auto;
+    margin-top: 140px;
 }
 
 

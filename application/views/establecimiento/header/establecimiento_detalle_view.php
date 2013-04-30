@@ -112,7 +112,7 @@
             '../../resources/images/autopartes/contraer.png'
         ]);
         
-        pintarMapa();
+        
         
         //muestra hover el titulo seleccionado
        var titulozona = $('span', '#filtro-zona').text();
@@ -338,49 +338,6 @@
                 return '<span id="fancybox-title-over">Imagen ' + (currentIndex + 1) + ' de ' + currentArray.length + (title.length ? ' &nbsp; ' + title : '') + '</span>';
             }
         });
-        
-        
-        //Pinga el mapa de Gmaps
-        function pintarMapa() {
-            var latlng = new google.maps.LatLng(<?php echo $establecimiento->lat; ?>,<?php echo $establecimiento->lng; ?>);
-            var myOptions = {
-                zoom: 15,
-                center: latlng,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            var map = new google.maps.Map(document.getElementById("googlemap"),myOptions);
-
-            var markerOptions = {map: map, position: new google.maps.LatLng(<?php echo $establecimiento->lat; ?>, <?php echo $establecimiento->lng; ?>), title: '<?php echo $establecimiento->nombre; ?>'};
-            var marker = new google.maps.Marker(markerOptions);
-        
-            var content = '<div align="center"><h4><center><b><?php echo $establecimiento->nombre; ?></b></center></h4><img src="<?php echo base_url() . $establecimiento->logo_thumb_url; ?>" /><div class="general_link"  align="center" valign="bottom" style="padding-top:5px;"><h4><img src="<?php echo base_url() ?>resources/images/establecimientos/carrito.gif" />&nbsp;&nbsp;<a href="<?php echo base_url(); ?>establecimientos/ver_establecimiento/<?php echo $establecimiento->id_establecimiento; ?>" target="_blank">Ir al establecimiento.</a></h4></div></div>';
-            var infowindow = new google.maps.InfoWindow({position: marker.getPosition(), map: map, content: content});
-        
-            google.maps.event.addListener(marker, 'click', function(e) {
-                infowindow.open(map, marker);
-            });
-
-<?php
-foreach ($establecimientos as $e) {
-    ?>
-
-                    var markerOptions_<?php echo $e->id_establecimiento; ?> = {map: map, position: new google.maps.LatLng(<?php echo $e->lat; ?>, <?php echo $e->lng; ?>), title: '<?php echo $e->nombre; ?>'};
-                    var marker_<?php echo $e->id_establecimiento; ?> = new google.maps.Marker(markerOptions_<?php echo $e->id_establecimiento; ?>);
-                                        
-                    var content_<?php echo $e->id_establecimiento; ?> = '<div align="center"><h4><center><b><?php echo $e->nombre; ?></b></center></h4><img src="<?php echo base_url() . $e->logo_thumb_url; ?>" /><div class="general_link"  align="center" valign="bottom" style="padding-top:5px;"><h4><img src="<?php echo base_url() ?>resources/images/establecimientos/carrito.gif" />&nbsp;&nbsp;<a href="<?php echo base_url(); ?>establecimientos/ver_establecimiento/<?php echo $e->id_establecimiento; ?>" target="_blank">Ir al establecimiento.</a></h4></div></div>';
-                    var infowindow_<?php echo $e->id_establecimiento; ?> = new google.maps.InfoWindow({position: marker_<?php echo $e->id_establecimiento; ?>.getPosition(), map: map, content: content_<?php echo $e->id_establecimiento; ?>});
-                    infowindow_<?php echo $e->id_establecimiento; ?>.close();
-                                        
-                    google.maps.event.addListener(marker_<?php echo $e->id_establecimiento; ?>, 'click', function(e) {
-                        infowindow_<?php echo $e->id_establecimiento; ?>.open(map, marker_<?php echo $e->id_establecimiento; ?>);
-                    });
-                                        
-    <?php
-}
-?>
-
-            map.panBy(50, -70);
-        }
     
     
        
@@ -608,8 +565,12 @@ foreach ($establecimientos as $e) {
                    
         }); 
         
+        
+        $('#lightbox-cita').click(function  (){
+            $('#contacto-div-contacto-asunto').val('Agendar cita');
+        });
         //activa el lightbox cuando se hace click sobre el div de hacer contacto
-        $('#lightbox-contacto').click(function(e){
+        $('.lightbox-contacto').click(function(e){
             $.ajax({
                 url: '<?php echo base_url(); ?>usuario/dar_sesion_activa_ajax',
                 type: "POST",
