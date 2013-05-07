@@ -4003,10 +4003,10 @@ class Usuario extends Laspartes_Controller {
 
     /**
      * Este método cambia los nombres, apellidos, el usuario, el email y la ciudad del usuario que está logueado. Debe verificar lo siguiente:
-      - Todos los valores son requeridos. Mensaje acerca del error: "Debes especificar todos los campos"
-      - El email debe ser válido. Mensaje acerca del error: "Debes escribir un email válido"
-      - El usuario no debe existir previamente. Mensaje acerca del error: "Ya existe alguien registrado con el usuario que especificaste"
-      - El email no debe estar registrado a otro usuario. Mensaje acerca del error: "Ya existe alguien registrado con el mail que especificaste"
+    * Todos los valores son requeridos. Mensaje acerca del error: "Debes especificar todos los campos"
+    * El email debe ser válido. Mensaje acerca del error: "Debes escribir un email válido"
+    * El usuario no debe existir previamente. Mensaje acerca del error: "Ya existe alguien registrado con el usuario que especificaste"
+    * El email no debe estar registrado a otro usuario. Mensaje acerca del error: "Ya existe alguien registrado con el mail que especificaste"
      */
     function editar_perfil_ajax() {
         if ($this->hay_sesion_activa()) {
@@ -4595,6 +4595,11 @@ class Usuario extends Laspartes_Controller {
             else {
                 echo json_encode(array('status' => true, 'msg' => $this->session->userdata('id_usuario')));
             }
+    }
+
+    function crm(){
+        $this->load->model('usuario_model');
+        $this->usuario_model->agregar_vehiculo_usuario(2333, 100, '', 2002, 20001, '', 'aaa123');
     }
 
 }

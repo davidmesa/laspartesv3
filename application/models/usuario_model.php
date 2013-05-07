@@ -42,9 +42,9 @@ class Usuario_model extends CI_Model {
         $params['laspartes_id_usuario_c'] = $id_usuario;
         $params['first_name'] = $nombres;
         $params['last_name'] = $apellidos;
-        $params['email'] = $email;
+        $params['email1'] = $email;
         $params['primary_address_city'] = $lugar;
-        $this->crm->actualizar_usuario($params);
+        $this->crm->actualizar_usuario_REST($params);
     }
 
     /**
@@ -321,11 +321,11 @@ class Usuario_model extends CI_Model {
         $params['laspartes_id_usuario_c'] = $insertedID;
         $params['first_name'] = $nombre;
         $params['last_name'] = $apellidos;
-        $params['email'] = $email;
+        $params['email1'] = $email;
         $params['primary_address_city'] = $lugar;
         $params['primary_address_country'] = $pais;
         $params['phone_home'] = $telefono;
-        $this->crm->agregar_usuario($params);
+        $this->crm->agregar_usuario_REST($params);
         
         return $insertedID;
     }
@@ -381,7 +381,7 @@ class Usuario_model extends CI_Model {
         $params['marca']  = $vehiculo->marca;
         $params['linea']  = $vehiculo->linea;
         $params['placa']  = $vehiculo->numero_placa;
-        $this->crm->agregar_vehiculo($params);
+        $this->crm->agregar_vehiculo_REST($params);
         return $id_usuario_vehiculo;
     }
 
@@ -968,7 +968,7 @@ class Usuario_model extends CI_Model {
                 'usuario' => $usuario->usuario
             );
             $this->session->set_userdata($usuario_sesion);
-
+            
             //Registra el inicio de sesión en la tabla inicion_sesion
             $this->db->set('id_usuario', $usuario->id_usuario);
             $this->db->set('fecha', 'curdate()', FALSE);

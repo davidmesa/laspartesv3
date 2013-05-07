@@ -13,8 +13,32 @@ class Crm {
     //maneja una conexión a la base de datos de crm
     private $_db_crm;
 
+    private $session_id;
+
+    private $url = "http://crm.laspartes.com/service/v4/rest.php";
+
+    private $username = "admin";
+
+    private $password = "4dminCRM111";
+
     public function __construct() {
         $this->_CI = & get_instance();
+        if(!isset($this->session_id)){ //se verifica que la id sesion alla sido solo 1 ves inicializada
+            $login_parameters = array(
+                 "user_auth"=>array(
+                      "user_name"=>'admin',
+                      "password"=>md5('4dminCRM111'),
+                      "version"=>"1"
+                 ),
+                 "application_name"=>"RestTest",
+                 "name_value_list"=>array(),
+            );
+            $dir = $this->url;
+            $login_result = $this->call("login", $login_parameters, $dir);
+
+            //get session id
+            $this->session_id = $login_result->id;
+        }
     }
 
     /**
@@ -49,6 +73,36 @@ class Crm {
 
         //cambia la base de datos al default
         $this->_CI->load->database('default', TRUE);
+    }
+
+    /**
+     * Agrega un usuario a la DB del CRM via REST
+     * @param int $params[laspartes_id_usuario_c] id del usuario registrado en laspartes
+     * @param string $params[first_name] nombres del usuario
+     * @param string $params[last_name] apellidos del usuario
+     * @param email $params[email] email del usuario
+     * @param string $params[primary_address_city] ciudad done recide el usuario
+     * @param string $params[primary_address_country] país donde recide el usuario
+     * @param int $params[phone_home] teléfono de contacte del usuario
+     * 
+     */
+    public function agregar_usuario_REST($params){
+        $name_value_list = array();
+        foreach($params as $key => $value) {
+               array_push($name_value_list, array("name" => $key, "value" => $value));
+        }
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "Contacts",
+
+             //Record attributes
+             "name_value_list" => $name_value_list,
+        );
+        $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
     }
 
     /**
@@ -98,6 +152,39 @@ class Crm {
     }
 
     /**
+     * Actualiza un usuario a la DB del CRM 
+     * @param int $params[laspartes_id_usuario_c] id del usuario registrado en laspartes
+     * @param string $params[first_name] nombres del usuario
+     * @param string $params[last_name] apellidos del usuario
+     * @param email $params[email] email del usuario
+     * @param string $params[primary_address_city] ciudad done recide el usuario
+     * @param string $params[primary_address_country] país donde recide el usuario
+     * @param int $params[phone_home] teléfono de contacte del usuario
+     * 
+     */
+    public function actualizar_usuario_REST($params) {
+        $name_value_list = array();
+        $uID = $this->dar_uID_REST($params['laspartes_id_usuario_c']);
+        array_push($name_value_list, array("name" => 'id', "value" => $uID));
+        foreach($params as $key => $value) {
+            if ($key != 'laspartes_id_usuario_c')
+               array_push($name_value_list, array("name" => $key, "value" => $value));
+        }
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "Contacts",
+
+             //Record attributes
+             "name_value_list" => $name_value_list,
+        );
+        $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
+    }
+
+    /**
      * Da el uID según el id usuario vehiculo
      * @param int $id_usuario_vehiculo
      * @return string uID
@@ -122,6 +209,50 @@ class Crm {
     }
 
     /**
+     * Da el uID según el id usuario vía REST
+     * @param int $id_usuario
+     * @return string uID
+     */
+    private function dar_uID_REST($id_usuario) {
+        $user_id = $this->session_id;
+   
+
+        //get list of records --------------------------------
+       
+        $get_entry_list_parameters = array(
+
+             //session id
+             'session' => $user_id,
+
+             //The name of the module from which to retrieve records
+             'module_name' => 'Contacts',
+
+             //The SQL WHERE clause without the word "where".
+             'query' => "laspartes_id_usuario_c = ".$id_usuario,
+
+             //The SQL ORDER BY clause without the phrase "order by".
+             'order_by' => "",
+
+             //The record offset from which to start.
+             'offset' => '0',
+
+             //Optional. A list of fields to include in the results.
+             'select_fields' => array(
+                  'id',
+             ),
+
+             //The maximum number of results to return.
+             'max_results' => '1',
+        );
+
+        $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
+
+        $entry_list = $get_entry_list_result->entry_list;
+
+        return $entry_list[0]->id;
+    }
+
+    /**
      * Actualiza el correo de un usuario según su uID
      * @param string $uID
      * @param email $correo
@@ -136,6 +267,48 @@ class Crm {
         $this->_db_crm->set('email_address', $correo);
         $this->_db_crm->set('email_address_caps', strtoupper($correo));
         $this->_db_crm->update('email_addresses');
+    }
+
+    /**
+     * Agrega un vehículo vía REST
+     * @param int $params[id_usuario] id del usuario registrado en laspartes
+     * @param string $params[marca] marca del carro
+     * @param string $params[linea] linea del carro
+     * @param int $params[modelo] modelo del carro
+     * @param int $params[kilometraje] kilometraje del carro
+     * @param string $params[placa] placa del carro
+     * @param string $params[id_usuario_vehiculo] id del carro
+     */
+    function agregar_vehiculo_REST($params) {
+        $name_value_list = array();
+
+        array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+        $nombreCarro = $params['marca'].' '.$params['linea'];
+        array_push($name_value_list, array("name" => "ve111_marcalinea_ve111_vehiculos_name", "value" => $nombreCarro));
+        echo 'nombre del carro: '.$nombreCarro.'<br/>';
+        $uID_usuario = $this->dar_uID_REST($params['id_usuario']);//retorna el uID del usuario al que se le va a agregar el vehículo
+        array_push($name_value_list, array("name" => 've111_vehiculos_contactscontacts_ida', "value" => $uID_usuario)); 
+        echo 'uID usuario: '.$uID_usuario.'<br/>';
+        $uID_vehiculo = $this->dar_marcalinea_uID_REST($params['id_vehiculo']);//retorna el uID del vehiculo que se va a agregar
+        array_push($name_value_list, array("name" => 've111_marcalinea_ve111_vehiculosve111_marcalinea_ida', "value" => $uID_vehiculo));
+        echo 'uID vehiculo: '.$uID_vehiculo.'<br/>';
+        
+        foreach($params as $key => $value) {
+            if($key != 'id_usuario' && $key != 'marca' && $key != 'linea' && $key != 'id_vehiculo')
+               array_push($name_value_list, array("name" => $key, "value" => $value));
+        }
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "ve111_vehiculos",
+
+             //Record attributes
+             "name_value_list" => $name_value_list,
+        );
+        $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
     }
 
     /**
@@ -189,6 +362,58 @@ class Crm {
         $this->_db_crm->where('id_vehiculo', $id_vehiculo);
         $q = $this->_db_crm->get('ve111_marcalinea');
         return $q->row(0)->id;
+    }
+
+    /**
+     * Da el uID del vehículo
+     * @param type $id_vehiculo
+     * @return int id
+     */
+    private function dar_marcalinea_uID_REST($id_vehiculo) {
+        // $this->_db_crm->select('id');
+        // $this->_db_crm->where('id_vehiculo', $id_vehiculo);
+        // $q = $this->_db_crm->get('ve111_marcalinea');
+        // return $q->row(0)->id;
+
+        $user_id = $this->session_id;
+   
+        echo '<br/> user id: '.$user_id.'<br/>';
+        echo '<br/> id vehiculo: '.$id_vehiculo.'<br/>';
+        //get list of records --------------------------------
+   
+        $get_entry_list_parameters = array(
+
+             //session id
+             'session' => $user_id,
+
+             //The name of the module from which to retrieve records
+             'module_name' => 've111_MarcaLinea',
+
+             //The SQL WHERE clause without the word "where".
+             'query' => "id_vehiculo = ".$id_vehiculo ,
+
+             //The SQL ORDER BY clause without the phrase "order by".
+             'order_by' => "",
+
+             //The record offset from which to start.
+             'offset' => '0',
+
+             //Optional. A list of fields to include in the results.
+             'select_fields' => array(
+                  '*',
+             ),
+
+             //The maximum number of results to return.
+             'max_results' => '1',
+        );
+
+        $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
+
+
+        $entry_list = $get_entry_list_result->entry_list;
+
+        return $entry_list[0]->id;
+
     }
 
     /**
@@ -456,6 +681,41 @@ class Crm {
     }
 
     /* fin de Metodos de popular la DB */
+
+    //function to make cURL request
+    private function call($method, $parameters, $url)
+    {
+        ob_start();
+        $curl_request = curl_init();
+
+        curl_setopt($curl_request, CURLOPT_URL, $url);
+        curl_setopt($curl_request, CURLOPT_POST, 1);
+        curl_setopt($curl_request, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        curl_setopt($curl_request, CURLOPT_HEADER, 1);
+        curl_setopt($curl_request, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($curl_request, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl_request, CURLOPT_FOLLOWLOCATION, 0);
+
+        $jsonEncodedData = json_encode($parameters);
+
+        $post = array(
+             "method" => $method,
+             "input_type" => "JSON",
+             "response_type" => "JSON",
+             "rest_data" => $jsonEncodedData
+        );
+
+        curl_setopt($curl_request, CURLOPT_POSTFIELDS, $post);
+        $result = curl_exec($curl_request);
+        curl_close($curl_request);
+
+        $result = explode("\r\n\r\n", $result, 2);
+        $response = json_decode($result[1]);
+        ob_end_flush();
+
+        return $response;
+    }
+
 }
 
 /* End of file crm.php */

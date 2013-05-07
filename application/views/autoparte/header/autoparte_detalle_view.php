@@ -41,7 +41,7 @@
     }
 </style>
 <script>
-    $(function(){
+    {$(function(){
         var vehiculos = <?php echo json_encode($allvehiculos); ?>;
 
         $(".vehiculos").autocomplete({
@@ -321,3 +321,9 @@
     //se registra el evento de click al entrar a la página
     _gaq.push(['_trackEvent', 'Autoparte', 'Clic', '<?php echo $autoparte->nombre. ' MARCA '.  $autoparte->marca;?>', '<?php echo $autoparte->id_autoparte;?>']);
 </script>
+
+
+<div class="clase" id="idloquier">
+    <span class="otraclase"></span>
+    <div></div>
+</div>
