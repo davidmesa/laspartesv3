@@ -3,7 +3,7 @@
         <div id="tallerlinea-div-banner-comunidad">
             <div id="tallerlinea-div-banner-comunidad-titulo" style="margin-top: 35px;">
 
-                <h1 style="font-size: 30px;">CREA AQUÍ EL PERFIL DE TU VEHICULO</h1>
+                <h1 style="font-size: 30px;">CREA AQUÍ EL PERFIL DE TU VEHÍCULO</h1>
                 <h1>¡Y NOSOTROS NOS ENCARGAMOS DEL MANTENIMIENTO!</h1>
             </div>  
         </div>

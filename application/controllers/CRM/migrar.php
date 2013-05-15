@@ -26,6 +26,7 @@ class Migrar extends Laspartes_Controller {
         $this->crm->migrar_usuarios_vehiculos($vehiculos);
         $compras = $this->usuario_model->dar_items_compras_usuarios();
         $this->crm->migrar_usuarios_compras($compras);
+        
     }
 
 }

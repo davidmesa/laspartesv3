@@ -88,6 +88,7 @@ class Crm {
      */
     public function agregar_usuario_REST($params){
         $name_value_list = array();
+        array_push($name_value_list, array("name" => "estadoHook", "value" => true));
         foreach($params as $key => $value) {
                array_push($name_value_list, array("name" => $key, "value" => $value));
         }
@@ -103,6 +104,114 @@ class Crm {
              "name_value_list" => $name_value_list,
         );
         $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
+        $this->crear_cuenta_REST($params);
+    }
+
+    /**
+     * Crea una cuenta al usuario
+     * @param int $params[laspartes_id_usuario_c] id del usuario registrado en laspartes
+     * @param string $params[first_name] nombres del usuario
+     * @param string $params[last_name] apellidos del usuario
+     * @param email $params[email] email del usuario
+     * @param string $params[primary_address_city] ciudad done recide el usuario
+     * @param string $params[primary_address_country] país donde recide el usuario
+     * @param int $params[phone_home] teléfono de contacte del usuario
+     * 
+     */
+    private function crear_cuenta_REST($params){
+        $name_value_list = array();
+        if(!empty($params['first_name']) ){
+        array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+        array_push($name_value_list, array("name" => "name", "value" => $params['first_name']. ' '. $params['last_name']));
+
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "Accounts",
+
+             //Record attributes
+             "name_value_list" => $name_value_list,
+        );
+        $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
+        }
+    }
+
+    /**
+     * Agrega varios usuario a la DB del CRM via REST
+     * @param int $params[laspartes_id_usuario_c] id del usuario registrado en laspartes
+     * @param string $params[first_name] nombres del usuario
+     * @param string $params[last_name] apellidos del usuario
+     * @param email $params[email] email del usuario
+     * @param string $params[primary_address_city] ciudad done recide el usuario
+     * @param string $params[primary_address_country] país donde recide el usuario
+     * @param int $params[phone_home] teléfono de contacte del usuario
+     * 
+     */
+    public function agregar_usuarios_REST($params){
+        $name_values_list = array();
+        foreach ($params as $array) {
+            $name_value_list = array();
+            array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+            foreach($array as $key => $value) {
+                   array_push($name_value_list, array("name" => $key, "value" => $value));
+            }
+            array_push($name_values_list, $name_value_list);
+        }
+        // echo '<pre>';
+        // print_r($name_values_list);
+        // echo '</pre>';
+        
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "Contacts",
+
+             //Record attributes
+             "name_value_list" => $name_values_list,
+        );
+        $set_entry_result = $this->call("set_entries", $set_entry_parameters, $this->url);
+        $this->crear_cuentas_REST($params);
+    }
+
+    /**
+     * Crea una cuenta por cada usuario existente
+     * @param int $params[laspartes_id_usuario_c] id del usuario registrado en laspartes
+     * @param string $params[first_name] nombres del usuario
+     * @param string $params[last_name] apellidos del usuario
+     * @param email $params[email] email del usuario
+     * @param string $params[primary_address_city] ciudad done recide el usuario
+     * @param string $params[primary_address_country] país donde recide el usuario
+     * @param int $params[phone_home] teléfono de contacte del usuario
+     */
+    private function crear_cuentas_REST($params){
+        $name_values_list = array();
+        foreach ($params as $array) {
+            if(!empty($array['first_name']) ){
+            $name_value_list = array();
+            array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+            array_push($name_value_list, array("name" => "name", "value" => $array['first_name']. ' '. $array['last_name']) );
+            array_push($name_values_list, $name_value_list);
+           } 
+        } 
+
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "Accounts",
+
+             //Record attributes
+             "name_value_list" => $name_values_list,
+        );
+        $set_entry_result = $this->call("set_entries", $set_entry_parameters, $this->url);
     }
 
     /**
@@ -165,6 +274,7 @@ class Crm {
     public function actualizar_usuario_REST($params) {
         $name_value_list = array();
         $uID = $this->dar_uID_REST($params['laspartes_id_usuario_c']);
+        array_push($name_value_list, array("name" => "estadoHook", "value" => true));
         array_push($name_value_list, array("name" => 'id', "value" => $uID));
         foreach($params as $key => $value) {
             if ($key != 'laspartes_id_usuario_c')
@@ -253,6 +363,62 @@ class Crm {
     }
 
     /**
+     * Da los uID según los id usuario vía REST
+     * @param int $id_usuario
+     * @return string uID
+     */
+    private function dar_uIDs_REST($id_usuarios) {
+        $user_id = $this->session_id;
+
+        $query  = '';
+        foreach ($id_usuarios as $id_usuario) {
+            $query .= " laspartes_id_usuario_c = ".$id_usuario.'  ||';
+        }
+        $query = substr($query, 0, -2);
+   
+
+        //get list of records --------------------------------
+       
+        $get_entry_list_parameters = array(
+
+             //session id
+             'session' => $user_id,
+
+             //The name of the module from which to retrieve records
+             'module_name' => 'Contacts',
+
+             //The SQL WHERE clause without the word "where".
+             'query' => $query,
+
+             //The SQL ORDER BY clause without the phrase "order by".
+             'order_by' => "",
+
+             //The record offset from which to start.
+             'offset' => '0',
+
+             'link_name_to_fields_array' => array(),
+
+             //Optional. A list of fields to include in the results.
+             'select_fields' => array(
+                  'id', 'laspartes_id_usuario_c',
+             )
+             ,'max_results' => '100000',
+             'deleted' => '0',
+             'Favorites' => false,
+
+        );
+
+        $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
+        echo "<pre>";
+
+        print_r(sizeof($id_usuarios));
+        echo "</pre>";
+        $entry_list = $get_entry_list_result->entry_list;
+
+        return $entry_list;
+    }
+
+    /**
      * Actualiza el correo de un usuario según su uID
      * @param string $uID
      * @param email $correo
@@ -285,13 +451,10 @@ class Crm {
         array_push($name_value_list, array("name" => "estadoHook", "value" => true));
         $nombreCarro = $params['marca'].' '.$params['linea'];
         array_push($name_value_list, array("name" => "ve111_marcalinea_ve111_vehiculos_name", "value" => $nombreCarro));
-        echo 'nombre del carro: '.$nombreCarro.'<br/>';
         $uID_usuario = $this->dar_uID_REST($params['id_usuario']);//retorna el uID del usuario al que se le va a agregar el vehículo
         array_push($name_value_list, array("name" => 've111_vehiculos_contactscontacts_ida', "value" => $uID_usuario)); 
-        echo 'uID usuario: '.$uID_usuario.'<br/>';
         $uID_vehiculo = $this->dar_marcalinea_uID_REST($params['id_vehiculo']);//retorna el uID del vehiculo que se va a agregar
         array_push($name_value_list, array("name" => 've111_marcalinea_ve111_vehiculosve111_marcalinea_ida', "value" => $uID_vehiculo));
-        echo 'uID vehiculo: '.$uID_vehiculo.'<br/>';
         
         foreach($params as $key => $value) {
             if($key != 'id_usuario' && $key != 'marca' && $key != 'linea' && $key != 'id_vehiculo')
@@ -309,6 +472,78 @@ class Crm {
              "name_value_list" => $name_value_list,
         );
         $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
+    }
+
+    /**
+     * Agrega un vehículo vía REST
+     * @param int $params[id_usuario] id del usuario registrado en laspartes
+     * @param string $params[marca] marca del carro
+     * @param string $params[linea] linea del carro
+     * @param int $params[modelo] modelo del carro
+     * @param int $params[kilometraje] kilometraje del carro
+     * @param string $params[placa] placa del carro
+     * @param string $params[id_usuario_vehiculo] id del carro
+     */
+    function agregar_vehiculos_REST($params) {
+        $name_values_list = array();
+        $marcalineas = array();
+        $contactos = array();
+        foreach ($params as $array) {
+            $name_value_list = array();
+            array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+            $nombreCarro = $array['marca'].' '.$array['linea'];
+            array_push($name_value_list, array("name" => "ve111_marcalinea_ve111_vehiculos_name", "value" => $nombreCarro));
+            $marcalineas[] = $array['id_vehiculo'];
+            $contactos[] = $array['id_usuario'];
+            // $uID_usuario = $this->dar_uID_REST($array['id_usuario']);//retorna el uID del usuario al que se le va a agregar el vehículo
+            // array_push($name_value_list, array("name" => 've111_vehiculos_contactscontacts_ida', "value" => $uID_usuario)); 
+            // $uID_vehiculo = $this->dar_marcalinea_uID_REST($array['id_vehiculo']);//retorna el uID del vehiculo que se va a agregar
+            // array_push($name_value_list, array("name" => 've111_marcalinea_ve111_vehiculosve111_marcalinea_ida', "value" => $uID_vehiculo));
+            foreach($array as $key => $value) {
+                if($key != 'id_usuario' && $key != 'marca' && $key != 'linea' && $key != 'id_vehiculo')
+                array_push($name_value_list, array("name" => $key, "value" => $value));
+            }
+            array_push($name_values_list, $name_value_list);
+        }
+
+        // echo "<pre>";
+
+        // print_r($marcalineas);
+        // echo "</pre>";
+        $ids_usuarios = $this->dar_uIDs_REST($contactos);
+        $ids_marcalineas = $this->dar_marcalinea_uIDs_REST($marcalineas);
+
+        echo sizeof($name_values_list).'<br/>';
+        echo sizeof($ids_usuarios).'<br/>';
+        echo sizeof($ids_marcalineas).'<br/>';
+
+        // echo "<pre>";
+
+        // print_r($ids_marcalineas);
+        // echo "</pre>";
+
+        for ($i=0; $i < sizeof($name_values_list); $i++) { 
+            $name_values_list[$i][] = array('name' => 've111_vehiculos_contactscontacts_ida', 'value'=>$ids_usuarios[$i]->id);
+            $name_values_list[$i][] = array('name' => 've111_marcalinea_ve111_vehiculosve111_marcalinea_ida', 'value'=>$ids_marcalineas[$i]->id);
+        }
+
+        // echo "<pre>";
+
+        // print_r($name_values_list);
+        // echo "</pre>";
+
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "ve111_vehiculos",
+
+             //Record attributes
+             "name_value_list" => $name_values_list,
+        );
+        // $set_entries_result = $this->call("set_entries", $set_entry_parameters, $this->url);
     }
 
     /**
@@ -370,15 +605,8 @@ class Crm {
      * @return int id
      */
     private function dar_marcalinea_uID_REST($id_vehiculo) {
-        // $this->_db_crm->select('id');
-        // $this->_db_crm->where('id_vehiculo', $id_vehiculo);
-        // $q = $this->_db_crm->get('ve111_marcalinea');
-        // return $q->row(0)->id;
 
         $user_id = $this->session_id;
-   
-        echo '<br/> user id: '.$user_id.'<br/>';
-        echo '<br/> id vehiculo: '.$id_vehiculo.'<br/>';
         //get list of records --------------------------------
    
         $get_entry_list_parameters = array(
@@ -417,6 +645,58 @@ class Crm {
     }
 
     /**
+     * Da los uIDs del vehículos
+     * @param  string $id_vehiculos
+     * @return array uids
+     */
+    private function dar_marcalinea_uIDs_REST($id_vehiculos) {
+
+        $user_id = $this->session_id;
+        $query  = '';
+        foreach ($id_vehiculos as $id_vehiculo) {
+            $query .= " id_vehiculo = ".$id_vehiculo.'  ||';
+        }
+        $query = substr($query, 0, -2);
+        //get list of records --------------------------------
+   
+        $get_entry_list_parameters = array(
+
+             //session id
+             'session' => $user_id,
+
+             //The name of the module from which to retrieve records
+             'module_name' => 've111_MarcaLinea',
+
+             //The SQL WHERE clause without the word "where".
+             'query' => $query ,
+
+             //The SQL ORDER BY clause without the phrase "order by".
+             'order_by' => "",
+
+             //The record offset from which to start.
+             'offset' => '0',
+
+             'link_name_to_fields_array' => array(),
+
+             //Optional. A list of fields to include in the results.
+             'select_fields' => array(
+                  'id',
+             )
+             ,'max_results' => '100000',
+             'deleted' => '0',
+             'Favorites' => false,
+        );
+
+        $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
+
+
+        $entry_list = $get_entry_list_result->entry_list;
+
+        return $entry_list;
+
+    }
+
+    /**
      * Asocia un vehículo con un usuaro
      * @param string $uID_usuario
      * @param string $uID_vehiculo
@@ -447,6 +727,80 @@ class Crm {
         $this->_db_crm->insert('ve111_marcalinea');
 
         $this->_CI->load->database('default', TRUE);
+    }
+
+    /**
+     * Agrega la marca y línea de vehículo
+     * @param int $id_vehiculo
+     * @param string $marca
+     * @param string $linea
+     */
+    function agregar_marcalineas_REST($params) {
+        $name_values_list = array();
+
+        foreach ($params as $array) {
+            $name_value_list = array();
+            array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+            foreach($array as $key => $value) {
+                   array_push($name_value_list, array("name" => $key, "value" => $value));
+            }
+            array_push($name_values_list, $name_value_list);
+        }
+
+        echo "<pre>";
+
+        print_r($name_values_list);
+        echo "</pre>";
+        // $nombreCarro = $marca . ' ' . $linea;
+        // array_push($name_value_list, array("name" => "id", "value" => $id_vehiculo));
+        // array_push($name_value_list, array("name" => "name", "value" => $nombreCarro));
+        // array_push($name_value_list, array("name" => 'id_vehiculo', "value" => $id_vehiculo));
+        // array_push($name_value_list, array("name" => 'marca', "value" => $marca)); 
+        // array_push($name_value_list, array("name" => 'linea', "value" => $linea));
+
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "ve111_MarcaLinea",
+
+             //Record attributes
+             "name_value_list" => $name_values_list,
+        );
+        $set_entry_result = $this->call("set_entries", $set_entry_parameters, $this->url);
+    }
+
+    /**
+     * Agrega la marca y línea de vehículo
+     * @param int $id_vehiculo
+     * @param string $marca
+     * @param string $linea
+     */
+    function agregar_marcalinea_REST($id_vehiculo, $marca, $linea) {
+        $name_value_list = array();
+
+        array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+        $nombreCarro = $marca . ' ' . $linea;
+        array_push($name_value_list, array("name" => "id", "value" => $id_vehiculo));
+        array_push($name_value_list, array("name" => "name", "value" => $nombreCarro));
+        array_push($name_value_list, array("name" => 'id_vehiculo', "value" => $id_vehiculo));
+        array_push($name_value_list, array("name" => 'marca', "value" => $marca)); 
+        array_push($name_value_list, array("name" => 'linea', "value" => $linea));
+
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "ve111_MarcaLinea",
+
+             //Record attributes
+             "name_value_list" => $name_value_list,
+        );
+        $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
     }
 
     /**
@@ -489,6 +843,86 @@ class Crm {
     }
 
     /**
+     * Agrega compras al CRM vía REST
+     * @param int $params[id_usuario] id del usuario registrado en laspartes que ha comprado
+     * @param int $params[id_carrito] id del carrito de compras
+     * @param string $params[name] titulo del item
+     * @param int $params[amount] valor del item
+     * @param string $params[tipo] el tipo del item (Autoparte u Oferta)
+     * @param string $params[titulo] titulo del item
+     * @param int $params[cantidad] cantidad el item comprado
+     * @param date $params[fecha_compra] fecha de compra del item
+     * @param string $params[recibo] url donde se encuentra el recibo de compra
+     */
+    public function agregar_carrito_compras_REST($params){
+        $name_value_list = array();
+        $uID_usuario = $this->dar_uID_REST($params['id_usuario']);
+        array_push($name_value_list, array("name" => 'venta_compra_contactscontacts_ida', "value" => $uID_usuario)); 
+        array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+        foreach($params as $key => $value) {
+               array_push($name_value_list, array("name" => $key, "value" => $value));
+        }
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "venta_Compra",
+
+             //Record attributes
+             "name_value_list" => $name_value_list,
+        );
+        $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
+        $this->agregar_llamada_venta_REST($params);
+    }
+
+    /**
+     * Agrega una llamada por motivo de venta vía REST
+     * Agrega compras al CRM vía REST
+     * @param int $params[id_usuario] id del usuario registrado en laspartes que ha comprado
+     * @param int $params[id_carrito] id del carrito de compras
+     * @param string $params[name] titulo del item
+     * @param int $params[amount] valor del item
+     * @param string $params[tipo] el tipo del item (Autoparte u Oferta)
+     * @param string $params[titulo] titulo del item
+     * @param int $params[cantidad] cantidad el item comprado
+     * @param date $params[fecha_compra] fecha de compra del item
+     * @param string $params[recibo] url donde se encuentra el recibo de compra
+     */
+    public function agregar_llamada_venta_REST($params){
+        
+        $name_value_list = array();
+        array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+        array_push($name_value_list, array("name" => "name", "value" => 'Llamada postventa'));
+        array_push($name_value_list, array("name" => "direction", "value" => 'Outbound'));
+        array_push($name_value_list, array("name" => "status", "value" => 'Planned'));
+        array_push($name_value_list, array("name" => "date_start", "value" => date("Y-m-d H:i:s", mktime(22, 0, 0, date("m")  , date("d")+8, date("Y")))));
+        array_push($name_value_list, array("name" => "duration_hours", "value" => '0'));
+        array_push($name_value_list, array("name" => "duration_minutes", "value" => '15'));
+        array_push($name_value_list, array("name" => "reminder_checked", "value" => '1'));
+        array_push($name_value_list, array("name" => "reminder_time", "value" => '300'));
+        array_push($name_value_list, array("name" => "email_reminder_checked", "value" => '1'));
+        array_push($name_value_list, array("name" => "email_reminder_time", "value" => '300'));
+        array_push($name_value_list, array("name" => "description", "value" => 'Llamar a '.$params['usuario']->nombres.' para preguntar cómo le fue en el taller por haber realizado la compra de '.$params['name']. '. ver recibo adjunto en: '.$params['recibo']));
+        array_push($name_value_list, array("name" => "assigned_user_name", "value" => 'Alexander Guerra'));
+        array_push($name_value_list, array("name" => "assigned_user_id", "value" => 'ea5a2345-453d-fe9d-161f-5176e26e52f2'));
+
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "Calls",
+
+             //Record attributes
+             "name_value_list" => $name_value_list,
+        );
+        $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
+    }
+
+    /**
      * Agrega compras al CRM
      * @param int $params[id_usuario] id del usuario registrado en laspartes que ha comprado
      * @param int $params[id_carrito] id del carrito de compras
@@ -526,6 +960,45 @@ class Crm {
         $this->_db_crm->set('venta_compra_contactsventa_compra_idb', $uID_compra);
         $this->_db_crm->set('venta_compra_contactscontacts_ida', $uID_usuario);
         $this->_db_crm->insert('venta_compra_contacts_c');
+    }
+
+    /**
+     * Agrega una remision
+     * @param int $params[id_usuario] id del usuario registrado en laspartes que ha comprado
+     * @param int $params[id_vehiculo] id del vehiculo
+     * @param string $params[name] nombre de la remision el caul es el mismo del consecutivo
+     * @param string $params[first_name] nombre de la persona que va a hacer la remisión
+     * @param string $params[primary_address_city] ciudad de donde se hace la remisión
+     * @param string $params[primary_address_street] dirección de envió o donde reside la persona
+     * @param int $params[phone_home] número telefónico de la persona de la remisión
+     * @param string $params[description] Descripción de la remision
+     * @param int $params[consecutivo] consecutivo de la remisión
+     * @param string $params[remisionurl] url donde se encuentra la remisión en pdf
+     */
+    public function agregar_remision_REST($params){
+        $name_value_list = array();
+        $uID_usuario = $this->dar_uID_REST($params['id_usuario']);
+        array_push($name_value_list, array("name" => "venta_remision_contactscontacts_ida", "value" => $uID_usuario));
+        $uID_marcalinea = $this->dar_marcalinea_uID_REST($params['id_vehiculo']);
+        array_push($name_value_list, array("name" => "venta_remision_ve111_marcalineave111_marcalinea_idb", "value" => $uID_marcalinea));
+
+        array_push($name_value_list, array("name" => "estadoHook", "value" => true));
+        foreach($params as $key => $value) {
+            if($key != 'id_vehiculo' || $key != 'id_usuario')
+               array_push($name_value_list, array("name" => $key, "value" => $value));
+        }
+        $user_id = $this->session_id;
+        $set_entry_parameters = array(
+             //session id
+             "session" => $user_id,
+
+             //The name of the module from which to retrieve records.
+             "module_name" => "venta_Remision",
+
+             //Record attributes
+             "name_value_list" => $name_value_list,
+        );
+        $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
     }
 
     /**
@@ -599,17 +1072,20 @@ class Crm {
      */
     public function migrar_usuarios($params) {
         $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
+        $arrayParams = array();
         foreach ($params as $usuario) {
-            $params = array();
-            $params['laspartes_id_usuario_c'] = $usuario->id_usuario;
-            $params['first_name'] = $usuario->nombres;
-            $params['last_name'] = $usuario->apellidos;
-            $params['email'] = $usuario->email;
-            $params['primary_address_city'] = $usuario->lugar;
-            $params['primary_address_country'] = $usuario->pais;
-            $params['phone_home'] = $usuario->telefonos;
-            $this->agregar_usuario($params);
+            $temp = array();
+            $temp['laspartes_id_usuario_c'] = $usuario->id_usuario;
+            $temp['first_name'] = $usuario->nombres;
+            $temp['last_name'] = $usuario->apellidos;
+            $temp['email1'] = $usuario->email;
+            $temp['primary_address_city'] = $usuario->lugar;
+            $temp['primary_address_country'] = $usuario->pais;
+            $temp['phone_home'] = $usuario->telefonos;
+            array_push($arrayParams, $temp);
+            // echo 'usuario '.$usuario->id_usuario.': '.$usuario->nombres.' '. $usuario->apellidos.' email: '.$usuario->email.' Ciudad: '.$usuario->lugar.' Pais: '.$usuario->pais.' telefono: '.$usuario->telefonos.'<br/>';
         }
+        $this->agregar_usuarios_REST($arrayParams);
         $this->_CI->load->database('default', TRUE);
     }
 
@@ -625,18 +1101,25 @@ class Crm {
      */
     public function migrar_usuarios_vehiculos($params) {
         $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
+        $arrayParams = array();
         foreach ($params as $vehiculo) {
-            $params = array();
-            $params['id_usuario_vehiculo'] = $vehiculo->id_usuario_vehiculo;
-            $params['id_vehiculo'] = $vehiculo->id_vehiculo;
-            $params['id_usuario'] = $vehiculo->id_usuario;
-            $params['modelo'] = $vehiculo->modelo;
-            $params['kilometraje'] = $vehiculo->kilometraje;
-            $params['marca'] = $vehiculo->marca;
-            $params['linea'] = $vehiculo->linea;
-            $params['placa'] = $vehiculo->numero_placa;
-            $this->agregar_vehiculo($params);
+            $temp = array();
+            $temp['id_usuario_vehiculo'] = $vehiculo->id_usuario_vehiculo;
+            $temp['id_vehiculo'] = $vehiculo->id_vehiculo;
+            $temp['id_usuario'] = $vehiculo->id_usuario;
+            $temp['modelo'] = $vehiculo->modelo;
+            $temp['kilometraje'] = $vehiculo->kilometraje;
+            $temp['marca'] = $vehiculo->marca;
+            $temp['linea'] = $vehiculo->linea;
+            $temp['placa'] = $vehiculo->numero_placa;
+            // array_push($arrayParams, $temp);
+            $this->agregar_vehiculo($temp);
         }
+        // echo "<pre>";
+        // print_r($arrayParams);
+        // echo "</pre>";
+
+        // $this->agregar_vehiculos_REST($arrayParams);
         $this->_CI->load->database('default', TRUE);
     }
 
@@ -666,6 +1149,7 @@ class Crm {
             $params['fecha_compra'] = $carrito->fecha;
             $params['recibo'] = base_url() . 'usuario/recibo/' . $carrito->refVenta;
             $this->agregar_carrito_compras($params);
+            echo '';
         }
         $this->_CI->load->database('default', TRUE);
     }
@@ -675,9 +1159,16 @@ class Crm {
      * @param type $params
      */
     public function migrar_marcalinea($params) {
-        foreach ($params as $marcalinea) {
-            $this->agregar_marcalinea($marcalinea->id_vehiculo, $marcalinea->marca, $marcalinea->linea);
+        $arrayParams = array();
+        foreach ($params as $vehiculo) {
+            $temp = array();
+            $temp['id_vehiculo'] = $vehiculo->id_vehiculo;
+            $temp['name'] = $vehiculo->marca. ' '.$vehiculo->linea;
+            $temp['marca'] = $vehiculo->marca;
+            $temp['linea'] = $vehiculo->linea;
+            array_push($arrayParams, $temp);
         }
+        $this->agregar_marcalineas_REST($arrayParams);
     }
 
     /* fin de Metodos de popular la DB */

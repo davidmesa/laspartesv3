@@ -1591,6 +1591,7 @@ class Usuario_model extends CI_Model {
             $params = array();
             $params['id_carrito'] = $id_carrito_compra;
             $params['id_usuario'] = $carrito->id_usuario;
+            $params['usuario'] = $this->dar_usuario($carrito->id_usuario);
             $params['name'] = $carrito->titulo;
             $params['amount'] = $carrito->precio;
             $params['tipo'] = $carrito->tipo;
@@ -1598,7 +1599,7 @@ class Usuario_model extends CI_Model {
             $params['cantidad'] = $carrito->cantidad;
             $params['fecha_compra'] = $carrito->fecha;
             $params['recibo'] = 'http://www.laspartes.com/usuario/recibo/'.$carrito->refVenta;
-            $this->crm->agregar_carrito_compras($params);
+            $this->crm->agregar_carrito_compras_REST($params);
         }
         
         return $id_consecutivo;
@@ -1639,7 +1640,24 @@ class Usuario_model extends CI_Model {
         $this->db->set('descripcion', $descripcion);
         $this->db->set('fecha', 'curdate()', FALSE);
         $this->db->insert('bono');
-        return mysql_insert_id();
+
+        $id_remision =  mysql_insert_id();
+
+        $params['taller']  = $this->dar_establecimiento($id_establecimiento)->nombre;
+        $params['id_vehiculo']  = $id_vehiculo;
+        $params['id_usuario']  = $id_usuario;
+        $params['email1']  = $email;
+        $params['first_name']  = $nombres;
+        $params['primary_address_city']  = $lugar;
+        $params['primary_address_street']  = $direccion;
+        $params['phone_home']  = $telefono;
+        $params['description']  = $descripcion;
+        $params['consecutivo']  = $id_remision;
+        $params['name']  = $id_remision;
+        $params['remisionurl']  = 'http://www.laspartes.com/usuario/recibo/'.$id_remision;
+        $this->crm->agregar_remision_REST($params);
+
+        return $id_remision;
     }
 
     /**
@@ -1822,6 +1840,19 @@ class Usuario_model extends CI_Model {
             return substr($code, 0, $length);
         else
             return $code;
+    }
+
+    /**
+     * Da un establecimiento
+     * @param int $id_establecimiento
+     * @return object $establecimiento
+     */
+    function dar_establecimiento($id_establecimiento){
+        $this->db->escape($id_establecimiento);
+        $this->db->where('id_establecimiento', $id_establecimiento);
+        $this->db->limit(1);
+        $query = $this->db->get('establecimientos');
+        return $query->row(0);
     }
 
 }

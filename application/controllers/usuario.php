@@ -4597,9 +4597,6 @@ class Usuario extends Laspartes_Controller {
             }
     }
 
-    function crm(){
-        $this->load->model('usuario_model');
-        $this->usuario_model->agregar_vehiculo_usuario(2333, 100, '', 2002, 20001, '', 'aaa123');
-    }
+    
 
 }

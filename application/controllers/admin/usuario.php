@@ -595,9 +595,9 @@ class Usuario extends CI_Controller {
         endforeach;
         $this->refventa_model->agregar_RefVenta($refVenta, $id_carrito);
         $this->_generar_factura($refVenta, $mensaje = "");
-        $url = base_url().'admin/usuario/recibo/' . $id_usuario;
+        $url = base_url().'usuario/recibo/' . $id_usuario;
         echo "<script type='text/javascript'>top.location = '" . $url . "';</script>";
-//        redirect('admin/usuario/recibo/' . $id_usuario);
+       redirect('admin/usuario/recibo/' . $id_usuario);
     }
 
     function _generar_factura($refVenta, $mensaje = "") {
@@ -858,7 +858,7 @@ class Usuario extends CI_Controller {
         $consecutivo = $this->usuario_model->agregar_bono_usuario($id_usuario, $id_taller, $id_vehiculo, $nombres, $email, $ciudadEnvio, $direccionEnvio, $telefonoMovil, $bono);
         $this->_generar_bono($consecutivo);
 
-        redirect('admin/usuario/recibo/' . $id_usuario);
+        redirect(base_url().'usuario/recibo/' . $consecutivo);
     }
 
     /**
