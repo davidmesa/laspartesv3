@@ -4597,6 +4597,24 @@ class Usuario extends Laspartes_Controller {
             }
     }
 
-    
+    function crm(){
+        $this->load->helper('mail');
+        $destinatario = new stdClass();
+                    $destinatario->email = 'luis.cabarique@laspartes.com.co';
+                    $destinatarios[] = $destinatario;
+                    send_mail($destinatarios, "[LasPartes.com] Nuevo Carro", "", 'El vehiculo: con id_vehiculo:  fue ingresada al sistema por el id_usuario: ');
+        // $this->load->model('usuario_model');
+        // $this->usuario_model->agregar_usuario1('lucho', 'cabarique', 'ensuncho', 'borrar2as@bor.com', '1234', 'Bogotá', '30', "borrar", "Colombia", "2323");
+        // 
+        // $params = array();
+        // $params['laspartes_id_usuario_c'] = 12331;
+        // $params['first_name'] = 'lucho ';
+        // $params['last_name'] = 'cabariq';
+        // $params['email1'] = 'casbsdfhhw@asdf.com';
+        // $params['primary_address_city'] = 'Bogotá';
+        // $params['primary_address_country'] = 'Colombia';
+        // $params['phone_home'] = '232332';
+        // $this->crm->agregar_usuario_REST($params);
+    }
 
 }

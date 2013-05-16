@@ -1071,7 +1071,7 @@ class Crm {
      * @param string $params[id_usuario_vehiculo] id del carro
      */
     public function migrar_usuarios($params) {
-        $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
+        // $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
         $arrayParams = array();
         foreach ($params as $usuario) {
             $temp = array();
@@ -1086,7 +1086,7 @@ class Crm {
             // echo 'usuario '.$usuario->id_usuario.': '.$usuario->nombres.' '. $usuario->apellidos.' email: '.$usuario->email.' Ciudad: '.$usuario->lugar.' Pais: '.$usuario->pais.' telefono: '.$usuario->telefonos.'<br/>';
         }
         $this->agregar_usuarios_REST($arrayParams);
-        $this->_CI->load->database('default', TRUE);
+        // $this->_CI->load->database('default', TRUE);
     }
 
     /**

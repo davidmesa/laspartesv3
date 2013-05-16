@@ -330,6 +330,7 @@ class Usuario_model extends CI_Model {
         return $insertedID;
     }
 
+
     /**
      * Agrega un nuevo vehículo al usuario
      * @param int $id_usuario

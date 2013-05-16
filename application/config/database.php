@@ -43,8 +43,8 @@
 $active_group = "CRM";
 $active_record = TRUE;
 $db['CRM']['hostname'] = '98.130.0.94';
-$db['CRM']['username'] = 'laspart_pruebas';
-$db['CRM']['password'] = 'Pr52b1s';
+$db['CRM']['username'] = 'laspart_version2';
+$db['CRM']['password'] = 'V2rs34n2';
 $db['CRM']['database'] = 'laspart_crm';
 $db['CRM']['dbdriver'] = 'mysql';
 $db['CRM']['dbprefix'] = '';  
@@ -61,9 +61,9 @@ $db['CRM']['stricton'] = FALSE;
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '127.0.0.1'; 
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
+$db['default']['hostname'] = '98.130.0.94'; 
+$db['default']['username'] = 'laspart_version2';
+$db['default']['password'] = 'V2rs34n2';
 $db['default']['database'] = 'laspart_version2';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';  
