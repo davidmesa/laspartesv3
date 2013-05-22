@@ -560,7 +560,7 @@
                 required: true,
                 email: true,
                 remote: {
-                    url: "<?php echo base_url(); ?>usuario/no_existe_email_ajax",
+                    url: "<?php echo base_url(); ?>usuario/no_existe_email_CRM_ajax",
                     type: "post",
                     data: {
                         email: function () {
@@ -951,6 +951,37 @@
             }
         });
     }
+
+    //valida el correo alla sido precreado con el CRM y carga la información
+    function validar_correo(campo){
+        $.ajax({
+                url: "<?php echo base_url(); ?>usuario/dar_usuario_CRM_ajax",
+                type: "POST",
+                data: {
+                    email: function() {
+                            return $("#input-registrate-email").val();
+                        }
+                },
+                onsubmit: false,
+                success: function(data) {
+                        if(data!=='false' && data !== 'true'){
+                            console.log(data);
+                            var data = $.parseJSON(data);
+                            $("#input-registrate-nombre").val(data.nombres);
+                            $('#input-registrate-apellidos').val(data.apellidos);
+                            $('#input-registrate-telefono').val(data.telefonos);
+                            $('#input-registrate-ciudad').val(data.lugar);
+
+                            //info del carro
+                            $("#input_vehiculo_marca").val(data.marca);
+                            $('#input_vehiculo_linea').val(data.linea);
+                            $('#input_vehiculo_placa').val(data.placa);
+                            $('#input_vehiculo_kilometraje').val(data.kilometraje);
+                            $('#input_vehiculo_modelo').val(data.modelo);
+                        }
+                    }
+            });
+    }
     
 </script>
 <!--vista que contiene la información de registro del usuario-->
@@ -994,6 +1025,19 @@
             </div>
 
             <form id="form_registro">
+
+                <div class="form_login_div_campo">
+                    <label>Correo electrónico: </label>
+                    <input class="form_registro_input" onblur="validar_correo(this)" type="text" name="input_registrate_email" id="input-registrate-email"  title="Ingresa tu correo electrónico"/><div for="input-registrate-email"></div>
+                </div>
+                <div class="form_login_div_campo">
+                    <label>Contraseña:</label>
+                    <input class="form_registro_input" type="password" name="input_registrate_contrasena" id="input-registrate-contrasena"  title="Ingresa tu contraseña"/><div for="input-registrate-contrasena"></div>
+                </div>
+                <div class="form_login_div_campo">
+                    <label>Repite tu contraseña:</label>
+                    <input class="form_registro_input" type="password" name="input_registrate_contrasena_repite" id="input-registrate-contrasena-repite"  title="Repite tu contraseña"/><div for="input-registrate-contrasena-repite"></div>
+                </div>
                 <div class="form_login_div_campo">
                     <label>Nombres:</label>
                     <input class="form_registro_input" type="text" name="input_registrate_nombre" id="input-registrate-nombre" title="Ingresa tus nombres"/><div for="input-registrate-nombre"></div>
@@ -1022,18 +1066,6 @@
                     }
                     echo form_dropdown('ciudad_registrarse', $option_ciudades, 'Bogotá', 'id="input-registrate-ciudad" title="En qué ciudad vives" class="form_registro_ie_select"'); //, 'id="marca_registrarse"');
                     ?>
-                </div>
-                <div class="form_login_div_campo">
-                    <label>Correo electrónico: </label>
-                    <input class="form_registro_input" type="text" name="input_registrate_email" id="input-registrate-email"  title="Ingresa tu correo electrónico"/><div for="input-registrate-email"></div>
-                </div>
-                <div class="form_login_div_campo">
-                    <label>Contraseña:</label>
-                    <input class="form_registro_input" type="password" name="input_registrate_contrasena" id="input-registrate-contrasena"  title="Ingresa tu contraseña"/><div for="input-registrate-contrasena"></div>
-                </div>
-                <div class="form_login_div_campo">
-                    <label>Repite tu contraseña:</label>
-                    <input class="form_registro_input" type="password" name="input_registrate_contrasena_repite" id="input-registrate-contrasena-repite"  title="Repite tu contraseña"/><div for="input-registrate-contrasena-repite"></div>
                 </div>
                 
                 <div class="form_login_div_campo">
@@ -1083,6 +1115,7 @@
             </form>
             <form id="form_vehiculo">
                 <div id="vehiculo_div_form">
+                    <input type="hidden" name="input_vehiculo_id_usuario_vehiculo" id="input_vehiculo_id_usuario_vehiculo" class="input_vehiculo_id_usuario_vehiculo form_vehiculo_input" maxlength="20"/>
                     <div class="form_login_div_campo">
                         <label>Marca: ej. Renault</label>
                         <input type="text" name="input_vehiculo_marca" id="input_vehiculo_marca" class="input_vehiculo_marca form_vehiculo_input" maxlength="20"/><div for="input_vehiculo_marca"></div>

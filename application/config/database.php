@@ -61,9 +61,9 @@ $db['CRM']['stricton'] = FALSE;
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '98.130.0.94'; 
-$db['default']['username'] = 'laspart_version2';
-$db['default']['password'] = 'V2rs34n2';
+$db['default']['hostname'] = '127.0.0.1'; 
+$db['default']['username'] = 'root';
+$db['default']['password'] = '';
 $db['default']['database'] = 'laspart_version2';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';  

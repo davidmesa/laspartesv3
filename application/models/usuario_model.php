@@ -22,7 +22,7 @@ class Usuario_model extends CI_Model {
      * @param String $email
      * @param String $lugar
      */
-    function actualizar_usuario($id_usuario, $usuario, $nombres, $apellidos, $email, $lugar) {
+    function actualizar_usuario($id_usuario, $usuario, $nombres, $apellidos, $email, $lugar, $referenciado) {
         $this->db->escape($id_usuario);
         $this->db->escape($usuario);
         $this->db->escape($nombres);
@@ -33,18 +33,21 @@ class Usuario_model extends CI_Model {
         $this->db->set('nombres', $nombres);
         $this->db->set('apellidos', $apellidos);
         $this->db->set('email', $email);
+        $this->db->set('referenciado', $referenciado);
         $this->db->set('lugar', $lugar);
         $this->db->where('id_usuario', $id_usuario);
         $this->db->update('usuarios');
         
         //agrega el usuario al CRM
-        $params = array();
-        $params['laspartes_id_usuario_c'] = $id_usuario;
-        $params['first_name'] = $nombres;
-        $params['last_name'] = $apellidos;
-        $params['email1'] = $email;
-        $params['primary_address_city'] = $lugar;
-        $this->crm->actualizar_usuario_REST($params);
+        if($referenciado != 'CRM_Activo'){
+            $params = array();
+            $params['laspartes_id_usuario_c'] = $id_usuario;
+            $params['first_name'] = $nombres;
+            $params['last_name'] = $apellidos;
+            $params['email1'] = $email;
+            $params['primary_address_city'] = $lugar;
+            $this->crm->actualizar_usuario_REST($params);
+        }
     }
 
     /**
@@ -926,6 +929,23 @@ class Usuario_model extends CI_Model {
     }
 
     /**
+     * Verifica si existe un usuario
+     * @param String $usuario
+     * @return boolean $existe true si existe
+     */
+    function existe_usuario_Referencia_CRM($usuario) {
+        $this->db->escape($usuario);
+        $this->db->where('usuario', $usuario);
+        $query = $this->db->get('usuarios');
+        if($query->row(0)->referenciado == 'CRM')
+            return $query->row(0);
+        else if ($query->num_rows() != 0)
+            return TRUE;
+        else
+            return FALSE;
+    }
+
+    /**
      * Verifica si existe un email
      * @param String $email
      * @return boolean $existe true si existe
@@ -936,6 +956,45 @@ class Usuario_model extends CI_Model {
         $query = $this->db->get('usuarios');
         if ($query->num_rows() != 0)
             return TRUE;
+        else
+            return FALSE;
+    }
+
+    /**
+     * Verifica si existe un email
+     * @param String $email
+     * @return boolean $existe true si existe
+     */
+    function existe_email_CRM($email) {
+        $this->db->escape($email);
+        $this->db->where('email', $email);
+        $query = $this->db->get('usuarios');
+        if ($query->num_rows() != 0 && $query->row(0)->referenciado !='CRM') 
+            return TRUE;
+        else
+            return FALSE;
+    }
+
+    /**
+     * Verifica si existe un email y no ha sido precreado por el CRM
+     * @param String $email
+     * @return boolean $existe true si existe
+     */
+    function existe_usuario_CRM($email) {
+        $this->db->escape($email);
+        $this->db->select('usuarios.id_usuario, usuarios.referenciado, usuarios.nombres, usuarios.apellidos, usuarios.telefonos, usuarios.email, usuarios.usuario, usuarios.lugar,
+            usuarios_vehiculos.kilometraje, usuarios_vehiculos.id_usuario_vehiculo, usuarios_vehiculos.numero_placa as placa, usuarios_vehiculos.modelo, vehiculos.marca, vehiculos.linea');        
+        $this->db->join('usuarios_vehiculos', 'usuarios.id_usuario = usuarios_vehiculos.id_usuario', 'left');
+        $this->db->join('vehiculos', 'vehiculos.id_vehiculo = usuarios_vehiculos.id_vehiculo', 'left');
+        $this->db->where('email', $email);
+        $this->db->limit(1);
+        $query = $this->db->get('usuarios');
+        if ($query->num_rows() != 0){
+            if($query->row(0)->referenciado == 'CRM')
+                return $query->row(0);
+            else
+                return TRUE;
+        }
         else
             return FALSE;
     }
@@ -1575,6 +1634,27 @@ class Usuario_model extends CI_Model {
             return "false";
         } else {
             return "true";
+        }
+    }
+
+    /**
+     * Valida que email de usuario no exista, en caso de que exista el usuario
+     * retorna false, en caso de que no exista retorna true
+     * @param string $usuario
+     * @return boolean 
+     */
+    function validar_email_existente_conCRM_ajax($email) {
+        $this->db->escape($email);
+        $this->db->where('email', $email);
+        $query = $this->db->get('usuarios');
+        if ($query->num_rows() > 0) {
+            return "false";
+        } else {
+            $referenciado = $query->row(0)->referenciado;
+            if($referenciado = 'CRM')
+                return 'false';
+            else
+                return "true";
         }
     }
 

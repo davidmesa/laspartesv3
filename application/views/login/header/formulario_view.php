@@ -60,6 +60,8 @@
             }
         });         
     });
+
+    
     
     var validator = $('form#form_registro').validate({
         rules:{
@@ -84,7 +86,7 @@
                 required: true,
                 email: true,
                 remote: {
-                    url: "<?php echo base_url(); ?>usuario/no_existe_email_ajax",
+                    url: "<?php echo base_url(); ?>usuario/no_existe_email_CRM_ajax",
                     type: "post",
                     data: {
                         email: function() {
@@ -408,6 +410,8 @@
                         return $("#input_vehiculo_modelo", form).val()
                     },input_vehiculo_placa: function () {
                         return $("#input_vehiculo_placa", form).val()
+                    },input_vehiculo_id_usuario_vehiculo: function () {
+                        return $("#input_vehiculo_id_usuario_vehiculo", form).val()
                     }
                 },
                 onsubmit: false,
@@ -477,6 +481,38 @@
                 $('#loging-div.login-div-historial').append(data);
             }
         });
+    }
+
+    //valida el correo alla sido precreado con el CRM y carga la información
+    function validar_correo(campo){
+        $.ajax({
+                url: "<?php echo base_url(); ?>usuario/dar_usuario_CRM_ajax",
+                type: "POST",
+                data: {
+                    email: function() {
+                            return $("#input-registrate-email").val();
+                        }
+                },
+                onsubmit: false,
+                success: function(data) {
+                        if(data!=='false' && data !== 'true'){
+                            console.log(data);
+                            var data = $.parseJSON(data);
+                            $("#input-registrate-nombre").val(data.nombres);
+                            $('#input-registrate-apellidos').val(data.apellidos);
+                            $('#input-registrate-telefono').val(data.telefonos);
+                            $('#input-registrate-ciudad').val(data.lugar);
+
+                            //info del carro
+                            $("#input_vehiculo_id_usuario_vehiculo").val(data.id_usuario_vehiculo);
+                            $("#input_vehiculo_marca").val(data.marca);
+                            $('#input_vehiculo_linea').val(data.linea);
+                            $('#input_vehiculo_placa').val(data.placa);
+                            $('#input_vehiculo_kilometraje').val(data.kilometraje);
+                            $('#input_vehiculo_modelo').val(data.modelo);
+                        }
+                    }
+            });
     }
 </script>
 

@@ -672,10 +672,43 @@ class Usuario extends Laspartes_Controller {
         $existe = $this->usuario_model->existe_email($email);
         if (!$existe)
             return TRUE;
-        else {
+        else if($existe){
             $this->form_validation->set_message('_no_existe_email', 'El correo electrónico dado ya se encuentra registrado.');
             return FALSE;
         }
+    }
+
+    /**
+     * Verifica si no existe un mail dado
+     * @param String $email
+     * @return boolean $no_existe_email true si no existe
+     */
+    function _no_existe_email_CRM($email) {
+        $this->load->model('usuario_model');
+        $existe = $this->usuario_model->existe_email_CRM($email);
+        if (!$existe)
+            return TRUE;
+        else if($existe){
+            $this->form_validation->set_message('_no_existe_email', 'El correo electrónico dado ya se encuentra registrado.');
+            return FALSE;
+        }
+    }
+
+    /**
+     * Da el usuario y carro asociado
+     * @param String $email
+     * @return boolean $no_existe_email true si no existe
+     */
+    function _dar_usuario_CRM($email) {
+        $this->load->model('usuario_model');
+        $existe = $this->usuario_model->existe_usuario_CRM($email);
+        if ($existe === false)
+            return TRUE;
+        else if($existe === true){
+            return FALSE;
+        }
+        else
+            return $existe;
     }
 
     /**
@@ -1834,10 +1867,66 @@ class Usuario extends Laspartes_Controller {
         else {
             $email = strtolower($this->input->post('email', TRUE));
             $resultado = $this->_no_existe_email($email);
-            if ($resultado)
+            if ($resultado === true)
                 echo 'true';
-            else
+            else if($resultado === false)
                 echo 'false';
+        }
+    }
+
+    /**
+     * Valida si NO existe un email
+     * @return String-bool $existe_email true si no existe
+     */
+    function no_existe_email_CRM_ajax() {
+        $this->load->library('form_validation');
+        $reglas = array(
+            array(
+                'field' => 'email',
+                'label' => 'correo electrónico',
+                'rules' => 'trim|required|valid_email|xss_clean'
+            )
+        );
+        $this->form_validation->set_rules($reglas);
+
+        if (!$this->form_validation->run())
+            echo 'false';
+        else {
+            $email = strtolower($this->input->post('email', TRUE));
+            $resultado = $this->_no_existe_email_CRM($email);
+            if ($resultado === true)
+                echo 'true';
+            else if($resultado === false)
+                echo 'false';
+        }
+    }
+
+    /**
+     * Valida si NO existe un email
+     * @return String-bool $existe_email true si no existe
+     */
+    function dar_usuario_CRM_ajax() {
+        $this->load->library('form_validation');
+        $reglas = array(
+            array(
+                'field' => 'email',
+                'label' => 'correo electrónico',
+                'rules' => 'trim|required|valid_email|xss_clean'
+            )
+        );
+        $this->form_validation->set_rules($reglas);
+
+        if (!$this->form_validation->run())
+            echo 'false';
+        else {
+            $email = strtolower($this->input->post('email', TRUE));
+            $resultado = $this->_dar_usuario_CRM($email);
+            if ($resultado === true)
+                echo 'true';
+            else if($resultado === false)
+                echo 'false';
+            else
+                echo json_encode($resultado);
         }
     }
 
@@ -2097,7 +2186,7 @@ class Usuario extends Laspartes_Controller {
             array(
                 'field' => 'input_registrate_email',
                 'label' => 'Correo electrónico',
-                'rules' => 'trim|required|valid_email|callback__no_existe_email|xss_clean'
+                'rules' => 'trim|required|valid_email|callback__no_existe_email_CRM|xss_clean'
             ),
             array(
                 'field' => 'input_registrate_contrasena',
@@ -2136,14 +2225,23 @@ class Usuario extends Laspartes_Controller {
             $email = strtolower($this->input->post('input_registrate_email', TRUE));
             list($usuario, $dominio) = split('@', $email);
             $this->load->model('usuario_model');
-            $existe = $this->usuario_model->existe_usuario($usuario);
-            if ($existe)
+            $existe = $this->usuario_model->existe_usuario_Referencia_CRM($usuario);
+            if ($existe === true)
                 $usuario = $this->_generar_usuario($usuario);
+            else{
+                $usuarioPrecreado = $existe;
+                $id_usuario = $usuarioPrecreado->id_usuario; 
+            }
+                
             $telefono = $this->input->post('input_registrate_telefono', TRUE);
             $ciudad = $this->input->post('ciudad_registrarse', TRUE);
             $contrasena_simple = $this->input->post('input_registrate_contrasena', TRUE);
             $contrasena = sha1($this->input->post('input_registrate_contrasena', TRUE));
-            $id_usuario = $this->usuario_model->agregar_usuario($nombre, $apellidos, $usuario, $email, $contrasena, $ciudad, 30, $referenciado, "Colombia", $telefono);
+            if(isset($usuarioPrecreado)){
+                $this->usuario_model->actualizar_usuario($usuarioPrecreado->id_usuario, $usuarioPrecreado->usuario, $nombre, $apellidos, $email, $ciudad, 'CRM_Activo');
+                $this->usuario_model->actualizar_usuario_contrasena($id_usuario, $contrasena);
+            }else
+                $id_usuario = $this->usuario_model->agregar_usuario($nombre, $apellidos, $usuario, $email, $contrasena, $ciudad, 30, $referenciado, "Colombia", $telefono);
 
             $usuario = $this->usuario_model->dar_usuario($id_usuario);
             $this->load->model('usuario_model');
@@ -3543,6 +3641,11 @@ class Usuario extends Laspartes_Controller {
                     'field' => 'input_vehiculo_placa',
                     'label' => 'Placa',
                     'rules' => 'trim|xss_clean|max_length[7]'
+                ),
+                array(
+                    'field' => 'input_vehiculo_id_usuario_vehiculo',
+                    'label' => 'Placa',
+                    'rules' => 'trim|xss_clean'
                 )
             );
             $this->form_validation->set_rules($reglas);
@@ -3552,6 +3655,7 @@ class Usuario extends Laspartes_Controller {
                 echo 'false|' . validation_errors();
             } else {
                 $this->load->helper('date');
+                $id_usuario_vehiculo_precreado =$this->input->get_post('input_vehiculo_id_usuario_vehiculo', TRUE);
                 $marca = $this->input->get_post('input_vehiculo_marca', TRUE);
                 $linea = $this->input->get_post('input_vehiculo_linea', TRUE);
                 $modelo = $this->input->get_post('input_vehiculo_modelo', TRUE);
@@ -3566,13 +3670,19 @@ class Usuario extends Laspartes_Controller {
 
                 $vehiculo = $this->vehiculo_model->existe_vehiculo_marca_linea($marca, $linea);
 
-                if ($vehiculo != false)
-                    $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $vehiculo->id_vehiculo, '', $modelo, $kilometraje, '', $placa);
-                else {
+                if ($vehiculo != false){
+                    if(empty($id_usuario_vehiculo_precreado))
+                        $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $vehiculo->id_vehiculo, '', $modelo, $kilometraje, '', $placa);
+                    else
+                        $this->usuario_model->actualizar_vehiculo_usuario($id_usuario_vehiculo_precreado, $vehiculo->id_vehiculo, "", $modelo, $kilometraje , $serie, $placa );
+                }else {
 
                     $nuevoVehiculo = $this->vehiculo_model->agregar_vehiculo($marca, $linea);
-                    $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $nuevoVehiculo, '', $modelo, $kilometraje, '', $placa);
-
+                    if(empty($id_usuario_vehiculo_precreado))
+                        $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $nuevoVehiculo, '', $modelo, $kilometraje, '', $placa);
+                    else
+                        $this->usuario_model->actualizar_vehiculo_usuario($id_usuario_vehiculo_precreado, $vehiculo->id_vehiculo, "", $modelo, $kilometraje , $serie, $placa );
+                    
                     $destinatario = new stdClass();
                     $destinatario->email = 'tallerenlinea@laspartes.com.co';
                     $destinatarios[] = $destinatario;
@@ -4615,6 +4725,12 @@ class Usuario extends Laspartes_Controller {
         // $params['primary_address_country'] = 'Colombia';
         // $params['phone_home'] = '232332';
         // $this->crm->agregar_usuario_REST($params);
+    }
+
+    function noemail(){
+        $this->load->model('usuario_model');
+        var_dump($this->_no_existe_email('NUEVOUSER4@USER.COM'));
+        // var_dump($this->usuario_model->existe_email_noCRM('NUEVOUSER4@USER.COM') );
     }
 
 }

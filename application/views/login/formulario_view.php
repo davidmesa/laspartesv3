@@ -80,6 +80,18 @@
 
                                 <form id="form_registro">
                                     <div class="form_login_div_campo">
+                                        <label>Correo electrónico: </label>
+                                        <input class="form_registro_input" onblur="validar_correo(this)"  type="text" name="input_registrate_email" id="input-registrate-email"  title="Ingresa tu correo electrónico"/><div for="input-registrate-email"></div>
+                                    </div>
+                                    <div class="form_login_div_campo">
+                                        <label>Contraseña:</label>
+                                        <input class="form_registro_input" type="password" name="input_registrate_contrasena" id="input-registrate-contrasena"  title="Ingresa tu contraseña"/><div for="input-registrate-contrasena"></div>
+                                    </div>
+                                    <div class="form_login_div_campo">
+                                        <label>Repite tu contraseña:</label>
+                                        <input class="form_registro_input" type="password" name="input_registrate_contrasena_repite" id="input-registrate-contrasena-repite"  title="Repite tu contraseña"/><div for="input-registrate-contrasena-repite"></div>
+                                    </div>
+                                    <div class="form_login_div_campo">
                                         <label>Nombres:</label>
                                         <input class="form_registro_input" type="text" name="input_registrate_nombre" id="input-registrate-nombre" title="Ingresa tus nombres"/><div for="input-registrate-nombre"></div>
                                     </div>
@@ -107,18 +119,6 @@
                                         }
                                         echo form_dropdown('ciudad_registrarse', $option_ciudades, 'Bogotá', 'id="input-registrate-ciudad" title="En qué ciudad vives" class="form_registro_ie_select"'); //, 'id="marca_registrarse"');
                                         ?>
-                                    </div>
-                                    <div class="form_login_div_campo">
-                                        <label>Correo electrónico: </label>
-                                        <input class="form_registro_input" type="text" name="input_registrate_email" id="input-registrate-email"  title="Ingresa tu correo electrónico"/><div for="input-registrate-email"></div>
-                                    </div>
-                                    <div class="form_login_div_campo">
-                                        <label>Contraseña:</label>
-                                        <input class="form_registro_input" type="password" name="input_registrate_contrasena" id="input-registrate-contrasena"  title="Ingresa tu contraseña"/><div for="input-registrate-contrasena"></div>
-                                    </div>
-                                    <div class="form_login_div_campo">
-                                        <label>Repite tu contraseña:</label>
-                                        <input class="form_registro_input" type="password" name="input_registrate_contrasena_repite" id="input-registrate-contrasena-repite"  title="Repite tu contraseña"/><div for="input-registrate-contrasena-repite"></div>
                                     </div> 
                                     <div class="form_login_div_campo">
                                         <label>Escribe los 4 dígitos de la imagen:</label>
@@ -168,6 +168,7 @@
                                 </form>
                                 <form id="form_vehiculo">
                                     <div id="vehiculo_div_form">
+                                        <input type="hidden" name="input_vehiculo_id_usuario_vehiculo" id="input_vehiculo_id_usuario_vehiculo" class="input_vehiculo_id_usuario_vehiculo form_vehiculo_input" maxlength="20"/>
                                         <div class="form_login_div_campo">
                                             <label>Marca: ej. Renault</label>
                                             <input type="text" name="input_vehiculo_marca" id="input_vehiculo_marca" class="input_vehiculo_marca form_vehiculo_input" maxlength="20"/><div for="input_vehiculo_marca"></div>
