@@ -189,9 +189,12 @@ margin-right: auto;}
 
 #quisiste_decir{
     text-decoration: underline;
-    font-size: 12px;
+    font-size: 18px;
     color: #ef0600;
     cursor: pointer;
+    font-style: italic;
+    font-weight: bold;
+    width: 270px;
 }
 
 .form_login_input

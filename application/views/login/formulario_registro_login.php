@@ -481,9 +481,12 @@
 
     #quisiste_decir{
         text-decoration: underline;
-        font-size: 12px;
+        font-size: 18px;
         color: #ef0600;
         cursor: pointer;
+        font-style: italic;
+        font-weight: bold;
+        width: 270px;
     }
 </style>
 <style>
@@ -1255,10 +1258,10 @@ $('#input-vehiculo-submit').attr('disabled', 'disabled');
                         <input type="text" name="input_vehiculo_linea" id="input_vehiculo_linea" class="input_vehiculo_linea form_vehiculo_input" maxlength="30"/><div for="input_vehiculo_linea"></div>
                     </div>
                     <div class="form_login_div_campo div_quisiste_decir">
-                        <label>Quisiste decir: </label>
+                        <label style="font-size: 15px;">Quisiste decir: </label>
                         <input type="hidden" id="quisiste_decir_marca">
                         <input type="hidden" id="quisiste_decir_linea">
-                        <span id="quisiste_decir" onclick="carro_sugerido()"></span>
+                        <div id="quisiste_decir" onclick="carro_sugerido()"></div>
                     </div>
                     <div class="form_login_div_campo">
                         <label>Placa: (*opcional)</label>
