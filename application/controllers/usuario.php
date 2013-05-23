@@ -2228,7 +2228,7 @@ class Usuario extends Laspartes_Controller {
             $existe = $this->usuario_model->existe_usuario_Referencia_CRM($usuario);
             if ($existe === true)
                 $usuario = $this->_generar_usuario($usuario);
-            else{
+            else if ($existe !== false && $existe !== true){
                 $usuarioPrecreado = $existe;
                 $id_usuario = $usuarioPrecreado->id_usuario; 
             }
@@ -2238,7 +2238,7 @@ class Usuario extends Laspartes_Controller {
             $contrasena_simple = $this->input->post('input_registrate_contrasena', TRUE);
             $contrasena = sha1($this->input->post('input_registrate_contrasena', TRUE));
             if(isset($usuarioPrecreado)){
-                $this->usuario_model->actualizar_usuario($usuarioPrecreado->id_usuario, $usuarioPrecreado->usuario, $nombre, $apellidos, $email, $ciudad, 'CRM_Activo');
+                $this->usuario_model->actualizar_usuario($usuarioPrecreado->id_usuario, $usuarioPrecreado->usuario, $nombre, $apellidos, $email, $ciudad, 'CRM_Activo', 'Activo');
                 $this->usuario_model->actualizar_usuario_contrasena($id_usuario, $contrasena);
             }else
                 $id_usuario = $this->usuario_model->agregar_usuario($nombre, $apellidos, $usuario, $email, $contrasena, $ciudad, 30, $referenciado, "Colombia", $telefono);
@@ -3625,7 +3625,7 @@ class Usuario extends Laspartes_Controller {
                 array(
                     'field' => 'input_vehiculo_linea',
                     'label' => 'Línea',
-                    'rules' => 'trim|required|xss_clean|max_length[40]'
+                    'rules' => 'trim|required|xss_clean|max_length[50]'
                 ),
                 array(
                     'field' => 'input_vehiculo_kilometraje',
@@ -3682,7 +3682,7 @@ class Usuario extends Laspartes_Controller {
                         $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $nuevoVehiculo, '', $modelo, $kilometraje, '', $placa);
                     else
                         $this->usuario_model->actualizar_vehiculo_usuario($id_usuario_vehiculo_precreado, $vehiculo->id_vehiculo, "", $modelo, $kilometraje , $serie, $placa );
-                    
+
                     $destinatario = new stdClass();
                     $destinatario->email = 'tallerenlinea@laspartes.com.co';
                     $destinatarios[] = $destinatario;
@@ -4442,6 +4442,11 @@ class Usuario extends Laspartes_Controller {
                 send_mail($destinatarios, "[LasPartes.com] Gracias por registrarte con nosotros", $contenidoHTML, "", $fileName);
             } else {
                 $usuario = $this->usuario_model->dar_usuario_segun_mail($fb_data['me']['email']);
+                if($usuario->referenciado == 'CRM' && $usuario->estado == 'precreado'){
+                    $this->usuario_model->actualizar_usuario($usuario->id_usuario, $usuario->usuario, $usuario->nombres, $usuario->apellidos, $usuario->email, $usuario->lugar, 'CRM_Activo', 'Activo'); 
+                    $this->usuario_model->actualizar_usuario_contrasena($usuario->id_usuario, sha1($usuario->usuario));
+                }
+                    
                 if ($usuario->imagen_url == '') {
                     $this->usuario_model->actualizar_usuario_imagen_url($usuario->id_usuario, 'https://graph.facebook.com/' . $fb_data['me']['username'] . '/picture?type=large');
                 }
@@ -4727,10 +4732,108 @@ class Usuario extends Laspartes_Controller {
         // $this->crm->agregar_usuario_REST($params);
     }
 
-    function noemail(){
-        $this->load->model('usuario_model');
-        var_dump($this->_no_existe_email('NUEVOUSER4@USER.COM'));
-        // var_dump($this->usuario_model->existe_email_noCRM('NUEVOUSER4@USER.COM') );
+    /**
+     * Busca el vehículo que esté más acorde con el dado
+     * @return [type] [description]
+     */
+    function buscar_vehiculo_similar($vehiculo_ingresado){
+        $this->load->model('vehiculo_model');
+        $vehiculos= $this->vehiculo_model->dar_vehiculos();
+        $shortest = -1;
+        $closest = -1;
+        $vehiculo_seleccionado;
+        $vehiculo_ingresado = strtolower($vehiculo_ingresado);
+        foreach ($vehiculos as $vehiculo ){
+            $word = strtolower($vehiculo->marca. ' '.$vehiculo->linea);
+            // calculate the distance between the input word,
+            // and the current word
+            $lev = levenshtein($vehiculo_ingresado, $word);
+
+            // check for an exact match
+            if ($lev == 0) {
+
+                // closest word is this one (exact match)
+                $closest = $word;
+                $shortest = 0;
+
+                // break out of the loop; we've found an exact match
+                break;
+            }
+
+            // if this distance is less than the next found shortest
+            // distance, OR if a next shortest word has not yet been found
+            if ($lev <= $shortest || $shortest < 0) {
+                $vehiculo_seleccionado = $vehiculo;
+                echo 'compara: '.$vehiculo_ingresado.' vs. '.$word.': ';
+                // set the closest match, and shortest distance
+                $closest  = $word;
+                $shortest = $lev; echo $shortest.'<br/>';
+            }
+        }
+
+        echo "vehiculo_ingresado word: $vehiculo_ingresado<br/>";
+        if ($shortest <= 1) {
+            echo "Exact match found: $closest levenshtein: $shortest<br/>";
+        } else {
+            echo "Did you mean: $closest? levenshtein: $shortest<br/>";
+        }
     }
+
+    /**
+     * Busca el vehículo que esté más acorde con el dado
+     * @return [type] [description]
+     */
+    function buscar_vehiculo_similar_ajax(){
+        $this->load->model('vehiculo_model');
+        $vehiculos= $this->vehiculo_model->dar_vehiculos();
+        $shortest = -1;
+        $closest = -1;
+        $proba = -1;
+        $vehiculo_similar;
+        $vehiculos_seleccionados = array();
+        $vehiculo_ingresado = strtolower($this->input->post('vehiculo', TRUE));
+        foreach ($vehiculos as $vehiculo ){
+            $word = strtolower($vehiculo->marca.' '.$vehiculo->linea);
+            // calculate the distance between the input word,
+            // and the current word
+            $lev = levenshtein($vehiculo_ingresado, $word);
+
+            // check for an exact match
+            if ($lev == 0) {
+
+                // closest word is this one (exact match)
+                $closest = $word;
+                $shortest = 0;
+
+                // break out of the loop; we've found an exact match
+                break;
+            }
+
+            // if this distance is less than the next found shortest
+            // distance, OR if a next shortest word has not yet been found
+            if ($lev < $shortest || $shortest < 0) {
+                $vehiculos_seleccionados = array();
+                $vehiculos_seleccionados[] =  $vehiculo;
+                // set the closest match, and shortest distance
+                $closest  = $word;
+                $shortest = $lev;
+            }else if($lev == $shortest){
+                $vehiculos_seleccionados[] =  $vehiculo;
+            }
+        }
+       
+        if ($shortest <= 0) {
+            echo 'true';
+        } else {
+             foreach ($vehiculos_seleccionados as $vehiculo_seleccionado) {
+                $marca_linea_seleccionado = strtolower($vehiculo_seleccionado->marca.' '.$vehiculo_seleccionado->linea);
+                $sim = similar_text($vehiculo_ingresado, $marca_linea_seleccionado);
+                if($sim > $proba)
+                    $vehiculo_similar = $vehiculo_seleccionado;
+            }
+            echo json_encode($vehiculo_similar);
+        }
+    }
+
 
 }

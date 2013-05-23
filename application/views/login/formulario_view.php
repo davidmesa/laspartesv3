@@ -168,6 +168,7 @@
                                 </form>
                                 <form id="form_vehiculo">
                                     <div id="vehiculo_div_form">
+                                        <input type="hidden" id="nuevo_carro" value="1">
                                         <input type="hidden" name="input_vehiculo_id_usuario_vehiculo" id="input_vehiculo_id_usuario_vehiculo" class="input_vehiculo_id_usuario_vehiculo form_vehiculo_input" maxlength="20"/>
                                         <div class="form_login_div_campo">
                                             <label>Marca: ej. Renault</label>
@@ -175,7 +176,13 @@
                                         </div>
                                         <div class="form_login_div_campo">
                                             <label>Línea: ej. logan</label>
-                                            <input type="text" name="input_vehiculo_linea" id="input_vehiculo_linea" class="input_vehiculo_linea form_vehiculo_input" maxlength="30"/><div for="input_vehiculo_linea"></div>
+                                            <input type="text" name="input_vehiculo_linea" id="input_vehiculo_linea" class="input_vehiculo_linea form_vehiculo_input" maxlength="50"/><div for="input_vehiculo_linea"></div>
+                                        </div>
+                                        <div class="form_login_div_campo div_quisiste_decir">
+                                            <label>Quisiste decir: </label>
+                                            <input type="hidden" id="quisiste_decir_marca">
+                                            <input type="hidden" id="quisiste_decir_linea">
+                                            <span id="quisiste_decir" onclick="carro_sugerido()"></span>
                                         </div>
                                         <div class="form_login_div_campo">
                                             <label>Placa: (*opcional)</label>

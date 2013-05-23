@@ -474,6 +474,17 @@
     .div-registrate-submit{
         position: relative;
     }
+
+    .div_quisiste_decir{
+    display: none;
+    }
+
+    #quisiste_decir{
+        text-decoration: underline;
+        font-size: 12px;
+        color: #ef0600;
+        cursor: pointer;
+    }
 </style>
 <style>
 
@@ -514,6 +525,7 @@
             source: vehiculosMarca,
             change: function(e, ui){
                 $('#input_vehiculo_linea').val('');
+                $('#nuevo_carro').val(1);
             },select: function(e, ui) {
                 $('#input_vehiculo_linea').val('');
                 var marca_actual = ui.item.value;
@@ -525,8 +537,12 @@
                     success: function(data){
                         var lineas = $.parseJSON(data);
                         $("#input_vehiculo_linea").autocomplete({
-                            source: lineas
+                            source: lineas,
+                            select: function(){
+                                $('#nuevo_carro').val(0);
+                            }
                         });
+
                     }
                 });    
             }
@@ -868,52 +884,156 @@
             validator.focusInvalid()
         },
         submitHandler: function (form) {
-            $(form).bind('click');
-            $('.ajax_img_loader', form).show();
-            $.ajax({
-                url: "<?php echo base_url(); ?>usuario/agregar_vehiculo_registro_ajax",
-                type: "POST",
-                data: {
-                    input_vehiculo_marca: function () {
-                        return $("#input_vehiculo_marca", form).val()
-                    },input_vehiculo_linea: function () {
-                        return $("#input_vehiculo_linea", form).val()
-                    },input_vehiculo_kilometraje: function () {
-                        return $("#input_vehiculo_kilometraje", form).val()
-                    },input_vehiculo_modelo: function () {
-                        return $("#input_vehiculo_modelo", form).val()
-                    },input_vehiculo_placa: function () {
-                        return $("#input_vehiculo_placa", form).val()
-                    }
-                },
-                onsubmit: false,
-                success: function (data) {
-                    if (data == 'true') {
-                        try{
-                            var imagen = $("#input_vehiculo_imagen").val();
-                            if( imagen != "" || imagen != null){
-                                subirFotoVehiculo();
+            var marca = $("#input_vehiculo_marca", form).val();
+            var linea = $("#input_vehiculo_linea", form).val(); 
+            var nuevo_carro = $('#nuevo_carro').val();
+            if(nuevo_carro == 1){
+                confirmNO('El carro <strong>'+ marca+' '+linea+'</strong> no aparece en el sistema, está seguro que desea registrar este carro', function () {
+                    $(form).bind('click');
+                    $('.ajax_img_loader', form).show();
+                    $.ajax({
+                        url: "<?php echo base_url(); ?>usuario/agregar_vehiculo_registro_ajax",
+                        type: "POST",
+                        data: {
+                            input_vehiculo_marca: function () {
+                                return $("#input_vehiculo_marca", form).val()
+                            },input_vehiculo_linea: function () {
+                                return $("#input_vehiculo_linea", form).val()
+                            },input_vehiculo_kilometraje: function () {
+                                return $("#input_vehiculo_kilometraje", form).val()
+                            },input_vehiculo_modelo: function () {
+                                return $("#input_vehiculo_modelo", form).val()
+                            },input_vehiculo_placa: function () {
+                                return $("#input_vehiculo_placa", form).val()
                             }
-                            //según el carro registrado, se carga la hoja de mto
-                            cargarHojaMto();
-                            
-                            //se muestra la vista de hoja de mto
-                            $('.login-div-vehiculo').hide();
-                            $('.login-div-historial').show();
-                        }catch(e){
-                            //según el carro registrado, se carga la hoja de mto
-                            cargarHojaMto();
-                            $('.login-div-vehiculo').hide();
-                            $('.login-div-historial').show();
+                        },
+                        onsubmit: false,
+                        success: function (data) {
+                            if (data == 'true') {
+                                try{
+                                    var imagen = $("#input_vehiculo_imagen").val();
+                                    if( imagen != "" || imagen != null){
+                                        subirFotoVehiculo();
+                                    }
+                                    //según el carro registrado, se carga la hoja de mto
+                                    cargarHojaMto();
+                                    
+                                    //se muestra la vista de hoja de mto
+                                    $('.login-div-vehiculo').hide();
+                                    $('.login-div-historial').show();
+                                }catch(e){
+                                    //según el carro registrado, se carga la hoja de mto
+                                    cargarHojaMto();
+                                    $('.login-div-vehiculo').hide();
+                                    $('.login-div-historial').show();
+                                }
+                                $('#ajax_loadingDiv').hide();
+                            } else{
+                                alert((data.split('|'))[1]);
+                            }
                         }
-                        $('#ajax_loadingDiv').hide();
-                    } else{
-                        alert((data.split('|'))[1]);
+                    });
+                    $('.ajax_img_loader', form).hide();
+                    $(form).unbind('click');
+                    $.modal.close();
+                });
+            }else{
+                $(form).bind('click');
+                    $('.ajax_img_loader', form).show();
+                    $.ajax({
+                        url: "<?php echo base_url(); ?>usuario/agregar_vehiculo_registro_ajax",
+                        type: "POST",
+                        data: {
+                            input_vehiculo_marca: function () {
+                                return $("#input_vehiculo_marca", form).val()
+                            },input_vehiculo_linea: function () {
+                                return $("#input_vehiculo_linea", form).val()
+                            },input_vehiculo_kilometraje: function () {
+                                return $("#input_vehiculo_kilometraje", form).val()
+                            },input_vehiculo_modelo: function () {
+                                return $("#input_vehiculo_modelo", form).val()
+                            },input_vehiculo_placa: function () {
+                                return $("#input_vehiculo_placa", form).val()
+                            }
+                        },
+                        onsubmit: false,
+                        success: function (data) {
+                            if (data == 'true') {
+                                try{
+                                    var imagen = $("#input_vehiculo_imagen").val();
+                                    if( imagen != "" || imagen != null){
+                                        subirFotoVehiculo();
+                                    }
+                                    //según el carro registrado, se carga la hoja de mto
+                                    cargarHojaMto();
+                                    
+                                    //se muestra la vista de hoja de mto
+                                    $('.login-div-vehiculo').hide();
+                                    $('.login-div-historial').show();
+                                }catch(e){
+                                    //según el carro registrado, se carga la hoja de mto
+                                    cargarHojaMto();
+                                    $('.login-div-vehiculo').hide();
+                                    $('.login-div-historial').show();
+                                }
+                                $('#ajax_loadingDiv').hide();
+                            } else{
+                                alert((data.split('|'))[1]);
+                            }
+                        }
+                    });
+                $('.ajax_img_loader', form).hide();
+                $(form).unbind('click');
+            }
+        }
+    });
+
+$('#input-vehiculo-submit').attr('disabled', 'disabled');
+    $('#form_vehiculo').bind('submit',function(e){e.preventDefault();});
+    var globalTimeout = null;  
+    //Busca la referencia del carro más parecida
+    $('#input_vehiculo_marca, #input_vehiculo_linea').change(function() {
+        $('#input-vehiculo-submit', this).attr('disabled', 'disabled');
+        $('#form_vehiculo').bind('submit',function(e){e.preventDefault();});
+
+        var marca = $('#input_vehiculo_marca').val();
+        var linea = $('#input_vehiculo_linea').val();
+        if(marca.length > 0 && linea.length > 0){
+            if (globalTimeout != null) {
+                clearTimeout(globalTimeout);
+              }
+              globalTimeout = setTimeout(function() {
+                globalTimeout = null;  
+
+                $.ajax({
+                    url: "<?php echo base_url(); ?>usuario/buscar_vehiculo_similar_ajax",
+                    type: "POST",
+                    data: {
+                        vehiculo: marca+' '+linea
+                    },
+                    onsubmit: false,
+                    success: function(data, status){
+                        if(data !== 'true'){
+                            data = JSON.parse(data); 
+                            var carro = data.marca +' '+ data.linea;
+                            $('#quisiste_decir').text(carro);
+                            $('#quisiste_decir_marca').val(data.marca);
+                            $('#quisiste_decir_linea').val(data.linea);
+                            $('.div_quisiste_decir').css('display', 'block');
+                            $('#nuevo_carro').val(1);
+                        }else{
+                            $('.div_quisiste_decir').css('display', 'none');
+                            $('#nuevo_carro').val(0);
+                        }
+
+                        $('#input-vehiculo-submit').removeAttr('disabled', 'disabled');
+                        // $('#form_vehiculo').unbind('submit');
                     }
-                }
-            });
-            $('.ajax_img_loader', form).hide();
-            $(form).unbind('click');
+                });
+
+              }, 1000);  
+        }else{
+           clearTimeout(globalTimeout); 
         }
     });
     
@@ -950,6 +1070,15 @@
                 $('#loging-div.login-div-historial').append(data);
             }
         });
+    }
+
+    //al dar click en el carro sugerido se carga la información de ese carro
+    function carro_sugerido(){
+        var marca = $('#quisiste_decir_marca').val();
+        var linea = $('#quisiste_decir_linea').val();
+        $("#input_vehiculo_marca").val(marca);
+        $("#input_vehiculo_linea").val(linea);
+        $('#nuevo_carro').val(0);
     }
 
     //valida el correo alla sido precreado con el CRM y carga la información
@@ -1115,6 +1244,7 @@
             </form>
             <form id="form_vehiculo">
                 <div id="vehiculo_div_form">
+                    <input type="hidden" id="nuevo_carro" value="1">                    
                     <input type="hidden" name="input_vehiculo_id_usuario_vehiculo" id="input_vehiculo_id_usuario_vehiculo" class="input_vehiculo_id_usuario_vehiculo form_vehiculo_input" maxlength="20"/>
                     <div class="form_login_div_campo">
                         <label>Marca: ej. Renault</label>
@@ -1123,6 +1253,12 @@
                     <div class="form_login_div_campo">
                         <label>Línea: ej. logan</label>
                         <input type="text" name="input_vehiculo_linea" id="input_vehiculo_linea" class="input_vehiculo_linea form_vehiculo_input" maxlength="30"/><div for="input_vehiculo_linea"></div>
+                    </div>
+                    <div class="form_login_div_campo div_quisiste_decir">
+                        <label>Quisiste decir: </label>
+                        <input type="hidden" id="quisiste_decir_marca">
+                        <input type="hidden" id="quisiste_decir_linea">
+                        <span id="quisiste_decir" onclick="carro_sugerido()"></span>
                     </div>
                     <div class="form_login_div_campo">
                         <label>Placa: (*opcional)</label>

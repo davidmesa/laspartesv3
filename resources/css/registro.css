@@ -183,6 +183,17 @@ margin-right: auto;}
     width: 255px;	
 }
 
+.div_quisiste_decir{
+    display: none;
+}
+
+#quisiste_decir{
+    text-decoration: underline;
+    font-size: 12px;
+    color: #ef0600;
+    cursor: pointer;
+}
+
 .form_login_input
 { width:200px;}
 
@@ -311,7 +322,7 @@ margin-right: auto;}
     font-family:open_sansregular;
     padding-left: 30px; 
     float: left; 
-    margin-left: 50px;	
+    margin-left: 30px;	
 }
 
 #form_vehiculo input 

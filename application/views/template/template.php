@@ -34,7 +34,7 @@
             <link rel="stylesheet" href="<?php echo base_url(); ?>resources/css/fonts.css" type="text/css" charset="utf-8" />
             <link href="<?php echo base_url(); ?>resources/css/confirm.css" rel="stylesheet" type="text/css" />
 
-            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script> 
+            <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery-1.6.1.min.js"></script> 
             <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery-ui-1.8.23.custom.min.js"></script>
             <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery.validate.js"></script>
             <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery.simplemodal.js"></script>
@@ -70,12 +70,24 @@
             <!-- modal content -->
             <div id='confirm'>
                 <div class='header'><span>Mensaje de http://www.laspartes.com/</span></div>
-                <div class='message'></div>
+                <div class='message' id="message"></div>
                 <div class='buttons'>
-                    <div class='yes'>Aceptar</div>
+                    <div class='yes' id="yes">Aceptar</div>
                 </div>
             </div>
-            <div id="ajax_loadingDiv"></div> 
+
+            <div id='confirmNO'>
+                <div class='header'><span>Mensaje de http://www.laspartes.com/</span></div>
+                <div class='message' id="messageNO"></div>
+                <div class='buttons'>
+                    <div class='yes' id="yesNO">Aceptar</div><div class='no simplemodal-close'>Cancelar</div>
+                </div>
+            </div>
+
+
+            <div id="ajax_loadingDiv"></div>
+
+            
 
 
 
@@ -327,6 +339,32 @@
             });
             }
 
+            function confirmNO(message, callback) {
+                $('#confirmNO').modal({
+                    closeHTML: "<a href='#' title='Close' class='modal-close'>x</a>",
+                    position: ["20%",],
+                    overlayId: 'confirm-overlay',
+                    containerId: 'confirm-container', 
+                    onShow: function (dialog) {
+                        var modal = this;
+
+                        $('#messageNO', dialog.data[0]).append(message);
+
+                        // if the user clicks "yes"
+                        $('#yesNO', dialog.data[0]).click(function () {
+                            // call the callback
+                            if ($.isFunction(callback)) {
+                                callback.apply();
+                            }
+                            // close the dialog
+                            modal.close(); // or $.modal.close();
+                        });
+                    }
+                });
+                $('.simplemodal-container').css('height', 'auto');
+            }
+
+
             function confirm(message, callback) {
                 $('#confirm').modal({
                     closeHTML: "<a href='#' title='Close' class='modal-close'>x</a>",
@@ -336,10 +374,10 @@
                     onShow: function (dialog) {
                         var modal = this;
 
-                        $('.message', dialog.data[0]).append(message);
+                        $('#message', dialog.data[0]).append(message);
 
                         // if the user clicks "yes"
-                        $('.yes', dialog.data[0]).click(function () {
+                        $('#yes', dialog.data[0]).click(function () {
                             // call the callback
                             if ($.isFunction(callback)) {
                                 callback.apply();

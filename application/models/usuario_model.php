@@ -22,7 +22,7 @@ class Usuario_model extends CI_Model {
      * @param String $email
      * @param String $lugar
      */
-    function actualizar_usuario($id_usuario, $usuario, $nombres, $apellidos, $email, $lugar, $referenciado) {
+    function actualizar_usuario($id_usuario, $usuario, $nombres, $apellidos, $email, $lugar, $referenciado, $estado) {
         $this->db->escape($id_usuario);
         $this->db->escape($usuario);
         $this->db->escape($nombres);
@@ -35,6 +35,7 @@ class Usuario_model extends CI_Model {
         $this->db->set('email', $email);
         $this->db->set('referenciado', $referenciado);
         $this->db->set('lugar', $lugar);
+        $this->db->set('estado', $estado);
         $this->db->where('id_usuario', $id_usuario);
         $this->db->update('usuarios');
         
@@ -319,7 +320,7 @@ class Usuario_model extends CI_Model {
         $this->db->insert('usuarios');
         $insertedID = mysql_insert_id();
         
-        //agrega el usuario al CRM
+        // agrega el usuario al CRM
         $params = array();
         $params['laspartes_id_usuario_c'] = $insertedID;
         $params['first_name'] = $nombre;
@@ -1048,6 +1049,7 @@ class Usuario_model extends CI_Model {
         $this->db->escape($email);
         $this->db->where('email', $email);
         $this->db->where('estado', 'Activo');
+        $this->db->or_where('estado', 'precreado');
         $this->db->limit(1);
         $query = $this->db->get('usuarios');
         if ($query->num_rows() == 0)

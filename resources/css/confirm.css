@@ -9,6 +9,7 @@
  */
 
 #confirm {display:none;}
+#confirmNO {display:none;}
 
 /* Overlay */
 #confirm-overlay {background-color:#eee;}
