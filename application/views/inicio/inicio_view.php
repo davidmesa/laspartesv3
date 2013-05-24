@@ -32,11 +32,12 @@
                                 <div id="noticia-baner-encuentra-registrate"><a href="<?php echo base_url();?>registro">REGISTRATE AHORA</a></div>
                             </div>
                             <a class="slides_container_a" href="<?php echo base_url();?>acerca/contactenos_taller" title="Registra tu taller"><img src="<?php echo base_url(); ?>resources/images/home/noticias/baner1.png" width="980" height="365" alt="imagen de registro de talleres"></a>x
+                            <a class="slides_container_a" target="_blank" href="https://www.carromania.com" title="Carromania.com"><img src="<?php echo base_url(); ?>resources/images/home/noticias/banner-carromania.jpg" width="980" height="365" alt="carromania.com"></a>
                         </div>
 
                         <a href="#" class="prev"><img src="<?php echo base_url(); ?>resources/images/home/arrow-prev.png" width="24" height="43" alt="Arrow Prev"></a>
                         <a href="#" class="next"><img src="<?php echo base_url(); ?>resources/images/home/arrow-next.png" width="24" height="43" alt="Arrow Next"></a>
-
+                        
                     </div>
 
                 </div>
