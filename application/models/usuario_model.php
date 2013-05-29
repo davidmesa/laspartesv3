@@ -148,7 +148,7 @@ class Usuario_model extends CI_Model {
      * @param int $kilometraje
      * @param int $serie
      */
-    function actualizar_vehiculo_usuario($id_usuario_vehiculo, $id_vehiculo = -1, $nombre = -1, $modelo = -1, $kilometraje = -1, $serie = -1, $placa = -1) {
+    function actualizar_vehiculo_usuario($id_usuario_vehiculo, $id_vehiculo , $nombre, $modelo , $kilometraje , $serie , $placa , $extra_params) {
         $this->db->escape($id_usuario_vehiculo);
         $this->db->escape($id_vehiculo);
         $this->db->escape($serie);
@@ -156,19 +156,24 @@ class Usuario_model extends CI_Model {
         $this->db->escape($modelo);
         $this->db->escape($kilometraje);
         $this->db->escape($placa);
-        if ($id_vehiculo != -1)
+        $this->db->escape($extra_params);
+        if (!empty($id_vehiculo))
             $this->db->set('id_vehiculo', $id_vehiculo);
-        if ($serie != -1)
+        if (!empty($serie))
             $this->db->set('serie', $serie);
-        if ($nombre != -1)
+        if (!empty($nombre))
             $this->db->set('nombre', $nombre);
-        if ($modelo != -1)
+        if (!empty($modelo))
             $this->db->set('modelo', $modelo);
-        if ($kilometraje != -1)
+        if (!empty($kilometraje))
             $this->db->set('kilometraje', $kilometraje);
-        if ($placa != -1)
+        if (!empty($placa))
             $this->db->set('numero_placa', $placa);
         $this->db->set('fecha', 'curdate()', FALSE);
+
+        foreach ($extra_params as $key => $value) {
+           $this->db->set($key, $value); 
+        }
         $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
         $this->db->update('usuarios_vehiculos');
         
@@ -839,10 +844,14 @@ class Usuario_model extends CI_Model {
      */
     function dar_vehiculos_usuario($id_usuario) {
         $this->db->escape($id_usuario);
-        $this->db->select('id_usuario_vehiculo, serie, nombre, modelo, kilometraje, fecha, imagen_thumb_url, imagen_url,
-            marca, linea, numero_placa, ciudad_placa, soat, revision, usuarios_vehiculos.id_vehiculo AS id_vehiculo');
+        $this->db->select('id_usuario_vehiculo, serie, nombre, modelo, kilometraje, fecha, usuarios_vehiculos.imagen_thumb_url, 
+            usuarios_vehiculos.imagen_url, marca, linea, numero_placa, ciudad_placa, soat, revision, 
+            usuarios_vehiculos.id_vehiculo, tipo_documento, documento, licencia_transito, tipo_servicio, estado_vehiculo, 
+            clase_vehiculo, marca_RUNT, linea_RUNT, modelo_RUNT, color, nro_serie, nro_motor, nro_vin, nro_chasis, cilindraje, 
+            carroceria, peso, num_ejes, capacidad_carga');
         $this->db->join('vehiculos', 'vehiculos.id_vehiculo = usuarios_vehiculos.id_vehiculo');
-        $this->db->where('id_usuario', $id_usuario);
+        $this->db->join('usuarios', 'usuarios.id_usuario = usuarios_vehiculos.id_usuario');
+        $this->db->where('usuarios_vehiculos.id_usuario', $id_usuario);
         $query = $this->db->get('usuarios_vehiculos');
         return $query->result();
     }
@@ -1113,11 +1122,10 @@ class Usuario_model extends CI_Model {
 
         $tareas = array();
         if ($query->num_rows() != 0) {
-            $tareas = $query->result();
+            return $query->result();
         } else {
-            $tareas = $this->dar_tareas_vehiculo($this->dar_id_vehiculo('default', 'default'));
+            return $this->dar_tareas_vehiculo($this->dar_id_vehiculo('default', 'default'));
         }
-        return $tareas;
     }
 
     /**

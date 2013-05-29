@@ -33,12 +33,6 @@ class NewsletterSOAT extends Laspartes_Controller {
             }
             if (sizeof($ultimo_cronjob) == 0 || $diff_en_dias > 6):
                 $data = $dataP;
-                $this->load->model('usuario_model');
-
-                $this->load->helper('date');
-                $this->load->helper('mail');
-
-                setlocale(LC_ALL, 'es_ES');
                 define("CHARSET", "iso-8859-1");
 
                 $data['fecha'] = strftime("%B %d de %Y");

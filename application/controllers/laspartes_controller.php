@@ -43,7 +43,7 @@ class Laspartes_Controller extends CI_Controller
         }else{
             $myFile = "resources/logs/".$tipo.".txt";
         }
-        $fh = fopen($myFile, 'a') or die("can't open file");
+        $fh = fopen($myFile, 'a') or die("No se pudo abrir el archivo");
         fwrite($fh, $log);
         fclose($fh);
     }
