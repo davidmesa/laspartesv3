@@ -1057,8 +1057,7 @@ class Usuario_model extends CI_Model {
     function validar_usuario_fb($email) {
         $this->db->escape($email);
         $this->db->where('email', $email);
-        $this->db->where('estado', 'Activo');
-        $this->db->or_where('estado', 'precreado');
+        $this->db->where("(estado = 'Activo' OR estado = 'precreado' )");
         $this->db->limit(1);
         $query = $this->db->get('usuarios');
         if ($query->num_rows() == 0)

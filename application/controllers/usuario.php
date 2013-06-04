@@ -2643,7 +2643,7 @@ class Usuario extends Laspartes_Controller {
             $data['iva'] = round($ivaTotal);
             $data['baseDevolucionIva'] = $precioTotal - $ivaTotal;
             $llave_encripcion = "13733cb5a73";
-            $urlPagosOnline = "https://gateway2.pagosonline.net/apps/gateway/index.html";
+            $urlPagosOnline = "https://gateway.pagosonline.net/apps/gateway/index.html";
             $usuarioId = 84442;
             $refVenta = 0;
             $this->load->model('refventa_model');
@@ -2655,7 +2655,7 @@ class Usuario extends Laspartes_Controller {
             $idUsuario = $this->session->userdata('id_usuario');
             $usuario = $this->usuario_model->dar_usuario($idUsuario);
             $emailComprador = $usuario->email;
-            $prueba = 1;
+            $prueba = 0;
             $moneda = "COP";
             $url_respuesta = base_url() . "usuario/pago_confirmacion";
             $url_confirmacion = base_url() . "usuario/confirmacion_pol";
@@ -4835,5 +4835,11 @@ class Usuario extends Laspartes_Controller {
         }
     }
 
+    // function fblog(){
+    //     $this->load->model('usuario_model');
+    //     echo  $this->usuario_model->validar_usuario_fb('a.vasquez@greencode.com.co');
+
+    // }
 
 }
+
