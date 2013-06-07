@@ -118,6 +118,8 @@ class ActualizarLegales extends Laspartes_Controller {
                                     $stringData .= "Fecha de vigencia rev. tecn. mec.: " . $fechaVigenciaTecnMec . "\n";
                                     $this->usuario_model->actualizar_tarea_realizada_vehiculo($vehiculo->id_usuario_vehiculo, 10, $fechaVigenciaTecnMec);
                                     
+                                    $extra_data['revision'] = $fechaVigenciaTecnMec;
+                                    $this->usuario_model->actualizar_vehiculo_usuario($vehiculo->id_usuario_vehiculo, '', '', '', '', '', '', $extra_data);
                                 }
 
                                 if($dias['soat'] == false || $dias['soat'] > -30){
@@ -142,6 +144,10 @@ class ActualizarLegales extends Laspartes_Controller {
                                     echo 'Fecha de vigencia SOAT: ' . $fechaVigenciaSOAT . '<br/>';
                                     $stringData .= "Fecha de vigencia SOAT: " . $fechaVigenciaSOAT . "\n";
                                     $this->usuario_model->actualizar_tarea_realizada_vehiculo($vehiculo->id_usuario_vehiculo, 9, $fechaVigenciaSOAT);
+
+
+                                    $extra_data['soat'] = $fechaVigenciaSOAT;
+                                    $this->usuario_model->actualizar_vehiculo_usuario($vehiculo->id_usuario_vehiculo, '', '', '', '', '', '', $extra_data);
                                 }
 
                                 //datos extras

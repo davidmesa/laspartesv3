@@ -186,6 +186,26 @@ class Usuario_model extends CI_Model {
         $params['marca']  = $vehiculo->marca;
         $params['linea']  = $vehiculo->linea;
         $params['placa']  = $vehiculo->numero_placa;
+        $params['licencia_transito']  = $vehiculo->licencia_transito; 
+        $params['estado_vehiculo']  = $vehiculo->estado_vehiculo; 
+        $params['tipo_servicio']  = $vehiculo->tipo_servicio;  
+        $params['clase_vehiculo']  = $vehiculo->clase_vehiculo;  
+        $params['marca_runt']  = $vehiculo->marca_RUNT;  
+        $params['linea_runt']  = $vehiculo->linea_RUNT;  
+        $params['modelo_runt']  = $vehiculo->modelo_RUNT;  
+        $params['color']  = $vehiculo->color;  
+        $params['nro_serie']  = $vehiculo->nro_serie;  
+        $params['nro_motor']  = $vehiculo->nro_motor;  
+        $params['nro_chasis']  = $vehiculo->nro_chasis;  
+        $params['nro_vin']  = $vehiculo->nro_vin;  
+        $params['cilindraje']  = $vehiculo->cilindraje; 
+        $params['carroceria']  = $vehiculo->carroceria; 
+        $params['capacidad_carga']  = $vehiculo->capacidad_carga; 
+        $params['peso']  = $vehiculo->peso; 
+        $params['num_ejes']  = $vehiculo->num_ejes; 
+        $params['revision']  = $vehiculo->revision; 
+        $params['soat']  = $vehiculo->soat; 
+
         $this->crm->actualizar_vehiculo($params);
     }
 
@@ -864,7 +884,10 @@ class Usuario_model extends CI_Model {
     function dar_vehiculo($id_usuario_vehiculo) {
         $this->db->escape($id_usuario_vehiculo);
         $this->db->select('id_usuario_vehiculo, serie, nombre, modelo, kilometraje, fecha, imagen_thumb_url, 
-            marca, linea, numero_placa, ciudad_placa, soat, revision, usuarios_vehiculos.id_vehiculo AS id_vehiculo, id_usuario');
+            marca, linea, numero_placa, ciudad_placa, soat, revision, usuarios_vehiculos.id_vehiculo AS id_vehiculo, id_usuario, 
+            licencia_transito, tipo_servicio, estado_vehiculo, 
+            clase_vehiculo, marca_RUNT, linea_RUNT, modelo_RUNT, color, nro_serie, nro_motor, nro_vin, nro_chasis, cilindraje, 
+            carroceria, peso, num_ejes, capacidad_carga');
         $this->db->join('vehiculos', 'vehiculos.id_vehiculo = usuarios_vehiculos.id_vehiculo');
         $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
         $query = $this->db->get('usuarios_vehiculos');
