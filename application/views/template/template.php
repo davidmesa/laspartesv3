@@ -34,7 +34,8 @@
             <link rel="stylesheet" href="<?php echo base_url(); ?>resources/css/fonts.css" type="text/css" charset="utf-8" />
             <link href="<?php echo base_url(); ?>resources/css/confirm.css" rel="stylesheet" type="text/css" />
 
-            <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery-1.6.1.min.js"></script> 
+            <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery-1.10.1.min.js"></script>
+            <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery-migrate-1.2.1.min.js"></script>
             <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery-ui-1.8.23.custom.min.js"></script>
             <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery.validate.js"></script>
             <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery.simplemodal.js"></script>

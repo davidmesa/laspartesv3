@@ -1133,7 +1133,7 @@ class Usuario_model extends CI_Model {
     function dar_tareas_vehiculo($id_vehiculo, $modelo = '') {
         $this->db->escape($id_vehiculo);
         $this->db->escape($modelo);
-        $this->db->select('tareas_servicios.id_tarea AS id_tarea, tareas.nombre AS nombre, inicio, periodicidad, 
+        $this->db->select('tareas_servicios.id_tarea AS id_tarea, tareas.nombre AS nombre, inicio, periodicidad, rango,
                     tareas.descripcion AS descripcion, tareas.imagen_thumb_url AS imagen_thumb_url, 
                     tareas.id_servicio as id_servicio');
         $this->db->join('tareas', 'tareas.id_servicio = tareas_servicios.id_servicio');

@@ -1,0 +1,876 @@
+#usuario-div-degrade{
+    position: absolute;
+    z-index: -1;
+    width: 980px;
+    height: 150px;
+    top: 400px;
+    left:0 px;
+    background-image:url(../../resources/images/home/bg1.png);
+    background-repeat:repeat-x;
+}
+
+.sesion{
+    background-image:url(../../resources/images/micuenta/separador-sesiones.png);
+    background-position:bottom;
+    background-repeat: no-repeat;
+}
+
+.subsesion{
+    background-image:url(../../resources/images/micuenta/sub-separador-sesiones.png);
+    background-position:bottom;
+    background-repeat: no-repeat;
+}
+
+#usuario-div-mi-perfil.fixed {
+    position: fixed;
+    top: 0;
+}
+
+#usuario-div-mi-perfil{
+    position: absolute;
+    display:block;
+    margin-top: 0px;
+    width: 980px;
+    background-color: #fcfcfc;
+    z-index: 10;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 1px;
+    -moz-box-shadow: 
+        7px 0 9px -1px #ccc, 
+        -7px 0 9px -1px #ccc;
+    -webkit-box-shadow: 
+        7px 0 9px -1px #ccc, 
+        -7px 0 9px -1px #ccc;
+    box-shadow: 
+        7px 0 9px -1px #ccc,  
+        -7px 0 9px -1px #ccc;
+}
+
+#usuario-div-foto{
+    width: 150px;
+    height: 125px;
+    position: relative;
+    float: left;
+    margin-right: 10px;
+}
+
+#usuario-div-foto-marco{
+    padding: 10px 20px 10px 20px;
+}
+
+
+#usuario-div-foto-marco img{
+    height: 104px;
+    width: 104px;
+    box-shadow: 0 0 3px #ccc;
+    -webkit-box-shadow: 0 0 3px #ccc;
+    -moz-box-shadow: 0 0 3px #ccc;
+    border-radius: 2px;
+}
+
+.usuario-div-foto-editar{
+    position: absolute;
+    right: 12px;
+    bottom: 8px;	
+    background-color: white;
+    box-shadow: 0 0 5px #666666;
+    -webkit-box-shadow: 0 0 5px #666666;
+    -moz-box-shadow: 0 0 5px #666666;
+    border-radius: 2px;
+    border-color: #666666;
+    cursor: pointer;
+    width: 12px;
+    height: 11px;
+    padding: 3px;
+    background-repeat:no-repeat;
+    background-image:url(../../resources/images/micuenta/icono-editar.png);	
+    background-position:center;	
+}
+
+
+
+#usuario-div-perfil-info{
+    float: left;
+    position: relative;
+    width: 300px;
+    padding-top: 15px;
+    padding-right: 20px;
+    border-right: 1px solid #ccc;
+    padding-bottom: 19px;
+}
+
+#usuario-div-perfil-info h1{
+    font-size: 20px;
+}
+
+#usuario-div-perfil-info-user{
+    margin-top: 5px;
+    font-size: 13px;
+    color: #404040;
+    overflow: hidden;
+    width: 230px;
+}
+
+#usuario-div-perfil-info-email{
+    overflow: hidden;
+    width: 230px;
+    display: block;
+}
+
+#usuario-div-perfil-info .usuario-div-editar{
+    position: absolute;
+    right: 25px;
+    bottom: 13px;
+}
+
+.usuario-div-editar {
+    text-align: right;
+    width: 40px;
+    background-image:url(../../resources/images/micuenta/icono-editar.png);
+    background-repeat: no-repeat;
+    padding-left: 12px;
+    font-family: 'open_sansregular';	
+    font-style: normal;
+    text-decoration:underline;
+    color: #C60200;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+#usuario-div-perfil-tareas{
+    position: relative;
+    float: left;
+    height: 110px;
+    width: 426px;
+    padding-top: 10px;	
+    font-size: 13px;
+    text-align:center;
+    padding-left: 25px;
+    padding-bottom: 12px;
+}
+
+.usuario-div-perfil-tarea{
+    cursor: pointer;
+}
+
+.usuario-div-perfil-misvehiculos{
+    position: relative;
+    float: left;
+    width: 92px;
+    height: 100%;
+    margin-left: 15px;
+    color: #C60200;
+}
+
+.usuario-div-perfil-sobrevehiculo{
+    position: relative;
+    float: left;
+    width: 120px;
+    height: 100%;	
+}
+
+.usuario-div-perfil-ofertas{
+    position: relative;
+    float: left;
+    width: 92px;
+    height: 100%;		
+}
+
+.usuario-div-perfil-compras{
+    position: relative;
+    float: left;
+    width: 92px;
+    height: 100%;	
+    margin-left: 15px;		
+}
+
+.usuario-div-perfil-comunidad{
+    position: relative;
+    float: left;
+    width: 92px;
+    height: 100%;	
+    margin-left: 15px;	
+}
+
+#usuario-div-mi-perfil-bottom{
+    position: relative;
+    display: block;
+    top: 145px;
+    background-color: #262626;
+    height: 20px;
+    width: 100%;
+}
+
+.usuario-div-perfil-contenedor{
+    position: relative;
+    margin-top: 145px;
+    background-image:url(../../resources/images/home/bg1.png); 
+    background-position:top;
+    background-repeat:repeat-x;
+    width: 910px;
+    padding-top: 15px;
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-bottom: 20px;
+}
+
+.usuario-div-breadcrumb{
+    font-size: 11px;
+    text-transform: uppercase; 
+}
+
+.usuario-div-breadcrumb-espaciador{
+    float: left;
+    width: 2px;
+    height: 11px;
+    margin-right: 5px;
+    background-color: #777777;
+}
+
+.usuario-div-breadcrumb div{
+    float: left;
+    margin-right: 5px;
+}
+
+.usuario-div-breadcrumb a{
+    font-style:normal;
+    text-decoration: none;
+    color: black;
+}
+
+.marca-linea .editar-perfil-hidden{
+    width: 150px;
+}
+
+.editar-vehiculo-hidden, .editar-perfil-hidden{
+    display: none;
+    padding: 5px;
+}
+
+.usuario_div_id_usuario_vehiculo .usuario-div-foto-editar{
+    padding: 0px;
+    width: 18px;
+    height: 18px;
+}
+
+.usuario-div-foto-editar .input_imageUpload_automovil, .input_imageUpload_perfil{
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: default;
+}
+
+#usuario_input_perfil_nombres, #usuario_input_perfil_apellidos{
+    width: 114px;
+}
+
+#usuario_input_perfil_apellidos{
+    margin-left: 10px;
+}
+
+label.error{
+    display: block;
+    font-size: 9px;
+    font-family: 'open_sansregular';
+}
+
+.usuario-div-editar-submit input, .inf-dato-editar-submit input{
+    border: none;
+    background-image: url(../../resources/images/micuenta/icono-editar.png);
+    padding-left: 13px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    text-decoration: underline;
+    color: #c60200;
+    cursor: pointer;
+}
+.usuario-div-editar-submit button, .inf-dato-editar-submit button{
+    border: none;
+    padding-left: 13px;
+    background-color: transparent;
+    text-decoration: underline;
+    color: #c60200;
+    cursor: pointer;
+}
+
+.usuario-div-editar-submit{
+    text-align: right;
+    padding-right: 12px;
+    margin-top: 5px;
+}
+
+#usuario_formulario_perfil input{
+    font-family: 'open_sansregular';
+}
+
+
+#usuario-div-mv-titulo{
+    float: left;    
+    height: 100%;
+}
+
+#usuario-div-mv-titulo h1{
+    display: inline-block;  
+}
+
+#usuario-div-mv-anadir{
+    float: right;
+    height: 100%;
+    font-family: 'open_sansregular';
+    font-size: 12px;
+    text-decoration:underline;
+    color: #C60200;
+    cursor: pointer;
+}   
+
+#usuario-div-mv-top{
+    margin-top: 25px;
+}
+
+#usuario-div-mv-titulo{
+    font-family: 'univers_condensedbold';
+    font-size: 28px;    
+}
+
+#usuario-div-mv-all{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 40px;
+}
+
+.tablesorter td{
+    position: relative;
+    cursor: pointer;
+}
+
+.notificacion-tarea{
+    position: absolute;
+    top: -2px;
+    left: -5px;
+    width: 15px; height: 15px; 
+    -webkit-border-radius: 10px; -moz-border-radius: 10px;
+    background-color: red;
+    text-align: center;
+    color: white;
+    font-size: 9px;
+    cursor: pointer;
+}
+
+.flota-div-template{
+    display: none;
+    padding: 8px;
+    width: 690px;
+    background-color: #f5f5f5;
+    -webkit-border-radius: 3px; -moz-border-radius: 3px;
+    height: 700px;
+    overflow-y: scroll;
+}
+
+.inf-carro-marco{
+    float: left;
+    border: 1px solid #ccc;
+    padding: 2px;
+    background-color: white;
+    -webkit-border-radius: 3px; -moz-border-radius: 3px;
+}
+
+.inf-carro-datos{
+    float: left;
+    margin-left: 15px;
+    color: black;
+    position: relative;
+}
+
+.inf-dato{
+    margin-top: 15px;
+}
+
+.inf-dato.marca-linea span.span-dato {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 20px;
+    color: black;
+}
+
+.inf-dato span{
+    font-size: 13px;
+}
+
+.span-dato{
+    color: #404040;
+}
+
+.titl-dato{
+    display: block;
+}
+
+.titl-dato-h{
+    display: none;
+    width: 150px;
+}
+
+.inf-dato-editar {
+    text-align: right;
+    width: 40px;
+    background-image:url(../../resources/images/micuenta/icono-editar.png);
+    background-repeat: no-repeat;
+    padding-left: 12px;
+    font-family: 'open_sansregular';    
+    font-style: normal;
+    text-decoration:underline;
+    color: #C60200;
+    font-size: 13px;
+    cursor: pointer;
+    position: absolute;
+    left: 200px;
+}
+
+.flota-tareas{
+    margin-top: 20px;
+    position: relative;
+    width: 650px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.flota-tareas .tareas-debo{
+    width: 49.8%;
+    float: left;
+}
+
+.flota-tareas .tareas-pendiente{
+    width: 49.8%;
+    float: right;
+}
+
+.tarea-titulo{
+    color: white;
+    padding: 3px 25px;
+    font-size: 24px;
+    font-family: 'univers_condensedbold';
+    margin-bottom: 8px;
+}
+.tarea-sub-titulo{
+    font-size: 12px;
+    font-weight: bold;
+    color: #404040;
+    padding-left: 25px;
+}
+
+.tareas-debo .tarea-titulo{
+    background-color: #c60200;
+}
+
+.tareas-pendiente .tarea-titulo{
+    background-color: #EAA803;
+}
+
+.tarea-content{
+    margin-top: 10px;
+}
+
+.tarea-item{
+    margin-bottom: 10px;
+    position: relative;
+    height: 44px;
+    vertical-align: middle;
+    position: relative;
+}
+
+.tarea-item input[type=checkbox],  .tarea-item img{
+    vertical-align: middle;
+    float: left;
+}
+
+.tarea-item .tarea-texto, .tarea-item .tarea-nombre, .tarea-item .tarea-tiempo{
+    float: left;
+    width: 240px;
+    vertical-align: middle;
+}
+
+.tarea-item .tarea-nombre{
+    text-decoration: underline;
+    color: black;
+}
+
+.tarea-item .tarea-tiempo{
+    color: white;
+    padding: 2px 5px;
+    text-align: center;
+    font-size: 12px;
+    width: 150px;
+}
+
+.tareas-debo .tarea-tiempo{
+    background-color: #c60200;
+}
+
+.tareas-pendiente .tarea-tiempo{
+    background-color: #EAA803;
+}
+
+.tarea-item img{
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.flotas-menu{
+    margin-top: 20px;
+}
+
+.menu-header{
+    background-color: #FEFEFE;
+    color: #c60200;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 3;
+    border: 1px solid #DDD;
+    font-size: 14px;
+}
+
+.hist-titulo-hist{
+    width: 344px;
+    border-right: 1px solid #DDD;
+    float: left;
+    cursor: pointer;
+    position: relative;
+}
+
+.hist-titulo-hmto.fm-act img, .hist-titulo-hist.fm-act img {
+    display: block;
+}
+
+.hist-titulo-hmto{
+    width: 343px;
+    float: left;
+    cursor: pointer;
+    position: relative;
+}
+
+.hist-titulo-hmto img, .hist-titulo-hist img{
+    position: absolute;
+    bottom: -1px;
+    left: 165px;
+    display: none;
+}
+
+.hist-titulo-hmto.fm-act, .hist-titulo-hist.fm-act{
+    background-color: #efefef;
+}
+
+.menu-content{
+    background-color: #efefef;
+    border: 1px solid #DDD;
+    -webkit-border-radius: 2px; -moz-border-radius: 2px;
+    padding: 10px 2px;
+    margin-top: 10px;
+    color: black;
+    font-size: 14px;
+}
+
+.menu-hist{
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+.menu-hist ul{
+    margin: 0;
+    padding-left: 16px;
+    float: left;
+}
+
+.menu-hist span{
+    display: block;
+}
+
+.hist-fecha{
+    font-size: 11px;
+    color: #ccc;
+}
+
+.menu-hmto{
+    
+}
+
+.fc-inactive{
+    display: none;
+}
+
+.hist-compra{
+    border-bottom: 1px solid #dcdcdc;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+.hist-img{
+    border-right: 1px solid #e9eaed;
+    background-color: white;
+    padding: 1px;
+    float: left;
+}
+
+.hist-img img{
+    height: 30px;
+    width: 30px;
+}
+
+.hmto-form .form-invalid{
+    display: block;
+}
+
+.hmto-table {
+    width: 500px;
+    font: 12px/18px Arial, Sans-serif;
+    color: #333;
+    background-color: #fff;
+    border-spacing: 0;
+    margin: 10px 0 5px;
+    text-align: left;
+    float: left;
+}
+
+.hmto-table select{
+    width: 150px;
+}
+
+/* header */
+.hmto-table th,
+.hmto-table thead td {
+    font: bold 12px/18px Arial, Sans-serif;
+    color: #000;
+    background-color: #fff;
+    border-collapse: collapse;
+    border-bottom: #ccc 2px solid;
+    padding: 0;
+}
+
+/* tbody */
+.hmto-table td {
+    background-color: #fff;
+    border-bottom: #ccc 1px solid;
+    padding: 4px;
+    vertical-align: top;
+}
+
+/* hovered row colors */
+.hmto-table tbody > tr:hover > td,
+.hmto-table tbody > tr.even:hover > td,
+.hmto-table tbody > tr.odd:hover > td {
+    background: #fff;
+    color: #000;
+}
+
+/* Zebra Widget - row alternating colors */
+.hmto-table tr.odd td {
+    background-color: #dfdfdf;
+}
+.hmto-table tr.even td {
+    background-color: #efefef;
+}
+
+.div_quisiste_decir{
+    display: none;
+}
+
+.quisiste_decir{
+    text-decoration: underline;
+    font-size: 18px;
+    color: #ef0600;
+    cursor: pointer;
+    font-style: italic;
+    font-weight: bold;
+    width: 270px;
+}
+
+/*  table sorter */
+#overlay {
+    top: 100px;
+    left: 50%;
+    position: absolute;
+    margin-left: -100px;
+    width: 200px;
+    text-align: center;
+    display: none;
+    margin-top: -10px;
+    background: #000;
+    color: #FFF;
+}
+
+.hmto-acciones{
+    float: left;
+    width: 140px;
+    margin-left: 20px;
+}
+
+.acciones-titulo{
+    color: black;
+    font-size: 20px;
+}
+
+.htmo-div-button{
+    border: 1px solid #DDD;
+    background-color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 5px;
+    -webkit-border-radius: 3px; -moz-border-radius: 3px;
+}
+
+.htmo-div-button:hover{
+    background-color: #c60200;
+    color: white;
+}
+
+.hmto-guardar.htmo-div-button{
+    background-color: #709e00;
+    color: white;
+    width: 100px;
+    text-align: center;
+    position: relative;
+    left: 380px;
+    display: none;
+}
+
+.hmto-guardar.htmo-div-button:hover{
+    background-color: #649200;
+}
+
+.ui-datepicker{ z-index: 9999 !important;}
+/* end -table sorter */
+
+/* start ya lo hiciste*/
+.tarea-item div.usuario-lightbox-ya-hise{
+    padding: 15px;  
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border: 1px solid #ccc;
+    color: #404040;
+    font:12px open_sansregular;
+    position: relative;
+    background-color: #efefef;
+    width: 317px;
+    position: absolute;
+    z-index: 10;
+    top: 18px;
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+}
+
+.usuario-lightbox-ya-hise label{
+    color: #404040;
+    font-size:14px;
+    display: block;
+}
+
+.usuario-lightbox-ya-hise input[type=text]{
+    background-color: #f9f9f9;
+    border: 2px solid #b5b5b5;
+    moz-border-radius: 5px;
+    webkit-border-radius: 5px; 
+    border-radius: 5px;
+    outline:none;
+    color: black;
+    padding: 10px 10px;
+    font-family:open_sansregular; 
+}
+
+.usuario-lightbox-ya-hise input[type=text]:focus
+{ outline:none;
+  border: 2px solid #c60200;
+  background-color: #fbfbfb;
+  -webkit-box-shadow: 0px 0px 5px #c60200;
+  -moz-box-shadow:    0px 0px 5px #c60200;
+  box-shadow:         0px 0px 5px #c60200;
+}
+
+.usuario-lightbox-ya-hise-t1, .usuario-lightbox-ya-hise-t2{
+    font:17px univers_condensedbold;
+    text-transform: uppercase;
+}
+
+.usuario-lightbox-ya-hise-t2{
+    color: #c60200; 
+}
+
+.usuario-lightbox-ya-hise-content{
+    margin-top: 15px;   
+    position: relative; 
+}
+
+.fromCalendar{
+    margin-top:5px; 
+}
+
+.usuario-lightbox-ya-hise-kilometraje{
+    margin-top: 10px;
+}
+
+.usuario-lightbox-ya-hise-adjunto{
+    margin-top: 10px;
+    float: left;
+}
+
+.usuario-lightbox-ya-hise-submit{
+    float:right;
+    margin-top: 10px;
+    position: relative;
+    margin-right: 10px;
+}
+
+.usuario-lightbox-ya-hise input[type=submit], .usuario-lightbox-ya-hise input[type=button] {
+    float:right;
+    cursor: pointer;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ebe8eb), color-stop(1, #a8a5a8) );
+    background:-moz-linear-gradient( center top, #ebe8eb 5%, #a8a5a8 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebe8eb', endColorstr='#a8a5a8');
+    background-color:#ebe8eb;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    border:1px solid #8f8f8f;
+    display:inline-block;
+    color:#4a4a4a;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #c7c7c7;
+}
+.usuario-lightbox-ya-hise input[type=submit]:hover, .usuario-lightbox-ya-hise input[type=button]:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a8a5a8), color-stop(1, #ebe8eb) );
+    background:-moz-linear-gradient( center top, #a8a5a8 5%, #ebe8eb 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#a8a5a8', endColorstr='#ebe8eb');
+    background-color:#a8a5a8;
+}
+.usuario-lightbox-ya-hise input[type=submit]:active, .usuario-lightbox-ya-hise input[type=button]:active {
+    position:relative;
+    top:1px;
+}
+/* This imageless css button was generated by CSSButtonGenerator.com */
+
+div.ui-widget{
+    font-size: 14px;
+}
+
+.ajax_img_loader{
+    position: absolute;
+    bottom: 10px;
+    right: -20px;
+    display: none;
+}
+
+.tarea-realizada label.form-invalid, .tarea-realizada label.form-valid{
+    margin-top: 0px;
+    font-size: 11px;
+} 
+/*end ya lo hice*/

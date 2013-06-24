@@ -170,20 +170,6 @@ class Vehiculo_model extends CI_Model {
      * @return type
      */
     function dar_hoja_mantenimiento($id_vehiculo) {
-//        $q = $this->db->query('SELECT  p.nombre, o.periodicidad, p.id_servicio
-//                                FROM    tareas p
-//                                JOIN
-//                                        tareas_servicios o
-//                                ON      o.id_servicio = p.id_servicio where o.id_vehiculo = '.$id_vehiculo.' and o.id_servicio != 9 and o.id_servicio != 10
-//                                union all
-//                                SELECT  p.nombre, NULL, p.id_servicio
-//                                FROM    tareas p
-//                                WHERE   p.id_servicio NOT IN
-//                                        (
-//                                        SELECT  ts.id_servicio
-//                                        FROM    tareas_servicios ts
-//                                                where ts.id_vehiculo = '.$id_vehiculo.'
-//                                        ) and p.id_servicio != 9 and p.id_servicio != 10');
         $this->db->select('tareas.nombre, tareas_servicios.periodicidad, tareas_servicios.rango, tareas_servicios.modelo, tareas_servicios.id_servicio, tareas_servicios.id_tarea');
         $this->db->from('tareas');
         $this->db->join('tareas_servicios', 'tareas_servicios.id_servicio = tareas.id_servicio');
