@@ -127,15 +127,20 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
             <?php $nombreFlota = explode(' ', $flota->nombre, '2');?>
             <div id="usuario-div-mv-top">
                 <div id="usuario-div-mv-titulo">
-                    <img src="<?php echo base_url(); ?>/resources/images/micuenta/mi-vehiculo.png" alt="<mi vehiculo" />
+                    <img src="<?php echo base_url(); ?>/resources/images/micuenta/mi-vehiculo.png" alt="mi vehiculo" />
                     <h1>
+                    <?php if($nombreFlota):?>
                         <span><?php echo $nombreFlota[0]; ?></span>
                         <span style="color: #C60200;"><?php echo $nombreFlota[1]; ?></span>
+                    <?php else:?>
+                        <span>Mi</span>
+                        <span style="color: #C60200;">Flota</span>
+                    <?php endif;?>
                     </h1>
                 </div>
 
-                <div id="usuario-div-mv-anadir">
-                    <img src="<?php echo base_url(); ?>/resources/images/micuenta/mi-vehiculo-2.png" alt="<mi vehiculo" />
+                <div id="usuario-div-mv-anadir" onclick="mostrar_agregar_vehiculo(this, <?php echo $flota->id_flota;?>)">
+                    <img src="<?php echo base_url(); ?>/resources/images/micuenta/mi-vehiculo-2.png" alt="agregar vehiculo" />
                     AÑADIR VEHÍCULO
                 </div>
 
@@ -150,11 +155,11 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                 
                 <div id="pager" class="pager">
                     <form>
-                        <img src="../addons/pager/icons/first.png" class="first"/>
-                        <img src="../addons/pager/icons/prev.png" class="prev"/>
+                        <img src="<?php echo base_url();?>resources/images/micuenta/pager/first.png" class="first"/>
+                        <img src="<?php echo base_url();?>resources/images/micuenta/pager/prev.png" class="prev"/>
                         <input type="text" class="pagedisplay"/>
-                        <img src="../addons/pager/icons/next.png" class="next"/>
-                        <img src="../addons/pager/icons/last.png" class="last"/>
+                        <img src="<?php echo base_url();?>resources/images/micuenta/pager/next.png" class="next"/>
+                        <img src="<?php echo base_url();?>resources/images/micuenta/pager/last.png" class="last"/>
                         <select class="pagesize">
                             <option selected="selected"  value="10">10</option>
                             <option value="20">20</option>
@@ -163,6 +168,7 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                         </select>
                     </form>
                 </div>
+                <div class="clear"></div>
                 <table class="tablesorter" id="tablesorter">             
                 <thead>
                     <tr> 
@@ -186,9 +192,16 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
             </div>
             <?php endforeach; ?>
             <div id="flota-div-template" class="flota-div-template open-sans">
-                <div class="flota-inf-carro">
+                <div class="asignar-lb-close flota-t-close">&#10006;</div>
+                <div class="flota-inf-carro"> 
                     <div class="inf-carro-marco">
+                        
                         <img src="<?php echo base_url();?>resources/images/micuenta/tmpl_img_micuenta_vehiculo_nd1.png" alt="foto del vehículo">
+                        <div class="usuario-div-foto-editar">
+                            <form class="subir_imagen_automovil" action="/usuario/subir_imagen_temp_ajax" >
+                                <input type="file" name="imageUpload" size="20" class="input_imageUpload_automovil">
+                            </form>
+                        </div>
                     </div>
                     <div class="inf-carro-datos">
                         <form  class="editar-vehiculo">
@@ -196,7 +209,7 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                             <input type="hidden" class="editar_id_usuario_vehiculo">
                             <div class="inf-dato marca-linea">
                                 <span class="span-dato font-universe editar-perfil-show"></span>
-                                <span class="titl-dato-h editar-perfil-hidden">Marca: </span><span class="titl-dato-h editar-perfil-hidden" style="margin-left: 125px;">Linea: </span><br/>
+                                <span class="titl-dato-h editar-perfil-hidden">Marca: </span><span class="titl-dato-h editar-perfil-hidden">Linea: </span><br/>
                                 <input name="editar_marca" class="editar-perfil-hidden marca" type="text" value="">
                                 <input name="editar_linea" class="editar-perfil-hidden linea" type="text" value="">
                             </div>
@@ -240,8 +253,8 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                             </div>
                         </form>
                     </div> 
-                    <div class="clear"></div>
                 </div>
+                <div class="clear"></div>
                 <div class="flota-tareas">
                     <div class="tareas-debo">
                         <div class="tarea-titulo">DEBO HACER</div>
@@ -274,6 +287,15 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                         </div>
                         <div class="clear"></div>
                     </div>
+
+                    <div class="flota-registrar-trabajo">
+                        <input type="button" class="flota-rt-button" value="&#10010;  Registrar Preventivo/Correctivo" onclick="ver_realizar_trabajo(this)">
+                        <div class="flota-rt-div">
+                            
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+
                     <div class="menu-content">
                         <div class="menu-hist">
                         </div>
@@ -297,8 +319,31 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                                     <div class="htmo-div-button accion-eliminar" onclick="eliminar_tareas(this)">
                                         Eliminar tarea
                                     </div>
-                                    <div class="htmo-div-button">
+                                    <div class="htmo-div-button  hmto-asignar"  onclick="lighbox_asignar(this)">
                                         Asignar...
+                                    </div>
+                                    <div class="asignar-lightbox">
+                                        <div class="asignar-lb-titulo"><span>Asigna este mantenimiento a tus otros carros</span><div class="asignar-lb-close" onclick="cerrar_asignar(this)">&#10006;</div></div>
+                                        <hr>
+                                        <div class="asignar-lb-carros">
+                                            <?php foreach ($flotas as $flota):?>
+                                            <?php foreach ($vehiculos[$flota->id_flota] as $car):?>
+                                            <div class="asignar-lb-carro" data-id-usuario-vehiculo="<?php echo $car->id_usuario_vehiculo;?>" onclick="asignar_vehiculo(this)">
+                                                <span class="asignar-lb-img">
+                                                    <img  width="30" height="30" src="<?php 
+                                                    if(!empty($car->imagen_thumb_url)){ echo base_url().$car->imagen_thumb_url;  
+                                                        }else if(!empty($car->imagen_url)){ echo base_url().$car->imagen_url;
+                                                        }else {echo base_url().'resources/images/micuenta/tmpl_img_micuenta_vehiculo_nd_30x.png';} ?>" alt="<?php echo $car->numero_placa;?> (<?php echo $car->linea;?>)">
+                                                </span>
+                                                <span class="asignar-lb-desc">
+                                                    <?php echo $car->numero_placa;?> (<?php echo $car->linea;?>)
+                                                </span>
+                                                <span class="asignar-lb-chk">&#10004;</span>
+                                                <div class="clear"></div>
+                                            </div>
+                                            <?php endforeach;?>
+                                            <?php endforeach;?>
+                                        </div>
                                     </div>
                                     <div class="htmo-div-button">
                                         Vista PDF
@@ -312,12 +357,78 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                 </div>
             </div>
         </div>
-
-        <div id="usuario-div-smv" class="sesion">
-
-        </div>
-
     </div>
 </div>
-<div id="usuario-div-lightbox-tarea"></div>
-<div id="registro-login-div"></div> 
+<div id="loging-div" class="login-div-vehiculo">
+    <div class="asignar-lb-close flota-t-close close" style="z-index: 9;">✖</div>
+    <div id="login-div-center" class="sesion-vehiculo">
+        <div id="login-div-sesion">
+            <div id="login-div-titulo">
+                <img src="<?php echo base_url(); ?>resources/images/login/mayor-que-404040.png" alt="flechas de registro"/><span>INGRESA LOS DATOS DE TU VEHÍCULO</span>
+            </div>
+            <form action="<?php echo base_url(); ?>usuario/subir_imagen_vehiculo_ajax" id="form_vehiculo_file">
+                <div id="foto_div_form">
+                    <label>Adjunta la imagen de tu carro: (*opcional)</label>
+                    <div id="foto_form_marco">
+                        <img src="http://www.laspartes.com/resources/images/micuenta/tmpl_img_micuenta_vehiculo_nd1.png"  />
+                    </div>
+                    <input type="file" id="input_vehiculo_imagen" name="input_vehiculo_imagen" onchange="fotoPreview(this);" />
+                </div>
+            </form>
+            <form id="form_vehiculo">
+                <div id="vehiculo_div_form">
+                    <input type="hidden" id="nuevo_carro" value="1">
+                    <input type="hidden" name="input_vehiculo_id_usuario_vehiculo" id="input_vehiculo_id_usuario_vehiculo" class="input_vehiculo_id_usuario_vehiculo form_vehiculo_input" maxlength="20"/>
+                    <div class="form_login_div_campo">
+                        <label>Marca: ej. Renault</label>
+                        <input type="text" name="input_vehiculo_marca" id="input_vehiculo_marca" class="input_vehiculo_marca form_vehiculo_input" maxlength="20"/><div for="input_vehiculo_marca"></div>
+                    </div>
+                    <div class="form_login_div_campo">
+                        <label>Línea: ej. logan</label>
+                        <input type="text" name="input_vehiculo_linea" id="input_vehiculo_linea" class="input_vehiculo_linea form_vehiculo_input" maxlength="50"/><div for="input_vehiculo_linea"></div>
+                    </div>
+                    <div class="form_login_div_campo div_quisiste_decir">
+                        <label style="font-size: 15px;">Quisiste decir: </label>
+                        <input type="hidden" id="quisiste_decir_marca">
+                        <input type="hidden" id="quisiste_decir_linea">
+                        <div id="quisiste_decir" onclick="carro_sugerido2()"></div>
+                    </div>
+                    <div class="form_login_div_campo">
+                        <label>Placa:</label>
+                        <input type="text" name="input_vehiculo_placa" id="input_vehiculo_placa" class="input_vehiculo_palca form_vehiculo_input" maxlength="7"/><div for="input_vehiculo_placa"></div>
+                    </div>
+                    <div id="vehiculo_form_div_kilo" class="form_login_div_campo">
+                        <label>Kilometraje:</label>
+                        <input type="text" name="input_vehiculo_kilometraje" id="input_vehiculo_kilometraje" class="input_vehiculo_kilometraje form_vehiculo_input"/><div for="input_vehiculo_kilometraje"></div>
+                    </div>
+                    <div id="vehiculo_form_div_model" class="form_login_div_campo">
+                        <label>Modelo:</label>
+                        <?php
+                        $this->load->helper('date');
+                        $option_modelo = array();
+                        $selected = '2010';
+                        $año = intval(mdate('%Y')) + 1;
+                        for ($i = $año; $i > 1950; $i--) {
+                            $option_modelo[$i] = $i;
+                            if ($vehiculo->modelo == $i) {
+                                $selected = $i;
+                            }
+                        }
+                        echo form_dropdown('input_vehiculo_modelo', $option_modelo, $selected, 'id="input_vehiculo_modelo" class="input_vehiculo_modelo" title="Selecciona el modelo de tu carro"');
+                        ?><div for="input_vehiculo_modelo"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="div-registrate-submit">
+                        <input type="submit" name="input_vehiculo_submit" id="input-vehiculo-submit" class="input-vehiculo-submit" value="Crear"/>
+                        <input type="button" id="input-vehiculo-close" class="input-vehiculo-close close" value="Cancelar"/>
+                        <img src="<?php echo base_url(); ?>resources/images/login/ajax-loader.gif" class="ajax_img_loader" />
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="clear"></div>
+    </div>
+</div>

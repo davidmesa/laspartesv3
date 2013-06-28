@@ -49,6 +49,8 @@
                 $('body').append($iframe);
             } // iframe shim for ie6, to hide select elements
             $('body').append($self.hide()).append($overlay);
+            if (opts.staticBackground) 
+                $('body').css('overflow', 'hidden');
 
 
             /*----------------------------------------------------
@@ -141,6 +143,8 @@
                 if (ie6)
                     s.removeExpression('top');
                 opts.onClose();
+                if (opts.staticBackground) 
+                    $('body').css('overflow', 'auto');
             }
 
 
@@ -239,6 +243,7 @@
         destroyOnClose: false,
         showOverlay: true,
         parentLightbox: false,
+        staticBackground: false,
 
         // callbacks
         onLoad: function() {},

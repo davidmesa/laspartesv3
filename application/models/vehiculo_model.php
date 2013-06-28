@@ -44,7 +44,7 @@ class Vehiculo_model extends CI_Model {
         $id_vehiculo = mysql_insert_id();
         
         //agrega la marca y linea de vehiculo al crm
-        $this->crm->agregar_marcalinea($id_vehiculo, $marca, $linea);
+        // $this->crm->agregar_marcalinea($id_vehiculo, $marca, $linea);
         
         return $id_vehiculo;
     }
@@ -93,6 +93,20 @@ class Vehiculo_model extends CI_Model {
     function dar_vehiculo($id_vehiculo) {
         $this->db->escape($id_vehiculo);
         $this->db->where('id_vehiculo', $id_vehiculo);
+        $this->db->limit(1);
+        $query = $this->db->get('vehiculos');
+        return $query->row(0);
+    }
+
+    /**
+     * Da los datos de un vehiculo según el usuario vehículo
+     * @param int $id_usuario_vehiculo
+     * @return object $vehiculo
+     */
+    function dar_vehiculo_usuario_vehiculo($id_usuario_vehiculo) {
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->join('usuarios_vehiculos', 'usuarios_vehiculos.id_vehiculo = vehiculos.id_vehiculo');
+        $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
         $this->db->limit(1);
         $query = $this->db->get('vehiculos');
         return $query->row(0);
@@ -178,6 +192,18 @@ class Vehiculo_model extends CI_Model {
         $this->db->order_by('tareas.nombre');
         $q = $this->db->get();
         return $q->result();
+    }
+
+    /**
+     * Agrega una nueva tarea de hmto
+     * @param  string $otro tarea
+     * @return int id de la tarea agregada
+     */
+    function agregar_servicio_hmto($otro){
+        $this->db->escape($otro);
+        $this->db->set('nombre', $otro);
+        $this->db->insert('tareas');
+        return mysql_insert_id();
     }
 
     /**

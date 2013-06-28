@@ -71,8 +71,8 @@
 
 .usuario-div-foto-editar{
     position: absolute;
-    right: 12px;
-    bottom: 8px;	
+    right: -8px;
+    bottom: -4px;	
     background-color: white;
     box-shadow: 0 0 5px #666666;
     -webkit-box-shadow: 0 0 5px #666666;
@@ -88,7 +88,13 @@
     background-position:center;	
 }
 
-
+.loading_subir_imagen_automovil{
+    background-image: url(../../resources/template/iconos/loading2.gif);
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 177px;
+    width: 177px;
+}
 
 #usuario-div-perfil-info{
     float: left;
@@ -366,8 +372,14 @@ label.error{
     width: 690px;
     background-color: #f5f5f5;
     -webkit-border-radius: 3px; -moz-border-radius: 3px;
-    height: 700px;
+    max-height: 700px;
     overflow-y: scroll;
+    position: relative;
+}
+
+.flota-t-close{
+    top: 7px !important;
+    right: 10px !important;
 }
 
 .inf-carro-marco{
@@ -376,6 +388,7 @@ label.error{
     padding: 2px;
     background-color: white;
     -webkit-border-radius: 3px; -moz-border-radius: 3px;
+    position: relative;
 }
 
 .inf-carro-datos{
@@ -427,6 +440,21 @@ label.error{
     cursor: pointer;
     position: absolute;
     left: 200px;
+}
+.flota-registrar-trabajo{
+    float: right;
+}
+
+.flota-rt-button{
+    color: #4d4d4d;
+    font: 12px 'open_sansregular';
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.flota-rt-button:hover{
+    text-decoration: underline;
 }
 
 .flota-tareas{
@@ -570,7 +598,6 @@ label.error{
     border: 1px solid #DDD;
     -webkit-border-radius: 2px; -moz-border-radius: 2px;
     padding: 10px 2px;
-    margin-top: 10px;
     color: black;
     font-size: 14px;
 }
@@ -605,7 +632,9 @@ label.error{
 
 .hist-compra{
     border-bottom: 1px solid #dcdcdc;
-    margin-bottom: 10px;
+    padding-top: 7px;
+    margin-top: 3px;
+    border-radius: 2px;
     padding-bottom: 5px;
 }
 
@@ -638,6 +667,7 @@ label.error{
 
 .hmto-table select{
     width: 150px;
+    display: block;
 }
 
 /* header */
@@ -675,6 +705,14 @@ label.error{
     background-color: #efefef;
 }
 
+.hmto-table tr.newRow td {
+    background-color: white;
+}
+
+.hmto_otro, .hmto_span_otro{
+    display: none;
+}
+
 .div_quisiste_decir{
     display: none;
 }
@@ -703,10 +741,19 @@ label.error{
     color: #FFF;
 }
 
+#tablesorter.tablesorter{
+    margin-top: 0px;
+}
+
+.pager{
+    float: right;
+}
+
 .hmto-acciones{
     float: left;
     width: 140px;
     margin-left: 20px;
+    position: relative;
 }
 
 .acciones-titulo{
@@ -724,7 +771,7 @@ label.error{
     -webkit-border-radius: 3px; -moz-border-radius: 3px;
 }
 
-.htmo-div-button:hover{
+.htmo-div-button:hover, .htmo-div-button.selected{
     background-color: #c60200;
     color: white;
 }
@@ -755,7 +802,6 @@ label.error{
     border: 1px solid #ccc;
     color: #404040;
     font:12px open_sansregular;
-    position: relative;
     background-color: #efefef;
     width: 317px;
     position: absolute;
@@ -765,13 +811,13 @@ label.error{
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
 }
 
-.usuario-lightbox-ya-hise label{
+.usuario-lightbox-ya-hise label, .trabajo-realizado label{
     color: #404040;
     font-size:14px;
     display: block;
 }
 
-.usuario-lightbox-ya-hise input[type=text]{
+.usuario-lightbox-ya-hise input[type=text], .trabajo-realizado input[type=text]{
     background-color: #f9f9f9;
     border: 2px solid #b5b5b5;
     moz-border-radius: 5px;
@@ -783,7 +829,7 @@ label.error{
     font-family:open_sansregular; 
 }
 
-.usuario-lightbox-ya-hise input[type=text]:focus
+.usuario-lightbox-ya-hise input[type=text]:focus,  .trabajo-realizado  input[type=text]:focus
 { outline:none;
   border: 2px solid #c60200;
   background-color: #fbfbfb;
@@ -792,7 +838,7 @@ label.error{
   box-shadow:         0px 0px 5px #c60200;
 }
 
-.usuario-lightbox-ya-hise-t1, .usuario-lightbox-ya-hise-t2{
+.usuario-lightbox-ya-hise-t1, .usuario-lightbox-ya-hise-t2,  .trabajo-realizado-t1{
     font:17px univers_condensedbold;
     text-transform: uppercase;
 }
@@ -801,7 +847,7 @@ label.error{
     color: #c60200; 
 }
 
-.usuario-lightbox-ya-hise-content{
+.usuario-lightbox-ya-hise-content,  .trabajo-realizado-content{
     margin-top: 15px;   
     position: relative; 
 }
@@ -810,23 +856,24 @@ label.error{
     margin-top:5px; 
 }
 
-.usuario-lightbox-ya-hise-kilometraje{
+.usuario-lightbox-ya-hise-kilometraje,  .trabajo-realizado-kilometraje, .trabajo-realizado-fecha{
     margin-top: 10px;
 }
 
-.usuario-lightbox-ya-hise-adjunto{
+.usuario-lightbox-ya-hise-adjunto,  .trabajo-realizado-adjunto{
     margin-top: 10px;
     float: left;
 }
 
-.usuario-lightbox-ya-hise-submit{
+.usuario-lightbox-ya-hise-submit,  .trabajo-realizado-submit{
     float:right;
     margin-top: 10px;
     position: relative;
     margin-right: 10px;
 }
 
-.usuario-lightbox-ya-hise input[type=submit], .usuario-lightbox-ya-hise input[type=button] {
+.usuario-lightbox-ya-hise input[type=submit], .usuario-lightbox-ya-hise input[type=button],  
+.trabajo-realizado input[type=submit], .trabajo-realizado input[type=button]{
     float:right;
     cursor: pointer;
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ebe8eb), color-stop(1, #a8a5a8) );
@@ -846,15 +893,121 @@ label.error{
     text-decoration:none;
     text-shadow:1px 1px 0px #c7c7c7;
 }
-.usuario-lightbox-ya-hise input[type=submit]:hover, .usuario-lightbox-ya-hise input[type=button]:hover {
+.usuario-lightbox-ya-hise input[type=submit]:hover, .usuario-lightbox-ya-hise input[type=button]:hover,
+.trabajo-realizado input[type=submit]:hover, .trabajo-realizado input[type=button]:hover {
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a8a5a8), color-stop(1, #ebe8eb) );
     background:-moz-linear-gradient( center top, #a8a5a8 5%, #ebe8eb 100% );
     filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#a8a5a8', endColorstr='#ebe8eb');
     background-color:#a8a5a8;
 }
-.usuario-lightbox-ya-hise input[type=submit]:active, .usuario-lightbox-ya-hise input[type=button]:active {
+.usuario-lightbox-ya-hise input[type=submit]:active, .usuario-lightbox-ya-hise input[type=button]:active,
+.trabajo-realizado input[type=submit]:active, .trabajo-realizado input[type=button]:active {
     position:relative;
     top:1px;
+}
+
+.htmo-div-button{
+    position: relative;
+}
+
+.asignar-lightbox{
+    width: 250px;
+    max-height: 300px;
+    padding: 7px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border: 1px solid #ccc;
+    color: black;
+    font: 12px open_sansregular;
+    background-color: #efefef;
+    position: absolute;
+    z-index: 10;
+    right: 0px;
+    bottom: 68px;
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    overflow-y: scroll;
+    display: none;
+}
+
+.asignar-lb-titulo{
+    font: 14px univers_condensedbold;
+    text-transform: uppercase;
+    text-align: center;
+    color: #404040;
+    position: relative;
+}
+
+.asignar-lb-titulo span{
+    width: 82%;
+    display: block;
+}
+
+.asignar-lb-close {
+    position: absolute;
+    right: 3px; top: -4px; width:20px;
+    color: #ccc;
+    cursor:pointer;
+    font-size:16px; 
+    padding: 5px;
+    display: block;
+}
+
+.asignar-lb-close:hover {
+    color: #404040;
+}
+
+.asignar-lb-carro{
+    cursor: pointer;
+    padding: 4px;
+    margin-top: 2px;
+}
+
+.asignar-lb-carro:hover, .asignar-lb-carro.selected{
+    background-color: #c60200;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -web-kit-border-radius: 2px;
+    color: white;
+}
+
+.asignar-lb-img{
+    width: 30px;   
+    height: 30px;
+    display: block;
+    float: left;
+}
+
+.asignar-lb-img img{  
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -web-kit-border-radius: 2px;
+    background-color: white;
+    border:1px solid #ccc;
+}
+
+.asignar-lb-desc{
+    padding: 3px;
+    line-height: 26px;
+    display: block;
+    float: left;
+    white-space: nowrap;
+    width: 190px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.asignar-lb-chk{
+    display: none;
+    color: white;
+    line-height: 31px;
+    float: left;
+    white-space: nowrap;
+}
+
+.selected .asignar-lb-chk{
+    display: block;
 }
 /* This imageless css button was generated by CSSButtonGenerator.com */
 
@@ -874,3 +1027,329 @@ div.ui-widget{
     font-size: 11px;
 } 
 /*end ya lo hice*/
+
+/* inicio trabajo realizado*/
+.flota-registrar-trabajo {
+    position: relative;
+}
+.flota-registrar-trabajo div.trabajo-realizado{
+    padding: 15px;  
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border: 1px solid #ccc;
+    color: #404040;
+    font:12px open_sansregular;
+    background-color: #efefef;
+    width: 317px;
+    position: absolute;
+    z-index: 10;
+    top: 23px;
+    right: 0px;
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+}
+
+.trabajo-realizado input.tr-trabajo{
+    width: 290px;
+}
+/* fin trabajo realizado*/
+
+/*formulario de registrar vehículo*/
+
+#loging-div.login-div-vehiculo, #loging-div.login-div-historial
+{ width:600px; 
+  display: none;
+}
+
+#login-div-top
+{ width:605px; }
+
+
+#login-div-top-texto
+{ font:12px open_sansregular;
+  position:relative;
+  background-color: #ef0600;
+  text-align:center;
+  color: white;
+  border: 1px solid #c60200;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  padding:10px; }
+
+#login-div-center
+{ margin-top:2px;
+  position:relative;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+#login-div-center.sesion-login{
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px; 
+}
+
+#login-div-center.sesion-vehiculo, #login-div-center.sesion-historial{
+    border-radius: 5px;
+    padding:10px;
+}
+
+#login-div-registrate
+{ background-color: #f5f5f5;
+  float:right;
+  width: 36%;
+  color: #404040;
+  font-family:open_sansregular; 
+  background-image:url(../../resources/images/login/separador.png);
+  background-position:left;
+  background-repeat:repeat-y;
+  padding-left: 50px;
+  padding-right: 90px;
+}
+
+.sesion-login #login-div-sesion
+{ background-color: #f5f5f5;
+  float:left;
+  width: 256px;
+  color: #404040;
+  font-family:open_sansregular;
+  padding-left: 20px;}
+
+#login-div-titulo
+{ padding-top:15px;
+  margin-left:10px;
+  font:25px univers_condensedbold; }
+
+.sesion-vehiculo #login-div-titulo, .sesion-historial #login-div-titulo{
+    font:20px univers_condensedbold;
+}
+
+
+#login-div-titulo span
+{ margin-left:5px;
+  position:relative;
+  top:3px; }
+
+
+
+#form_login label, #form_login input, #form_registro label, #form_registro input
+{ display:block; }
+
+#form_registro label,#form_login label, #form_historial label
+{ 
+    margin-top: 10px;
+}
+
+#loging-div input[type=text], #loging-div select{
+    background-color: #f9f9f9;
+    border: 2px solid #b5b5b5;
+    moz-border-radius: 5px;
+    webkit-border-radius: 5px; 
+    border-radius: 5px;
+    outline:none;
+    color: black;
+    font-family:open_sansregular; 
+}
+
+#loging-div input#input_vehiculo_kilometraje{
+    width: 120px;
+}
+
+#loging-div label{
+    color: #404040;
+    font-size:11px;
+    display: block;
+
+}
+
+.form_registro_input , #form_registro select, #form_login input[type=text], #form_login input[type=password], .form_vehiculo_input, #form_vehiculo select
+{ 
+    padding: 10px 10px; 
+    margin-top: 3px;}
+
+#form_registro .form_registro_input, #form_registro select{
+    width: 250px;
+}
+#form_registro .form_registro_ie_select{
+    width: 274px;  
+}
+#form_vehiculo .form_vehiculo_input{
+    width: 255px;   
+}
+
+#quisiste_decir{
+    text-decoration: underline;
+    font-size: 18px;
+    color: #ef0600;
+    cursor: pointer;
+    font-style: italic;
+    font-weight: bold;
+    width: 270px;
+}
+
+.form_login_input
+{ width:200px;}
+
+#form_historial input[type=text]{
+    width:70px;
+    padding: 5px 5px;
+    margin-top: 3px;
+}
+
+#loging-div input[type=text]:focus, #loging-div input[type=password]:focus
+{ outline:none;
+  border: 2px solid #c60200;
+  background-color: #fbfbfb;
+  -webkit-box-shadow: 0px 0px 5px #c60200;
+  -moz-box-shadow:    0px 0px 5px #c60200;
+  box-shadow:         0px 0px 5px #c60200;
+}
+
+
+#form_registro #ckbox-registrate-chkbox
+{ display:inline; }
+
+#form_registro #label-registrate-condiciones
+{ font-size:11px;
+  margin-top:0;
+  margin-left:10px;
+  position:absolute;
+  top:4px; 
+  left: 20px;}
+
+#form_registro #label-registrate-condiciones span
+{ text-decoration:underline;
+  font-style:italic;
+  cursor:pointer;
+  color: #404040; }
+
+#form_registro #label-registrate-condiciones a
+{ cursor:pointer;
+  color:#FFF;
+  text-decoration:none; }
+
+#loging-div input[type=submit], #loging-div input[type=button] {
+    float:right;
+    margin-top:20px;
+    cursor: pointer;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ebe8eb), color-stop(1, #a8a5a8) );
+    background:-moz-linear-gradient( center top, #ebe8eb 5%, #a8a5a8 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebe8eb', endColorstr='#a8a5a8');
+    background-color:#ebe8eb;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    border:1px solid #8f8f8f;
+    display:inline-block;
+    color:#4a4a4a;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #c7c7c7;
+}
+
+#form_login input[type=submit]{
+    margin-top: 0px;    
+}
+
+#loging-div input[type=submit]:hover {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a8a5a8), color-stop(1, #ebe8eb) );
+    background:-moz-linear-gradient( center top, #a8a5a8 5%, #ebe8eb 100% );
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#a8a5a8', endColorstr='#ebe8eb');
+    background-color:#a8a5a8;
+}
+#loging-div input[type=submit]:active {
+    position:relative;
+    top:1px;
+}
+/* This imageless css button was generated by CSSButtonGenerator.com */
+
+#login-div-ingresarolvidar input
+{ float:right;}
+
+#login-div-olvide
+{ float:left;
+  width:50px; }
+
+#login-div-olvide a
+{ text-decoration:underline;
+  color:#404040;
+  font-size:11px;
+  cursor:pointer; }
+
+#form_registro label.error,#form_login label.error
+{ margin-top:0; }
+
+#form_registro,#form_login
+{ margin-left:30px; }
+
+#form_registro #select-registrate-modelo,#login-div-ingresarolvidar
+{ margin-top:20px; position: relative;}
+
+#home-div-facebook-button{
+    display: block;
+    width: 100%;    
+    cursor: pointer;
+}
+
+.div_campo_chkbox{
+    margin-top: 5px;
+}
+
+#form_vehiculo select{
+    width: 110px;   
+}
+
+#vehiculo_form_div_kilo{
+    float: left;
+}
+
+#vehiculo_form_div_model{
+    float: right;
+}
+
+#vehiculo_div_form{
+    margin-top: 10px;
+    font-family:open_sansregular;
+    padding-left: 30px; 
+    float: left; 
+    margin-left: 30px;  
+}
+
+#form_vehiculo input 
+{ display:block; }
+
+#form_vehiculo label
+{ font-size:11px;
+  margin-top: 10px;
+}
+
+#form_vehiculo_file label{
+    font-size:11px;
+    margin-bottom: 5px;
+    font-family:open_sansregular;
+}
+
+#foto_div_form{
+    float: left;
+    margin-top: 30px;
+    max-width:188px;
+    color: transparent;
+}
+
+#foto_form_marco{
+    padding: 2px;
+    background-color: white;
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+#foto_form_marco img{   
+    border-radius: 5px;
+    max-width:182px;
+}
+/*fin de registrar vehículo*/

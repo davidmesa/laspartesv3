@@ -129,12 +129,30 @@ class Flota_model extends CI_Model {
         return $q->row(0);
     }
 
+    /**
+     * Da el flota usuario vehiculo
+     * @param  int $id_usuario_vehiculo 
+     * @return array flota usuario vehiculo 
+     */
     function dar_flota_vehiculo($id_usuario_vehiculo){
         $this->db->escape($id_usuario_vehiculo);
         $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
         $this->db->limit(1);
         $q = $this->db->get('flota_usuario_vehiculo');
         return $q->row(0);
+    }
+
+    /**
+     * Agrega un vehículo a una flota
+     * @param  int $id_usuario_vehiculo 
+     * @return int el id de la flota vehiculo
+     */
+    function agregar_flota_vehiculo($id_usuario_vehiculo, $id_flota){
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->set('id_usuario_vehiculo', $id_usuario_vehiculo);
+        $this->db->set('id_flota', $id_flota);
+        $this->db->insert('flota_usuario_vehiculo');
+        return mysql_insert_id();
     }
 
    
@@ -147,7 +165,6 @@ class Flota_model extends CI_Model {
         $this->db->where('flotas_hmto.id_flota_usuario_vehiculo in 
             (select fuv.id_flota_usuario_vehiculo from flota_usuario_vehiculo as fuv where fuv.id_usuario_vehiculo = '.$usuario_vehiculo.') ');
         $this->db->delete('flotas_hmto');
-        // echo $this->db->last_query();
     }
 
     /**
@@ -170,4 +187,31 @@ class Flota_model extends CI_Model {
         $this->db->insert('flotas_hmto');
     }
 
+    /**
+     * Asigna una tarea
+     * @param  [type] $asignar  [description]
+     * @param  [type] $asignado [description]
+     * @param  [type] $tarea    [description]
+     * @return [type]           [description]
+     */
+    function asignar_htmo($asignado, $tareas){
+        $this->db->escape($asignar);
+        $this->db->escape($asignado);
+        $this->borrar_hmto_usuario_vehiculo($asignado);
+        $id_flota_usuario_vehiculo = $this->dar_flota_vehiculo($asignado)->id_flota_usuario_vehiculo;
+        // $this->db->select()
+        // $this->db->from('flotas_hmto');
+        // $this->db->join('flota_usuario_vehiculo', 'flota_usuario_vehiculo.id_flota_usuario_vehiculo = flotas_hmto.id_flota_usuario_vehiculo');
+        // $this->db->where('flotas_hmto.id_usuario_vehiculo', $asignado);
+        foreach ($tareas as $key => $tarea) {
+            $this->db->set('id_tarea', $tarea->id_servicio);
+            $this->db->set('periodicidad', $tarea->periodicidad);
+            $this->db->set('rango', $tarea->rango);
+            $this->db->set('id_flota_usuario_vehiculo', $id_flota_usuario_vehiculo);
+            $this->db->insert('flotas_hmto');
+        }
+        
+        
+
+    }
 }

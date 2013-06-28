@@ -507,7 +507,7 @@ class Usuario extends Laspartes_Controller {
      * @param int $kilometraje_mensual
      * @return array tareas a realizar 
      */
-    function _dar_tareas_vehiculo($vehiculo, $kilometraje_ciudad) {
+    function _dar_tareas_vehiculo($vehiculo, $kilometraje_ciudad, $opciones) {
         $this->load->helper('date');
         $this->load->model('flota_model');
         $tareas = array();
@@ -515,6 +515,10 @@ class Usuario extends Laspartes_Controller {
         $kilometraje_mensual = $kilometraje_ciudad / 12;
         $kilometraje_diario = $kilometraje_ciudad / 365;
         $kilometraje_actual = $vehiculo->kilometraje;
+        if($opciones['trabajos']){
+            $trabajos_realizados  = $this->_dar_trabajos_realizados($vehiculo->id_usuario_vehiculo);
+            $tareas_asignadas = array_merge($trabajos_realizados, $tareas_asignadas);
+        }
         if ($kilometraje_actual > 3000) {
             $tareas = $this->flota_model->dar_tareas_vehiculo_personalizado($vehiculo->id_usuario_vehiculo);
             if(count($tareas)  == 0)
@@ -669,7 +673,9 @@ class Usuario extends Laspartes_Controller {
         $kilometraje_diario = $kilometraje_ciudad / 365;
         $kilometraje_actual = $vehiculo->kilometraje;
         if ($kilometraje_actual > 3000) {
-            $tareas = $this->usuario_model->dar_tareas_vehiculo($vehiculo->id_vehiculo, $vehiculo->modelo);
+            $tareas = $this->flota_model->dar_tareas_vehiculo_personalizado($vehiculo->id_usuario_vehiculo);
+            if(count($tareas)  == 0)
+                $tareas = $this->usuario_model->dar_tareas_vehiculo($vehiculo->id_vehiculo, $vehiculo->modelo);
             $fecha_actual = mdate("%Y-%m-%d");
             foreach ($tareas as $tarea) {
                 $tarea->realizado = false;
@@ -3476,6 +3482,7 @@ class Usuario extends Laspartes_Controller {
             $vehiculoseleccionado = $this->usuario_model->dar_vehiculo($id_usuario_vehiculo);
             $data['vehiculoseleccionado'] = $vehiculoseleccionado;
             $tareas = array();
+            
             $tareas_vehiculo = $this->_dar_tareas_vehiculo($vehiculoseleccionado, $kilometraje_ciudad);
             $tareas = $tareas_vehiculo;
             foreach ($tareas as $key => $tarea){
@@ -3872,6 +3879,11 @@ class Usuario extends Laspartes_Controller {
                     'field' => 'input_vehiculo_id_usuario_vehiculo',
                     'label' => 'Placa',
                     'rules' => 'trim|xss_clean'
+                ),
+                array(
+                    'field' => 'input_id_flota',
+                    'label' => 'id flota',
+                    'rules' => 'trim|xss_clean'
                 )
             );
             $this->form_validation->set_rules($reglas);
@@ -3887,6 +3899,7 @@ class Usuario extends Laspartes_Controller {
                 $modelo = $this->input->get_post('input_vehiculo_modelo', TRUE);
                 $kilometraje = $this->input->get_post('input_vehiculo_kilometraje', TRUE);
                 $placa = $this->input->get_post('input_vehiculo_placa', TRUE);
+                $id_flota = $this->input->get_post('input_id_flota', TRUE);
                 $placa = str_replace(' ', '', $placa);
                 $id_usuario = $this->session->userdata('id_usuario');
 
@@ -3896,16 +3909,17 @@ class Usuario extends Laspartes_Controller {
 
                 $vehiculo = $this->vehiculo_model->existe_vehiculo_marca_linea($marca, $linea);
 
+                $id_usuario_vehiculo = '';
                 if ($vehiculo != false){
                     if(empty($id_usuario_vehiculo_precreado))
-                        $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $vehiculo->id_vehiculo, '', $modelo, $kilometraje, '', $placa);
+                        $id_usuario_vehiculo = $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $vehiculo->id_vehiculo, '', $modelo, $kilometraje, '', $placa);
                     else
                         $this->usuario_model->actualizar_vehiculo_usuario($id_usuario_vehiculo_precreado, $vehiculo->id_vehiculo, "", $modelo, $kilometraje , $serie, $placa );
                 }else {
 
                     $nuevoVehiculo = $this->vehiculo_model->agregar_vehiculo($marca, $linea);
                     if(empty($id_usuario_vehiculo_precreado))
-                        $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $nuevoVehiculo, '', $modelo, $kilometraje, '', $placa);
+                        $id_usuario_vehiculo = $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $nuevoVehiculo, '', $modelo, $kilometraje, '', $placa);
                     else
                         $this->usuario_model->actualizar_vehiculo_usuario($id_usuario_vehiculo_precreado, $vehiculo->id_vehiculo, "", $modelo, $kilometraje , $serie, $placa );
 
@@ -3914,11 +3928,112 @@ class Usuario extends Laspartes_Controller {
                     $destinatarios[] = $destinatario;
                     send_mail($destinatarios, "[LasPartes.com] Nuevo Carro", "", 'El vehiculo: ' . $marca . ' ' . $linea . ' con id_vehiculo: ' . $nuevoVehiculo . ' fue ingresada al sistema por el id_usuario: ' . $id_usuario);
                 }
+                //si se envía el id de la flota, este carro se agrega a una flota
+                if($id_flota){
+                    $this->load->model('flota_model');
+                    $this->flota_model->agregar_flota_vehiculo($id_usuario_vehiculo, $id_flota);
+                }
+
                 echo 'true';
             }
         }
     }
 
+    /**
+     * agrega el vehículo desde el formulario de registro por medio de ajax 
+     */
+    function agregar_vehiculo_flota_ajax() {
+        if ($this->hay_sesion_activa()) {
+            $this->load->library('form_validation');
+            $reglas = array(
+                array(
+                    'field' => 'input_vehiculo_marca',
+                    'label' => 'Marca',
+                    'rules' => 'trim|required|xss_clean|max_length[20]'
+                ),
+                array(
+                    'field' => 'input_vehiculo_linea',
+                    'label' => 'Línea',
+                    'rules' => 'trim|required|xss_clean|max_length[50]'
+                ),
+                array(
+                    'field' => 'input_vehiculo_kilometraje',
+                    'label' => 'Kilometraje',
+                    'rules' => 'trim|required|xss_clean|max_length[10]|is_natural'
+                ),
+                array(
+                    'field' => 'input_vehiculo_modelo',
+                    'label' => 'Modelo',
+                    'rules' => 'trim|required|xss_clean|numeric|greater_than[1950]|less_than[2015]'
+                ),
+                array(
+                    'field' => 'input_vehiculo_placa',
+                    'label' => 'Placa',
+                    'rules' => 'trim|xss_clean|max_length[7]'
+                ),
+                array(
+                    'field' => 'input_vehiculo_id_usuario_vehiculo',
+                    'label' => 'Placa',
+                    'rules' => 'trim|xss_clean'
+                ),
+                array(
+                    'field' => 'input_id_flota',
+                    'label' => 'id flota',
+                    'rules' => 'trim|xss_clean'
+                )
+            );
+            $this->form_validation->set_rules($reglas);
+
+            if (!$this->form_validation->run()) {
+                $this->form_validation->set_error_delimiters('', '');
+                json_encode(array('status' => false, 'msg' => validation_errors()));
+            } else {
+                $this->load->helper('date');
+                $id_usuario_vehiculo_precreado =$this->input->get_post('input_vehiculo_id_usuario_vehiculo', TRUE);
+                $marca = $this->input->get_post('input_vehiculo_marca', TRUE);
+                $linea = $this->input->get_post('input_vehiculo_linea', TRUE);
+                $modelo = $this->input->get_post('input_vehiculo_modelo', TRUE);
+                $kilometraje = $this->input->get_post('input_vehiculo_kilometraje', TRUE);
+                $placa = $this->input->get_post('input_vehiculo_placa', TRUE);
+                $id_flota = $this->input->get_post('input_id_flota', TRUE);
+                $placa = str_replace(' ', '', $placa);
+                $id_usuario = $this->session->userdata('id_usuario');
+
+                $this->load->model('usuario_model');
+                $this->load->model('vehiculo_model');
+                $this->load->helper('mail');
+
+                $vehiculo = $this->vehiculo_model->existe_vehiculo_marca_linea($marca, $linea);
+
+                $id_usuario_vehiculo = '';
+                if ($vehiculo != false){
+                    if(empty($id_usuario_vehiculo_precreado))
+                        $id_usuario_vehiculo = $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $vehiculo->id_vehiculo, '', $modelo, $kilometraje, '', $placa);
+                    else
+                        $this->usuario_model->actualizar_vehiculo_usuario($id_usuario_vehiculo_precreado, $vehiculo->id_vehiculo, "", $modelo, $kilometraje , $serie, $placa );
+                }else {
+
+                    $nuevoVehiculo = $this->vehiculo_model->agregar_vehiculo($marca, $linea);
+                    if(empty($id_usuario_vehiculo_precreado))
+                        $id_usuario_vehiculo = $this->usuario_model->agregar_vehiculo_usuario($id_usuario, $nuevoVehiculo, '', $modelo, $kilometraje, '', $placa);
+                    else
+                        $this->usuario_model->actualizar_vehiculo_usuario($id_usuario_vehiculo_precreado, $vehiculo->id_vehiculo, "", $modelo, $kilometraje , $serie, $placa );
+
+                    $destinatario = new stdClass();
+                    $destinatario->email = 'tallerenlinea@laspartes.com.co';
+                    $destinatarios[] = $destinatario;
+                    send_mail($destinatarios, "[LasPartes.com] Nuevo Carro", "", 'El vehiculo: ' . $marca . ' ' . $linea . ' con id_vehiculo: ' . $nuevoVehiculo . ' fue ingresada al sistema por el id_usuario: ' . $id_usuario);
+                }
+                //si se envía el id de la flota, este carro se agrega a una flota
+                if($id_flota){
+                    $this->load->model('flota_model');
+                    $this->flota_model->agregar_flota_vehiculo($id_usuario_vehiculo, $id_flota);
+                }
+                $status_img = $this->_subir_imagen_usuario_vehiculo($id_usuario_vehiculo);
+                echo json_encode(array('status' => true, 'id_usuario_vehiculo' => $id_usuario_vehiculo));
+            }
+        }
+    }
     /**
      * agrega el vehículo desde el perfil por medio de ajax 
      */
@@ -4012,6 +4127,8 @@ class Usuario extends Laspartes_Controller {
             $this->load->model('usuario_model');
             $id_usuario_vehiculo = $this->input->post('id_usuario_vehiculo');
             $id_usuario = $this->input->post('id_usuario');
+            if(!$id_usuario)
+                $id_usuario = $this->usuario_model->dar_vehiculo($id_usuario_vehiculo)->id_usuario;
             $upload_path = 'resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo . '/';
             if (!is_dir('resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo)) {
                 mkdir('resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo, 0777, TRUE);
@@ -4222,6 +4339,109 @@ class Usuario extends Laspartes_Controller {
             } else {
                 echo $this->upload->display_errors();
             }
+        }
+    }
+
+    /**
+     * Sube la la imagen de un vehículo según su id_usuario_vehiculo
+     */
+    function _subir_imagen_usuario_vehiculo($id_usuario_vehiculo) {
+        $this->load->library('upload');
+        $id_usuario = $this->session->userdata('id_usuario');
+        $upload_path = 'resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo . '/';
+        if (!is_dir('resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo)) {
+            mkdir('resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo, 0777, TRUE);
+        }
+        $config = array(
+            'upload_path' => $upload_path,
+            'allowed_types' => 'jpg|jpeg|png|gif',
+            'max_size' => '10000'
+        );
+        $this->upload->initialize($config);
+
+        if ($this->upload->do_upload('input_vehiculo_imagen')) {
+            $imagen = $this->upload->data();
+
+            $img_path = 'resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo . '/' . $imagen['file_name'];
+            $img_thumb = 'resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo . '/' . $imagen['file_name'];
+            $config['image_library'] = 'gd2';
+            $config['source_image'] = $img_path;
+            $config['maintain_ratio'] = FALSE;
+            $img = imagecreatefromjpeg($img_path);
+            $_width = imagesx($img);
+            $_height = imagesy($img);
+            $img_type = '';
+            $thumb_size = 177;
+
+            if ($_width > $_height) {
+                // wide image
+                $config['width'] = intval(($_width / $_height) * $thumb_size);
+                if ($config['width'] % 2 != 0) {
+                    $config['width']++;
+                }
+                $config['height'] = $thumb_size;
+                $img_type = 'wide';
+            } else if ($_width < $_height) {
+                // landscape image
+
+                $config['width'] = $thumb_size;
+                $config['height'] = intval(($_height / $_width) * $thumb_size);
+
+                if ($config['height'] % 2 != 0) {
+                    $config['height']++;
+                }
+                $img_type = 'landscape';
+            } else {
+                // square image
+                $config['width'] = $thumb_size;
+                $config['height'] = $thumb_size;
+                $img_type = 'square';
+            }
+
+
+
+            $this->load->library('image_lib');
+
+            $this->image_lib->initialize($config);
+
+            $this->image_lib->resize();
+
+            // reconfigure the image lib for cropping
+
+            $conf_new = array(
+                'image_library' => 'gd2',
+                'source_image' => $img_thumb,
+                'create_thumb' => FALSE,
+                'maintain_ratio' => FALSE,
+                'width' => $thumb_size,
+                'height' => $thumb_size
+            );
+
+            if ($img_type == 'wide') {
+
+                $conf_new['x_axis'] = ($config['width'] - $thumb_size) / 2;
+
+                $conf_new['y_axis'] = 0;
+            } else if ($img_type == 'landscape') {
+
+                $conf_new['x_axis'] = 0;
+
+                $conf_new['y_axis'] = ($config['height'] - $thumb_size) / 2;
+            } else {
+
+                $conf_new['x_axis'] = 0;
+
+                $conf_new['y_axis'] = 0;
+            }
+
+            $this->image_lib->initialize($conf_new);
+
+            $this->image_lib->crop();
+
+            $this->usuario_model->actualizar_usuario_vehiculo_imagen_url($id_usuario_vehiculo, $img_path);
+
+        } else {
+            return $this->upload->display_errors();
         }
     }
 
@@ -5115,7 +5335,8 @@ class Usuario extends Laspartes_Controller {
             $id_usuario_vehiculo = $this->input->post('id_usuario_vehiculo');
             $data['usuario_vehiculo'] = $this->usuario_model->dar_usuario_vehiculo($id_usuario_vehiculo);
             $tareas = array();
-            $tareas_vehiculo = $this->_dar_tareas_vehiculo($data['usuario_vehiculo'], '32000');//hay que cambiar el kilometraje por el real
+            $opciones['trabajos'] = true;
+            $tareas_vehiculo = $this->_dar_tareas_vehiculo($data['usuario_vehiculo'], '32000', $opciones);//hay que cambiar el kilometraje por el real
             $tareas = $tareas_vehiculo;
             $sort_vehiculos = array();
             foreach ($tareas as $key => $tarea) {
@@ -5198,54 +5419,180 @@ class Usuario extends Laspartes_Controller {
             ),array(
                 'field' => 'input_periodicidad',
                 'label' => 'Periodicidad',
-                'rules' => 'trim|required|xss_clean'
+                'rules' => 'trim|xss_clean'
             ),array(
                 'field' => 'input_rango',
                 'label' => 'Rango de tolerancia',
-                'rules' => 'trim|required|xss_clean'
+                'rules' => 'trim|xss_clean'
             ),array(
                 'field' => 'input_categoria',
                 'label' => 'Tarea',
-                'rules' => 'trim|required|xss_clean'
-            )
+                'rules' => 'trim|xss_clean'
+            // )
             // ,array(
             //     'field' => 'hoja_mto_id_tarea_otros',
             //     'label' => 'ID del elemento',
             //     'rules' => 'trim|xss_clean'
-            // ),array(
-            //     'field' => 'otro',
-            //     'label' => 'Nombre de la tarea',
-            //     'rules' => 'trim|xss_clean'
+            ),array(
+                'field' => 'input_otro',
+                'label' => 'Nombre de la tarea nueva',
+                'rules' => 'trim|xss_clean'
             // ),array(
             //     'field' => 'imagen',
             //     'label' => 'Imagen de la tarea',
             //     'rules' => 'trim|xss_clean'
-            // )
+            )
         );
         $this->form_validation->set_rules($reglas);
         if (!$this->form_validation->run()) {
-            
+            $this->form_validation->set_error_delimiters('', '');
+            echo json_encode(array('status' => false, 'msg' => validation_errors));
             // $this->ver_hoja_mantenimiento($id_vehiculo, validation_errors('<div class="mensaje-error canhide">', '</div>'));
         } else {
             $this->load->model('flota_model');
+            $this->load->model('vehiculo_model');
             $periodicidades = array();
             $rangos = array();
             $id_servicios = array();
+            $otros = array();
             parse_str($this->input->post('input_periodicidad'), $periodicidades);
             parse_str($this->input->post('input_rango'), $rangos);
             parse_str($this->input->post('input_categoria'), $id_servicios);
+            parse_str($this->input->post('input_otro'), $otros);
             $id_usuario_vehiculo = $this->input->post('id_usuario_vehiculo');
             $id_flota_vehiculo = $this->flota_model->dar_flota_vehiculo($id_usuario_vehiculo)->id_flota_usuario_vehiculo;
+            $vehiculo = $this->vehiculo_model->dar_vehiculo_usuario_vehiculo($id_usuario_vehiculo);
             $this->flota_model->borrar_hmto_usuario_vehiculo($id_usuario_vehiculo);
-            // $otro = $this->input->post('otro');
 
             foreach ($id_servicios as $key => $servicio) {
                 $llave = explode('_', $key);
-                $this->flota_model->agregar_hoja_mto($id_flota_vehiculo, $servicio, $periodicidades['hmto_periodicidad_'.$llave[2]], $rangos['hmto_rango_'.$llave[2]]);
+                if($servicio == 0){
+                    $id_servicio = $this->vehiculo_model->agregar_servicio_hmto($otros['hmto_otro_'.$llave[2]]);
+                    $this->flota_model->agregar_hoja_mto($id_flota_vehiculo, $id_servicio, $periodicidades['hmto_periodicidad_'.$llave[2]], $rangos['hmto_rango_'.$llave[2]]);
+                }else{
+                    $this->flota_model->agregar_hoja_mto($id_flota_vehiculo, $servicio, $periodicidades['hmto_periodicidad_'.$llave[2]], $rangos['hmto_rango_'.$llave[2]]);
+
+                }
             }
-            echo 'true';
+            echo json_encode(array('status' => true));
         }
     }
 
+    /**
+     * asigna la hmto a los carros seleccionados
+     */
+    function asignar_htmo(){
+        $this->load->model('flota_model');
+        $this->load->model('vehiculo_model');
+        $asignar = $this->input->post('id_usuario_vehiculo');
+        $tareas = $this->flota_model->dar_tareas_vehiculo_personalizado($asignar);
+        if(count($tareas)  > 0){
+            foreach (json_decode($this->input->post('asignados')) as $key => $asignado) {
+                $this->flota_model->asignar_htmo($asignado, $tareas);
+            }
+        }else{
+            $vehiculo = $this->vehiculo_model->dar_vehiculo_usuario_vehiculo($asignar);
+
+            $tareas = $this->flota_model->dar_tareas_vehiculo($vehiculo->id_vehiculo, $vehiculo->modelo);
+            if(count($tareas) > 0){
+                foreach (json_decode($this->input->post('asignados')) as $key => $asignado) {
+                    $this->flota_model->asignar_htmo($asignado, $tareas);
+                } 
+            }
+        }
+    }
+
+    /**
+     * Se registra un trabajo que se le halla realizado a un vehículo de un usuario
+     */
+    function trabajo_realizado_ajax() {
+        if ($this->hay_sesion_activa()) {
+            $this->load->library('form_validation');
+            $reglas = array(
+                array(
+                    'field' => 'id_usuario_vehiculo',
+                    'rules' => 'trim|required|xss_clean|numeric',
+                    'label' => 'id del vehículo'
+                ),array(
+                    'field' => 'trabajo',
+                    'rules' => 'trim|required|xss_clean',
+                    'label' => 'Trabajo realizado'
+                ), array(
+                    'field' => 'kilometraje',
+                    'rules' => 'trim|xss_clean|numeric',
+                    'label' => 'Kilometraje'
+                ),
+                array(
+                    'field' => 'fecha',
+                    'rules' => 'trim|required|xss_clean',
+                    'label' => 'Fecha'
+                )
+            );
+            $this->form_validation->set_rules($reglas);
+
+            if (!$this->form_validation->run()) {
+                $this->form_validation->set_error_delimiters('', '');
+                echo json_encode(array('status' => false, 'msg' => validation_errors()));
+            } else {
+                $this->load->model('usuario_model');
+                $this->load->helper('date');
+                setlocale(LC_ALL, 'es_ES');
+                $id_usuario_vehiculo = $this->input->get_post('id_usuario_vehiculo', TRUE);
+                $kilometraje = $this->input->get_post('kilometraje', TRUE);
+                $trabajo = $this->input->get_post('trabajo', TRUE);
+                $fecha_realizado = $this->input->get_post('fecha', TRUE);
+                $this->load->library('upload');
+                $this->load->model('usuario_model');
+                $id_usuario = $this->session->userdata('id_usuario');
+                $upload_path = 'resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo . '/adjuntos/';
+                if (!is_dir('resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo . '/adjuntos')) {
+                    mkdir('resources/images/usuarios/' . $id_usuario . '/vehiculos/' . $id_usuario_vehiculo . '/adjuntos', 0777, TRUE);
+                }
+                $nombreArchivo = 'adjunto-' . $this->_getUniqueCode(10);
+                $config = array(
+                    'upload_path' => $upload_path,
+                    'allowed_types' => 'gif|jpg|png|doc|txt|pdf|tiff|docx|rtf',
+                    'max_size' => '10000',
+                    'file_name' => $nombreArchivo
+                );
+                $this->upload->initialize($config);
+
+                if ($this->upload->do_upload('trabajo_realizada_adjunto')) {
+                    $imagen = $this->upload->data();
+                    $id = $this->usuario_model->registrar_trabajo_realizado($id_usuario_vehiculo, $trabajo, $fecha_realizado, $kilometraje, $upload_path . $imagen['file_name']);
+                    echo json_encode(array('status' => true, 'msg' => strftime("%B %d de %Y", strtotime($fecha_realizado)) . "|" . $id . "|" . $trabajo . "|" . $upload_path . $imagen['file_name']));
+                } else {
+                    $id = $this->usuario_model->registrar_trabajo_realizado($id_usuario_vehiculo, $trabajo, $fecha_realizado, $kilometraje);
+                    if ($this->input->get_post('trabajo_realizada_adjunto') != null) {
+                        echo json_encode(array('status' => false, 'msg' => $this->upload->display_errors('', '')));
+                    } else {
+                        echo json_encode(array('status' => true, 'msg' => strftime("%B %d de %Y", strtotime($fecha_realizado)) . "|" . $id . "|" . $trabajo));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * da los trabajos realizados del vehilo de un usuario con el formato
+     * para ser ingresado como tareas
+     * @param  int $id_usuario_vehiculo id del vehiculo usuario
+     * @return [type]                      [description]
+     */
+    function _dar_trabajos_realizados($id_usuario_vehiculo){
+        $trabajos = $this->usuario_model->dar_trabajos_realizados($id_usuario_vehiculo);
+        $tareas_asignadas = array();
+        foreach ($trabajos as $key => $trabajo) {
+            $tareaTemp = new stdClass();
+            $tareaTemp->nombre = $trabajo->trabajo;
+            $tareaTemp->adjunto = $realizado->adjunto;
+            $tareaTemp->due = strftime("%B %d de %Y", strtotime($realizado->trabajo));
+            $tareaTemp->fecha = $trabajo->fecha;
+            $tareaTemp->realizado = true;
+            $tareaTemp->trabajo = true;
+            $tareas_asignadas[] = $tareaTemp;
+        }
+        return $tareas_asignadas;
+    }
 }
 

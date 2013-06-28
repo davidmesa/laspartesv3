@@ -9,6 +9,7 @@
 <script src="<?php echo base_url(); ?>resources/js/jquery.ui.autocomplete.js" type="text/javascript"></script>
 
 <script src="<?php echo base_url(); ?>resources/js/ajaxfileupload.js" type="text/javascript"></script>
+<script src="<?php echo base_url(); ?>resources/js/ajaxupload.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>resources/js/jquery.datepick-es.js" type="text/javascript"></script> 
 
 <script type="text/javascript" src="<?php echo base_url(); ?>resources/admin/js/jquery.tablesorte.js"></script> 
@@ -19,17 +20,8 @@
 
 
 <script type="text/javascript" src="<?php echo base_url() ?>resources/js/jquery.lightbox_me.js"></script>
-<script src="<?php echo base_url(); ?>resources/js/ajaxfileupload.js" type="text/javascript"></script>
 
 <style> 
-    .ui-autocomplete-input
-    {
-        margin: 0; 
-        padding: 0.30em 0 0.30em 0.45em;
-        max-height: 30px;
-        font-size: 13px;
-    }
-
     .ui-menu .ui-menu-item a{
         font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
         font-size:13px;
@@ -82,7 +74,7 @@
     </script>
     <![endif]-->
 <script>
-    $(function(){
+$(function(){
     var vehiculosMarca = <?php echo json_encode($allmarcas); ?>;
     $(".editar-perfil-hidden.marca:not(.ui-autocomplete-input)").live("focus", function (event) {
             $(this).autocomplete({
@@ -112,14 +104,47 @@
                 }
             });         
         });
-    });
+    // });
+
+    $('#input_vehiculo_marca').autocomplete({
+            source: vehiculosMarca,
+            change: function(e, ui){
+                $('#input_vehiculo_linea').val('');
+                $('#nuevo_carro').val(1);
+            },select: function(e, ui) {
+                var linea_elem = $('#input_vehiculo_linea');
+                linea_elem.val('');
+                var marca_actual = ui.item.value;
+                $.ajax({
+                    type: "POST",
+                    url: "<?php echo base_url(); ?>usuario/dar_linea_vehiculos_marca_ajax",
+                    async: false,
+                    data: "marca=" + marca_actual,
+                    success: function(data){
+                        var lineas = $.parseJSON(data);
+                        $(linea_elem).autocomplete({
+                            source: lineas,
+                            select: function(){
+                                $('#nuevo_carro').val(0);
+                            }
+                        });
+                    }
+                });    
+            }
+    });  
+
+});
 </script>
 
 
 <script>  
     $(document).ready(function() {
         
-
+        $("#input_vehiculo_marca, #input_vehiculo_linea").on({
+            change: function(event){
+                sugerir_carro2(this);
+            }
+        });
 
         //tablesorter
         $("#tablesorter").tablesorter({
@@ -222,81 +247,6 @@
             }
         
         });
-	
-	
-        //posiciona el div de información en una posicion fija mientras se hace
-        //scroll hacia abajo
-        // var msie6 = $.browser == 'msie' && $.browser.version < 7;
-  
-        // if (!msie6) {
-        //     var top = $('#usuario-div-mi-perfil').offset().top - parseFloat($('#usuario-div-mi-perfil').css('margin-top').replace(/auto/, 0));
-        //     var misVehiculos = $('#usuario-div-mis-vehiculos').offset().top - parseFloat($('#usuario-div-mis-vehiculos').css('margin-top').replace(/auto/, 0)) -150;
-        //     var smv = $('#usuario-div-smv').offset().top - parseFloat($('#usuario-div-smv').css('margin-top').replace(/auto/, 0))-150;
-        //     $(window).scroll(function (event) {
-        //         // what the y position of the scroll is
-        //         var y = $(this).scrollTop();
-		  
-        //         // whether that's below the form
-        //         if (y >= top) {
-        //             // if so, ad the fixed class
-        //             $('#usuario-div-mi-perfil').addClass('fixed');
-        //         } else {
-        //             // otherwise remove it
-        //             $('#usuario-div-mi-perfil').removeClass('fixed');
-        //         }
-                
-        //         if(y >= misVehiculos && y < smv){
-        //             $('.usuario-div-perfil-tarea').css('color', '#564B47')
-        //             $('.usuario-div-perfil-misvehiculos').css('color', '#C60200');
-        //             $('.activo').addClass('inactivo');
-        //             $('.activo').removeClass('activo');
-        //             $('.usuario-div-perfil-misvehiculos').removeClass('inactivo');
-        //             if($('.usuario-div-perfil-misvehiculos').hasClass('activo') == false){
-        //                 var src = $('.usuario-div-perfil-misvehiculos').find('img').attr('src');
-        //                 var subsrc = src.replace('-inactivo', '');
-        //                 $('.usuario-div-perfil-misvehiculos').find('img').attr('src', subsrc);
-
-        //             }
-        //             $('.usuario-div-perfil-misvehiculos').addClass('activo');
-        //             if($('.usuario-div-perfil-misvehiculos').hasClass('activo')){
-        //                 var inactivo =  $('.inactivo');
-        //                 inactivo.each(function(i, e){
-        //                     var scr1= $(e).find('img').attr('src');
-        //                     if(scr1.indexOf('-inactivo.png') == -1){
-        //                         var substr1 = scr1.replace('.png', '-inactivo.png');
-        //                         $(e).find('img').attr('src', substr1);
-        //                     }
-        //                 });
-                        
-        //             }
-        //         }
-        //         else if(y >= smv){
-        //             $('.usuario-div-perfil-tarea').css('color', '#564B47');
-        //             $('.usuario-div-perfil-sobrevehiculo').css('color', '#C60200');
-        //             $('.activo').addClass('inactivo');
-        //             $('.activo').removeClass('activo');
-        //             $('.usuario-div-perfil-sobrevehiculo').removeClass('inactivo');
-        //             if($('.usuario-div-perfil-sobrevehiculo').hasClass('activo') == false){
-        //                 var src = $('.usuario-div-perfil-sobrevehiculo').find('img').attr('src');
-        //                 var subsrc = src.replace('-inactivo', '');
-        //                 $('.usuario-div-perfil-sobrevehiculo').find('img').attr('src', subsrc);
-
-        //             }
-        //             $('.usuario-div-perfil-sobrevehiculo').addClass('activo');
-        //             if($('.usuario-div-perfil-sobrevehiculo').hasClass('activo')){
-        //                 var inactivo =  $('.inactivo');
-        //                 inactivo.each(function(i, e){
-        //                     var scr1= $(e).find('img').attr('src');
-        //                     if(scr1.indexOf('-inactivo.png') == -1){
-        //                         var substr1 = scr1.replace('.png', '-inactivo.png');
-        //                         $(e).find('img').attr('src', substr1);
-        //                     }
-        //                 });
-                        
-        //             }
-        //         }
-        //     });
-        // } 
         
         //valida el formulario de editar perfil
         $("#usuario_formulario_perfil").validate({
@@ -454,6 +404,15 @@
         $('.nuevo_carro', padre).val(0);
     }
 
+    //al dar click en el carro sugerido se carga la información de ese carro
+    function carro_sugerido2(e){
+        var marca = $('#quisiste_decir_marca').val();
+        var linea = $('#quisiste_decir_linea').val();
+        $("#input_vehiculo_marca").val(marca);
+        $("#input_vehiculo_linea").val(linea);
+        $('#nuevo_carro').val(0);
+    }
+
 
     //cuando se hace click en editar perfil se edita la información del perfil
     function clickEditarPerfil(e){ 
@@ -501,115 +460,123 @@
     var year = currentDate.getFullYear();
     var fecha = year+"-"+month+"-"+day;
     function dar_vehiculo(e, id_usuario_vehiculo){
-            if($.isEmptyObject($.find('#vehiculo-'+id_usuario_vehiculo))){
-            var html = $('#flota-div-template').html();
-            var vehiculo_div = '<div id="vehiculo-'+ id_usuario_vehiculo+ '" class="flota-div-template open-sans">'+ html+'</div>';
-            $('#usuario-div-mis-vehiculos').append(vehiculo_div);
+        if($.isEmptyObject($.find('#vehiculo-'+id_usuario_vehiculo))){
+        var html = $('#flota-div-template').html();
+        var vehiculo_div = '<div id="vehiculo-'+ id_usuario_vehiculo+ '" class="flota-div-template open-sans">'+ html+'</div>';
+        $('#usuario-div-mis-vehiculos').append(vehiculo_div);
 
-            var padre = $('#vehiculo-'+id_usuario_vehiculo);
-            var data = dar_vehiculo_ajax(id_usuario_vehiculo);
-            data = $.parseJSON(data);
-            if(data.status){
-                data = data.data;
-                var data_uv = data.usuario_vehiculo;
-                var data_tarea = data.tareas;
-                var data_tareas_cat = data.tareasCategoria;
-                var data_hojas = data.hojas;
-                // mostrar_hmto(padre, data_tareas_cat, data_hojas);
-                $('.editar_id_usuario_vehiculo',padre).val(data_uv.id_usuario_vehiculo);
-                $('.marca-linea',padre).children('.span-dato').text(data_uv.marca+' '+data_uv.linea);
-                $('.marca-linea',padre).children('.editar-perfil-hidden.marca').val(data_uv.marca);
-                $('.marca-linea',padre).children('.editar-perfil-hidden.linea').val(data_uv.linea);
-                $('.modelo',padre).children('.span-dato').text(data_uv.modelo);
-                $('.modelo',padre).children('.editar-perfil-hidden').val(data_uv.modelo);
-                $('.kilometraje',padre).children('.span-dato').text(data_uv.kilometraje);
-                $('.kilometraje',padre).children('.editar-perfil-hidden').val(data_uv.kilometraje);
-                $('.placa',padre).children('.span-dato').text(data_uv.numero_placa);
-                $('.placa',padre).children('.editar-perfil-hidden').val(data_uv.numero_placa);
-                $.each( data_tarea, function( key, tarea ) {
-                  if(tarea.realizado == true){
-                    var div = $('<div>').addClass('hist-compra');
-                    var ul = $('<ul>');
-                    var li = $('<li>');
+        var padre = $('#vehiculo-'+id_usuario_vehiculo);
+        var data = dar_vehiculo_ajax(id_usuario_vehiculo);
+        data = $.parseJSON(data);
+        if(data.status){
+            data = data.data;
+            var data_uv = data.usuario_vehiculo;
+            var data_tarea = data.tareas;
+            var data_tareas_cat = data.tareasCategoria;
+            var data_hojas = data.hojas;
+            // mostrar_hmto(padre, data_tareas_cat, data_hojas);
+            $('.input_imageUpload_automovil', padre).attr('id', 'imageUpload_'+id_usuario_vehiculo);
+            if(data_uv.imagen_url)
+                $('.inf-carro-marco img', padre).attr('src', data_uv.imagen_url);
+            $('.editar_id_usuario_vehiculo',padre).val(data_uv.id_usuario_vehiculo);
+            $('.marca-linea',padre).children('.span-dato').text(data_uv.marca+' '+data_uv.linea);
+            $('.marca-linea',padre).children('.editar-perfil-hidden.marca').val(data_uv.marca);
+            $('.marca-linea',padre).children('.editar-perfil-hidden.linea').val(data_uv.linea);
+            $('.modelo',padre).children('.span-dato').text(data_uv.modelo);
+            $('.modelo',padre).children('.editar-perfil-hidden').val(data_uv.modelo);
+            $('.kilometraje',padre).children('.span-dato').text(data_uv.kilometraje);
+            $('.kilometraje',padre).children('.editar-perfil-hidden').val(data_uv.kilometraje);
+            $('.placa',padre).children('.span-dato').text(data_uv.numero_placa);
+            $('.placa',padre).children('.editar-perfil-hidden').val(data_uv.numero_placa);
+            $.each( data_tarea, function( key, tarea ) {
+              if(tarea.realizado == true){
+                var div = $('<div>').addClass('hist-compra');
+                var ul = $('<ul>');
+                var li = $('<li>');
+                if(tarea.trabajo)
+                   var span_nombre = $('<span>').text('Se registró el trabajo: '); 
+                else
                     var span_nombre = $('<span>').text('Se realizó la tarea: ');
-                    if(!!tarea.adjunto){
-                        var strong = $('<strong>').text(tarea.nombre);span_nombre.append(strong); li.append(span_nombre);
-                        var nombre_adjunto = tarea.adjunto.split('/'); var size = nombre_adjunto.length -1;
-                        var ahref = $('<a>').attr('href', '<?php echo base_url();?>'+tarea.adjunto).text(nombre_adjunto[size]); li.append('Ver: ');li.append(ahref);
-                    }else{
-                        
-                        var strong = $('<strong>').text(tarea.nombre);span_nombre.append(strong); li.append(span_nombre);
-                    }
-                    var span_fecha = $('<span>').addClass('hist-fecha').text(tarea.due); li.append(span_fecha);
-                    ul.append(li);
-                    var input_id = $('<input>').attr('type', 'hidden').val(tarea.id_tarea_realizada); div.append(input_id);
-                    div.append(ul);
-                    var div_clear =  $('<div>').addClass('clear');
-                    div.append(div_clear);
-                    $('.menu-hist', padre).append(div);
-                  }else{
-                    var div = $('<div>').addClass('tarea-item');
-                    var input = $('<input>').addClass('tarea-chk-box').attr('type', 'checkbox').val(tarea.id_servicio);
-                    var img = $('<img>').addClass('tarea-img').attr('src', '<?php echo base_url();?>'+tarea.imagen_thumb_url).attr('alt', tarea.nombre);
-                    var tarea_texto = $('<div>').addClass('tarea-texto');
-                    var tarea_nombre = $('<div>').addClass('tarea-nombre').text(tarea.nombre); tarea_texto.append(tarea_nombre);
-                    var texto_tiempo = '';
-                    if(!!tarea.dias_restantes){
-                        texto_tiempo = ' '+tarea.dias_restantes + ' '+ tarea.mensaje_dias_restantes2;
-                    }
-                    var tarea_tiempo = $('<div>').addClass('tarea-tiempo').text(tarea.mensaje_dias_restantes + texto_tiempo);  
-                    tarea_texto.append(tarea_tiempo);tarea_texto.append(tarea_tiempo);
-                    div.append(input);
-                    div.append(img);
-                    div.append(tarea_texto);
-                    if(!!tarea.dias_restantes && tarea.dias_restantes>15)
-                        $('.tareas-pendiente', padre).children('.tarea-content').append(div);
-                    else
-                        $('.tareas-debo', padre).children('.tarea-content').append(div);
-                  }
-                });            
+                if(!!tarea.adjunto){
+                    var strong = $('<strong>').text(tarea.nombre);span_nombre.append(strong); li.append(span_nombre);
+                    var nombre_adjunto = tarea.adjunto.split('/'); var size = nombre_adjunto.length -1;
+                    var ahref = $('<a>').attr('href', '<?php echo base_url();?>'+tarea.adjunto).attr('target', '_blank').text(nombre_adjunto[size]); li.append('Ver: ');li.append(ahref);
+                }else{
+                    
+                    var strong = $('<strong>').text(tarea.nombre);span_nombre.append(strong); li.append(span_nombre);
+                }
+                var span_fecha = $('<span>').addClass('hist-fecha').text(tarea.due); li.append(span_fecha);
+                ul.append(li);
+                var input_id = $('<input>').attr('type', 'hidden').val(tarea.id_tarea_realizada); div.append(input_id);
+                div.append(ul);
+                var div_clear =  $('<div>').addClass('clear');
+                div.append(div_clear);
+                $('.menu-hist', padre).append(div);
+              }else{
+                var div = $('<div>').addClass('tarea-item');
+                var input = $('<input>').addClass('tarea-chk-box').attr('type', 'checkbox').val(tarea.id_servicio);
+                var img = $('<img>').addClass('tarea-img').attr('src', '<?php echo base_url();?>'+tarea.imagen_thumb_url).attr('alt', tarea.nombre);
+                var tarea_texto = $('<div>').addClass('tarea-texto');
+                var tarea_nombre = $('<div>').addClass('tarea-nombre').text(tarea.nombre); tarea_texto.append(tarea_nombre);
+                var texto_tiempo = '';
+                if(!!tarea.dias_restantes){
+                    texto_tiempo = ' '+tarea.dias_restantes + ' '+ tarea.mensaje_dias_restantes2;
+                }
+                var tarea_tiempo = $('<div>').addClass('tarea-tiempo').text(tarea.mensaje_dias_restantes + texto_tiempo);  
+                tarea_texto.append(tarea_tiempo);tarea_texto.append(tarea_tiempo);
+                div.append(input);
+                div.append(img);
+                div.append(tarea_texto);
+                if(!!tarea.dias_restantes && tarea.dias_restantes>15)
+                    $('.tareas-pendiente', padre).children('.tarea-content').append(div);
+                else
+                    $('.tareas-debo', padre).children('.tarea-content').append(div);
+              }
+            });            
                 
-                //se muestra el lightbox de la información del vehículo
-                $('#vehiculo-'+id_usuario_vehiculo).lightbox_me({
-                        closeEsc: true,
-                        lightboxSpeed: 'fast',
-                        closeSelector: ".close_lightbox",
-                        onLoad: function() { 
-                            $(padre).on("click", ".tarea-chk-box:checked", function(event){
-                                var tarea_item = $('.tarea-item').has(this);
-                                $('.usuario-lightbox-ya-hise').hide();
-                                if($('.usuario-lightbox-ya-hise', tarea_item).length > 0){
-                                    $('.usuario-lightbox-ya-hise', tarea_item).show(); 
-                                }else{
-                                    ver_realizar_tarea(this);
-                                    validate_tarea_realizar($('form.tarea-realizada', tarea_item));
-                                    $('.tarea-realizada-fecha', padre).val( fecha );
-                                    $(".tarea-realizada-fecha", padre).datepicker({ appendText: "(aaaa-mm-dd)",altField: ".tarea-realizada-fecha", altFormat: 'yy-mm-dd', rangeSelect: false, maxDate: "+0D" });
-                                    $(".tarea-realizada-fecha", padre).on({
-                                        change: function(event){
-                                            fix_kilometraje(this, padre);
-                                        }
-                                    }); 
-                                }
-                            });
+            //se muestra el lightbox de la información del vehículo
+            $('#vehiculo-'+id_usuario_vehiculo).lightbox_me({
+                    closeEsc: true,
+                    lightboxSpeed: 'fast',
+                    closeSelector: ".flota-t-close",
+                    onLoad: function() { 
+                        $(padre).on("click", ".tarea-chk-box:checked", function(event){
+                            var tarea_item = $('.tarea-item').has(this);
+                            $('.usuario-lightbox-ya-hise').hide();
+                            if($('.usuario-lightbox-ya-hise', tarea_item).length > 0){
+                                $('.usuario-lightbox-ya-hise', tarea_item).show(); 
+                            }else{
+                                ver_realizar_tarea(this);
+                                validate_tarea_realizar($('form.tarea-realizada', tarea_item));
+                                $('.tarea-realizada-fecha', padre).val( fecha );
+                                $(".tarea-realizada-fecha", padre).datepicker({ appendText: "(aaaa-mm-dd)",altField: ".tarea-realizada-fecha", altFormat: 'yy-mm-dd', rangeSelect: false, maxDate: "+0D" });
+                                $(".tarea-realizada-fecha", padre).on({
+                                    change: function(event){
+                                        fix_kilometraje(this, padre);
+                                    }
+                                }); 
+                            }
+                        });
 
-                            $(".linea, .marca", padre).on({
-                                change: function(event){
-                                    sugerir_carro(this);
-                                }
-                            });
-
-                            validate_form_editar_carro(id_usuario_vehiculo);
-                            mostrar_hmto(padre, data_tareas_cat, data_hojas);
-                            $(".input_change", padre).on({
-                                change: function(event){
-                                    modificar_hmto(this);
-                                },keypress: function(event){
-                                    modificar_hmto(this);
-                                }
-                            });
-                        }
-                });
+                        $(".linea, .marca", padre).on({
+                            change: function(event){
+                                sugerir_carro(this);
+                            }
+                        });
+                        editar_foto_carro(padre);
+                        validate_form_editar_carro(id_usuario_vehiculo);
+                        mostrar_hmto(padre, data_tareas_cat, data_hojas);
+                        $(".input_change", padre).on({
+                            change: function(event){
+                                modificar_hmto(this);
+                            },keypress: function(event){
+                                modificar_hmto(this);
+                            }
+                        });
+                    },onClose: function(){
+                        asignar_hmto(padre);
+                    }
+            });
             }else{
                 confirm(error, function () {
                                 $.modal.close();
@@ -617,7 +584,11 @@
             } 
         }else{
             $('#vehiculo-'+id_usuario_vehiculo).lightbox_me({
-                        closeEsc: true,
+                closeEsc: true,
+                staticBackground: true,
+                onClose: function(){
+                    asignar_hmto($('#vehiculo-'+id_usuario_vehiculo));
+                }
             });  
         }
     }
@@ -626,9 +597,18 @@
     var select_template;
     function mostrar_hmto(padre, data_tareas_cat, data_hojas){
         select_template = $('<select>').addClass('input_change').addClass('hmto_cat');
+        var count_selected = 0;
+        var opt_selected = 0;
              $.each( data_tareas_cat, function( key1, categoria ) {
                 
                 var option = $('<option>').val(key1).text(categoria);
+                if(count_selected <1)
+                    count_selected ++;
+                else if(count_selected == 1){
+                    opt_selected  = key1;
+                    option.attr('selected', 'selected');
+                }
+                   
                 select_template.append(option);
             });
          
@@ -647,7 +627,7 @@
             }
             var td1 = $('<td>');
             var inputChk = $('<input>').attr('type', 'checkbox').addClass('input_chk'); td1.append(inputChk);
-            var select = $('<select>').addClass('input_change').addClass('hmto_cat').attr('name', 'hmto_cat_'+key);
+            var select = $('<select>').addClass('input_change').addClass('hmto_cat').attr('name', 'hmto_cat_'+key).attr('onchange', 'mostrar_otro(this)');
              $.each( data_tareas_cat, function( key1, categoria ) {
                 
                 var option = $('<option>').val(key1).text(categoria);
@@ -655,7 +635,9 @@
                     option.attr('selected', 'selected');
                 select.append(option);
             });
-            var td2 = $('<td>'); td2.append(select);
+            var spanOtro = $('<span>').text('si otro, cuál: ').addClass('hmto_span_otro');
+            var inputOtro = $('<input>').addClass('input_change').addClass('hmto_otro').attr('name', 'hmto_otro_'+key);
+            var td2 = $('<td>'); td2.append(select); td2.append(spanOtro); td2.append(inputOtro);
             var td3 = $('<td>');
             var inputPerio = $('<input>').val(hoja.periodicidad).addClass('input_change').addClass('hmto_periodicidad').attr('name', 'hmto_periodicidad_'+key);td3.append(inputPerio);
             var td4 = $('<td>');
@@ -705,10 +687,14 @@
             $('.fm-act', padre).removeClass('fm-act');
             $(e).addClass('fm-act');
             $('.fc-inactive', padre).removeClass('fc-inactive');
-            if($('span', e).text() === 'Historial')
-                $('.menu-hmto', padre).addClass('fc-inactive');
-            else
+            if($('span', e).text() === 'Historial'){
+               $('.menu-hmto', padre).addClass('fc-inactive'); 
+               $('.flota-registrar-trabajo', padre).css('visibility', 'visible');
+            }
+            else{
+                $('.flota-registrar-trabajo', padre).css('visibility', 'hidden');
                 $('.menu-hist', padre).addClass('fc-inactive');
+            }  
         }
 
         if(hmto){
@@ -759,7 +745,7 @@
                 var div_notificacion = $('<div>').addClass('notificacion-tarea').text(num_debo);
                 $('#carro-'+id_usuario_vehiculo +' td:nth-of-type(1)').append(div_notificacion);
             }
-
+            $('.hmto-guardar.htmo-div-button', padre).hide();
         }
     }
 
@@ -991,6 +977,51 @@
         }
     }
 
+    var globalTimeout2 = null; 
+    function sugerir_carro2(elem){
+        var padre = $('#form_vehiculo').has(elem);
+        var marca = $('#input_vehiculo_marca');
+        var linea = $('#input_vehiculo_linea');
+        $('#input-vehiculo-submit').attr('disabled', 'disabled');
+        padre.bind('submit',function(e){e.preventDefault();});
+        var vehiculo = marca.val()+' '+linea.val();
+        if(vehiculo.length > 0 && linea.val().length > 0){
+            if (globalTimeout2 != null) {
+                clearTimeout(globalTimeout2);
+              }
+              globalTimeout2 = setTimeout(function() {
+                globalTimeout2 = null;  
+
+                $.ajax({
+                    url: "<?php echo base_url(); ?>usuario/buscar_vehiculo_similar_ajax",
+                    type: "POST",
+                    data: {
+                        vehiculo: vehiculo
+                    },
+                    onsubmit: false,
+                    success: function(data, status){
+                        if(data !== 'true'){
+                            data = JSON.parse(data); 
+                            var carro = data.marca +' '+ data.linea; 
+                            $('#quisiste_decir').text(carro);
+                            $('#quisiste_decir_marca').val(data.marca);
+                            $('#quisiste_decir_linea').val(data.linea);
+                            $('.div_quisiste_decir', padre).css('display', 'block');
+                            $('#nuevo_carro').val(1);
+                        }else{
+                            $('.div_quisiste_decir', padre).css('display', 'none');
+                            $('#nuevo_carro').val(0);
+                        }
+                        $('#input-vehiculo-submit').removeAttr('disabled', 'disabled');
+                    }
+                });
+
+              }, 1000);  
+        }else{
+           clearTimeout(globalTimeout2); 
+        }
+    }
+
     //cambia el formato de la fecha y cambia el kilometraje
     function fix_kilometraje(elem, padre){
         var fecha = $(elem).val();
@@ -1045,6 +1076,7 @@
             },
             errorClass: "form-invalid",
             validClass: "form-valid",
+            // onsubmit: false,
             submitHandler: function (form) {
                 $(form).bind('click');
                 $('.ajax_img_loader', form).show();
@@ -1069,11 +1101,17 @@
                         // sube el adjunto
                         if(data.status==true){
                             var temp = (data.msg).split("|"); console.log(temp[0]+temp[1]+temp[2]);
-                            var div = $('<div>').addClass('hist-compra');
+                            var div = $('<div>').addClass('hist-compra').css('background-color', '#fefefe');
                             var ul = $('<ul>');
                             var li = $('<li>');
                             var span_nombre = $('<span>').text('Se realizó la tarea: ');
-                            var strong = $('<strong>').text(temp[2]);span_nombre.append(strong); li.append(span_nombre);
+                            if(!!temp[3]){
+                                var strong = $('<strong>').text(temp[2]);span_nombre.append(strong); li.append(span_nombre);
+                                var nombre_adjunto = temp[3].split('/'); var size = nombre_adjunto.length -1;
+                                var ahref = $('<a>').attr('href', '<?php echo base_url();?>'+temp[3]).attr('target', '_blank').text(nombre_adjunto[size]); li.append('Ver: ');li.append(ahref);
+                            }else{
+                                var strong = $('<strong>').text(temp[2]);span_nombre.append(strong); li.append(span_nombre);
+                            }
                             var span_fecha = $('<span>').addClass('hist-fecha').text(temp[0]); li.append(span_fecha);
                             ul.append(li);
                             var input_id = $('<input>').attr('type', 'hidden').val(temp[1]); div.append(input_id);
@@ -1129,22 +1167,31 @@
                 type: "POST",
                 data: {
                     id_usuario_vehiculo: function () {
-                        return $(".editar_id_usuario_vehiculo", padre).val()
+                        return $(".editar_id_usuario_vehiculo", padre).val();
+                    },
+                    input_otro: function () {
+                        return $(".hmto_otro", form).serialize();
                     },
                     input_categoria: function () {
-                        return $(".hmto_cat", form).serialize()
+                        return $(".hmto_cat", form).serialize();
                     },
                     input_rango: function () {
-                        return $(".hmto_rango", form).serialize()
+                        return $(".hmto_rango", form).serialize();
                     },
                     input_periodicidad: function () {
-                        return $(".hmto_periodicidad", form).serialize()
+                        return $(".hmto_periodicidad", form).serialize();
                     }
                 },
                 onsubmit: false,
                 success: function (data) {
-                    if(data == 'true')
+                    var data = $.parseJSON(data);
+                    if(data.status)
                         actualizar_tareas($(".editar_id_usuario_vehiculo", padre).val());
+                    else{
+                        confirm(data.msg, function () {
+                                        $.modal.close();
+                                    });   
+                    }
                 }
             });
             $('.ajax_img_loader', form).hide();
@@ -1159,6 +1206,20 @@
             messages: {
                 required: '*Debes ingresar la categoría',
                 number: '*Categoría debe ser un número'
+            } 
+        });
+    });
+
+    $("input.hmto_otro", forma).each(function(i, e) {
+        var cat_padre = $("td").has(e);
+        $(this).rules("add", { 
+            required:{
+               depends: function(elem){
+                    return ($('.hmto_cat',cat_padre).val() ==0)
+               } 
+            },
+            messages: {
+                required: '*Debes ingresar el nombre de la categoría nueva'
             } 
         });
     });
@@ -1189,9 +1250,13 @@
     function eliminar_tareas(elem){
         // console.log('entro a eliminar');
         var padre = $('.menu-hmto').has(elem);
+        var count= 0;
         $('.input_chk:checked', padre).each(function(i, e) {
             $('tr').has(e).remove();  
+            count ++;
         });  
+        if(count > 0)
+            $('.hmto-guardar.htmo-div-button', padre).show();
     }
 
     //agrega una fila de tarea
@@ -1205,8 +1270,10 @@
         var td1 = $('<td>');
         var inputChk = $('<input>').attr('type', 'checkbox').addClass('input_chk'); td1.append(inputChk);
         var select = select_template.clone(); //hay que cambiarlo
-        select_template.val(0).attr('name', 'hmto_cat_'+numero);
-        var td2 = $('<td>'); td2.append(select);
+        select.attr('name', 'hmto_cat_'+numero).attr('onchange', 'mostrar_otro(this)');
+        var spanOtro = $('<span>').text('si otro, cuál: ').addClass('hmto_span_otro');
+        var inputOtro = $('<input>').addClass('input_change').addClass('hmto_otro').attr('name', 'hmto_otro_'+numero);
+        var td2 = $('<td>'); td2.append(select); td2.append(spanOtro); td2.append(inputOtro);
         var td3 = $('<td>');
         var inputPerio = $('<input>').addClass('input_change').addClass('hmto_periodicidad').attr('name', 'hmto_periodicidad_'+numero);td3.append(inputPerio);
         var td4 = $('<td>');
@@ -1226,6 +1293,18 @@
             } 
         });
 
+        var cat_padre = $("td").has(inputOtro);
+        $(inputOtro).rules("add", { 
+            required:{
+               depends: function(elem){
+                    return ($('.hmto_cat',cat_padre).val() ==0)
+               } 
+            },
+            messages: {
+                required: '*Debes ingresar el nombre de la categoría nueva'
+            } 
+        });
+
         $(inputPerio).rules("add", { 
             required: true,
             number: true,
@@ -1236,4 +1315,430 @@
         });
         $('.hmto-guardar', padre).show();
     }
-    </script>
+
+    //cuando se le da click al boton asignar, muestra el lightbox de asignar
+    //la hoja de mantenimiento a otros carros
+    function lighbox_asignar(elem){
+        var lightbox = $(elem).next('.asignar-lightbox');
+        lightbox.show();
+    }
+
+    //cierra el div de asignar
+    function cerrar_asignar(elem){
+        var lightbox = $('.asignar-lightbox').has(elem);
+        lightbox.hide();
+    }
+
+    //cuando selecciona un carro lo deja resaltado
+    function asignar_vehiculo(elem){
+        if( $(elem).hasClass('selected') ){
+            $(elem).removeClass('selected');
+        }else{
+            $(elem).addClass('selected');
+        }   
+    }
+
+    //asigna la hoja de mantenimiento actual a los carros seleccionados
+    function asignar_hmto(padre){
+        var carros_seleccionados = new Array();
+        $('.asignar-lb-carro.selected', padre).each(function(i, e) {
+            carros_seleccionados.push($(e).attr('data-id-usuario-vehiculo'));
+        }); 
+        if(carros_seleccionados.length > 0){
+           $.ajax({
+                url: "<?php echo base_url(); ?>usuario/asignar_htmo",
+                type: "POST",
+                data: {
+                    id_usuario_vehiculo: function(){
+                        return $(".editar_id_usuario_vehiculo", padre).val();
+                    },asignados: function(){
+                        return JSON.stringify(carros_seleccionados);
+                    }
+                },
+                onsubmit: false,
+                success: function(data, status){
+                    location.reload();
+                }
+            }); 
+        }
+    }
+
+    //muestra el campo de otra categoría para ingresar
+    function mostrar_otro(elem){
+        var padre = $('td').has(elem);
+        if($(elem).val() == 0){
+            $('.hmto_span_otro:hidden', padre).show();
+            $('.input_change.hmto_otro:hidden', padre).show();
+        }else{
+            $('.hmto_span_otro:visible', padre).hide();
+            $('.input_change.hmto_otro:visible', padre).hide();
+        }
+            
+    }
+    //Edita la foto de los automoviles
+    function editar_foto_carro(padre){
+        var thumb = $('.inf-carro-marco img', padre);  
+        var id = $('.input_imageUpload_automovil', padre).attr('id');
+        new AjaxUpload(id, {
+            action: '<?php echo base_url();?>usuario/subir_imagen_temp_ajax',
+            name: 'image',
+            onSubmit: function(file, extension) {
+
+                $('.inf-carro-marco', padre).addClass('loading_subir_imagen_automovil');
+                $('.inf-carro-marco img', padre).css('display', 'none');
+                this.setData({id_usuario_vehiculo: $('.editar_id_usuario_vehiculo', padre).val() });
+            },
+            onComplete: function(file, response) {
+                thumb.load(function(){
+                    $('.inf-carro-marco', padre).removeClass('loading_subir_imagen_automovil');
+                    $('.inf-carro-marco img', padre).css('display', 'block');
+                    thumb.unbind();
+                });
+                thumb.attr('src', response);
+
+            }
+        });
+    }
+
+    //cuando se le da click al checkbox de la tarea, se le muestra un menú para ingresar
+    //la fecha, kilometraje y adjunto de cuando se realizó el mantenimiento
+    function ver_realizar_trabajo(elem){
+        var lightbox = $('.flota-div-template').has(elem);
+        var padre = $(elem).next('.flota-rt-div');
+        if($('.trabajo-realizado', padre).length > 0){
+            if($('.trabajo-realizado', padre).is(':hidden')){
+                $('.trabajo-realizado', padre).show();
+            }else{
+                $('.trabajo-realizado', padre).hide();
+            }
+        }else{
+            var div = $('<div>').addClass('trabajo-realizado');
+            var t1 = $('<div>').addClass('trabajo-realizado-t1').text('Registra los datos del trabajo realizado');div.append(t1);
+            var form = $('<form>').addClass('form_trabajo');
+            var content = $('<div>').addClass('trabajo-realizado-content');
+            var divTrabajo = $('<div>').addClass('trabajo-realizado-trabajo');
+            var lblTrabajo = $('<label>').text('Trabajo:'); divTrabajo.append(lblTrabajo);
+            var trabajo = $('<input>').attr('name', 'trabajo_realizada_trabajo').attr('type', 'text').addClass('tr-trabajo').val(trabajo);divTrabajo.append(trabajo);
+            content.append(divTrabajo);
+            var divFecha = $('<div>').addClass('trabajo-realizado-fecha');
+            var lblFecha = $('<label>').text('Fecha de realización:'); divFecha.append(lblFecha);
+            var fechaInput = $('<input>').attr('name', 'trabajo_realizada_fecha').attr('type', 'text').addClass('tr-fecha');divFecha.append(fechaInput);
+            content.append(divFecha);
+            var divKms = $('<div>').addClass('trabajo-realizado-kilometraje');
+            var lblKms = $('<label>').text('Kilometraje:'); divKms.append(lblKms);
+            var kms = $('<input>').attr('name', 'trabajo_realizada_kilometraje').attr('type', 'text').addClass('tr-kilometraje');divKms.append(kms);
+            content.append(divKms);
+            form.append(content);
+            var divAdjunto = $('<div>').addClass('trabajo-realizado-adjunto');
+            var lblAdjunto = $('<lable>').text('Adjunta recibo o comprobante: (*opcional)');divAdjunto.append(lblAdjunto);
+            var adjunto = $('<input>').attr('type', 'file').attr('name', 'trabajo_realizada_adjunto').addClass('tr_adjunto').attr('id', 'tr_adjunto_'+$('.editar_id_usuario_vehiculo', lightbox).val()); divAdjunto.append(adjunto);
+            form.append(divAdjunto);
+            var divSubmit = $('<div>').addClass('trabajo-realizado-submit');
+            var enviar = $('<input>').attr('type', 'submit').val('Enviar').addClass('trabajo_realizado_submit').addClass('tr_submit');divSubmit.append(enviar);
+            var cancelar = $('<input>').attr('type', 'button').val('Cancelar').addClass('trabajo_realizado_cancelar').addClass('tr_cancelar').attr('onclick', 'cancelar_trabajo(this)');divSubmit.append(cancelar);
+            var img = $('<img>').attr('src', '').addClass('ajax_img_loader'); divSubmit.append(img);
+            form.append(divSubmit);
+            form.append('<div class="clear"></div>');
+            div.append(form);
+            padre.append(div);
+            $(fechaInput).val( fecha );
+            $(fechaInput).datepicker({ appendText: "(aaaa-mm-dd)",altField: ".tr-fecha", altFormat: 'yy-mm-dd', rangeSelect: false, maxDate: "+0D" });
+            validate_trabajo_realizado(form);
+        }
+    }
+
+     function validate_trabajo_realizado(forma){
+        $(forma).validate({
+            rules: {
+                trabajo_realizada_trabajo:{
+                    required: true
+                },
+                trabajo_realizada_kilometraje:{
+                    number: true
+                },trabajo_realizada_fecha:{
+                    required: true
+                }
+            },
+            messages: {
+                trabajo_realizada_trabajo: "*Ingresa el trabajo realizado",
+                trabajo_realizada_kilometraje: "*El kilometraje debe ser un número",
+                trabajo_realizada_fecha: "*Ingresa la fecha en que realizaste el trabajo"
+            },
+            invalidHandler: function (form, validator) {
+                var errors = validator.numberOfInvalids();
+                if (errors) {
+                    var message = errors == 1 ? 'Se encontró el siguiente error:\n' : 'Se encontraron los siguientes ' + errors + ' errores:\n';
+                    var errors = "";
+                    if (validator.errorList.length > 0) {
+                            errors += "<br/>" +  "\n\u25CF " + validator.errorList[0].message;
+
+                    }
+                    confirm(message + errors, function () {
+                                    $.modal.close();
+                                    validator.errorList[0].element.focus();
+                                });
+                }
+            },
+            errorClass: "form-invalid",
+            validClass: "form-valid",
+            submitHandler: function (form) {
+                $(form).bind('click');
+                $('.ajax_img_loader', form).show();
+                // console.log($(form).html());
+                var padre = $('.flota-div-template').has(form);
+                // var formita = $('.form_trabajo', padre)
+                // var input_submit = $('.tarea_realizada_submit', form);
+                var id_usuario_vehiculo = $('.editar_id_usuario_vehiculo', padre).val();
+                var trabajo = $('.tr-trabajo', form).val();
+                var kilometraje = $('.tr-kilometraje', form).val();
+                var fecha = $('.tr-fecha', form).val();
+
+                $.ajaxFileUpload({
+                    url: "<?php echo base_url();?>usuario/trabajo_realizado_ajax",
+                    secureuri      :false,
+                    fileElementId  :'tr_adjunto_'+id_usuario_vehiculo,
+                    dataType    : 'json',
+                    data: {
+                        'id_usuario_vehiculo': id_usuario_vehiculo,
+                        'trabajo': trabajo,
+                        'kilometraje': kilometraje,
+                        'fecha': fecha
+                    },
+                    success: function (data, status){
+                        // sube el adjunto
+                        if(data.status==true){
+                            var menu_content = $('.menu-content', padre);
+                            var temp = (data.msg).split("|");
+                            var div = $('<div>').addClass('hist-compra').css('background-color', '#fefefe');
+                            var ul = $('<ul>');
+                            var li = $('<li>');
+                            var span_nombre = $('<span>').text('Se registró el trabajo: ');
+                            if(!!temp[3]){
+                                var strong = $('<strong>').text(temp[2]);span_nombre.append(strong); li.append(span_nombre);
+                                var nombre_adjunto = temp[3].split('/'); var size = nombre_adjunto.length -1;
+                                var ahref = $('<a>').attr('href', '<?php echo base_url();?>'+temp[3]).attr('target', '_blank').text(nombre_adjunto[size]); li.append('Ver: ');li.append(ahref);
+                            }else{
+                                var strong = $('<strong>').text(temp[2]);span_nombre.append(strong); li.append(span_nombre);
+                            }
+                            
+                            var span_fecha = $('<span>').addClass('hist-fecha').text(temp[0]); li.append(span_fecha);
+                            ul.append(li);
+                            var input_id = $('<input>').attr('type', 'hidden').val(temp[1]); div.append(input_id);
+                            div.append(ul);
+                            var div_clear =  $('<div>').addClass('clear');
+                            div.append(div_clear);
+                            $('.menu-hist', menu_content).prepend(div);
+                            $('.trabajo-realizado').has(form).hide();
+                            $('.flota-rt-div').has(form).empty();
+
+                            // cancelar_hmto(input_submit);
+                        }else{
+                            confirm(data.msg, function () {
+                                                        $.modal.close();
+                                                    });
+                        }
+                    }
+                });
+                $('.ajax_img_loader', form).hide();
+                $(form).unbind('click');
+            }
+        });
+    }
+
+    //esconde el formulario de agregar trabajo
+    function cancelar_trabajo(elem){
+        $('.trabajo-realizado').has(elem).hide();
+    }
+
+    function mostrar_agregar_vehiculo(elem, id_flota){
+        $('#loging-div').lightbox_me({
+            closeEsc: true,
+            lightboxSpeed: 'fast',
+            onLoad: function() { 
+                //Valida el formulario de login
+                $("#form_vehiculo").validate({
+                    rules: {
+                        input_vehiculo_marca: {
+                            required: true,
+                            maxlength: 20
+                        },
+                        input_vehiculo_linea: {
+                            required: true,
+                            maxlength: 50
+                        },
+                        input_vehiculo_kilometraje: {
+                            required: true,
+                            number: true
+                        },
+                        input_vehiculo_modelo: {
+                            required: true,
+                            number: true
+                        },
+                        input_vehiculo_palca: {
+                            required: true,
+                            maxlength: 7
+                        }
+                    },
+                    messages: {
+                        input_vehiculo_marca: {
+                            required: "*Debes ingresar la marca de tu carro",
+                            maxlength: "*La marca del carro no puede contener más de 20 caracteres"
+                        },
+                        input_vehiculo_linea: {
+                            required: "*Debes ingresar la línea de tu carro",
+                            maxlength: "*La marca del carro no puede contener más de 30 caracteres"
+                        },
+                        input_vehiculo_kilometraje: {
+                            required: "*Debes ingresar el kilometraje de tu carro",
+                            number: "*El kilometraje debe ser un número"
+                        },
+                        input_vehiculo_modelo: {
+                            required: "*Debes ingresar el modelo de tu carro",
+                            number: "*El modelo de tu carro debe ser un número"
+                        },
+                        input_vehiculo_palca: {
+                            required: "*Debes ingresar la placa de tu carro",
+                            maxlength: "*La placa no puede tener más de 7 caracteres"
+                        }
+                    }, 
+                    errorClass: "form-invalid",
+                    validClass: "form-valid",
+                    highlight: function(element, errorClass, validClass) {
+                        $(element).addClass(errorClass);
+                        var divValid =  $(element.form).find("div[for=" + element.id + "]");
+                        divValid.addClass(errorClass);
+                    },
+                    unhighlight: function(element, errorClass, validClass) {
+                        $(element).removeClass(errorClass).removeClass(validClass);
+                        var divValid =  $(element.form).find("div[for=" + element.id + "]");
+                        divValid.addClass(validClass).removeClass(errorClass);
+                    },
+                    invalidHandler: function (form, validator) {
+                        var errors = validator.numberOfInvalids();
+                        if (errors) {
+                            var message = errors == 1 ? 'Se encontró el siguiente error:\n' : 'Se encontraron los siguientes ' + errors + ' errores:\n';
+                            var errors = "";
+                            if (validator.errorList.length > 0) {
+                                for (x = 0; x < validator.errorList.length; x++) {
+                                    errors += "<br/>" +  "\n\u25CF " + validator.errorList[x].message
+                                }
+                            }
+                            confirm(message + errors, function () {
+                                                                    $.modal.close();
+                                                                });
+                        }
+                        validator.focusInvalid()
+                    },
+                    submitHandler: function (form) {
+                        var nuevo_carro = $('#nuevo_carro').val();
+                        var input_vehiculo_marca = $("#input_vehiculo_marca").val();
+                        var input_vehiculo_linea = $("#input_vehiculo_linea").val();
+                        var input_vehiculo_kilometraje = $("#input_vehiculo_kilometraje").val();
+                        var input_vehiculo_modelo = $("#input_vehiculo_modelo").val();
+                        var input_vehiculo_placa = $("#input_vehiculo_placa").val();
+                        if(nuevo_carro == 1){
+                            confirmNO('El carro <strong>'+ marca+' '+linea+'</strong> no aparece en el sistema, está seguro que desea registrar este carro', function () {
+                                $(form).bind('click');
+                                $('.ajax_img_loader', form).show();
+                                $.ajaxFileUpload({
+                                    url: "<?php echo base_url(); ?>usuario/agregar_vehiculo_flota_ajax",
+                                    secureuri: false,
+                                    fileElementId  :'input_vehiculo_imagen',
+                                    dataType    : 'json',
+                                    data: {
+                                        'input_vehiculo_marca': input_vehiculo_marca
+                                        ,'input_vehiculo_linea': input_vehiculo_linea
+                                        ,'input_vehiculo_kilometraje': input_vehiculo_kilometraje
+                                        ,'input_vehiculo_modelo': input_vehiculo_modelo
+                                        ,'input_vehiculo_placa': input_vehiculo_placa
+                                        ,'input_id_flota': id_flota
+                                    },success: function (data, status){
+                                        // var data = $.parseJSON(data);
+                                        if(data.status){
+                                            agregar_carro_tabla(id_flota, data.id_usuario_vehiculo, input_vehiculo_placa, input_vehiculo_marca, input_vehiculo_linea, input_vehiculo_kilometraje);
+                                            $('#loging-div').trigger('close');
+                                            $('#nuevo_carro').val('');
+                                            $("#input_vehiculo_marca").val('');
+                                            $("#input_vehiculo_linea").val('');
+                                            $("#input_vehiculo_kilometraje").val('');
+                                            $("#input_vehiculo_modelo").val('');
+                                            $("#input_vehiculo_placa").val('');
+                                            $('.form_login_div_campo.div_quisiste_decir').hide();
+                                        }else{
+                                            confirm(data.msg, function () {
+                                                        $.modal.close();
+                                                    });
+                                        }
+                                    }
+                                });
+                                $('.ajax_img_loader', form).hide();
+                                $(form).unbind('click');
+                                $.modal.close();
+                            }); 
+                        }else{
+                           $(form).bind('click');
+                                $('.ajax_img_loader', form).show();
+                                $.ajaxFileUpload({
+                                    url: "<?php echo base_url(); ?>usuario/agregar_vehiculo_flota_ajax",
+                                    secureuri: false,
+                                    fileElementId  :'input_vehiculo_imagen',
+                                    dataType    : 'json',
+                                    data: {
+                                        'input_vehiculo_marca': input_vehiculo_marca
+                                        ,'input_vehiculo_linea': input_vehiculo_linea
+                                        ,'input_vehiculo_kilometraje': input_vehiculo_kilometraje
+                                        ,'input_vehiculo_modelo': input_vehiculo_modelo
+                                        ,'input_vehiculo_placa': input_vehiculo_placa
+                                        ,'input_id_flota': id_flota
+                                    },success: function (data, status){
+                                        // var data = $.parseJSON(data);
+                                        console.log(data.id_usuario_vehiculo);
+                                        if(data.status){
+                                            agregar_carro_tabla(id_flota, data.id_usuario_vehiculo, input_vehiculo_placa, input_vehiculo_marca, input_vehiculo_linea, input_vehiculo_kilometraje);
+                                            $('#loging-div').trigger('close');
+                                            $('#nuevo_carro').val('');
+                                            $("#input_vehiculo_marca").val('');
+                                            $("#input_vehiculo_linea").val('');
+                                            $("#input_vehiculo_kilometraje").val('');
+                                            $("#input_vehiculo_modelo").val('');
+                                            $("#input_vehiculo_placa").val('');
+                                            $('.form_login_div_campo.div_quisiste_decir').hide();
+                                        }else{
+                                            confirm(data.msg, function () {
+                                                    $.modal.close();
+                                                });
+                                        }
+                                    }
+                                });
+                            $('.ajax_img_loader', form).hide();
+                            $(form).unbind('click'); 
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    //Muestra un preview de la foto
+    function fotoPreview(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#foto_form_marco img').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    //agrega un carro a la tabla de carros
+    function agregar_carro_tabla(id_flota, id_usuario_vehiculo, placa, marca, linea, kilometraje){
+        var tr = $('<tr>').addClass('newRow').attr('id', 'carro-'+id_usuario_vehiculo).attr('onclick', 'dar_vehiculo(this, '+id_usuario_vehiculo+')');
+        var td1 = $('<td>').text(placa); tr.append(td1);
+        var td2 = $('<td>').text(marca); tr.append(td2);
+        var td3 = $('<td>').text(linea); tr.append(td3);
+        var td4 = $('<td>').text(kilometraje);  tr.append(td4);
+        $('#tablesorter').prepend(tr);
+    }
+</script>

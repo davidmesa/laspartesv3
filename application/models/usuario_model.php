@@ -411,7 +411,7 @@ class Usuario_model extends CI_Model {
         $params['marca']  = $vehiculo->marca;
         $params['linea']  = $vehiculo->linea;
         $params['placa']  = $vehiculo->numero_placa;
-        $this->crm->agregar_vehiculo_REST($params);
+        // $this->crm->agregar_vehiculo_REST($params);
         return $id_usuario_vehiculo;
     }
 
@@ -1966,6 +1966,43 @@ class Usuario_model extends CI_Model {
         $this->db->limit(1);
         $query = $this->db->get('establecimientos');
         return $query->row(0);
+    }
+
+
+    /**
+     * Registra un trabajo para el vehículo de un usuario
+     * @param id_usuario_vehiculo id del vehículo
+     * @param id_tarea id de la tarea
+     */
+    function registrar_trabajo_realizado($id_usuario_vehiculo, $trabajo, $fecha = '', $kilometraje = '', $adjunto = '') {
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->escape($trabajo);
+        $this->db->escape($fecha);
+        $this->db->escape($kilometraje);
+        $this->db->escape($adjunto);
+
+        $this->db->set('trabajo', $trabajo);
+        $this->db->set('id_usuario_vehiculo', $id_usuario_vehiculo);
+        if ($kilometraje != '' || !empty($kilometraje))
+            $this->db->set('kilometraje', $kilometraje);
+        if ($adjunto != '' || !empty($adjunto))
+            $this->db->set('adjunto', $adjunto);
+        if ($fecha != '' || !empty($fecha))
+            $this->db->set('fecha', $fecha);
+        $this->db->insert('trabajo_usuario_vehiculo');
+        return mysql_insert_id();
+    }
+
+    /**
+     * Registra un trabajo para el vehículo de un usuario
+     * @param id_usuario_vehiculo id del vehículo
+     * @param id_tarea id de la tarea
+     */
+    function dar_trabajos_realizados($id_usuario_vehiculo) {
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
+        $q = $this->db->get('trabajo_usuario_vehiculo');
+        return $q->result();
     }
 
 }
