@@ -210,8 +210,84 @@ class Flota_model extends CI_Model {
             $this->db->set('id_flota_usuario_vehiculo', $id_flota_usuario_vehiculo);
             $this->db->insert('flotas_hmto');
         }
-        
-        
+    }
 
+    /**
+     * Da la información de un vehículo
+     * @param int $id_usuario_vehiculo
+     * @return object $vehiculo
+     */
+    function dar_usuario_vehiculo($id_usuario_vehiculo) {
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->join('vehiculos', 'vehiculos.id_vehiculo = usuarios_vehiculos.id_vehiculo');
+        $this->db->join('flota_usuario_vehiculo','flota_usuario_vehiculo.id_usuario_vehiculo = usuarios_vehiculos.id_usuario_vehiculo');
+        $this->db->where('usuarios_vehiculos.id_usuario_vehiculo', $id_usuario_vehiculo);
+        $query = $this->db->get('usuarios_vehiculos');
+        return $query->row(0);
+    }
+
+    /**
+     * Actualiza el usuario flota, si se da el id_flota_usuario_vehiculo, se actualiza con ese id, sino
+     * se actualiza según el id_usario_vehiculo dado
+     * @param  int $id_flota_usuario_vehiculo [description]
+     * @param  int $id_usuario_vehiculo       [description]
+     * @param  array $extras                    [description]
+     */
+    function actualizar_flota_usuario_vehiculo($id_flota_usuario_vehiculo, $id_usuario_vehiculo, $extras){
+        $this->db->escape($id_flota_usuario_vehiculo);
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->escape($extras);
+
+        foreach ($extras as $key => $extra) {
+            $this->db->set($key, $extra);
+        }
+
+        if(empty($id_flota_usuario_vehiculo) || $id_flota_usuario_vehiculo == ''){
+            $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
+        }else{
+            $this->db->set('id_usuario_vehiculo', $id_usuario_vehiculo);
+            $this->db->where('id_flota_usuario_vehiculo', $id_flota_usuario_vehiculo);
+        }
+        $this->db->update('flota_usuario_vehiculo');
+    }
+
+    /**
+     * Da las herramientas de un usuario vehiculo
+     * @param  int $id_usuario_vehiculo
+     * @return array herramientas
+     */
+    function dar_herramientas_uv($id_usuario_vehiculo){
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
+        $q = $this->db->get('herramientas');
+        return $q->result();
+    }
+
+    /**
+     * Borra las herramientas de un vehículo
+     * @param  int $id_usuario_vehiculo
+     */
+    function borrar_herramientas_vehiculo($id_usuario_vehiculo){
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
+        $this->db->delete('herramientas');
+    }
+
+    /**
+     * agrega una herramienta al vehículo
+     * @param  int $id_usuario_vehiculo 
+     * @param  string $herramienta   
+     * @param  string $vida   
+     * @return int id_herramienta
+     */
+    function agregar_herramienta($id_usuario_vehiculo, $herramienta, $vida){
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->escape($herramienta);
+        $this->db->escape($vida);
+        $this->db->set('herramienta', $herramienta);
+        $this->db->set('vida_util', $vida);
+        $this->db->set('id_usuario_vehiculo', $id_usuario_vehiculo);
+        $this->db->insert('herramientas');
+        return mysql_insert_id();
     }
 }

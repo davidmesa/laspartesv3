@@ -197,52 +197,63 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                     </div>
                     <div class="inf-carro-datos">
                         <form  class="editar-vehiculo">
-                            <input type="hidden" class="nuevo_carro" value="1">
-                            <input type="hidden" class="editar_id_usuario_vehiculo">
-                            <div class="inf-dato marca-linea">
-                                <span class="span-dato font-universe editar-perfil-show"></span>
-                                <span class="titl-dato-h editar-perfil-hidden">Marca: </span><span class="titl-dato-h editar-perfil-hidden">Linea: </span><br/>
-                                <input name="editar_marca" class="editar-perfil-hidden marca" type="text" value="">
-                                <input name="editar_linea" class="editar-perfil-hidden linea" type="text" value="">
-                            </div>
-                            <div class="div_quisiste_decir">
-                                <label style="font-size: 15px;">Quisiste decir: </label>
-                                <input type="hidden" class="quisiste_decir_marca"><input type="hidden" class="quisiste_decir_linea">
-                                <div class="quisiste_decir" onclick="carro_sugerido(this)"></div>
-                            </div>
-                            <div class="inf-dato modelo">
-                                <span class="titl-dato">Modelo: </span>
-                                <span class="span-dato editar-perfil-show"></span>
-                                <?php
-                                    $option_modelo = array();
-                                    $selected = '2010';
-                                    $año = intval(mdate('%Y')) + 1;
-                                    for ($i = $año; $i > 1950; $i--) {
-                                        $option_modelo[$i] = $i;
-                                        if ($vehiculo->modelo == $i) {
-                                            $selected = $i;
+                            <div class="editar-vehiculo-left">
+                                <input type="hidden" class="nuevo_carro" value="1">
+                                <input type="hidden" class="editar_id_usuario_vehiculo">
+                                <div class="inf-dato marca-linea">
+                                    <span class="span-dato font-universe editar-perfil-show"></span>
+                                    <span class="titl-dato-h editar-perfil-hidden">Marca: </span><span class="titl-dato-h editar-perfil-hidden">Linea: </span><br/>
+                                    <input name="editar_marca" class="editar-perfil-hidden marca" type="text" value="">
+                                    <input name="editar_linea" class="editar-perfil-hidden linea" type="text" value="">
+                                </div>
+                                <div class="div_quisiste_decir">
+                                    <label style="font-size: 15px;">Quisiste decir: </label>
+                                    <input type="hidden" class="quisiste_decir_marca"><input type="hidden" class="quisiste_decir_linea">
+                                    <div class="quisiste_decir" onclick="carro_sugerido(this)"></div>
+                                </div>
+                                <div class="inf-dato modelo">
+                                    <span class="titl-dato">Modelo: </span>
+                                    <span class="span-dato editar-perfil-show"></span>
+                                    <?php
+                                        $option_modelo = array();
+                                        $selected = '2010';
+                                        $año = intval(mdate('%Y')) + 1;
+                                        for ($i = $año; $i > 1950; $i--) {
+                                            $option_modelo[$i] = $i;
+                                            if ($vehiculo->modelo == $i) {
+                                                $selected = $i;
+                                            }
                                         }
-                                    }
-                                    echo form_dropdown('editar_modelo', $option_modelo, $selected, 'class="editar-perfil-hidden"');
-                                ?>
+                                        echo form_dropdown('editar_modelo', $option_modelo, $selected, 'class="editar-perfil-hidden"');
+                                    ?>
+                                </div>
+                                <div class="inf-dato kilometraje">
+                                    <span class="titl-dato">Kilometraje: </span>
+                                    <span class="span-dato editar-perfil-show"></span>
+                                    <input name="editar_kms" class="editar-perfil-hidden" type="text" value="">
+                                </div>
+                                <div class="inf-dato placa">
+                                    <span class="titl-dato">Placa: </span>
+                                    <span class="span-dato editar-perfil-show"></span>
+                                    <input name="editar_placa" class="editar-perfil-hidden" type="text" value="">
+                                </div>
+                                <div class="inf-dato-editar editar-perfil-show" onclick="clickEditarCarro(this)">
+                                    Editar
+                                </div>
+                                <div class="inf-dato-editar-submit editar-perfil-hidden">
+                                    <button name="Cancelar" type="button" class="cancelar-formulario" onclick="cancelFormCarro(this)">Cancelar</button>                    
+                                    <input type="submit" name="Guardar" value="Guardar">                
+                                </div>
                             </div>
-                            <div class="inf-dato kilometraje">
-                                <span class="titl-dato">Kilometraje: </span>
-                                <span class="span-dato editar-perfil-show"></span>
-                                <input name="editar_kms" class="editar-perfil-hidden" type="text" value="">
+                            
+                            <div class="editar-vehiculo-right">
+                                <div class="inf-dato vida_util">
+                                    <span class="titl-dato">Vida Útil: </span>
+                                    <span class="span-dato editar-perfil-show"></span>
+                                    <input name="editar_vida_util" class="editar-perfil-hidden editar_vida_util" id="editar_vida_util" type="text" value="">
+                                </div>
                             </div>
-                            <div class="inf-dato placa">
-                                <span class="titl-dato">Placa: </span>
-                                <span class="span-dato editar-perfil-show"></span>
-                                <input name="editar_placa" class="editar-perfil-hidden" type="text" value="">
-                            </div>
-                            <div class="inf-dato-editar editar-perfil-show" onclick="clickEditarCarro()">
-                                Editar
-                            </div>
-                            <div class="inf-dato-editar-submit editar-perfil-hidden">
-                                <button name="Cancelar" type="button" class="cancelar-formulario" onclick="cancelFormCarro()">Cancelar</button>                    
-                                <input type="submit" name="Guardar" value="Guardar">                
-                            </div>
+                            <div class="clear"></div>
                         </form>
                     </div> 
                 </div>
@@ -269,14 +280,20 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
 
                 <div class="flotas-menu">
                     <div class="menu-header">
-                        <div class="hist-titulo-hist fm-act" onClick="select_menu(this, false)">
+                        <div class="hist-titulo-hist fm-act" onClick="select_menu(this, 'hist')">
                             <span class="font-universe">Historial</span>
                             <img src="<?php echo base_url();?>resources/images/micuenta/trangulo.png">
                         </div>
-                        <div class="hist-titulo-hmto" onClick="select_menu(this, true)">
+                        <div class="hist-titulo-hmto" onClick="select_menu(this, 'hmto')">
                             <span class="font-universe">Hoja de Mantenimiento</span>
                             <img src="<?php echo base_url();?>resources/images/micuenta/trangulo.png">
                         </div>
+
+                        <div class="hist-titulo-herramientas" onClick="select_menu(this, 'hermts')">
+                            <span class="font-universe">Herramientas</span>
+                            <img src="<?php echo base_url();?>resources/images/micuenta/trangulo.png">
+                        </div>
+
                         <div class="clear"></div>
                     </div>
 
@@ -343,6 +360,30 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                                 </div>
                                 <div class="clear"></div>
                                 <input type="submit" class="hmto-guardar htmo-div-button" value="Guardar">
+                            </form>
+                        </div>
+                        <div class="menu-herramientas">
+                            <form class="herrmts-form fc-inactive">
+                                <table class="herrmts-table">
+                                    <thead>
+                                        <th><input type="checkbox"></th>
+                                        <th>Herramienta</th>
+                                        <th>Vida últil</th>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                                <div class="herrmts-acciones">
+                                    <div class="acciones-titulo font-universe">Acciones</div>
+                                    <div class="htmo-div-button accion-agregar"  onclick="agregar_herrmts(this)">
+                                        Agregar herramienta
+                                    </div>
+                                    <div class="herrmts-div-button accion-eliminar" onclick="eliminar_herrmts(this)">
+                                        Eliminar herramienta
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <input type="submit" class="herrmts-guardar herrmts-div-button" value="Guardar">
                             </form>
                         </div>
                     </div>

@@ -140,6 +140,7 @@ $(function(){
 <script>  
     $(document).ready(function() {
         
+        
         $("#input_vehiculo_marca, #input_vehiculo_linea").on({
             change: function(event){
                 sugerir_carro2(this);
@@ -434,23 +435,25 @@ $(function(){
 
     //cuando se hace click en editar carro se edita la información del carro
     function clickEditarCarro(e){
-        var padre = $('.inf-carro-datos').parent(e);
+        var padre = $('.inf-carro-datos').has(e);
         $('.editar-perfil-show', padre).hide('fast');
         $('.editar-perfil-hidden', padre).show('fast');
         $('.titl-dato-h', padre).show('fast');
         $('.marca', padre).focus();
         $('.linea', padre).focus();
         $(e).hide();
+        $('.ui-datepicker-append', padre).show();
     }
 
 
     //al hacer click sobre cancelar, se esconde el formulario de editar 
     //y muestra la información que había antes
     function cancelFormCarro(e){
-        var padre_perfil = $('.inf-carro-datos').parent(e);
+        var padre_perfil = $('.inf-carro-datos').has(e);
         $('.editar-perfil-hidden', padre_perfil).hide();
         $('.editar-perfil-show', padre_perfil).show();
         $('.titl-dato-h', padre_perfil).hide();
+        $('.ui-datepicker-append', padre_perfil).hide();
     }
 
     //consigue la información del vehículo y lo muestra en un lightbox
@@ -474,6 +477,7 @@ $(function(){
             var data_tarea = data.tareas;
             var data_tareas_cat = data.tareasCategoria;
             var data_hojas = data.hojas;
+            var data_herramientas = data.herramientas;
             // mostrar_hmto(padre, data_tareas_cat, data_hojas);
             $('.input_imageUpload_automovil', padre).attr('id', 'imageUpload_'+id_usuario_vehiculo);
             if(data_uv.imagen_url)
@@ -488,6 +492,16 @@ $(function(){
             $('.kilometraje',padre).children('.editar-perfil-hidden').val(data_uv.kilometraje);
             $('.placa',padre).children('.span-dato').text(data_uv.numero_placa);
             $('.placa',padre).children('.editar-perfil-hidden').val(data_uv.numero_placa);
+            if(data_uv.vida_util == null)
+                data_uv.vida_util = '';
+            $('.vida_util',padre).children('.span-dato').text(data_uv.vida_util);
+            $('.vida_util',padre).children('.editar-perfil-hidden').val(data_uv.vida_util);
+            var numero = Math.floor(Math.random() * 1000) + 1;
+            var new_id = 'editar_vida_util_'+numero;
+            $('.editar_vida_util', padre).attr('id', new_id); var new_id = '#editar_vida_util_'+numero;
+            $(new_id).datepicker({ appendText: "(aaaa-mm-dd)",altField: new_id, altFormat: 'yy-mm-dd', 
+                rangeSelect: false , changeMonth: true, changeYear: true});
+            $('.ui-datepicker-append', padre).hide();
             $.each( data_tarea, function( key, tarea ) {
               if(tarea.realizado == true){
                 var div = $('<div>').addClass('hist-compra');
@@ -573,6 +587,15 @@ $(function(){
                                 modificar_hmto(this);
                             }
                         });
+
+                        mostrar_herrmts(padre, data_herramientas);
+                        $(".input_change_h", padre).on({
+                            change: function(event){
+                                modificar_herrmts(this);
+                            },keypress: function(event){
+                                modificar_herrmts(this);
+                            }
+                        });
                     },onClose: function(){
                         asignar_hmto(padre);
                     }
@@ -650,6 +673,35 @@ $(function(){
         });
     }
 
+    //muestra las herramientas de un vehículo
+    function mostrar_herrmts(padre, data_herramientas){
+        var tabla = $('.herrmts-table', padre);
+        var tbody = $('tbody', tabla);
+
+        var even = true;
+        $.each( data_herramientas, function( key, herramienta ) {
+            if(even){
+                var tr = $('<tr>').addClass('even');
+                even = false;
+            }else{
+                var tr = $('<tr>').addClass('odd');
+                even = true;
+            }
+            var td1 = $('<td>');
+            var inputChk = $('<input>').attr('type', 'checkbox').addClass('input_chk'); td1.append(inputChk);
+            var td2 = $('<td>');
+            var inputHerramienta = $('<input>').val(herramienta.herramienta).addClass('input_change_h').addClass('herrmts_herramienta').attr('name', 'herrmts_herramienta_'+key);td2.append(inputHerramienta);
+            var td3 = $('<td>');
+            var inputVida = $('<input>').val(herramienta.vida_util).addClass('input_change_h').addClass('herrmts_vida').attr('id', 'herrmts_vida_'+key).attr('name', 'herrmts_vida_'+key);td3.append(inputVida);
+            tr.append(td1);
+            tr.append(td2);
+            tr.append(td3);
+            tbody.append(tr);
+            $('#herrmts_vida_'+key).datepicker({ altField: '#herrmts_vida_'+key, altFormat: 'yy-mm-dd', 
+                rangeSelect: false , changeMonth: true, changeYear: true});
+        });
+    }
+
     //da la información del vehículo vía ajax
     function dar_vehiculo_ajax(id_usuario_vehiculo){
         var postData = '';
@@ -681,25 +733,30 @@ $(function(){
     }
 
     //selecciona el menu deseado
-    function select_menu(e, hmto){
+    function select_menu(e, seccion){
         var padre = $('.flotas-menu').has(e);
         if(!$(e).hasClass('fm-act')){            
             $('.fm-act', padre).removeClass('fm-act');
             $(e).addClass('fm-act');
             $('.fc-inactive', padre).removeClass('fc-inactive');
-            if($('span', e).text() === 'Historial'){
+            if(seccion === 'Historial'){
                $('.menu-hmto', padre).addClass('fc-inactive'); 
+               $('.menu-herramientas', padre).addClass('fc-inactive'); 
                $('.flota-registrar-trabajo', padre).css('visibility', 'visible');
             }
-            else{
+            else if(seccion === 'hmto'){
                 $('.flota-registrar-trabajo', padre).css('visibility', 'hidden');
                 $('.menu-hist', padre).addClass('fc-inactive');
+                $('.menu-herramientas', padre).addClass('fc-inactive'); 
+                var form = $('form.hmto-form', padre);
+                validate_hmto(form);
+            }else{
+                $('.flota-registrar-trabajo', padre).css('visibility', 'hidden');
+                $('.menu-hist', padre).addClass('fc-inactive');
+                $('.menu-hmto', padre).addClass('fc-inactive'); 
+                var form = $('form.herrmts-form', padre);
+                validate_herramientas(form);
             }  
-        }
-
-        if(hmto){
-            var form = $('form.hmto-form', padre);
-            validate_hmto(form);
         }
     }
 
@@ -821,6 +878,7 @@ $(function(){
                 var modelo = $('.inf-dato.modelo select', padre);
                 var kilometraje = $('.inf-dato.kilometraje input', padre);
                 var placa = $('.inf-dato.placa input', padre);
+                var vida_util = $('.inf-dato.vida_util input', padre);
 
                 var nuevo_carro = $('.nuevo_carro', padre).val();
 
@@ -828,8 +886,8 @@ $(function(){
                     type: "POST",
                     url: "usuario/editar_vehiculo_fix",
                     async: false,
-                    data: "id_usuario_vehiculo=" + id_usuario_vehiculo + "&modelo=" + modelo.val() 
-                        + "&kilometraje=" + kilometraje.val() + "&placa=" + placa.val()+ "&marca=" + marca.val()+ "&linea=" + linea.val(),
+                    data: "id_usuario_vehiculo=" + id_usuario_vehiculo + "&modelo=" + modelo.val() + "&kilometraje=" + kilometraje.val() + 
+                    "&placa=" + placa.val()+ "&marca=" + marca.val()+ "&linea=" + linea.val()+ "&vida_util=" + vida_util.val(),
                     success: function(data){
                         var corrio = data.split('|');
                         if(data == 'true'){
@@ -837,6 +895,8 @@ $(function(){
                             $('.modelo .span-dato', padre).text(modelo.val());
                             $('.kilometraje .span-dato', padre).text(kilometraje.val());
                             $('.placa .span-dato', padre).text(placa.val());
+                            $('.vida_util .span-dato', padre).text(vida_util.val());
+                            $('.ui-datepicker-append', padre).hide();
                             $('#carro-'+id_usuario_vehiculo +' td:nth-of-type(1)').text('8').append('&nbsp;&nbsp;&nbsp;').append(placa.val());
                             $('#carro-'+id_usuario_vehiculo +' td:nth-of-type(2)').text(marca.val());
                             $('#carro-'+id_usuario_vehiculo +' td:nth-of-type(3)').text(linea.val());
@@ -922,6 +982,14 @@ $(function(){
         var padre = $('.menu-hmto').has(elem);
         if($('.hmto-guardar.htmo-div-button', padre).is(":hidden"))
             $('.hmto-guardar.htmo-div-button', padre).show();
+    }
+
+    //cuando cambia algún elemento de la hoja de mantenimiento
+    //se muestra el boton de guardar
+    function modificar_herrmts(elem){
+        var padre = $('.menu-herramientas').has(elem);
+        if($('.herrmts-guardar.herrmts-div-button', padre).is(":hidden"))
+            $('.herrmts-guardar.herrmts-div-button', padre).show();
     }
 
     function cancelar_hmto(elem){
@@ -1135,6 +1203,73 @@ $(function(){
         });
     }
 
+    //valida la forma de las herramientas
+    function validate_herramientas(forma){
+        var padre = $('.flota-div-template').has(forma);
+        $(forma).validate({
+        errorClass: "form-invalid",
+        validClass: "form-valid",
+        showErrors: function(errorMap, errorList) {
+            // Do nothing here
+         },
+        invalidHandler: function (form, validator) {
+            var errors = validator.numberOfInvalids();
+            if (errors) {
+                var message = errors == 1 ? 'Se encontró el siguiente error:\n' : 'Se encontraron los siguientes ' + errors + ' errores:\n';
+                var errors = "";
+                if (validator.errorList.length > 0) {
+                        errors += "<br/>" +  "\n\u25CF " + validator.errorList[0].message;
+
+                }
+                confirm(message + errors, function () {
+                                            $.modal.close();
+                                            validator.errorList[0].element.focus();
+                                        });
+            }
+        },
+        submitHandler: function (form) {
+          $(form).bind('click');
+            $('.ajax_img_loader', form).show();
+            $.ajax({
+                url: "<?php echo base_url(); ?>usuario/actualizar_herramientas_ajax",
+                type: "POST",
+                data: {
+                    id_usuario_vehiculo: function () {
+                        return $(".editar_id_usuario_vehiculo", padre).val();
+                    },
+                    input_herramientas: function () {
+                        return $(".herrmts_herramienta", form).serialize();
+                    },
+                    input_vidas: function () {
+                        return $(".herrmts_vida", form).serialize();
+                    }
+                },
+                success: function (data) {
+                    var data = $.parseJSON(data);
+                    if(data.status)
+                        $('.herrmts-guardar.herrmts-div-button', padre).hide();
+                    else{
+                        confirm(data.msg, function () {
+                                        $.modal.close();
+                                    });   
+                    }
+                }
+            });
+            $('.ajax_img_loader', form).hide();
+            $(form).unbind('click');
+        }
+    });
+
+    $("input.herrmts_herramienta", forma).each(function() {
+        $(this).rules("add", { 
+            required: true,
+            messages: {
+                required: '*Debes ingresar la herramienta'
+            } 
+        });
+    });
+
+    }
     //valida la forma de la hoja de mantenimiento
     function validate_hmto(forma){
         var padre = $('.flota-div-template').has(forma);
@@ -1740,5 +1875,48 @@ $(function(){
         var td3 = $('<td>').text(linea); tr.append(td3);
         var td4 = $('<td>').text(kilometraje);  tr.append(td4);
         $('#tablesorter').prepend(tr);
+    }
+
+    //agrega un campo para agregar una herramienta
+    function agregar_herrmts(elem){ console.log('entra');
+        var padre = $('.herrmts-form').has(elem);
+        var tabla = $('.herrmts-table', padre);
+        var tbody = $('tbody', tabla);
+        var numero = Math.floor(Math.random() * 1000) + 1;
+        var tr = $('<tr>').addClass('odd');
+        var td1 = $('<td>');
+        var inputChk = $('<input>').attr('type', 'checkbox').addClass('input_chk'); td1.append(inputChk);
+        var td2 = $('<td>');
+        var inputHerramienta = $('<input>').addClass('input_change_h').addClass('herrmts_herramienta').attr('name', 'herrmts_herramienta_'+numero);td2.append(inputHerramienta);
+        var td3 = $('<td>');
+        var inputVida = $('<input>').addClass('input_change_h').addClass('herrmts_vida').attr('id', 'herrmts_vida_'+numero).attr('name', 'herrmts_vida_'+numero);td3.append(inputVida);
+        tr.append(td1);
+        tr.append(td2);
+        tr.append(td3);
+        tbody.append(tr);
+        $('#herrmts_vida_'+numero).datepicker({ altField: '#herrmts_vida_'+numero, altFormat: 'yy-mm-dd', 
+                rangeSelect: false , changeMonth: true, changeYear: true});
+
+        $("input.herrmts_herramienta", padre).each(function() {
+            $(this).rules("add", { 
+                required: true,
+                messages: {
+                    required: '*Debes ingresar la herramienta'
+                } 
+            });
+        });
+        $('.herrmts-guardar', padre).show();
+    }
+
+    //elimina las filas de herramientas seleccionads
+    function eliminar_herrmts(elem){
+        var padre = $('.menu-herramientas').has(elem);
+        var count= 0;
+        $('.input_chk:checked', padre).each(function(i, e) {
+            $('tr').has(e).remove();  
+            count ++;
+        });  
+        if(count > 0)
+            $('.herrmts-guardar.herrmts-div-button', padre).show();
     }
 </script>

@@ -3777,28 +3777,40 @@ class Usuario extends Laspartes_Controller {
             $reglas = array(
                 array(
                     'field' => 'modelo',
-                    'rules' => 'trim|required|xss_clean|numeric|greater_than[1950]|less_than[2013]'
+                    'rules' => 'trim|required|xss_clean|numeric|greater_than[1950]|less_than[2013]',
+                    'label' => 'modelo'
                 ),
                 array(
                     'field' => 'kilometraje',
-                    'rules' => 'trim|required|xss_clean|max_length[10]|is_natural'
+                    'rules' => 'trim|required|xss_clean|max_length[10]|is_natural',
+                    'label' => 'kilometraje'
                 ),
                 array(
                     'field' => 'placa',
-                    'rules' => 'trim|xss_clean|max_length[7]'
+                    'rules' => 'trim|xss_clean|max_length[7]',
+                    'label' => 'placa'
                 ),
                 array(
                     'field' => 'id_usuario_vehiculo',
-                    'rules' => 'trim|required|xss_clean|is_natural|callback_usuario_vehiculo_check_validate'
+                    'rules' => 'trim|required|xss_clean|is_natural|callback_usuario_vehiculo_check_validate',
+                    'label' => 'id del vehiculo'
                 ),
                 array(
                     'field' => 'marca',
-                    'rules' => 'trim|required|xss_clean'
+                    'rules' => 'trim|required|xss_clean',
+                    'label' => 'marca'
                 ),
                 array(
                     'field' => 'linea',
-                    'rules' => 'trim|required|xss_clean'
+                    'rules' => 'trim|required|xss_clean',
+                    'label' => 'linea'
+                ),
+                array(
+                    'field' => 'vida_util',
+                    'rules' => 'trim|required|xss_clean',
+                    'label' => 'vida últil'
                 )
+
             );
             $this->form_validation->set_rules($reglas);
             $this->form_validation->set_message('id_vehiculo', 'El vehículo que especificaste no se encuentra registrado en nuestra base de datos');
@@ -3819,19 +3831,25 @@ class Usuario extends Laspartes_Controller {
                 $placa = $this->input->get_post('placa', TRUE);
                 $marca = $this->input->get_post('marca', TRUE);
                 $linea = $this->input->get_post('linea', TRUE);
+                $vida_util = $this->input->get_post('vida_util', TRUE);
                 $placa = str_replace(" ", "", $placa);
                 $placa = str_replace("-", "", $placa);
 
                 $this->load->model('vehiculo_model');
+                $this->load->model('flota_model');
                 $this->load->helper('mail');
 
                 $vehiculo = $this->vehiculo_model->existe_vehiculo_marca_linea($marca, $linea);
 
                 if ($vehiculo != false){
                     $this->usuario_model->actualizar_vehiculo_usuario($id_usuario_vehiculo, $vehiculo->id_vehiculo, '', $modelo, $kilometraje, '', $placa);
+                    $extras['vida_util'] = $vida_util;
+                    $this->flota_model->actualizar_flota_usuario_vehiculo('', $id_usuario_vehiculo, $extras);
                 } else {
                     $nuevoVehiculo = $this->vehiculo_model->agregar_vehiculo($marca, $linea);
                     $this->usuario_model->actualizar_vehiculo_usuario($id_usuario_vehiculo, $nuevoVehiculo, '', $modelo, $kilometraje, '', $placa);
+                    $extras['vida_util'] = $vida_util;
+                    $this->flota_model->actualizar_flota_usuario_vehiculo('', $id_usuario_vehiculo, $extras);
 
                     $destinatario = new stdClass();
                     $destinatario->email = 'luis.cabarique@laspartes.com.co';
@@ -5332,8 +5350,9 @@ class Usuario extends Laspartes_Controller {
     function dar_vehiculo_flota(){
         if ($this->hay_sesion_activa()) {
             $this->load->model('usuario_model');
+            $this->load->model('flota_model');
             $id_usuario_vehiculo = $this->input->post('id_usuario_vehiculo');
-            $data['usuario_vehiculo'] = $this->usuario_model->dar_usuario_vehiculo($id_usuario_vehiculo);
+            $data['usuario_vehiculo'] = $this->flota_model->dar_usuario_vehiculo($id_usuario_vehiculo);
             $tareas = array();
             $opciones['trabajos'] = true;
             $tareas_vehiculo = $this->_dar_tareas_vehiculo($data['usuario_vehiculo'], '32000', $opciones);//hay que cambiar el kilometraje por el real
@@ -5353,6 +5372,8 @@ class Usuario extends Laspartes_Controller {
             $data['tareas'] = $fixed_tareas;
             $data_hmto = $this->_ver_hoja_mantenimiento($id_usuario_vehiculo, $data['usuario_vehiculo']->id_vehiculo, $data['usuario_vehiculo']->modelo);
             $data = array_merge($data, $data_hmto);
+
+            $data['herramientas'] = $this->_ver_herramientas($id_usuario_vehiculo);
             // $data['items_compras'] = $this->usuario_model->dar_items_compra_usuario($this->session->userdata('id_usuario'));
             echo json_encode(array('status' => TRUE, 'data' => $data));
         }else{
@@ -5594,5 +5615,58 @@ class Usuario extends Laspartes_Controller {
         }
         return $tareas_asignadas;
     }
+
+    /**
+     * ve las herramientas de un usuario vehiculo
+     * @param  int $id_usuario_vehiculo 
+     * @return array herramientas
+     */
+    function _ver_herramientas($id_usuario_vehiculo){
+        return $this->flota_model->dar_herramientas_uv($id_usuario_vehiculo);
+    }
+
+    /**
+     * actualiza las herramientas de un vehículo
+     * @return [type] [description]
+     */
+    function actualizar_herramientas_ajax(){
+        $this->load->library('form_validation');
+        $reglas = array(
+            array(
+                'field' => 'id_usuario_vehiculo',
+                'label' => 'Vehículo',
+                'rules' => 'trim|required|xss_clean|numeric'
+            ),array(
+                'field' => 'input_herramientas',
+                'label' => 'Herramienta',
+                'rules' => 'trim|xss_clean'
+            ),array(
+                'field' => 'input_vidas',
+                'label' => 'Vida útil',
+                'rules' => 'trim|xss_clean'
+            )
+        );
+        $this->form_validation->set_rules($reglas);
+        if (!$this->form_validation->run()) {
+            $this->form_validation->set_error_delimiters('', '');
+            echo json_encode(array('status' => false, 'msg' => validation_errors));
+        } else {
+            $this->load->model('flota_model');
+            $this->load->model('vehiculo_model');
+            $herramientas = array();
+            $vidas = array();
+            parse_str($this->input->post('input_herramientas'), $herramientas);
+            parse_str($this->input->post('input_vidas'), $vidas);
+            $id_usuario_vehiculo = $this->input->post('id_usuario_vehiculo');
+            $this->flota_model->borrar_herramientas_vehiculo($id_usuario_vehiculo);
+
+            foreach ($herramientas as $key => $herramienta) {
+                $llave = explode('_', $key);
+                $this->flota_model->agregar_herramienta($id_usuario_vehiculo, $herramienta, $vidas['herrmts_vida_'.$llave[2]]);
+            }
+            echo json_encode(array('status' => true));
+        }
+    }
+
 }
 
