@@ -44,7 +44,7 @@ class Vehiculo_model extends CI_Model {
         $id_vehiculo = mysql_insert_id();
         
         //agrega la marca y linea de vehiculo al crm
-        // $this->crm->agregar_marcalinea($id_vehiculo, $marca, $linea);
+        $this->crm->agregar_marcalinea($id_vehiculo, $marca, $linea);
         
         return $id_vehiculo;
     }

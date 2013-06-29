@@ -411,7 +411,7 @@ class Usuario_model extends CI_Model {
         $params['marca']  = $vehiculo->marca;
         $params['linea']  = $vehiculo->linea;
         $params['placa']  = $vehiculo->numero_placa;
-        // $this->crm->agregar_vehiculo_REST($params);
+        $this->crm->agregar_vehiculo_REST($params);
         return $id_usuario_vehiculo;
     }
 

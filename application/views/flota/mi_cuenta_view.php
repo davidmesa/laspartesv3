@@ -95,15 +95,7 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                 <img src="<?php echo base_url(); ?>/resources/images/micuenta/mis-vehiculos.png" alt="mis vehiculos" />
                 <div class="usuario-div-perfil-misvehiculos-cantidad">
                     <span class="usuario-span-perfil-titulosesion">Mis vehículos</span><br/>
-                    <span class="usuario-span-cantidad">( <?php echo $numVehiculos; ?> )</span>
-                </div>
-            </div>
-
-            <div class="usuario-div-perfil-sobrevehiculo usuario-div-perfil-tarea inactivo">
-                <img src="<?php echo base_url(); ?>/resources/images/micuenta/sobre-vehiculo-inactivo.png" alt="sobre mi vehiculo" />
-                <div class="usuario-div-perfil-sobrevehiculo-cantidad">
-                    <span class="usuario-span-perfil-titulosesion">Sobre mi vehículo</span><br/>
-                    <span class="usuario-span-cantidad">( <?php echo sizeof($tareas); ?> )</span>
+                    <!-- <span class="usuario-span-cantidad">( <?php echo $numVehiculos; ?> )</span> -->
                 </div>
             </div>
 
