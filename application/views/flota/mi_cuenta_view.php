@@ -354,9 +354,9 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                                             <?php endforeach;?>
                                         </div>
                                     </div>
-                                    <div class="htmo-div-button">
+                                    <a class="htmo-div-button" target="_blank">
                                         Vista PDF
-                                    </div>
+                                    </a>
                                 </div>
                                 <div class="clear"></div>
                                 <input type="submit" class="hmto-guardar htmo-div-button" value="Guardar">

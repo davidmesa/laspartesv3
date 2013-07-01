@@ -99,6 +99,8 @@ $route['carrito/pago_confirmacion'] = "usuario/pago_confirmacion";
 $route['usuario/recibo/(.+)'] = "usuario/recibo/$1";
 $route['usuario/califica_tu_experiencia/(.+)'] = "usuario/califica_tu_experiencia/$1";
 
+$route['usuario/cronograma_flotas/(\d+)'] = "usuario/cronograma_flotas/$1";
+
 $route['ofertas/(\d+)/(.+)'] = "ofertas/dar_oferta/$1/$2";
 
 $route['default_controller'] = "inicio";

@@ -579,7 +579,7 @@ $(function(){
                         });
                         editar_foto_carro(padre);
                         validate_form_editar_carro(id_usuario_vehiculo);
-                        mostrar_hmto(padre, data_tareas_cat, data_hojas);
+                        mostrar_hmto(padre, data_tareas_cat, data_hojas, id_usuario_vehiculo);
                         $(".input_change", padre).on({
                             change: function(event){
                                 modificar_hmto(this);
@@ -618,7 +618,8 @@ $(function(){
 
     //muestra la información de la hoja de mantenimiento de un carro
     var select_template;
-    function mostrar_hmto(padre, data_tareas_cat, data_hojas){
+    function mostrar_hmto(padre, data_tareas_cat, data_hojas, id_usuario_vehiculo){
+        $('.htmo-div-button', padre).attr('href', '<?php echo base_url();?>usuario/cronograma_flotas/'+id_usuario_vehiculo);
         select_template = $('<select>').addClass('input_change').addClass('hmto_cat');
         var count_selected = 0;
         var opt_selected = 0;
@@ -739,7 +740,7 @@ $(function(){
             $('.fm-act', padre).removeClass('fm-act');
             $(e).addClass('fm-act');
             $('.fc-inactive', padre).removeClass('fc-inactive');
-            if(seccion === 'Historial'){
+            if(seccion === 'hist'){
                $('.menu-hmto', padre).addClass('fc-inactive'); 
                $('.menu-herramientas', padre).addClass('fc-inactive'); 
                $('.flota-registrar-trabajo', padre).css('visibility', 'visible');

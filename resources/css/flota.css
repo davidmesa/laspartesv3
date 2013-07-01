@@ -791,6 +791,16 @@ label.error{
     cursor: pointer;
     margin-top: 5px;
     -webkit-border-radius: 3px; -moz-border-radius: 3px;
+    display: block;
+}
+
+a.htmo-div-button {
+    text-decoration: none;
+    color: black;
+}
+
+a.htmo-div-button:hover{
+    color: white;
 }
 
 .htmo-div-button:hover, .htmo-div-button.selected, .herrmts-div-button:hover, .herrmts-div-button.selected{

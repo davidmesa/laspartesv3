@@ -4813,6 +4813,73 @@ class Usuario extends Laspartes_Controller {
     }
 
     /**
+     * Muestra el cronograma de actividades
+     */
+    function cronograma_flotas($id_usuario_vehiculo) {
+        if ($this->hay_sesion_activa()) {
+            $id_usuario = $this->session->userdata('id_usuario');
+            $this->load->helper('date');
+            $this->load->model('usuario_model');
+            $this->load->model('flota_model');
+            $vehiculos = $this->usuario_model->dar_vehiculos_usuario($id_usuario);
+            foreach ($vehiculos as $i => $carro) {
+                if ($carro->id_usuario_vehiculo == $id_usuario_vehiculo) {
+                    $carroIndex = $i;
+                }
+            }
+            $vehiculo = $vehiculos[$carroIndex];
+            $kilometraje_ciudad = '32000';
+
+            $this->load->helper('date');
+            $tareas = array();
+            $tareas_asignadas = array();
+            $kilometraje_mensual = $kilometraje_ciudad / 12;
+            $kilometraje_actual = $vehiculo->kilometraje;
+            $tareas = $this->flota_model->dar_tareas_vehiculo_personalizado($vehiculo->id_usuario_vehiculo);
+            if(count($tareas)  == 0)
+                $tareas = $this->usuario_model->dar_tareas_vehiculo($vehiculo->id_vehiculo, $vehiculo->modelo);
+            $fecha_actual = mdate("%Y-%m-%d");
+            foreach ($tareas as $tarea) {
+                $tarea->realizado = false;
+                if ($tarea->id_servicio == 9) {
+                    
+                } else if ($tarea->id_servicio == 10) {
+                    
+                } else {
+                    $tarea_cronograma = new stdClass();
+                    $periodicidad = $tarea->periodicidad;
+                    $periodicidadMeses = $tarea->periodicidad * 12 / $kilometraje_ciudad;
+                    $tarea_cronograma->titulo = 'Tarea: ' . $tarea->nombre . '. Realizar cada ' . $periodicidadMeses . ' meses o ' . $periodicidad . 'Kms.';
+                    $kiloTemp = $kilometraje_actual % 5000;
+                    $cincomil = 5000 - $kiloTemp;
+                    $kiloTemp = $kilometraje_actual + $cincomil;
+                    $tarea_cronograma_fecha = '';
+                    $encontro_fecha = false;
+                    for ($index = $kiloTemp; $index <= ($kiloTemp + 12000); $index+=5000) {
+                        if ($index % $periodicidad == 0) {
+                            $kilo_diff = $index - $kilometraje_actual;
+                            $dias_diff = round($kilo_diff * 365 / $kilometraje_ciudad);
+                            $time = now() + $dias_diff * 24 * 3600;
+                            $siguiente_ano = now() * 24 * 3600 * 365;
+                            if (strtotime($time) <= strtotime($siguiente_ano)) {
+                                $tarea_cronograma_fecha .= 'Realizar el día: ' . strftime("%B %d de %Y", $time) . '<br/>';
+                                $encontro_fecha = true;
+                            }
+                        }
+                    }
+                    if ($encontro_fecha) {
+                        $tarea_cronograma->img = $tarea->imagen_thumb_url;
+                        $tarea_cronograma->fecha = $tarea_cronograma_fecha;
+                        $tareas_cronogramas[] = $tarea_cronograma;
+                    }
+                }
+            }
+            $data['tareas_cronograma'] = $tareas_cronogramas;
+            $this->load->view('usuario/cronograma_listado_view', $data);
+        }
+    }
+
+    /**
      * Al hace click sobre cotizar soat, se le envía un correo a taller en línea 
      * con los datos del usuario y vehículo 
      */
