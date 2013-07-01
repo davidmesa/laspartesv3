@@ -285,7 +285,8 @@ class Flota_model extends CI_Model {
         $this->db->escape($herramienta);
         $this->db->escape($vida);
         $this->db->set('herramienta', $herramienta);
-        $this->db->set('vida_util', $vida);
+        if(!empty($vida) && $vida != 0 )
+            $this->db->set('vida_util', $vida);
         $this->db->set('id_usuario_vehiculo', $id_usuario_vehiculo);
         $this->db->insert('herramientas');
         return mysql_insert_id();

@@ -355,7 +355,7 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                                         </div>
                                     </div>
                                     <a class="htmo-div-button" target="_blank">
-                                        Vista PDF
+                                        Cronograma
                                     </a>
                                 </div>
                                 <div class="clear"></div>
