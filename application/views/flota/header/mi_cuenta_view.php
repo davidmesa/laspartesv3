@@ -535,7 +535,10 @@ $(function(){
               }else{
                 var div = $('<div>').addClass('tarea-item');
                 var input = $('<input>').addClass('tarea-chk-box').attr('type', 'checkbox').val(tarea.id_servicio);
-                var img = $('<img>').addClass('tarea-img').attr('src', '<?php echo base_url();?>'+tarea.imagen_thumb_url).attr('alt', tarea.nombre);
+                if(tarea.imagen_thumb_url)
+                    var img = $('<img>').addClass('tarea-img').attr('src', '<?php echo base_url();?>'+tarea.imagen_thumb_url).attr('alt', tarea.nombre);
+                else
+                    var img = $('<img>').addClass('tarea-img').attr('src', '<?php echo base_url();?>resources/images/autopartes/pinones.png').attr('alt', tarea.nombre);
                 var tarea_texto = $('<div>').addClass('tarea-texto');
                 var tarea_nombre = $('<div>').addClass('tarea-nombre').text(tarea.nombre); tarea_texto.append(tarea_nombre);
                 var texto_tiempo = '';
