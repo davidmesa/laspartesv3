@@ -97,11 +97,6 @@ class NewsletterTareas extends Laspartes_Controller {
                                 }
                                 $logOfertaTarea .= " --------------------------------------------------------------- \n";
                                 $log .= $logOfertaTarea;
-
-                                
-
-
-
                                 $this->guardarLog("tareas", $log);
                             }
                         }

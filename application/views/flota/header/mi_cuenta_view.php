@@ -405,6 +405,7 @@ $(function(){
         $(".marca", padre).val(marca);
         $(".linea", padre).val(linea);
         $('.nuevo_carro', padre).val(0);
+        $('.div_quisiste_decir', padre).hide();
     }
 
     //al dar click en el carro sugerido se carga la información de ese carro
@@ -414,6 +415,7 @@ $(function(){
         $("#input_vehiculo_marca").val(marca);
         $("#input_vehiculo_linea").val(linea);
         $('#nuevo_carro').val(0);
+        $('#form_vehiculo .div_quisiste_decir').hide();
     }
 
 
@@ -456,6 +458,7 @@ $(function(){
         $('.editar-perfil-show', padre_perfil).show();
         $('.titl-dato-h', padre_perfil).hide();
         $('.ui-datepicker-append', padre_perfil).hide();
+        $('.div_quisiste_decir', padre_perfil).hide();
     }
 
     //consigue la información del vehículo y lo muestra en un lightbox

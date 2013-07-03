@@ -755,8 +755,9 @@ class Usuario_model extends CI_Model {
      * Da la lista de usuarios registrados al newsletter de tareas
      * @return array $usuarios
      */
-    function dar_usuarios_tareas() {
+    function dar_usuarios_tareas($tipo = 30) {
         $this->db->where('tareas', 1);
+        $this->db->where('tipo', $tipo);
         $query = $this->db->get('usuarios');
         return $query->result();
     }
