@@ -18,6 +18,7 @@ class Laspartes_Controller extends CI_Controller
         $this->load->model('pregunta_model');
 
         define("CHARSET", "iso-8859-1");
+        date_default_timezone_set('America/Bogota');
     }
     
     /**

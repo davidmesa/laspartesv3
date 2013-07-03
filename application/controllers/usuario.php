@@ -458,7 +458,7 @@ class Usuario extends Laspartes_Controller {
      * Muestra la información de la flota de el usuario logueado
      * @return vista vista del usuario flota
      */
-    function _mi_flota(){ 
+    function _mi_flota(){ //phpinfo();
         $id_usuario = $this->session->userdata('id_usuario');
         $this->load->helper('date');
         $this->load->model('usuario_model');
@@ -5441,6 +5441,7 @@ class Usuario extends Laspartes_Controller {
             $data = array_merge($data, $data_hmto);
 
             $data['herramientas'] = $this->_ver_herramientas($id_usuario_vehiculo);
+            $data['inspecciones'] = $this->_ver_inspecciones($id_usuario_vehiculo);
             // $data['items_compras'] = $this->usuario_model->dar_items_compra_usuario($this->session->userdata('id_usuario'));
             echo json_encode(array('status' => TRUE, 'data' => $data));
         }else{
@@ -5704,6 +5705,18 @@ class Usuario extends Laspartes_Controller {
                 'label' => 'Vehículo',
                 'rules' => 'trim|required|xss_clean|numeric'
             ),array(
+                'field' => 'input_id_herramientas_new',
+                'label' => 'nuevas herramientas',
+                'rules' => 'trim|xss_clean'
+            ),array(
+                'field' => 'input_id_herramientas_update',
+                'label' => 'Herramientas actualizadas',
+                'rules' => 'trim|xss_clean'
+            ),array(
+                'field' => 'input_id_herramientas_delete',
+                'label' => 'Herramientas borradas',
+                'rules' => 'trim|xss_clean'
+            ),array(
                 'field' => 'input_herramientas',
                 'label' => 'Herramienta',
                 'rules' => 'trim|xss_clean'
@@ -5720,19 +5733,68 @@ class Usuario extends Laspartes_Controller {
         } else {
             $this->load->model('flota_model');
             $this->load->model('vehiculo_model');
+            $new = array();
+            $update = array();
+            $delete = array();
             $herramientas = array();
             $vidas = array();
             parse_str($this->input->post('input_herramientas'), $herramientas);
+            parse_str($this->input->post('input_id_herramientas_new'), $new);
+            parse_str($this->input->post('input_id_herramientas_update'), $update);
+            parse_str($this->input->post('input_id_herramientas_delete'), $delete);
             parse_str($this->input->post('input_vidas'), $vidas);
             $id_usuario_vehiculo = $this->input->post('id_usuario_vehiculo');
-            $this->flota_model->borrar_herramientas_vehiculo($id_usuario_vehiculo);
+            // $this->flota_model->borrar_herramientas_vehiculo($id_usuario_vehiculo);
+            $this->flota_model->borrar_herramientas_id($delete);
 
-            foreach ($herramientas as $key => $herramienta) {
-                $llave = explode('_', $key);
-                $this->flota_model->agregar_herramienta($id_usuario_vehiculo, $herramienta, $vidas['herrmts_vida_'.$llave[2]]);
+            foreach ($new as $key => $id) {
+                $llave = explode('_', $key); 
+                $this->flota_model->agregar_herramienta($id_usuario_vehiculo, $herramientas['herrmts_herramienta_'.$llave[2]], $vidas['herrmts_vida_'.$llave[2]]);
+            }
+            foreach ($update as $key => $id) {
+                $llave = explode('_', $key); 
+                $this->flota_model->actualizar_herramienta($id_usuario_vehiculo, $id, $herramientas['herrmts_herramienta_'.$llave[2]], $vidas['herrmts_vida_'.$llave[2]]);
             }
             echo json_encode(array('status' => true));
         }
+    }
+
+    /**
+     * Deja una herramienta como inspeccionada
+     */
+    function inspeccionar(){
+        $this->load->library('form_validation');
+        $reglas = array(
+            array(
+                'field' => 'id_herramientas',
+                'label' => 'Herramientas',
+                'rules' => 'trim|xss_clean'
+            )
+        );
+        $this->form_validation->set_rules($reglas);
+        if (!$this->form_validation->run()) {
+            $this->form_validation->set_error_delimiters('', '');
+            echo json_encode(array('status' => false, 'msg' => validation_errors));
+        } else {
+            $this->load->model('flota_model');
+            $this->load->model('vehiculo_model');
+            $herramientas = array();
+            parse_str($this->input->post('id_herramientas'), $herramientas);
+
+            foreach ($herramientas as $key => $herramienta) {
+                $this->flota_model->inspeccionar($herramienta);
+            }
+            echo json_encode(array('status' => true));
+        }
+    }
+
+    /**
+     * Da las inpecciones realizadas sobre las herramientas de un vehículo
+     * @param  int $id_usuario_vehiculo
+     * @return array inspecciones
+     */
+    function _ver_inspecciones($id_usuario_vehiculo){
+        return $this->flota_model->dar_inspecciones($id_usuario_vehiculo);
     }
 
 }

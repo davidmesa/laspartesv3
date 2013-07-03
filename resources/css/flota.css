@@ -575,18 +575,18 @@ label.error{
 }
 
 .hist-titulo-hist{
-    width: 229px;
+    width: 172px;
     float: left;
     cursor: pointer;
     position: relative;
 }
 
-.hist-titulo-hmto.fm-act img, .hist-titulo-hist.fm-act img,  .hist-titulo-herramientas.fm-act img {
+.hist-titulo-hmto.fm-act img, .hist-titulo-hist.fm-act img,  .hist-titulo-herramientas.fm-act img,  .hist-titulo-inspeccion.fm-act img {
     display: block;
 }
 
 .hist-titulo-hmto{
-    width: 228px;
+    width: 171px;
     float: left;
     cursor: pointer;
     position: relative;
@@ -594,21 +594,29 @@ label.error{
     border-left: 1px solid #DDD;
 }
 
-.hist-titulo-hmto img, .hist-titulo-hist img, .hist-titulo-herramientas img{
+.hist-titulo-hmto img, .hist-titulo-hist img, .hist-titulo-herramientas img, .hist-titulo-inspeccion img{
     position: absolute;
     bottom: -1px;
-    left: 105px;
+    left: 75px;
     display: none;
 }
 
 .hist-titulo-herramientas{
-    width: 229px;
+    width: 171px;
     float: left;
     cursor: pointer;
     position: relative;
 }
 
-.hist-titulo-hmto.fm-act, .hist-titulo-hist.fm-act, .hist-titulo-herramientas.fm-act{
+.hist-titulo-inspeccion{
+    width: 171px;
+    float: left;
+    cursor: pointer;
+    position: relative;
+    border-left: 1px solid #DDD;
+}
+
+.hist-titulo-hmto.fm-act, .hist-titulo-hist.fm-act, .hist-titulo-herramientas.fm-act, .hist-titulo-inspeccion.fm-act{
     background-color: #efefef;
 }
 
@@ -626,13 +634,13 @@ label.error{
     padding-right: 20px;
 }
 
-.menu-hist ul{
+.menu-hist ul, .menu-inspeccion  ul{
     margin: 0;
     padding-left: 16px;
     float: left;
 }
 
-.menu-hist span{
+.menu-hist span, .menu-inspeccion span{
     display: block;
 }
 

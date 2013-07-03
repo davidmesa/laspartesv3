@@ -11,6 +11,8 @@
 <script src="<?php echo base_url(); ?>resources/js/ajaxfileupload.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>resources/js/ajaxupload.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>resources/js/jquery.datepick-es.js" type="text/javascript"></script> 
+<script src="<?php echo base_url(); ?>resources/js/moment.min.js" type="text/javascript"></script> 
+<script src="<?php echo base_url(); ?>resources/js/moment.lang-es.js" type="text/javascript"></script>
 
 <script type="text/javascript" src="<?php echo base_url(); ?>resources/admin/js/jquery.tablesorte.js"></script> 
 <script type="text/javascript" src="<?php echo base_url(); ?>resources/admin/js/jquery.tablesorter.widgets.js"></script> 
@@ -139,7 +141,7 @@ $(function(){
 
 <script>  
     $(document).ready(function() {
-        
+        moment.lang('es');
         
         $("#input_vehiculo_marca, #input_vehiculo_linea").on({
             change: function(event){
@@ -478,6 +480,7 @@ $(function(){
             var data_tareas_cat = data.tareasCategoria;
             var data_hojas = data.hojas;
             var data_herramientas = data.herramientas;
+            var data_inspecciones = data.inspecciones;
             // mostrar_hmto(padre, data_tareas_cat, data_hojas);
             $('.input_imageUpload_automovil', padre).attr('id', 'imageUpload_'+id_usuario_vehiculo);
             if(data_uv.imagen_url)
@@ -596,6 +599,8 @@ $(function(){
                                 modificar_herrmts(this);
                             }
                         });
+
+                        mostrar_inspecciones(padre, data_inspecciones);
                     },onClose: function(){
                         asignar_hmto(padre);
                     }
@@ -682,14 +687,14 @@ $(function(){
         var even = true;
         $.each( data_herramientas, function( key, herramienta ) {
             if(even){
-                var tr = $('<tr>').addClass('even');
+                var tr = $('<tr>').addClass('even').attr('data-crud', 'n');
                 even = false;
             }else{
-                var tr = $('<tr>').addClass('odd');
+                var tr = $('<tr>').addClass('odd').attr('data-crud', 'n');
                 even = true;
             }
             var td1 = $('<td>');
-            var inputChk = $('<input>').attr('type', 'checkbox').addClass('input_chk'); td1.append(inputChk);
+            var inputChk = $('<input>').attr('type', 'checkbox').attr('name', 'herrmts_chk_'+key).addClass('input_chk').val(herramienta.id_herramienta); td1.append(inputChk);
             var td2 = $('<td>');
             var inputHerramienta = $('<input>').val(herramienta.herramienta).addClass('input_change_h').addClass('herrmts_herramienta').attr('name', 'herrmts_herramienta_'+key);td2.append(inputHerramienta);
             var td3 = $('<td>');
@@ -742,22 +747,31 @@ $(function(){
             $('.fc-inactive', padre).removeClass('fc-inactive');
             if(seccion === 'hist'){
                $('.menu-hmto', padre).addClass('fc-inactive'); 
-               $('.menu-herramientas', padre).addClass('fc-inactive'); 
+               $('.menu-herramientas', padre).addClass('fc-inactive');
+               $('.menu-inspeccion', padre).addClass('fc-inactive');  
                $('.flota-registrar-trabajo', padre).css('visibility', 'visible');
             }
             else if(seccion === 'hmto'){
                 $('.flota-registrar-trabajo', padre).css('visibility', 'hidden');
                 $('.menu-hist', padre).addClass('fc-inactive');
-                $('.menu-herramientas', padre).addClass('fc-inactive'); 
+                $('.menu-herramientas', padre).addClass('fc-inactive');
+                $('.menu-inspeccion', padre).addClass('fc-inactive');  
                 var form = $('form.hmto-form', padre);
                 validate_hmto(form);
+            }else if(seccion === 'hermts'){
+                $('.flota-registrar-trabajo', padre).css('visibility', 'hidden');
+                $('.menu-hist', padre).addClass('fc-inactive');
+                $('.menu-hmto', padre).addClass('fc-inactive'); 
+                $('.menu-inspeccion', padre).addClass('fc-inactive'); 
+                var form = $('form.herrmts-form', padre);
+                validate_herramientas(form);
             }else{
                 $('.flota-registrar-trabajo', padre).css('visibility', 'hidden');
                 $('.menu-hist', padre).addClass('fc-inactive');
                 $('.menu-hmto', padre).addClass('fc-inactive'); 
+                $('.menu-herramientas', padre).addClass('fc-inactive'); 
                 var form = $('form.herrmts-form', padre);
-                validate_herramientas(form);
-            }  
+            }
         }
     }
 
@@ -988,6 +1002,7 @@ $(function(){
     //cuando cambia algún elemento de la hoja de mantenimiento
     //se muestra el boton de guardar
     function modificar_herrmts(elem){
+        $('tr').has(elem).attr('data-crud', 'u');
         var padre = $('.menu-herramientas').has(elem);
         if($('.herrmts-guardar.herrmts-div-button', padre).is(":hidden"))
             $('.herrmts-guardar.herrmts-div-button', padre).show();
@@ -1231,12 +1246,36 @@ $(function(){
         submitHandler: function (form) {
           $(form).bind('click');
             $('.ajax_img_loader', form).show();
+            var trNew = $("tr[data-crud='c']", form);
+            var trUpdate = $("tr[data-crud='u']", form);
+            var trDelete = $("tr[data-crud='d']", form);
+            
             $.ajax({
                 url: "<?php echo base_url(); ?>usuario/actualizar_herramientas_ajax",
                 type: "POST",
                 data: {
                     id_usuario_vehiculo: function () {
                         return $(".editar_id_usuario_vehiculo", padre).val();
+                    },input_id_herramientas_new: function () {
+                        var temp = '';
+                        $('input[type=checkbox]', trNew).each(function(i, e) {  
+                                temp += '&'+e.name+'='+e.value;
+                        });
+                        return temp;
+                    },
+                    input_id_herramientas_update: function () {
+                        var temp = '';
+                        $('input[type=checkbox]', trUpdate).each(function(i, e) {  
+                                temp += '&'+e.name+'='+e.value;
+                        });
+                        return temp;
+                    },
+                    input_id_herramientas_delete: function () {
+                        var temp = '';
+                        $('input[type=checkbox]', trDelete).each(function(i, e) {  
+                                temp += '&'+e.name+'='+e.value;
+                        });
+                        return temp;
                     },
                     input_herramientas: function () {
                         return $(".herrmts_herramienta", form).serialize();
@@ -1247,8 +1286,10 @@ $(function(){
                 },
                 success: function (data) {
                     var data = $.parseJSON(data);
-                    if(data.status)
+                    if(data.status){
                         $('.herrmts-guardar.herrmts-div-button', padre).hide();
+                        var trNew = $("tr", form).attr('data-crud', 'n');
+                    }
                     else{
                         confirm(data.msg, function () {
                                         $.modal.close();
@@ -1387,12 +1428,16 @@ $(function(){
         // console.log('entro a eliminar');
         var padre = $('.menu-hmto').has(elem);
         var count= 0;
-        $('.input_chk:checked', padre).each(function(i, e) {
-            $('tr').has(e).remove();  
-            count ++;
-        });  
-        if(count > 0)
-            $('.hmto-guardar.htmo-div-button', padre).show();
+        if($('.input_chk:checked', padre).size()>0){
+            $('.input_chk:checked', padre).each(function(i, e) {
+                $('tr').has(e).remove();  
+                count ++;
+            });  
+            if(count > 0)
+                $('.hmto-guardar.htmo-div-button', padre).show();
+        }else{
+            confirm('Selecciona al menos una tarea', function () {$.modal.close();});
+        }
     }
 
     //agrega una fila de tarea
@@ -1884,9 +1929,9 @@ $(function(){
         var tabla = $('.herrmts-table', padre);
         var tbody = $('tbody', tabla);
         var numero = Math.floor(Math.random() * 1000) + 1;
-        var tr = $('<tr>').addClass('odd');
+        var tr = $('<tr>').addClass('odd').attr('data-crud', 'c');
         var td1 = $('<td>');
-        var inputChk = $('<input>').attr('type', 'checkbox').addClass('input_chk'); td1.append(inputChk);
+        var inputChk = $('<input>').attr('type', 'checkbox').addClass('input_chk').val(0).attr('name', 'herrmts_chk_'+numero); td1.append(inputChk);
         var td2 = $('<td>');
         var inputHerramienta = $('<input>').addClass('input_change_h').addClass('herrmts_herramienta').attr('name', 'herrmts_herramienta_'+numero);td2.append(inputHerramienta);
         var td3 = $('<td>');
@@ -1913,11 +1958,90 @@ $(function(){
     function eliminar_herrmts(elem){
         var padre = $('.menu-herramientas').has(elem);
         var count= 0;
-        $('.input_chk:checked', padre).each(function(i, e) {
-            $('tr').has(e).remove();  
-            count ++;
-        });  
-        if(count > 0)
-            $('.herrmts-guardar.herrmts-div-button', padre).show();
+        if($('.input_chk:checked', padre).size()>0){
+            $('.input_chk:checked', padre).each(function(i, e) {
+                if($(e).val() == 0)
+                    $('tr').has(e).remove();
+                else
+                    $('tr').has(e).attr('data-crud', 'd').hide();  
+                count ++;
+            });  
+            if(count > 0)
+                $('.herrmts-guardar.herrmts-div-button', padre).show();
+        }else{
+            confirm('Selecciona al menos una herramienta', function () {$.modal.close();});
+        }
+    }
+
+    //las herramientas las deja con el estado de inspeccionado
+    function inspeccionar_herrmts(elem){
+        var padre = $('.flota-div-template').has(elem);
+        var herramientas = $('.menu-herramientas').has(elem);
+        if($('.herrmts-guardar.herrmts-div-button', herramientas).is(':hidden')){
+            if($('.input_chk:checked', herramientas).size()>0){
+                $.ajax({
+                    url: "<?php echo base_url(); ?>usuario/inspeccionar",
+                    type: "POST",
+                    data: {
+                        id_herramientas: function () {
+                            return $('.input_chk:checked', herramientas).serialize()
+                        }
+                    },
+                    success: function (data) {
+                        var data = $.parseJSON(data);
+                        if(data.status){
+                            var menu_content = $('.menu-content', padre);
+                            
+                                $('.input_chk:checked', herramientas).each(function(i, e) {
+                                    var tr = $('tr').has(e);
+                                    var herrmt = $('.herrmts_herramienta', tr).val();
+                                    var div = $('<div>').addClass('hist-compra').css('background-color', '#fefefe');
+                                    var ul = $('<ul>');
+                                    var li = $('<li>');
+                                    var span_nombre = $('<span>').text('Se inspeccionó la herramienta: ');
+                                    var strong = $('<strong>').text(herrmt);span_nombre.append(strong); li.append(span_nombre);
+                                    var span_fecha = $('<span>').addClass('hist-fecha').text(moment().format('LLLL')); li.append(span_fecha);
+                                    ul.append(li);
+                                    var input_id = $('<input>').attr('type', 'hidden'); div.append(input_id);
+                                    div.append(ul);
+                                    var div_clear =  $('<div>').addClass('clear');
+                                    div.append(div_clear);
+                                    $('.menu-inspeccion', menu_content).prepend(div); 
+                                    $(e).attr('checked', false);
+                                });
+                            
+                        }else{
+                            confirm(data.msg, function () {$.modal.close();});   
+                        }
+                    }
+                });  
+            }else{
+                confirm('Selecciona al menos una herramienta', function () {$.modal.close();});
+            }
+        }else{
+            confirm('Guardar primero los cambios', function () {$.modal.close();});
+        }      
+    }
+
+    //muestra las herramientas de un vehículo
+    function mostrar_inspecciones(padre, data_inspecciones){
+
+        var menu_content = $('.menu-content', padre);
+        $.each( data_inspecciones, function( key, herramienta ) {
+            var div = $('<div>').addClass('hist-compra');
+            var ul = $('<ul>');
+            var li = $('<li>');
+            var span_nombre = $('<span>').text('Se inspeccionó la herramienta: ');
+            var strong = $('<strong>').text(herramienta.herramienta);span_nombre.append(strong); li.append(span_nombre);
+            var fecha_inspeccion = new Date(herramienta.fecha);
+            var momento = moment(fecha_inspeccion).format('LLLL');
+            var span_fecha = $('<span>').addClass('hist-fecha').text(momento); li.append(span_fecha);
+            ul.append(li);
+            var input_id = $('<input>').attr('type', 'hidden'); div.append(input_id);
+            div.append(ul);
+            var div_clear =  $('<div>').addClass('clear');
+            div.append(div_clear);
+            $('.menu-inspeccion', menu_content).prepend(div);  
+        });
     }
 </script>

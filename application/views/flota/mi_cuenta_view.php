@@ -294,6 +294,11 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                             <img src="<?php echo base_url();?>resources/images/micuenta/trangulo.png">
                         </div>
 
+                        <div class="hist-titulo-inspeccion" onClick="select_menu(this, 'inspeccion')">
+                            <span class="font-universe">Inspecciones</span>
+                            <img src="<?php echo base_url();?>resources/images/micuenta/trangulo.png">
+                        </div>
+
                         <div class="clear"></div>
                     </div>
 
@@ -362,7 +367,7 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                                 <input type="submit" class="hmto-guardar htmo-div-button" value="Guardar">
                             </form>
                         </div>
-                        <div class="menu-herramientas">
+                        <div class="menu-herramientas fc-inactive">
                             <form class="herrmts-form fc-inactive">
                                 <table class="herrmts-table">
                                     <thead>
@@ -375,16 +380,22 @@ if ($usuario->imagen_url != NULL || $usuario->imagen_url != '') {
                                 </table>
                                 <div class="herrmts-acciones">
                                     <div class="acciones-titulo font-universe">Acciones</div>
-                                    <div class="htmo-div-button accion-agregar"  onclick="agregar_herrmts(this)">
-                                        Agregar herramienta
+                                    <div class="herrmts-div-button accion-agregar"  onclick="agregar_herrmts(this)">
+                                        Agregar
                                     </div>
                                     <div class="herrmts-div-button accion-eliminar" onclick="eliminar_herrmts(this)">
-                                        Eliminar herramienta
+                                        Eliminar
+                                    </div>
+                                    <div class="herrmts-div-button accion-inspeccion" onclick="inspeccionar_herrmts(this)">
+                                        Inspeccionar
                                     </div>
                                 </div>
                                 <div class="clear"></div>
                                 <input type="submit" class="herrmts-guardar herrmts-div-button" value="Guardar">
                             </form>
+                        </div>
+                        <div class="menu-inspeccion fc-inactive">
+                            
                         </div>
                     </div>
                 </div>

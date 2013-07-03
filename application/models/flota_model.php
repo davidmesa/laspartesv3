@@ -271,6 +271,22 @@ class Flota_model extends CI_Model {
         $this->db->escape($id_usuario_vehiculo);
         $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
         $this->db->delete('herramientas');
+        return mysql_affected_rows();
+    }
+
+    /**
+     * Borra las herramientas de un vehículo
+     * @param  int $id_usuario_vehiculo
+     */
+    function borrar_herramientas_id($id_herramientas){
+        $this->db->escape($id_herramientas);
+        if(sizeof($id_herramientas) > 0){
+            foreach ($id_herramientas as $key => $id) {
+                $this->db->or_where('id_herramienta', $id);
+            }
+            $this->db->delete('herramientas');
+            return mysql_affected_rows(); 
+        }
     }
 
     /**
@@ -290,5 +306,50 @@ class Flota_model extends CI_Model {
         $this->db->set('id_usuario_vehiculo', $id_usuario_vehiculo);
         $this->db->insert('herramientas');
         return mysql_insert_id();
+    }
+
+    /**
+     * agrega una herramienta al vehículo
+     * @param  int $id_usuario_vehiculo 
+     * @param  string $herramienta   
+     * @param  string $vida   
+     * @return int id_herramienta
+     */
+    function actualizar_herramienta($id_usuario_vehiculo, $id_herramienta, $herramienta, $vida){
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->escape($herramienta);
+        $this->db->escape($vida);
+        $this->db->set('herramienta', $herramienta);
+        if(!empty($vida) && $vida != 0 )
+            $this->db->set('vida_util', $vida);
+        $this->db->set('id_usuario_vehiculo', $id_usuario_vehiculo);
+        $this->db->where('id_herramienta', $id_herramienta);
+        $this->db->update('herramientas');
+    }
+
+    /**
+     * Deja inspeccionado una herramienta
+     * @param  int $id_herramienta
+     * @return int id de la la inspeccion
+     */
+    function inspeccionar($id_herramienta){
+        $this->db->escape($id_herramienta);
+        $this->db->set('id_herramienta', $id_herramienta);
+        $this->db->insert('inspeccion');
+        return mysql_insert_id();
+    }
+
+    /**
+     * Da las inpecciones realizadas
+     * @param  int $id_usuario_vehiculo
+     * @return array inspecciones
+     */
+    function dar_inspecciones($id_usuario_vehiculo){
+        $this->db->escape($id_usuario_vehiculo);
+        $this->db->from('inspeccion');
+        $this->db->join('herramientas', 'herramientas.id_herramienta = inspeccion.id_herramienta');
+        $this->db->where('id_usuario_vehiculo', $id_usuario_vehiculo);
+        $q = $this->db->get();
+        return $q->result();
     }
 }
