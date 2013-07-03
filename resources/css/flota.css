@@ -88,6 +88,11 @@
     background-position:center;	
 }
 
+#usuario-div-foto .usuario-div-foto-editar{
+    right: 21px;
+    bottom: 7px;
+}
+
 .loading_subir_imagen_automovil{
     background-image: url(../../resources/template/iconos/loading2.gif);
     background-position: center;
