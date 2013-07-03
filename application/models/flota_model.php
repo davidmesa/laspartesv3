@@ -92,6 +92,8 @@ class Flota_model extends CI_Model {
      */
     function dar_tareas_categoria($id_flota){
         $this->db->escape($id_flota);
+        
+        //busca las tareas expecíficas de un vehículo
         $this->db->select('tareas.*');
         $this->db->join('flota_usuario_vehiculo', 'flota_usuario_vehiculo.id_flota = flotas.id_flota');
         $this->db->join('flotas_hmto', 'flotas_hmto.id_flota_usuario_vehiculo = flota_usuario_vehiculo.id_flota_usuario_vehiculo');
@@ -102,6 +104,21 @@ class Flota_model extends CI_Model {
         $subQuery1 = $this->db->last_query();
         $this->db->_reset_select();
 
+        //busca las tareas genéricas para una marca y línea ( no incluye soat ni tecnomecánica )
+        $this->db->select('tareas.*');
+        $this->db->join('flota_usuario_vehiculo', 'flota_usuario_vehiculo.id_flota = flotas.id_flota');
+        $this->db->join('usuarios_vehiculos', 'usuarios_vehiculos.id_usuario_vehiculo = flota_usuario_vehiculo.id_usuario_vehiculo');
+        $this->db->join('tareas_servicios','tareas_servicios.id_vehiculo = usuarios_vehiculos.id_vehiculo and tareas_servicios.modelo = usuarios_vehiculos.modelo');
+        $this->db->join('tareas', 'tareas.id_servicio = tareas_servicios.id_servicio');
+        $this->db->where('flotas.id_flota', $id_flota);
+        $this->db->where('tareas.id_servicio != ','9');
+        $this->db->where('tareas.id_servicio != ','10');
+        $this->db->group_by('tareas.id_servicio');
+        $query = $this->db->get('flotas');
+        $subQuery3 = $this->db->last_query();
+        $this->db->_reset_select();
+
+        //busca las tareas genéricas de todos los vehículos ( no incluye soat ni tecnomecánica )
         $this->db->from('tareas');
         $this->db->where('id_servicio != ','9');
         $this->db->where('id_servicio != ','10');
@@ -110,7 +127,7 @@ class Flota_model extends CI_Model {
         $subQuery2 = $this->db->last_query();
         $this->db->_reset_select();
 
-        $q = $this->db->query("select * from ($subQuery1 UNION $subQuery2) as unionTable");
+        $q = $this->db->query("select * from ($subQuery1 UNION $subQuery2 UNION $subQuery3) as unionTable group by id_servicio");
         // $this->db->from("($subQuery1 UNION $subQuery2)");
         // $q = $this->db->get();
         return $q->result();
