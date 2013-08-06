@@ -118,6 +118,13 @@ $route['admin/usuario/bono/(\d+)/(.+)'] = "admin/usuario/bono/$1/$2";
 $route['admin/vehiculo/ver_hoja_mantenimiento/(\d+)'] = "admin/vehiculo/ver_hoja_mantenimiento/$1";
 
 
+//OPERACIONES
+/*inicio cotización*/
+$route['operacion/cotizaciones/mostrar_cotizaciones/(.+)/(\d+)'] = "operacion/cotizaciones/mostrar_cotizaciones/$1/$2";
+$route['operacion/cotizaciones/mostrar_cotizaciones/(.+)/(\d+)/(\d+)'] = "operacion/cotizaciones/mostrar_cotizaciones/$1/$2/$3";
+/*fin cotización*/
+
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

@@ -4,13 +4,18 @@ if( ! function_exists('send_mail'))
 {
 	
 
-	function send_mail($destinatarios = array(), $asunto = "", $mensajeHTML = "", $mensajeText = "", $fileName ="")
+	function send_mail($destinatarios = array(), $asunto = "", $mensajeHTML = "", $mensajeText = "", $fileName ="", $path ="")
 	{
                 
 		$url = 'http://sendgrid.com/';
 		$user = 'laspartes';
 		$pass = 'L1sp1rt2s111';
-                $filePath = 'resources/facturas';
+		if(strpos($fileName, 'resources/facturas/') === 0 || $path==""){
+			$filePath = 'resources/facturas/';
+		}else{
+			$filePath = $path;
+		}
+                
                 //$path = dirname('resources/facturas/'.$fileName); 
                 
 		$to = array();
@@ -37,7 +42,7 @@ if( ! function_exists('send_mail'))
                             'text'			=> $mensajeText,
                             'from'			=> 'no-reply@laspartes.com.co',
                             'fromname'                  => 'Laspartes.com',
-                            'files['.$fileName.']'  => '@'.$filePath.'/'.$fileName
+                            'files['.$fileName.']'  => '@'.$filePath.$fileName
                     );
                 }else{
                    $params = array(
@@ -69,7 +74,7 @@ if( ! function_exists('send_mail'))
 		$response = curl_exec($session);
 		curl_close($session);
 		// print everything out
-//		print_r($response);   
+		// print_r($response);   
                 
 	}
 }
