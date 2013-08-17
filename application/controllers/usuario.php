@@ -2360,7 +2360,7 @@ class Usuario extends Laspartes_Controller {
 
         if (!$this->form_validation->run()) {
             $this->form_validation->set_error_delimiters('', '');
-            echo json_encode(array('status' => false, 'msg' => validation_errors));
+            echo json_encode(array('status' => false, 'msg' => validation_errors()));
         } else {
             $referenciado = "";
             if ($this->input->post('referenciado') == TRUE)
@@ -5535,7 +5535,7 @@ class Usuario extends Laspartes_Controller {
         $this->form_validation->set_rules($reglas);
         if (!$this->form_validation->run()) {
             $this->form_validation->set_error_delimiters('', '');
-            echo json_encode(array('status' => false, 'msg' => validation_errors));
+            echo json_encode(array('status' => false, 'msg' => validation_errors()));
             // $this->ver_hoja_mantenimiento($id_vehiculo, validation_errors('<div class="mensaje-error canhide">', '</div>'));
         } else {
             $this->load->model('flota_model');
@@ -5729,7 +5729,7 @@ class Usuario extends Laspartes_Controller {
         $this->form_validation->set_rules($reglas);
         if (!$this->form_validation->run()) {
             $this->form_validation->set_error_delimiters('', '');
-            echo json_encode(array('status' => false, 'msg' => validation_errors));
+            echo json_encode(array('status' => false, 'msg' => validation_errors()));
         } else {
             $this->load->model('flota_model');
             $this->load->model('vehiculo_model');
@@ -5774,7 +5774,7 @@ class Usuario extends Laspartes_Controller {
         $this->form_validation->set_rules($reglas);
         if (!$this->form_validation->run()) {
             $this->form_validation->set_error_delimiters('', '');
-            echo json_encode(array('status' => false, 'msg' => validation_errors));
+            echo json_encode(array('status' => false, 'msg' => validation_errors()));
         } else {
             $this->load->model('flota_model');
             $this->load->model('vehiculo_model');

@@ -117,7 +117,7 @@ font-size: 10px;
   </div><!--end logo-->
   
   <div id="address">
-    <h2>ORDEN DE COMPRA <?php echo $orden_compra_model->id?></h2>
+    <h2>ORDEN DE COMPRA <?php echo str_pad($orden_compra_model->id, 4, '0', STR_PAD_LEFT)?></h2>
     <table id="tbl-top">
       <tbody>
         <tr><td><strong>Fecha:</strong><br/><span><?php echo strftime("%B %d de %Y", strtotime($orden_compra_model->fecha))?></span></td></tr>

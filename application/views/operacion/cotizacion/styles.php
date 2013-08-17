@@ -1,5 +1,6 @@
 <link href="<?php echo base_url(); ?>resources/css/jquery.handsontable.full.css" rel="stylesheet" type="text/css" media="screen">
-<link href="<?php echo base_url(); ?>resources/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen">
+<link href="<?php echo base_url(); ?>resources/css/bootstrap.css" rel="stylesheet" type="text/css" media="screen">
+<link href="<?php echo base_url(); ?>resources/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen">
 <link href="<?php echo base_url(); ?>resources/css/datepicker.css" rel="stylesheet" type="text/css" media="screen">
 <link href="<?php echo base_url(); ?>resources/css/halflings.css" rel="stylesheet" type="text/css" media="screen">
 
@@ -91,6 +92,14 @@
 
 .dropdown-menu{
   z-index: 1050;
+}
+
+#ordenes-compra button{
+  padding: 0;
+}
+
+#cancelar{
+  margin-right: 5px;
 }
 /*
 .alert-success a{

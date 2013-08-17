@@ -120,9 +120,10 @@ class Crm {
      */
     private function crear_cuenta_REST($params){
         $name_value_list = array();
-        if(!empty($params['first_name']) ){
+        // if(!empty($params['first_name']) ){
         array_push($name_value_list, array("name" => "estadoHook", "value" => true));
-        array_push($name_value_list, array("name" => "name", "value" => $params['first_name']. ' '. $params['last_name']));
+        $name = $params['first_name']. ' '. $params['last_name'];
+        array_push($name_value_list, array("name" => "name", "value" => $name));
 
         $user_id = $this->session_id;
         $set_entry_parameters = array(
@@ -136,7 +137,7 @@ class Crm {
              "name_value_list" => $name_value_list,
         );
         $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
-        }
+        // }
     }
 
     /**

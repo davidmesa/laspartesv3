@@ -15,7 +15,7 @@ class item_cotizacion_model extends CI_Model
     var $item;
     var $cantidad;
     var $margen;
-    var $elegido = 0;
+    var $id_orden_compra = 0;
     
      /**
      * Constructor de la clase Cotizacion model

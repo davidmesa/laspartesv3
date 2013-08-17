@@ -12,12 +12,10 @@ class proveedor_cotizacion_model extends CI_Model
     //datos guardados
     var $id;
     var $id_item_cotizacion;
-    var $proveedor;
-    var $email = '';
+    var $id_proveedor;
     var $lp_valor;
     var $iva;
     var $nota = '';
-    var $orden_compra = 0;
     var $elegido = 0;
 
   /**
@@ -73,6 +71,26 @@ class proveedor_cotizacion_model extends CI_Model
         $item = new item_cotizacion_model();
         foreach ($row as $key => $value)
             $item->$key = $value;
+        return $item;
+    }
+
+    /**
+     * da el proovedor seleccionado
+     * @return array[proveedor_cotizacion_model] 
+     */
+    function dar_proveedor() {
+        $CI =& get_instance();
+        $CI->load->model('operacion/proveedor_model');
+        $this->db->select('op_proveedores.*');
+        $this->db->join('op_proveedores', 
+            'op_proveedor_cotizacion.id_proveedor = op_proveedores.id');
+        $this->db->where('op_proveedor_cotizacion.id', $this->id);
+        $query = $this->db->get('op_proveedor_cotizacion', 1);
+        $row = $query->row(0);
+        $item = new proveedor_model();
+        foreach ($row as $key => $value) {
+            $item->$key = $value;
+        }
         return $item;
     }
 }

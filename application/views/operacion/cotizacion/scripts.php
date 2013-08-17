@@ -6,8 +6,10 @@
 <script src="<?php echo base_url(); ?>resources/js/jquery.handsontable.full.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>resources/js/jquery.json-2.4.min.js"></script>
 <script src="<?php echo base_url(); ?>resources/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery.validate.js"></script>
 
 <script data-jsfiddle="example1">
+
 var modificado = false; //si se ha modificado algo en la tabla
 var ini = true; //la aplicación ha sido cargada por primera ves
 var load_cotizacion = <?php echo json_encode($cotizacion);?>; //datos de la cotización
@@ -16,9 +18,8 @@ var idItem = []; //id de los items
 var precreado = false; //ha sido precreada la página
 var $ht = $("#example1");  //la tabla
 var colWidths = [100, 60, 90, 90]; //el ancho de cada una de las columnas
-var establecimientos = <?php echo json_encode($all_establecimientos); ?>; //json de los establecimientos disponibles 
+var establecimientos = <?php echo json_encode($all_proveedores); ?>; //json de los establecimientos disponibles 
 var proveedoresSelec = []; //los proveedores seleccionados
-// console.log(establecimientos);
 var autocompleteProveedor = $('#input-proveedor').typeahead({
 	source: function(q, process){
 		objects = [];
@@ -31,6 +32,9 @@ var autocompleteProveedor = $('#input-proveedor').typeahead({
 	 
 	    process(objects);
 	},updater: function(item) {
+		$('#input-proveedor').attr('data-direccion', map[item].direccion);
+		$('#input-proveedor').attr('data-telefono', map[item].telefono);
+		$('#input-proveedor').attr('data-ciudad', map[item].ciudad);
         $('#input-eproveedor').val(map[item].email);
         return item;
     }
@@ -57,7 +61,7 @@ if(load_items.length > 0){
 	header.push("Cantidad");
 	var columnDef = new Array();
 	columnDef.push({data: 'item', type: {renderer: itemRender}});  
-	columnDef.push({data: 'cantidad', allowInvalid: false, type: 'numeric'});
+	columnDef.push({data: 'cantidad', allowInvalid: false, type: {renderer: numberRender}});
 	var dSchema = {};
 	dSchema.item = null;
 	dSchema.cantidad = 1;  
@@ -69,22 +73,30 @@ if(load_items.length > 0){
 			curdata['cantidad'] = parseInt(e.cantidad);
 		idItem[i] = e.id;
 		$.each(e.proveedores,function(i1,e1){
+			var formatProveedor = e1.proveedor.proveedor.replace(/[^a-z0-9\-]/ig," ");
 			if(mkHeader){
-				header.push('<input type="text" onclick="quitarSelect()" onchange="cambiarHeader(this, '+(i1+2)+')" data-eproveedor="'+e1.email+'" value="'+e1.proveedor+'" style="width: 75px;">');
-				proveedores.push(e1.proveedor);
-				dSchema[e1.proveedor] = {costo: null};
-				var cost = e1.proveedor+'.costo';
+				header.push('<input type="text" onclick="quitarSelect()" onchange="cambiarHeader(this, '+(i1+2)
+					+')" data-direccion="'+e1.proveedor.direccion+'" data-telefono="'+e1.proveedor.telefono+'" data-ciudad="'+
+				e1.proveedor.ciudad+'" data-eproveedor="'+e1.proveedor.email+'" value="'+formatProveedor+'" style="width: 75px;">');
+				proveedores.push(formatProveedor);
+				dSchema[formatProveedor] = {costo: null};
+				var cost = formatProveedor+'.costo'; console.log('costo', cost);
 			    columnDef.push({data: cost, type: {renderer: selectRender}});
 
 			    var provData = [];
-				provData['proveedor'] = e1.proveedor;
-				provData['email'] = e1.email;
+			    provData['id_proveedor'] = e1.proveedor.id;
+			    provData['proveedor'] = formatProveedor;
+				provData['original_proveedor'] = e1.proveedor.proveedor;
+				provData['email'] = e1.proveedor.email;
+				provData['telefono'] = e1.proveedor.telefono;
+				provData['direccion'] = e1.proveedor.direccion;
+				provData['ciudad'] = e1.proveedor.ciudad;
 				proveedoresSelec.push(provData); 
 			}
 			if(e1.elegido == 1)
 				seleccionados[i] = i1+2;
 			load_id_proveedor[i][i1+2] = e1.id;
-			curdata[e1.proveedor] = {costo: parseFloat(e1.lp_valor)};
+			curdata[formatProveedor] = {costo: parseFloat(e1.lp_valor)};
 			if(e1.nota != null)
 				notas[i][i1+2] = e1.nota;
 
@@ -102,7 +114,7 @@ if(load_items.length > 0){
 	});
 	header.push("Margen LP(%)");
 	header.push("Precio al cliente");
-	columnDef.push({data: 'margen', allowInvalid: false, type: 'numeric'});  
+	columnDef.push({data: 'margen', allowInvalid: false, type: {renderer: numberRender}});  
 	columnDef.push({data: 'precio', type: {renderer: myAutocompleteRenderer}, readOnly: true});  
 	dSchema.margen = 0;
 	dSchema.precio = 0;	
@@ -126,8 +138,8 @@ if(load_items.length > 0){
 	header[3] = "Precio al cliente";
 	var columnDef = new Array();
 	columnDef.push({data: 'item'});  
-	columnDef.push({data: 'cantidad', allowInvalid: false, type: 'numeric'});  
-	columnDef.push({data: 'margen', allowInvalid: false, type: 'numeric'});  
+	columnDef.push({data: 'cantidad', allowInvalid: false, type: {renderer: numberRender}});  
+	columnDef.push({data: 'margen', allowInvalid: false, type: {renderer: numberRender}});  
 	columnDef.push({data: 'precio', type: {renderer: myAutocompleteRenderer}, readOnly: true});  
 	var dSchema = {};
 
@@ -138,7 +150,19 @@ if(load_items.length > 0){
 }
 
 $(document).ready(function() {
+	//mensaje de comfirmación antes de abandonar la página
+	$(window).bind('beforeunload', function(){
+	    if( modificado ){
+	        return "¿Está seguro de que sea abandorar esta página y perder todos los cambios realizados?"
+	    }
+	});
+
 	mostrar_alerta();
+
+	// $('.modal-orden-compra').on('hide', function () {
+	// 	console.log('se esconde');
+	//   $(this).modal('hide').remove();
+	// })
 	
 	//setea el datepicker
 	$('.date-picker').datepicker();
@@ -146,16 +170,87 @@ $(document).ready(function() {
 	
 	// $('.date').datepicker();
 	//agrega un proveedor
-	$('#agregarProveedor').submit(function(e){
-		e.preventDefault();
-		agregar_columna();
+	// $('#agregarProveedor').submit(function(e){
+	// 	e.preventDefault();
+	// 	agregar_columna();
+	// });
+
+
+	//valida el formulario de editar perfil
+	$("#agregarProveedor").validate({
+		rules: {
+			proveedor: {
+				required: true
+				,minlength: 2
+				,maxlength: 40
+			},email:{
+				required: true,
+				email: true,
+			}
+		},messages: {
+            email: {
+                required: "*Escriba su correo electrónico",
+                email: "*Escriba un correo electrónico válido",
+            },proveedor: {
+                required: "*Escriba un usuario",
+                minlength: "*El usuario debe contener al menos 5 caracteres",
+                maxlength: "*Porfavor no ingresar más de 20 caracteres"
+            }
+        },errorPlacement: function(error, element) {
+            error.css('position', 'none');
+		},highlight: function(element, errorClass) {
+			var formGroup = $('.form-group').has(element);
+			$(formGroup).addClass('has-error');
+		},unhighlight: function(element, errorClass) {
+			var formGroup = $('.form-group').has(element);
+			$(formGroup).removeClass('has-error');
+		},invalidHandler: function(form, validator){
+			var errors = validator.numberOfInvalids();
+			if (errors) {
+				var message = errors == 1
+				? 'Se encontró el siguiente error:\n'
+				: 'Se encontraron los siguientes ' + errors + ' errores:\n';
+				var errors = "";
+				if (validator.errorList.length > 0) {
+					for (x=0;x<validator.errorList.length;x++) {
+						errors += "\n\u25CF " + validator.errorList[x].message;
+					}
+				}
+				alert(errors);
+			}
+			validator.focusInvalid();
+		},submitHandler: function(form){
+			var email = $('#input-eproveedor').val();
+			var proveedor = $('#input-proveedor').val();
+			$.ajax({
+			    type: "POST",
+			    url: "<?php echo base_url(); ?>operacion/cotizaciones/existe_proveedor",
+			    data: { 
+			    	'email': email,
+			    	'proveedor': proveedor
+			    },success: function(data){
+			    	var data = $.parseJSON(data);
+			    	if(!data.status){
+			        	// alert('no existe');
+			    	}
+			        else{
+			        	var datamsg = $.parseJSON(data.msg);
+			        	$('#input-proveedor').val(datamsg.proveedor);
+			        }
+					agregar_columna();
+			    },error: function(XMLHttpRequest, textStatus, errorThrown){
+			    	mostrar_alerta('msjError');
+			    	$("body").scrollTop(0);
+			    }
+			});
+		}
 	});
 
 	//previene que se envíe la forma de orden de compra por defecto
-	$('#form-orden-compra').submit(function(e){
-		e.preventDefault();
-		generar_orden_compra(e);
-	});
+	// $('#form-orden-compra').submit(function(e){
+	// 	e.preventDefault();
+	// 	generar_orden_compra(e);
+	// });
 
 	numeral.language('es', {
 		delimiters: {
@@ -212,7 +307,7 @@ $(document).ready(function() {
       if (maxed && availableWidth === void 0) {
         calculateSize();
       }
-      return maxed ? availableWidth : 600;
+      return $window.width();
     },
     height: function () {
       if (maxed && availableHeight === void 0) {
@@ -279,46 +374,57 @@ $(document).ready(function() {
 }
 });
 
-//formatea los valores de las retenciones como porcentajes
-	$('.retenciones').mask('99.9');
-
 });
+
 
 //agrega una columna a la tabla
 function agregar_columna(){
 	var $proveedor = $('#input-proveedor').val();
-	$proveedor = $proveedor.replace(/[^a-z0-9\-]/ig,"");
-	var $eproveedor = $('#input-eproveedor').val();
-	if($proveedor != '' && $proveedor != 'item' && $proveedor != 'cantidad' && $proveedor != 'margen LP(%)' && $proveedor != 'precio al cliente'){
-		var provData = [];
-		provData['proveedor'] = $eproveedor;
-		provData['email'] = $proveedor;
-		proveedoresSelec[$proveedor] = provData;
-		proveedores.push($proveedor);
-		header.splice(header.length-2,0,'<input type="text" onclick="quitarSelect()" data-eproveedor="'+$eproveedor+'" onchange="cambiarHeader(this, '+(header.length-2)+')" value="'+$proveedor+'"  style="width: 75px;">');
-		dSchema[$proveedor] = {costo: null};
-    var htInstance = $ht.handsontable('getInstance');
-    var cost = $proveedor+'.costo';
-    columnDef.splice(header.length-3,0,{data: cost, type: {renderer: selectRender}}); 
-    var currentData = htInstance.getData();
-    for (var i = 0; i < htInstance.countRows(); i++) {
-    	currentData[i][$proveedor] = {costo: ""};
-    };
-    colWidths.splice(header.length-3,0,90); 
-    htInstance.updateSettings({
-    	data: currentData,
-    	colWidths: colWidths,
-    	dataSchema: dSchema,
-    	colHeaders: header,
-    	columns: columnDef
-    });
+	var repetido = false;
+	$.each(proveedoresSelec, function(i, e){
+		if(e['original_proveedor'] == $proveedor || e['proveedor'] == $proveedor){
+			alert('Este proveedor ya existe');
+			repetido = true;
+		}
+	});
+	if(!repetido){
+		$proveedor = $proveedor.replace(/[^a-z0-9\-]/ig,"");
+		var $eproveedor = $('#input-eproveedor').val();
+		if($proveedor != '' && $proveedor != 'item' && $proveedor != 'cantidad' && $proveedor != 'margen LP(%)' && $proveedor != 'precio al cliente'){
+			var provData = [];
+			provData['proveedor'] = $proveedor;
+			provData['original_proveedor'] = $('#input-proveedor').val();
+			provData['email'] = $eproveedor;
+			provData['ciudad'] = $('#input-proveedor').attr('data-ciudad');
+			provData['direccion'] = $('#input-proveedor').attr('data-direccion');
+			provData['telefono'] = $('#input-proveedor').attr('data-telefono');
+			proveedoresSelec.push(provData) ; 
+			proveedores.push($proveedor);
+			header.splice(header.length-2,0,'<input type="text" onclick="quitarSelect()" data-eproveedor="'+$eproveedor+'" onchange="cambiarHeader(this, '+(header.length-2)+')" value="'+$proveedor+'"  style="width: 75px;">');
+			dSchema[$proveedor] = {costo: null};
+			var htInstance = $ht.handsontable('getInstance');
+			var cost = $proveedor+'.costo';
+			columnDef.splice(header.length-3,0,{data: cost, type: {renderer: selectRender}}); 
+			var currentData = htInstance.getData();
+			for (var i = 0; i < htInstance.countRows(); i++) {
+				currentData[i][$proveedor] = {costo: ""};
+			};
+			colWidths.splice(header.length-3,0,90); 
+			htInstance.updateSettings({
+				data: currentData,
+				colWidths: colWidths,
+				dataSchema: dSchema,
+				colHeaders: header,
+				columns: columnDef
+			});
 
-	$('#input-proveedor').val('');
-	$('#input-eproveedor').val('');
-    motrar_cotizacion();
-    dar_mejor_cotizacion();
-    modificado = true;
-}
+			$('#input-proveedor').val('');
+			$('#input-eproveedor').val('');
+			motrar_cotizacion();
+			dar_mejor_cotizacion();
+			modificado = true;
+		}
+	}
 }
 
 
@@ -365,19 +471,24 @@ function seleccionar_item_proveedor(){
 	var selected = htInstance.getSelected();
 	var cell = htInstance.getCell(selected[0], selected[1]);
 	var tieneClase = false;
+	var data =  numeral().unformat($(cell).text());
 	if($(cell).hasClass('seleccionado'))
 		tieneClase = true;
 
-	if(!tieneClase){
-		seleccionados[selected[0]] = selected[1];
+	if(data.length ==0 || data === 0 || isNaN(parseFloat(data)) && !isFinite(data)){
+		alert('Debes ingresar un valor mayor a 0');
 	}else{
-		seleccionados[selected[0]] = '';
+		if(!tieneClase){
+			seleccionados[selected[0]] = selected[1];
+		}else{
+			seleccionados[selected[0]] = '';
+		}
+
+		htInstance.render();
+		dar_mejor_cotizacion();
+		motrar_cotizacion();
+		modificado = true;
 	}
-	
-	htInstance.render();
-	dar_mejor_cotizacion();
-	motrar_cotizacion();
-	modificado = true;
 }
 
 
@@ -470,7 +581,7 @@ function motrar_cotizacion(){
 			costo = valorLP/(1+(ivaAttr/100));
 			var ivaLP = costo*(ivaAttr/100);
 
-			var valor_antes_iva = costo*cantidad*((1+ganancia)/100);
+			var valor_antes_iva = costo*cantidad*(1+(ganancia/100));
 			var ivaCliente = valor_antes_iva*(ivaAttr/100);
 			precio_cliente = valor_antes_iva + ivaCliente;
 
@@ -539,12 +650,15 @@ function itemRender(instance, td, row, col, prop, value, cellProperties) {
 //funcion que renderisa el valor del cliente y muestra el seleccionado
 function selectRender(instance, td, row, col, prop, value, cellProperties) {
 	Handsontable.NumericCell.renderer.apply(this, arguments);
+
+	dar_mejor_cotizacion();
 	//seleccinoa el item
 	if(seleccionados[row] == col){
 		$(td).addClass('seleccionado');
 	}
 
 	var inner = td.innerHTML;
+	inner = Math.abs(inner);
 	inner = numeral(inner).format('$0,0.00');
 	td.innerHTML = inner;
 
@@ -582,13 +696,24 @@ function myAutocompleteRenderer(instance, td, row, col, prop, value, cellPropert
 	return td;
 }
 
+function numberRender(instance, td, row, col, prop, value, cellProperties) {
+	Handsontable.TextCell.renderer.apply(this, arguments);
+	var inner = td.innerHTML;
+	inner = Math.abs(inner);
+	if(col != 2){
+		inner = numeral(inner).format('0,0[.]00');
+	}
+	td.innerHTML = inner;
+	return td;
+}
+
 
 //cambia el nombre del proveedor
 function cambiarHeader(elem, index){
 	var htInstance = $ht.handsontable('getInstance');
 	var currentData = htInstance.getData();
 	var prov = $(elem).val();
-	header[index] = '<input type="text" onclick="quitarSelect()" onchange="cambiarHeader(this, '+(header.length-2)+')" value="'+prov+'">';
+	header[index] = '<input type="text" onclick="quitarSelect()" data-eproveedor="'+$(elem).attr('data-eproveedor')+'" onchange="cambiarHeader(this, '+(header.length-2)+')" value="'+prov+'"  style="width: 75px;">';
 	motrar_cotizacion();
 }
 
@@ -621,7 +746,9 @@ function agregar_nota(row, col){
 
 //guarda la cotización
 function guardar(){
+	modificado = false;
 	$('#fs-btns').attr('disabled', 'disabled');
+	$('#fs-btns').val('Cargando...');
 	var data = {};
 	var htInstance = $ht.handsontable('getInstance');
 	var retenciones = {};
@@ -652,7 +779,7 @@ function guardar(){
 				if($(tdProveedor).attr('data-iva'))
 					ops.iva = $(tdProveedor).attr('data-iva').replace('%', '');
 				if($(tdProveedor).attr('data-id-proveedor'))
-					ops.id_proveedor = $(tdProveedor).attr('data-id-proveedor');
+					ops.id_proveedor_cotizacion = $(tdProveedor).attr('data-id-proveedor');
 				if($('a', tdProveedor))
 					ops.nota = $('a', tdProveedor).attr('data-original-title');
 				proveedores[$(header[col]).val()] = ops;
@@ -678,7 +805,11 @@ function guardar(){
 	    'id_pipeline': '<?php echo $id_pipeline;?>',
 	    'id_usuario': '<?php echo $id_usuario;?>'
 	    },success: function(data){
-	        window.location = '<?php echo base_url()."operacion/cotizaciones/mostrar_cotizaciones/".$id_pipeline."/".$id_usuario."/msjExito";?>';
+	    	var data = $.parseJSON(data);
+	    	if(data.status)
+	        	window.location = '<?php echo base_url()."operacion/cotizaciones/mostrar_cotizaciones/".$id_pipeline."/".$id_usuario."/msjExito";?>';
+	        else
+	        	alert(data.msg);
 	    },error: function(XMLHttpRequest, textStatus, errorThrown){
 	    	mostrar_alerta('msjError');
 	    	$("body").scrollTop(0);
@@ -700,12 +831,18 @@ function mostrar_alerta(msj){
 
 //genera el formulario de la orden de compra
 function orden_compra(){
+	var mostrado = false;
 	if(modificado){
 		alert('Debes guardar primero');
 	}else{
-		var mostrado = false;
+		mostrado = false;
+		var modalCloneOriginal = $('#modal-orden-compra').clone(); console.log('proveedores: ',proveedoresSelec);
 		$.each(proveedoresSelec, function (i, object) {
-
+			var modalClone = $(modalCloneOriginal).clone();
+			$(modalClone).attr('id', 'modal-orden-compra'+i);
+			$.each($('.modal-orden-compra:not(#modal-orden-compra)'), function (i2,e2){
+				$(e2).modal('hide').remove();
+			});
 			var id_proveedor_cot = [];
 			$.each($('#cotizacion tbody tr'), function (i1, object1) {
 				var tds = $('td', object1);
@@ -716,33 +853,41 @@ function orden_compra(){
 			if(id_proveedor_cot.length>0){ 
 				id_proveedor_cot = $.toJSON( id_proveedor_cot );
 
-				var modalClone = $('.modal-orden-compra').clone();
+				// var modalClone = $(modalCloneOriginal).clone();
 				$('.form-orden-compra', modalClone).submit(function(e){
 					e.preventDefault();
 					generar_orden_compra(this);
 				});
-
 				$('.oc-id-proveedores-cot', modalClone).val(id_proveedor_cot);
-				$('.oc-proveedor', modalClone).val(object['proveedor']);
+				$('.oc-id-proveedor', modalClone).val(object['id_proveedor']);
+				$('.oc-proveedor', modalClone).val(object['original_proveedor']);
 				$('.oc-email', modalClone).val(object['email']);
+				$('.oc-direccion', modalClone).val(object['direccion']);
+				$('.oc-telefono', modalClone).val(object['telefono']);
+				$('.oc-ciudad', modalClone).val(object['ciudad']);
 				modalClone.modal('show');
 				$('.date-picker', modalClone).datepicker();
 				mostrado = true;
 			}
 	    });
 	}
-	if(!mostrado)//si no se ha mostrado ningún modal, le muestra una alerta
+	if(!mostrado && !modificado){//si no se ha mostrado ningún modal, le muestra una alerta
 		alert('Debes escoger un al menos un item para generar la orden de compra');
+	}	
 }
 
 //envía la forma de orden de compra
 function generar_orden_compra(elem){
 	$('.submit-oc', elem).attr('disabled', 'disabled');
+	$('.submit-oc', elem).val('Cargando...');
 	var form =  $('#form-orden-compra');
 	$.ajax({
 	    type: "POST",
 	    url: "<?php echo base_url(); ?>operacion/ordenCompra/generar_orden",
 	    data: { 
+    	'id_cotizacion': '<?php echo $cotizacion->id?>',
+    	'id_proveedor': $('.oc-id-proveedor', elem).val(),
+    	'modificado': $('.oc-id-proveedor', elem).attr('data-modificado'),
 	    'id-proveedores-cot': $('.oc-id-proveedores-cot', elem).val(),
 	    'proveedor': $('.oc-proveedor', elem).val(),
 	    'email': $('.oc-email', elem).val(),
@@ -763,14 +908,81 @@ function generar_orden_compra(elem){
 	    	$('body').prepend(div);
 	    	$(div).show();
 	    	$('.modal-orden-compra').has(elem).modal('hide');
+	    	agregar_a_ordenes_compra(data.id, data.pdf);
 	    },error: function(XMLHttpRequest, textStatus, errorThrown){
 	    	mostrar_alerta('msjError');
+	    	$('.modal-orden-compra').has(elem).modal('hide');
     		$('.submit-oc').removeAttr('disabled');
 	    }
 	});
 
 }
 
+//Anula la una orden de compra según el id de la orden
+function anular(id, elem){
+	var answer = confirm("¿Está seguro de que sea anular la orden de compra "+str_pad(id, 4, '0', 'STR_PAD_LEFT')+"?");
+	$(elem).attr('disabled', 'disabled');
+	$(elem).text('Anulando...');
+	if (answer){
+		$.ajax({
+		    type: "POST",
+		    url: "<?php echo base_url(); ?>operacion/ordenCompra/anular",
+		    data: { 
+	    	'id': id,
+		    },success: function(data){
+		    	var data = $.parseJSON(data);
+		    	if(data.status == false)
+		        	alert(data.msg);
+		        else{
+		        	var td = $('td').has(elem);
+		        	$(td).html('<span>Anulada</span>');
+		        	var td2 = $(td).prev(td);
+		        	var pdf = $('a', td2).text();
+		        	var split = pdf.split(".pdf");
+		        	$('a', td2).text(split[0]+'-anulado.pdf').attr('href', '<?php echo base_url()?>resources/ordenCompra/'+split[0]+'-anulado.pdf');
+		        }
+		    },error: function(XMLHttpRequest, textStatus, errorThrown){
+		    	mostrar_alerta('msjError');
+		    	$('.modal-orden-compra').has(elem).modal('hide');
+	    		$('.submit-oc').removeAttr('disabled');
+	    		$(elem).text('Anular');
+				$(elem).removeAttr('disabled');
+		    }
+		});
+	}else{
+		$(elem).text('Anular');
+		$(elem).removeAttr('disabled');
+	}
+}
+
+//agrega al table la orden de compra
+function agregar_a_ordenes_compra(id, pdf){
+	var tr = $('<tr>');
+	var td1 = $('<td>').text(str_pad(id, 4, '0', 'STR_PAD_LEFT'));
+	var a = $('<a>').attr('href', '<?php echo base_url()?>resources/ordenCompra/'+pdf).attr('target', '_blank').text(pdf);
+	var td2 = $('<td>').append(a);
+	var td3 =$('<td>');
+	var button = $('<button>').addClass('btn').addClass('btn-link').attr('onclick', 'anular('+id+')').text('Anular'); 
+	td3.append(button);
+	tr.append(td1);
+	tr.append(td2);
+	tr.append(td3); //console.log('tr', $(tr).html());
+	$('#tbl-ordenes-compra tbody').append(tr);
+}
+
+//marca a un proveedor que ha sido modificado
+function proveedor_modificado(elem){
+	var padre = $('.form-orden-compra').has(elem);
+	$('.oc-id-proveedor',padre).attr('data-modificado', true);
+}
+
+//refresca la vista
+function cancelar(){
+	var answer = confirm("¿Desea perder todos los cambios realizados?")
+	if (answer){
+		window.location = '<?php echo base_url()."operacion/cotizaciones/mostrar_cotizaciones/".$id_pipeline."/".$id_usuario;?>';
+	}
+}
 
 //crea un array bi-dimensional
 function Create2DArray(rows) {
@@ -787,6 +999,43 @@ function guidGenerator() {
        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
     };
     return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
+function str_pad (input, pad_length, pad_string, pad_type) {
+  var half = '',
+    pad_to_go;
+
+  var str_pad_repeater = function (s, len) {
+    var collect = '',
+      i;
+
+    while (collect.length < len) {
+      collect += s;
+    }
+    collect = collect.substr(0, len);
+
+    return collect;
+  };
+
+  input += '';
+  pad_string = pad_string !== undefined ? pad_string : ' ';
+
+  if (pad_type !== 'STR_PAD_LEFT' && pad_type !== 'STR_PAD_RIGHT' && pad_type !== 'STR_PAD_BOTH') {
+    pad_type = 'STR_PAD_RIGHT';
+  }
+  if ((pad_to_go = pad_length - input.length) > 0) {
+    if (pad_type === 'STR_PAD_LEFT') {
+      input = str_pad_repeater(pad_string, pad_to_go) + input;
+    } else if (pad_type === 'STR_PAD_RIGHT') {
+      input = input + str_pad_repeater(pad_string, pad_to_go);
+    } else if (pad_type === 'STR_PAD_BOTH') {
+      half = str_pad_repeater(pad_string, Math.ceil(pad_to_go / 2));
+      input = half + input + half;
+      input = input.substr(0, pad_length);
+    }
+  }
+
+  return input;
 }
 
 </script>

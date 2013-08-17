@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?php $this->load->view($nombrevista.'styles')?>
 </head>
 
@@ -12,13 +13,18 @@
     Ocurrió un error al guardar la cotización, favor intentar más tarde.</div>
   <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>
     La cotización ha sido guardada.</div>
-  <form class="form-inline  proveedor" id="agregarProveedor">
+  <form class="form-inline  proveedor"  role="form" id="agregarProveedor">
     <div class="form-group">
-      <input type="text" placeholder="Proveedor" class="form-control" id="input-proveedor"> 
-      <input type="text" placeholder="E-mail" class="form-control" id="input-eproveedor"> 
-      <input type="button" class="btn btn-default" value="agregar proveedor" onclick="agregar_columna()">
+      <input type="text" name="proveedor" placeholder="Proveedor" class="form-control" id="input-proveedor"> 
+    </div>
+    <div class="form-group">
+      <input type="text" name="email" placeholder="E-mail" class="form-control" id="input-eproveedor"> 
+    </div>
+    <div class="form-group">
+      <input type="submit" class="btn btn-default" value="agregar proveedor">
     </div>
   </form>
+  <span id="error-placement"></span>
   
   <div class="form-group">
     <div class="bs-callout bs-callout-info"><button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -43,20 +49,22 @@
 
  <div id="cotizacion row">
    <h3>Retenciones</h3>
-   <table id="retenciones" class="table">
-    <thead>
-     <th>CREE(%)</th>
-     <th>ICA(%)</th>
-     <th>Retefuente(%)</th>
-   </thead>
-   <tbody>
-    <tr>
-      <td><input type="text" class="form-control input-small retenciones" id="rete-cree" placeholder="CREE"></td>
-      <td><input type="text" class="form-control input-small retenciones" id="rete-ica" placeholder="ICA"></td>
-      <td><input type="text" class="form-control input-small retenciones" id="rete-retefuente" placeholder="Retefuente"></td>
-    </tr>
-   </tbody>
- </table>
+   <form action="" id="reten">
+      <table id="retenciones" class="table">
+        <thead>
+         <th>CREE(%)</th>
+         <th>ICA(%)</th>
+         <th>Retefuente(%)</th>
+       </thead>
+       <tbody>
+        <tr>
+          <td><input name="cree" type="text" class="form-control input-small retenciones" id="rete-cree" placeholder="CREE"></td>
+          <td><input name="ica" type="text" class="form-control input-small retenciones" id="rete-ica" placeholder="ICA"></td>
+          <td><input name="retefuente" type="text" class="form-control input-small retenciones" id="rete-retefuente" placeholder="Retefuente"></td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
    <h3>Cotización</h3>
    <table id="cotizacion" class="table table-hover">
     <thead>
@@ -81,8 +89,32 @@
 <div id="row">
 <fieldset id="fs-btns">
  <button name="dump" class="btn btn-success pull-right" onclick="guardar()">Guardar</button>
+ <button name="dump" id="cancelar" class="btn btn-default pull-right" onclick="cancelar()">Cancelar</button>
  <button name="dump" id="ordenCompra" class="btn btn-success pull-right" onclick="orden_compra()">Generar Orden de compra</button>
 </fieldset>
+</div>
+
+<div id="ordenes-compra" class="container-fluid">
+  <h3>Ordenes de compra</h3>
+  <div class="span6">
+    <table id="tbl-ordenes-compra" class="table">
+      <thead>
+        <th>No. Orden</th>
+       <th>Archivo</th>
+       <th>Estado</th>
+     </thead>
+     <tbody>
+      <?php foreach ($ordenes_compras as $oc):?>
+        <tr>
+          <td><?php echo str_pad($oc->id, 4, '0', STR_PAD_LEFT);?></td>
+          <td><a href="<?php echo base_url().'resources/ordenCompra/'.$oc->url?>" target="_blank"><?php echo $oc->url?></a></td>
+          <td><?php if($oc->anulado): ?><span>Anulada</span><?php else: ?><button class="btn btn-link" onclick="anular(<?php echo $oc->id ?>, this)">Anular</button><?php endif;?></td>
+        </tr>
+      <?php endforeach;?>
+     </tbody>
+   </table>
+  </div>
+   
 </div>
 
 <div class="modal fade" id="myModal">
@@ -106,7 +138,7 @@
 
 
 
-<div class="modal fade modal-orden-compra">
+<div class="modal fade modal-orden-compra" id="modal-orden-compra">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -115,36 +147,37 @@
       </div>
 
       <form class="form-horizontal form-orden-compra">
+        <input type="hidden" class="oc-id-proveedor" data-modificado="false">
         <div class="modal-body">
           <input type="hidden" class="oc-id-proveedores-cot">
           <div class="form-group">
             <label for="inputEmail" class="col-lg-2 control-label">Proveedor:</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control input-sm oc-proveedor" placeholder="Proveedor">
+              <input type="text" class="form-control input-sm oc-proveedor" onchange="proveedor_modificado(this)" placeholder="Proveedor">
             </div>
           </div>
           <div class="form-group">
             <label for="inputEmail" class="col-lg-2 control-label">Email:</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control input-sm oc-email" placeholder="Email">
+              <input type="text" class="form-control input-sm oc-email" onchange="proveedor_modificado(this)" placeholder="Email">
             </div>
           </div>
           <div class="form-group">
             <label for="inputPassword" class="col-lg-2 control-label">Ciudad:</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control input-sm oc-ciudad" placeholder="Ciudad">
+              <input type="text" class="form-control input-sm oc-ciudad" onchange="proveedor_modificado(this)" placeholder="Ciudad">
             </div>
           </div>
           <div class="form-group">
             <label for="inputPassword" class="col-lg-2 control-label">Dirección:</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control input-sm oc-direccion" placeholder="Dirección">
+              <input type="text" class="form-control input-sm oc-direccion" onchange="proveedor_modificado(this)" placeholder="Dirección">
             </div>
           </div>
           <div class="form-group">
             <label for="inputPassword" class="col-lg-2 control-label">Teléfono:</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control input-sm oc-telefono" placeholder="Teléfono">
+              <input type="text" class="form-control input-sm oc-telefono" onchange="proveedor_modificado(this)" placeholder="Teléfono">
             </div>
           </div>
           <div class="form-group">
@@ -162,6 +195,14 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<div id="mialerta" class="modal hide fade">
+    <!-- dialog contents -->
+    <div class="modal-body">Hello world!</div>
+    <!-- dialog buttons -->
+    <div class="modal-footer"><a href="#" class="btn primary">OK</a></div>
+</div>
 
   <?php $this->load->view($nombrevista.'scripts')?>
 </body>
