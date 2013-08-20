@@ -562,7 +562,7 @@ function motrar_cotizacion(){
 			if(col == 0){
 				var itemVal = $(item).text();
 			}else if(col == 1){
-				var cantidad = $(item).text();
+				var cantidad = parseFloat($(item).text());
 			}else if(col < htInstance.countCols()-2){
 				if($(item).hasClass('seleccionado') && itemVal != ''){
 					id_proveedor = $(item).attr('data-id-proveedor');
@@ -574,7 +574,7 @@ function motrar_cotizacion(){
 						ivaAttr = parseFloat($(item).attr('data-iva').replace('%', ''));  
 				}
 			}else if(col == htInstance.countCols()-2 && itemVal != ''){
-				ganancia = $(item).text();
+				ganancia = parseInt($(item).text());
 			}
 		}
 		if(valorLP>0 && cantidad>0 && !isNaN(parseFloat(ganancia)) && isFinite(ganancia)){
@@ -649,7 +649,7 @@ function itemRender(instance, td, row, col, prop, value, cellProperties) {
 
 //funcion que renderisa el valor del cliente y muestra el seleccionado
 function selectRender(instance, td, row, col, prop, value, cellProperties) {
-	Handsontable.NumericCell.renderer.apply(this, arguments);
+	Handsontable.TextCell.renderer.apply(this, arguments);
 
 	dar_mejor_cotizacion();
 	//seleccinoa el item
@@ -657,10 +657,9 @@ function selectRender(instance, td, row, col, prop, value, cellProperties) {
 		$(td).addClass('seleccionado');
 	}
 
-	var inner = td.innerHTML;
-	inner = Math.abs(inner);
-	inner = numeral(inner).format('$0,0.00');
-	td.innerHTML = inner;
+	value = Math.abs(value);
+	value = numeral(value).format('$0,0[.]00');
+	td.innerHTML = value;
 
 	//ingresa una nota si tiene
 	var nota = notas[row][col];
@@ -687,22 +686,25 @@ function selectRender(instance, td, row, col, prop, value, cellProperties) {
 
 //funcion que muestra el precio del cliente
 function myAutocompleteRenderer(instance, td, row, col, prop, value, cellProperties) {
-	Handsontable.NumericCell.renderer.apply(this, arguments);
+	Handsontable.TextCell.renderer.apply(this, arguments);
 	var htInstance = $ht.handsontable('getInstance');
 	var ganancia = htInstance.getDataAtCell(row, col-1);
 	var selected = htInstance.getDataAtCell(row, seleccionados[row]);
 	var cantidad = htInstance.getDataAtCell(row, 1);
-	td.innerHTML = numeral(cantidad*selected*(1+(ganancia/100))).format('$0,0.00');
+	var inner = Math.abs(cantidad*selected*(1+(ganancia/100)));
+	td.innerHTML = numeral(inner).format('$0,0[.]00'); 
 	return td;
 }
 
+//le da formato a la cantidad y la probabilidad
 function numberRender(instance, td, row, col, prop, value, cellProperties) {
 	Handsontable.TextCell.renderer.apply(this, arguments);
 	var inner = td.innerHTML;
 	inner = Math.abs(inner);
-	if(col != 2){
+	if(col != 1){
 		inner = numeral(inner).format('0,0[.]00');
-	}
+	}else
+		inner = numeral(inner).format('0');
 	td.innerHTML = inner;
 	return td;
 }
