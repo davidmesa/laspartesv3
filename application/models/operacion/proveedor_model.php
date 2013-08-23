@@ -16,6 +16,9 @@ class proveedor_model extends CI_Model
     var $direccion = '';
     var $ciudad = '';
     var $telefono = '';
+    var $cree = 0;
+    var $ica = 0;
+    var $retefuente = 0;
     
      /**
      * Constructor de la clase Cotizacion model

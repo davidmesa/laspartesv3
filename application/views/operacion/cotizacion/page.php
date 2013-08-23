@@ -47,8 +47,8 @@
 
  </div> -->
 
- <div id="cotizacion row">
-   <h3>Retenciones</h3>
+ <div>
+   <!-- <h3>Retenciones</h3>
    <form action="" id="reten">
       <table id="retenciones" class="table">
         <thead>
@@ -64,7 +64,7 @@
         </tr>
       </tbody>
     </table>
-  </form>
+  </form> -->
    <h3>Cotización</h3>
    <table id="cotizacion" class="table table-hover">
     <thead>
@@ -180,10 +180,10 @@
               <input type="text" class="form-control input-sm oc-telefono" onchange="proveedor_modificado(this)" placeholder="Teléfono">
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" style="margin-bottom: 0;">
             <label for="inputPassword" class="col-lg-2 control-label">Enviar el:</label>
             <div class="col-lg-10">
-              <input class="form-control input-sm date-picker oc-enviar" size="16" type="text" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd">
+              <input data-placement="top" class="form-control input-sm date-picker oc-enviar" size="16" type="text" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd">
             </div>
           </div>
         </div>

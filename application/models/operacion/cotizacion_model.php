@@ -15,9 +15,6 @@ class cotizacion_model extends CI_Model
     var $cliente_iva;
     var $cliente_precio;
     var $ganancia;
-    var $cree = 0;
-    var $ica = 0;
-    var $retefuente = 0;
     var $fecha_actualizacion;
     var $fecha_creacion;
     var $eliminado = 0;

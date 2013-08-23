@@ -12,7 +12,6 @@
 
 var modificado = false; //si se ha modificado algo en la tabla
 var ini = true; //la aplicación ha sido cargada por primera ves
-var load_cotizacion = <?php echo json_encode($cotizacion);?>; //datos de la cotización
 var load_items = <?php echo json_encode($items);?>; //datos de los items
 var idItem = []; //id de los items
 var precreado = false; //ha sido precreada la página
@@ -41,11 +40,6 @@ var autocompleteProveedor = $('#input-proveedor').typeahead({
 });
    // autocompleteProveedor.data('typeahead').source = establecimientos; 
 
-if(load_cotizacion){
-	$('#rete-cree').val(load_cotizacion.cree);
-	$('#rete-ica').val(load_cotizacion.ica);
-	$('#rete-retefuente').val(load_cotizacion.retefuente);
-}
 
 var load_iva = Create2DArray(100);
 var load_id_proveedor = Create2DArray(100);
@@ -120,13 +114,6 @@ if(load_items.length > 0){
 	dSchema.precio = 0;	
 	colWidths.push(90);
 	colWidths.push(90);
-	// console.log(header);
-	// console.log(seleccionados);
-	// console.log(columnDef);
-	// console.log(dSchema);
-	// console.log(currentData);
-	// console.log('nota', notas);
-	// console.log('iva', load_iva);
 }else{
 	var notas = Create2DArray(100); 
 	var seleccionados = [];
@@ -159,21 +146,10 @@ $(document).ready(function() {
 
 	mostrar_alerta();
 
-	// $('.modal-orden-compra').on('hide', function () {
-	// 	console.log('se esconde');
-	//   $(this).modal('hide').remove();
-	// })
 	
 	//setea el datepicker
 	$('.date-picker').datepicker();
 
-	
-	// $('.date').datepicker();
-	//agrega un proveedor
-	// $('#agregarProveedor').submit(function(e){
-	// 	e.preventDefault();
-	// 	agregar_columna();
-	// });
 
 
 	//valida el formulario de editar perfil
@@ -246,11 +222,6 @@ $(document).ready(function() {
 		}
 	});
 
-	//previene que se envíe la forma de orden de compra por defecto
-	// $('#form-orden-compra').submit(function(e){
-	// 	e.preventDefault();
-	// 	generar_orden_compra(e);
-	// });
 
 	numeral.language('es', {
 		delimiters: {
@@ -590,21 +561,21 @@ function motrar_cotizacion(){
 			tr.append($('<td>').text(itemVal));
 			tr.append($('<td>').text(proveedor));
 			tr.append($('<td>').text(cantidad));
-			tr.append($('<td>').text(numeral(costo).format('$0,0.00')));
-			tr.append($('<td>').text(numeral(ivaLP).format('$0,0.00')));
-			tr.append($('<td>').text(numeral(valorLP).format('$0,0.00')));
+			tr.append($('<td>').text(numeral(costo*cantidad).format('$0,0.00')));
+			tr.append($('<td>').text(numeral(ivaLP*cantidad).format('$0,0.00')));
+			tr.append($('<td>').text(numeral(valorLP*cantidad).format('$0,0.00')));
 			tr.append('<td>'+numeral(precio_cliente-ivaCliente).format('$0,0.00') +'</td>');
 			tr.append('<td>'+numeral(ivaCliente).format('$0,0.00') +'</td>');
 			tr.append($('<td>').text(numeral(precio_cliente).format('$0,0.00')));
-			tr.append($('<td>').text(numeral(valor_antes_iva-costo).format('$0,0.00')));
+			tr.append($('<td>').text(numeral(valor_antes_iva-(costo*cantidad)).format('$0,0.00')));
 			$('tbody', '#cotizacion').append(tr);
-			TIvaCliente += (ivaCliente*cantidad);
-			TBaseCliente += ((precio_cliente-ivaCliente)*cantidad);
+			TIvaCliente += ivaCliente;
+			TBaseCliente += (precio_cliente-ivaCliente);
 			TCosto += (costo*cantidad);
 			TIVALP += (ivaLP*cantidad);
 			TValorLP += (valorLP*cantidad);
-			TPrecioCliente += (precio_cliente*cantidad);
-			TGanancia += ((valor_antes_iva-costo)*cantidad);
+			TPrecioCliente += precio_cliente;
+			TGanancia += valor_antes_iva-(costo*cantidad);
 		}
 	}
 	
@@ -753,7 +724,6 @@ function guardar(){
 	$('#fs-btns').val('Cargando...');
 	var data = {};
 	var htInstance = $ht.handsontable('getInstance');
-	var retenciones = {};
 	for (var row = 0; row < htInstance.countRows()-1 ; row++) {
 		var item = {};
 		var proveedores = {};
@@ -794,16 +764,11 @@ function guardar(){
 	}
 	console.log(data);
 	var data = $.toJSON( data );
-	retenciones.cree = $('#rete-cree').val();
-	retenciones.ica = $('#rete-ica').val();
-	retenciones.retefuente = $('#rete-retefuente').val();
-	var retenciones = $.toJSON( retenciones );
 	$.ajax({
 	    type: "POST",
 	    url: "<?php echo base_url(); ?>operacion/cotizaciones/guardar",
 	    data: { 
 	    'items': data,
-	    'retenciones': retenciones,
 	    'id_pipeline': '<?php echo $id_pipeline;?>',
 	    'id_usuario': '<?php echo $id_usuario;?>'
 	    },success: function(data){

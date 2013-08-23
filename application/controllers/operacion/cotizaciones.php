@@ -87,11 +87,6 @@ class Cotizaciones extends CI_Controller {
                     'field' => 'items',
                     'label' => 'información',
                     'rules' => 'trim|xss_clean'
-                ),
-                array(
-                    'field' => 'retenciones',
-                    'label' => 'retenciones',
-                    'rules' => 'trim|xss_clean'
                 )
             );
             $this->form_validation->set_rules($reglas);
@@ -104,7 +99,6 @@ class Cotizaciones extends CI_Controller {
                 $dataTemp = json_decode($this->input->post('items'), true);
                 $id_usuario = $this->input->post('id_usuario');
                 $id_pipeline = $this->input->post('id_pipeline');
-                $retenciones = json_decode($this->input->post('retenciones'), true);
                 $itemsCot = array();
                 $proveedoresCot = array();
                 foreach ($dataTemp as $data) {
@@ -146,7 +140,7 @@ class Cotizaciones extends CI_Controller {
                             $ivaTmp = $ops[iva];
                             $costo = $lp_valor/(1+($ivaTmp/100));
                             $ivaLP = $costo*($ivaTmp/100);
-                            $valor_antes_iva = $costo*$cantidad*(1+($margen/100));
+                            $valor_antes_iva = $costo*(1+($margen/100));
                             $cliente_iva = $valor_antes_iva*($ivaTmp/100);
                             $cliente_precio = $valor_antes_iva + $cliente_iva;
                             $ganancia = $valor_antes_iva-$costo;
@@ -184,9 +178,6 @@ class Cotizaciones extends CI_Controller {
                 $cotizacionModel->lp_valor = $Tlp_valor;
                 $cotizacionModel->cliente_iva = $Tcliente_iva;
                 $cotizacionModel->cliente_precio = $Tcliente_precio;
-                $cotizacionModel->cree = $retenciones[cree];
-                $cotizacionModel->ica = $retenciones[ica];
-                $cotizacionModel->retefuente = $retenciones[retefuente];
                 $cotizacionModel->ganancia = $Tganancia;
                 if($cotizacionModel->id)
                     $cotizacionModel->actualizar();

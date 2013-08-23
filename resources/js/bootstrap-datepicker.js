@@ -149,12 +149,21 @@
 			this.fill();
 		},
 		
-		place: function(){
+		place: function(){//se modificó la librería para hacertar la posición
 			var offset = this.component ? this.component.offset() : this.element.offset();
-			this.picker.css({
-				top: offset.top + this.height,
-				left: offset.left
-			});
+		    var topPos
+		    switch ($(this.element).data('placement')) {
+		        case "top":
+		            topPos = (offset.top + this.height) - 295;
+		            break;
+		        default:
+		            topPos = (offset.top + this.height);
+		            break;
+		    }
+		    this.picker.css({
+		        top: topPos,
+		        left: offset.left
+		    });
 		},
 		
 		update: function(newDate){

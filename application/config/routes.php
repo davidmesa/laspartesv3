@@ -123,6 +123,12 @@ $route['admin/vehiculo/ver_hoja_mantenimiento/(\d+)'] = "admin/vehiculo/ver_hoja
 $route['operacion/cotizaciones/mostrar_cotizaciones/(.+)/(\d+)'] = "operacion/cotizaciones/mostrar_cotizaciones/$1/$2";
 $route['operacion/cotizaciones/mostrar_cotizaciones/(.+)/(\d+)/(\d+)'] = "operacion/cotizaciones/mostrar_cotizaciones/$1/$2/$3";
 /*fin cotización*/
+/*inicio link de pago*/
+$route['operacion/linkPago/mostrar_links/(.+)/(\d+)'] = "operacion/linkPago/mostrar_links/$1/$2";
+$route['operacion/linkPago/mostrar_links/(.+)/(\d+)/(.+)'] = "operacion/linkPago/mostrar_links/$1/$2/$3";
+$route['operacion/linkPago/form_links/(.+)/(\d+)/(.+)'] = "operacion/linkPago/form_links/$1/$2/$3";
+$route['operacion/linkPago/editar_link/(\d+)/(\d+)'] = "operacion/linkPago/editar_link/$1/$2";
+/*fin link de pago */
 
 
 

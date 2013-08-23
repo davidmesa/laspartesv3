@@ -2,7 +2,7 @@
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Clase que maneja la migracion de datos al CRM
+ * Clase que maneja las ordenes de compra
  */
 class OrdenCompra extends CI_Controller {
 

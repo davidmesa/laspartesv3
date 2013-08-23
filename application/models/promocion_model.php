@@ -106,7 +106,7 @@ class Promocion_model extends CI_Model{
     
     function dar_oferta($id_oferta){
         $this->db->escape($id_oferta);
-        $this->db->select('oferta.id_oferta AS id_oferta,  oferta.titulo AS titulo, oferta.foto AS foto, oferta.plazo_uso AS plazo,
+        $this->db->select('oferta.id_oferta AS id_oferta,  oferta.titulo AS titulo, oferta.foto AS foto, oferta.plazo_uso AS plazo, oferta.margenLP,
                 oferta.precio AS precio, oferta.iva AS iva, oferta.dco_feria AS dco_feria,oferta.condiciones AS condiciones, oferta.incluye AS incluye, oferta.descripcion AS descripcion, 
                 oferta.vigencia AS vigencia, establecimientos_ofertas.id_establecimiento as id_establecimiento, establecimientos.telefonos AS telefonos,
                 establecimientos.nombre as establecimientoNombre, establecimientos.descripcion as establecimientoDescripcion, establecimientos.id_establecimiento,
