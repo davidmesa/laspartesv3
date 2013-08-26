@@ -267,18 +267,18 @@ class OrdenRemision extends CI_Controller {
                 </table';
         $this->pdf->writeHTML($html, true, false, true, false, '');
 
-        // $destinatario = new stdClass();
-        // $destinatario->email = $venta->emailEstablecimientos;
-        // $destinatarios[] = $destinatario;
-        // $destinatario = new stdClass();
-        // $destinatario->email = $venta->email;
-        // $destinatarios[] = $destinatario;
+        $destinatario = new stdClass();
+        $destinatario->email = $venta->emailEstablecimientos;
+        $destinatarios[] = $destinatario;
+        $destinatario = new stdClass();
+        $destinatario->email = $venta->email;
+        $destinatarios[] = $destinatario;
         $destinatario = new stdClass();
         $destinatario->email = "tallerenlinea@laspartes.com.co";
         $destinatarios[] = $destinatario;
-        // $destinatario = new stdClass();
-        // $destinatario->email = "ventas@laspartes.com.co";
-        // $destinatarios[] = $destinatario;
+        $destinatario = new stdClass();
+        $destinatario->email = "ventas@laspartes.com.co";
+        $destinatarios[] = $destinatario;
 
         $mensajeCorreo = 'A continuación puedes ver el resumen de tu orden de remisión:<br/><br/>
             Nombres: ' . $venta->nombres . '<br/>

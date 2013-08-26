@@ -335,11 +335,14 @@ class LinkPago extends CI_Controller {
                 ob_flush();
 
                 $destinatarios = array();
-                // $destinatario = new stdClass();
-                // $destinatario->email = $orden_compra_model->email_proveedor;
-                // $destinatarios[] = $destinatario;
+                $destinatario = new stdClass();
+                $destinatario->email = $data['usuario']->email;
+                $destinatarios[] = $destinatario;
                 $destinatario = new stdClass();
                 $destinatario->email = "tallerenlinea@laspartes.com.co";
+                $destinatarios[] = $destinatario;
+                $destinatario = new stdClass();
+                $destinatario->email = "ventas@laspartes.com.co";
                 $destinatarios[] = $destinatario;
                 $this->load->helper('mail');
                 send_mail($destinatarios, "Link de pago - LasPartes.com", $html, "");

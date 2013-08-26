@@ -10,8 +10,8 @@
 
 
 <div>
-	<h3>Ordenes de compra</h3>
-	<a href="<?php echo base_url()?>operacion/ordenRemision/form_orden/<?php echo $id_pipeline.'/'.$id_usuario;?>">Agregar orden de compra</a>
+	<h3>Ordenes de remisión</h3>
+	<a href="<?php echo base_url()?>operacion/ordenRemision/form_orden/<?php echo $id_pipeline.'/'.$id_usuario;?>">Agregar orden de remisión</a>
 	<div class="row">
 		<table class="table span9">
 			<thead>

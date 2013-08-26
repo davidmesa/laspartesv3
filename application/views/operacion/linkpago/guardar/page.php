@@ -81,7 +81,7 @@
       <div class="form-group row">
         <label for="categoria">CATEGORÍA DE LA OFERTA</label>
           <div class="control-group">
-            <select id="categoria" name="categoria" class="span12" multiple>
+            <select id="categoria" name="categoria" class="span12" multiple style="width: 400px;">
               <?php foreach ($servicios as $servicio):?>
               <option value="<?php echo $servicio->id_servicios_categoria;?>"><?php echo $servicio->nombre;?></option>
             <?php endforeach; ?>
@@ -97,7 +97,7 @@
       <div class="form-group row">
         <label for="carros">CARROS</label>
         <div class="control-group">
-          <select id="carros" name="carros" class="span12" multiple>
+          <select id="carros" name="carros" class="span12" multiple style="width: 400px;">
             <?php foreach ($allvehiculos as $value):?>
               <option value="<?php echo $value->value;?>"><?php echo $value->label;?></option>
             <?php endforeach; ?>
