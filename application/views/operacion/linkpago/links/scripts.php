@@ -7,7 +7,6 @@
 //redirecciona a el formulario de agregar un link de pago
 function generar_link(){
 	var chkbxs = $('input[type=checkbox]:checked');
-	console.log(chkbxs);
 	if(chkbxs.length > 0){
 		var url = '';
 		$.each(chkbxs, function(i,e){
@@ -20,8 +19,14 @@ function generar_link(){
 	}
 }
 
+//lo envía al formulario de link de pago
 function editar_oferta(id_oferta, id){
 	window.location = "<?php echo base_url();?>operacion/linkPago/editar_link/"+id_oferta+"/"+id;
+}
+
+//actualiza la vista
+function actualizar_vista(){
+	location.reload();
 }
 
 </script>

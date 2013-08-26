@@ -74,7 +74,7 @@ if(load_items.length > 0){
 				e1.proveedor.ciudad+'" data-eproveedor="'+e1.proveedor.email+'" value="'+formatProveedor+'" style="width: 75px;">');
 				proveedores.push(formatProveedor);
 				dSchema[formatProveedor] = {costo: null};
-				var cost = formatProveedor+'.costo'; console.log('costo', cost);
+				var cost = formatProveedor+'.costo';
 			    columnDef.push({data: cost, type: {renderer: selectRender}});
 
 			    var provData = [];
@@ -762,7 +762,6 @@ function guardar(){
 		item.proveedores = proveedores;
 		data[row] = item;
 	}
-	console.log(data);
 	var data = $.toJSON( data );
 	$.ajax({
 	    type: "POST",
@@ -803,7 +802,7 @@ function orden_compra(){
 		alert('Debes guardar primero');
 	}else{
 		mostrado = false;
-		var modalCloneOriginal = $('#modal-orden-compra').clone(); console.log('proveedores: ',proveedoresSelec);
+		var modalCloneOriginal = $('#modal-orden-compra').clone();
 		$.each(proveedoresSelec, function (i, object) {
 			var modalClone = $(modalCloneOriginal).clone();
 			$(modalClone).attr('id', 'modal-orden-compra'+i);
@@ -933,7 +932,7 @@ function agregar_a_ordenes_compra(id, pdf){
 	td3.append(button);
 	tr.append(td1);
 	tr.append(td2);
-	tr.append(td3); //console.log('tr', $(tr).html());
+	tr.append(td3); 
 	$('#tbl-ordenes-compra tbody').append(tr);
 }
 

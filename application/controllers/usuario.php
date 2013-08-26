@@ -243,6 +243,11 @@ class Usuario extends Laspartes_Controller {
         }
     }
 
+    /**
+     * nuestra el recibo
+     * @param  [type] $refVenta [description]
+     * @return [type]           [description]
+     */
     function recibo($refVenta) {
         if ($this->hay_sesion_activa()) {
             $filePath = 'resources/facturas';

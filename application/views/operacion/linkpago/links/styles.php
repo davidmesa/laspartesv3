@@ -17,4 +17,6 @@
 	text-align: center;
 	padding: 5px;
 }
+
+#actualizar-vista{ margin-right: 7px;}
 </style>

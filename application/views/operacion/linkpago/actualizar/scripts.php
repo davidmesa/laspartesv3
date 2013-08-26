@@ -76,17 +76,13 @@ $(document).ready(function() {
             titulo: {
                 required: true
             },precio: {
-                required: true,
-                number: true
+                required: true
             },iva: {
-                required: true,
-                number: true
+                required: true
             },margen: {
-                required: true,
-                number: true
+                required: true
             },descuento: {
-                required: true,
-                number: true
+                required: true
             },plazo: {
                 required: true,
                 number: true
@@ -100,17 +96,13 @@ $(document).ready(function() {
         },messages: {
             titulo: "*Debes escribir el título de la oferta"
             ,precio: {
-                required: "*Debes escribir el precio de la oferta",
-                number: "*El campo precio debe ser un número"
+                required: "*Debes escribir el precio de la oferta"
             },iva: {
-                required: "*Debes escribir el iva de la oferta",
-                number: "*El campo iva debe ser un número"
+                required: "*Debes escribir el iva de la oferta"
             },margen: {
-                required: "*Debes escribir el margen de la oferta",
-                number: "*El campo margen debe ser un número"
+                required: "*Debes escribir el margen de la oferta"
             },descuento: {
-                required: "*Debes escribir el descuento de la oferta",
-                number: "*El campo descuento debe ser un número"
+                required: "*Debes escribir el descuento de la oferta"
             },plazo: {
                 required: "*Debes escribir el plazo de uso de la oferta",
                 number: "*El campo plazo de uso debe ser un número"
@@ -154,6 +146,8 @@ function format_number(elem){
 
 //actualiza el link de pago
 function actualizarLink(){
+	$('#guardar').attr('disabled', 'disabled');
+	$('#guardar').val('Actualizando...');
 	var id_oferta  = $('#id_oferta').val();
 	var titulo  = $('#titulo').val();
 	if($('#precio').val() !== '')
@@ -217,6 +211,8 @@ function actualizarLink(){
 	    		$('.alert.alert-danger .alert-msg').html(data.msg).show();
 	    		$('.alert.alert-danger').show();
 	    		$("body").scrollTop(0);
+		    	$('#guardar').val('ACTUALIZAR OFERTA');
+		    	$('#guardar').removeAttr('disabled');
 	    	}
 	    	//hay que asociar la oferta con el link de pago
 	    	
@@ -225,6 +221,8 @@ function actualizarLink(){
 	    	$('.alert.alert-danger .alert-msg').text('Ocurrió un error al guardar la cotización, favor intentar más tarde.');
 	    	$('.alert.alert-danger').show();
 	    	$("body").scrollTop(0);
+	    	$('#guardar').val('ACTUALIZAR OFERTA');
+	    	$('#guardar').removeAttr('disabled');
 	    }
 	});
 }

@@ -156,11 +156,8 @@ class OrdenCompra extends CI_Controller {
             // $destinatario = new stdClass();
             // $destinatario->email = $proveedor_model->email;
             // $destinatarios[] = $destinatario;
-            // $destinatario = new stdClass();
-            // $destinatario->email = "tallerenlinea@laspartes.com.co";
-            // $destinatarios[] = $destinatario;
             $destinatario = new stdClass();
-            $destinatario->email = "direcciondesarrollo@laspartes.com.co";
+            $destinatario->email = "tallerenlinea@laspartes.com.co";
             $destinatarios[] = $destinatario;
 
             send_mail($destinatarios, "Orden de compra ".str_pad($data['orden_compra_model']->id, 4, '0', STR_PAD_LEFT)." - LasPartes.com - " . strftime("%B %d de %Y"), $html, "", $nombrePDF, 'resources/ordenCompra/');

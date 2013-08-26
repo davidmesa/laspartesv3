@@ -93,7 +93,7 @@ class Cotizaciones extends CI_Controller {
 
             if(!$this->form_validation->run()){
                 $this->form_validation->set_error_delimiters('', '');
-                echo json_encode(array('status' => false, 'msg' => validation_errors()));
+                echo json_encode(array('status' => false, 'msg' => validation_errors()), JSON_HEX_QUOT | JSON_HEX_TAG);
             }else{
                 $this->load->model('operacion/proveedor_model');
                 $dataTemp = json_decode($this->input->post('items'), true);

@@ -1768,7 +1768,7 @@ class Usuario_model extends CI_Model {
         $params['description']  = $descripcion;
         $params['consecutivo']  = $id_remision;
         $params['name']  = $id_remision;
-        $params['remisionurl']  = 'http://www.laspartes.com/usuario/recibo/'.$id_remision;
+        $params['remisionurl']  = 'http://www.laspartes.com/resources/remisiones/orden-de-remision-'.$id_remision.'.pdf';
         $this->crm->agregar_remision_REST($params);
 
         return $id_remision;

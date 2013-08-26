@@ -11,7 +11,7 @@
     <div class="alert-msg"></div>
   </div>
   <div>
-    <h2 class="red-lp">Agregar Oferta</h2>
+    <h2 class="red-lp">Actualizar Oferta</h2>
     <hr>
   </div>
   <div class="container">

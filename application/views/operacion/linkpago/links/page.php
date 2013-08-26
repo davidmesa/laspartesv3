@@ -88,6 +88,7 @@
  <div class="row">
   <fieldset id="fs-btns">
    <button name="dump" id="ordenCompra" class="btn btn-success pull-right" onclick="generar_link()">Generar Link de pago</button>
+   <button name="dump" id="actualizar-vista" class="btn btn-success pull-right" onclick="actualizar_vista()">Actualizar datos</button>
  </fieldset>
 </div>
 
