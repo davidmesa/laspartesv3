@@ -154,7 +154,7 @@ font-size: 10px;
       </tbody>
     </table>
     <br/><br/><br/><br/>
-    <span><img src="<?php echo base_url();?>resources/images/correos/operaciones/cotizacion/firma_pacheco.jpg"><span><span class="span-firma" id="firma-fecha">13 de agosto de 2013</span>
+    <span><img src="<?php echo base_url();?>resources/images/correos/operaciones/cotizacion/firma_pacheco.jpg"><span><span class="span-firma" id="firma-fecha"><?php echo strftime("%B %d de %Y", strtotime($orden_compra_model->fecha))?></span>
     <hr align="left" id="firma">
     <span class="span-firma">Firma del empleado</span><span class="span-firma" id="firma-tfecha">Fecha</span>
     

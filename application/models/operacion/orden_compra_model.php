@@ -23,6 +23,7 @@ class orden_compra_model extends CI_Model
     var $otros = 0;
     var $total;
     var $anulado = 0;
+    var $observacion = '';
     
     /**
      * Constructor de la clase orden_compra_model

@@ -186,6 +186,12 @@
               <input data-placement="top" class="form-control input-sm date-picker oc-enviar" size="16" type="text" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd">
             </div>
           </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="inputObservaciones" class="col-lg-3 control-label">Observaciones:</label>
+            <div class="col-lg-9">
+              <textarea name="" class="form-control oc-observaciones" id="" cols="20" rows="7"></textarea>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <a href="#" class="btn btn-default" data-dismiss="modal">Cerrar</a>

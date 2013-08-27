@@ -861,6 +861,7 @@ function generar_orden_compra(elem){
 	    'direccion': $('.oc-direccion', elem).val(),
 	    'telefono': $('.oc-telefono', elem).val(),
 	    'enviar': $('.oc-enviar', elem).val(),
+	    'observacion': $('.oc-observaciones', elem).val(),
 	    'id_pipeline': '<?php echo $id_pipeline;?>',
 	    'id_usuario': '<?php echo $id_usuario;?>'
 	    },success: function(data){

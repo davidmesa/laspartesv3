@@ -97,13 +97,13 @@ class OrdenCompra extends CI_Controller {
                     $model['item_cotizacion'] = $prov_model->dar_item_cotizacion();
                     $proveedor_item_cotizacion[] = $model;
                     $subtotalT = ($prov_model->lp_valor*$model['item_cotizacion']->cantidad)/(1+($prov_model->iva/100)); 
-                    $subtotal += round($subtotalT,2);
+                    $subtotal += round($subtotalT, 0);
                     $totalT = ($prov_model->lp_valor * $model['item_cotizacion']->cantidad);
                     $total += $totalT;
-                    $impuestos +=  round(($totalT-$subtotalT), 2);
+                    $impuestos +=  round(($totalT-$subtotalT), 0);
                     $item_orden_compra_model->item = $model['item_cotizacion']->item;
                     $item_orden_compra_model->cantidad = $model['item_cotizacion']->cantidad;
-                    $item_orden_compra_model->precio_unidad = $model['proveedor_cotizacion']->lp_valor;
+                    $item_orden_compra_model->precio_unidad = round($model['proveedor_cotizacion']->lp_valor/(1+($model['proveedor_cotizacion']->iva/100)), 0);
                     $item_orden_compra_model->precio_total = ($item_orden_compra_model->precio_unidad *$item_orden_compra_model->cantidad);
                     $items_orden[] = $item_orden_compra_model;
                 }
@@ -121,6 +121,7 @@ class OrdenCompra extends CI_Controller {
                 $orden_compra_model = new orden_compra_model();
                 $orden_compra_model->fecha_envio = $this->input->post('enviar');
                 $orden_compra_model->fecha = date("Y-m-d H:i:s");
+                $orden_compra_model->observacion = $this->input->post('observacion');
                 $orden_compra_model->id_cotizacion = $this->input->post('id_cotizacion');
                 $orden_compra_model->id_proveedor = $proveedor_model->id;
                 $orden_compra_model->proveedor = $proveedor_model->proveedor;
@@ -159,10 +160,12 @@ class OrdenCompra extends CI_Controller {
             $destinatario = new stdClass();
             $destinatario->email = "tallerenlinea@laspartes.com.co";
             $destinatarios[] = $destinatario;
+            // $destinatario = new stdClass();
+            // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
+            // $destinatarios[] = $destinatario;
 
             send_mail($destinatarios, "Orden de compra ".str_pad($data['orden_compra_model']->id, 4, '0', STR_PAD_LEFT)." - LasPartes.com - " . strftime("%B %d de %Y"), $html, "", $nombrePDF, 'resources/ordenCompra/');
             echo json_encode(array('status' => true, 'pdf' => $nombrePDF, 'id' => $data['orden_compra_model']->id));
-            // echo $html;
             }
         }else{
             echo json_encode(array('status' => false, 'msg' => 'Debes iniciar sesión como administrador'));
