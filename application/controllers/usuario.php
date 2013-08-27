@@ -5802,5 +5802,21 @@ class Usuario extends Laspartes_Controller {
         return $this->flota_model->dar_inspecciones($id_usuario_vehiculo);
     }
 
+    function ver_factura(){
+        // error_reporting(E_ALL);
+        setlocale(LC_ALL, 'es_ES');
+        define("CHARSET", "iso-8859-1");
+        $this->load->library('phptopdf');
+        $this->load->model('refventa_model');
+        $this->load->model('usuario_model');
+        $data['venta'] = $this->refventa_model->dar_venta('8e92309371');
+        $data['autopartes'] = $this->usuario_model->dar_carrito_compra_autopartes($data['venta']->id_carrito_compra);
+        $data['ofertas'] = $this->usuario_model->dar_carrito_compra_ofertas($data['venta']->id_carrito_compra);
+        // $data['consecutivo'] = $this->usuario_model->agregar_consecutivo_compra($venta->id_carrito_compra);
+        $html = $this->load->view('factura/factura_pdf_view', $data, true);
+        echo $html;
+        // $this->phptopdf->phptopdf_html($html, 'resources/ordenCompra/', 'facturita.pdf');
+    }
+
 }
 
