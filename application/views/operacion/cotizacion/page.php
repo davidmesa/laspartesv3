@@ -34,7 +34,7 @@
     </div>
     <div id="example1" style="overflow: auto;" class="handsontable"></div>
   </div>
-  <!-- <div class="form-group">
+  <div class="form-group">
     <p>
      <button name="dump" data-dump="#example1" title="Prints current data source to Firebug/Chrome Dev Tools">Dump
        data to console
@@ -45,7 +45,7 @@
      <button name="dump" onclick="motrar_cotizacion()">mostrar cotización</button>
    </p>
 
- </div> -->
+ </div>
 
  <div>
    <!-- <h3>Retenciones</h3>

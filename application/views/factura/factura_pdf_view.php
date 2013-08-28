@@ -274,7 +274,11 @@ tr.even{
           </thead>
           <tbody>
             <?php 
+                $odd = true;
                 $html = '';
+                $base = 0;
+                $ivaSum = 0;
+                $valorSum = 0;
                 foreach ($ofertas as $row1):
                 $destinatario = new stdClass();
                 $destinatario->email = $row1->email;
@@ -289,22 +293,22 @@ tr.even{
                     $precionConDco = ($valorDco * (1 + $ivaPorce));
                     $valorSum += $precionConDco * $row1->cantidad;
                     $ivaSum += round($precionConDco - $valorDco) * $row1->cantidad;
-                    $html .= '<tr class="odd">
+                    $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
                         <td class="center"></td>
                         <td class="center"> ' . $row1->cantidad . '</td>
                         <td>' . $row1->titulo . '</td>
-                        <td class="right">$ ' . number_format($precionConDco, 0, ',', '.') . '</td>
-                        <td class="right">$ ' . number_format($precionConDco * $row1->cantidad, 0, ',', '.') . '</td>
+                        <td class="right">$ ' . number_format($valorDco, 0, ',', '.') . '</td>
+                        <td class="right">$ ' . number_format($valorDco * $row1->cantidad, 0, ',', '.') . '</td>
                         </tr>';
                 else:
                     $ivaSum += round($row1->iva) * $row1->cantidad;
                     $valorSum += $row1->precio * $row1->cantidad;
-                    $html .= '<tr>
+                    $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
                         <td class="center"></td>
                         <td class="center"> ' . $row1->cantidad . '</td>
                         <td>' . $row1->titulo . '</td>
-                        <td class="right">$ ' . number_format($row1->precio, 0, ',', '.') . '</td>
-                        <td class="right">$ ' . number_format($row1->precio * $row1->cantidad, 0, ',', '.') . '</td>
+                        <td class="right">$ ' . number_format($row1->precio-round($row1->iva), 0, ',', '.') . '</td>
+                        <td class="right">$ ' . number_format(($row1->precio-round($row1->iva)) * $row1->cantidad, 0, ',', '.') . '</td>
                     </tr>';
                 endif;
             endforeach;
@@ -315,17 +319,42 @@ tr.even{
                 $destinatarios[] = $destinatario;
                 $valorSum += $row->precio * $row->cantidad;
                 $ivaSum += round($row->precio - ($row->precio / 1.16)) * $row->cantidad;
-                $html .= '<tr>
+                $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
                     <td class="center"></td>
                     <td class="center"> ' . $row->cantidad . '</td>
                     <td>' . $row->autoparte . '</td>
-                    <td class="right">$ ' . number_format($row->precio, 0, ',', '.') . '</td>
-                    <td class="right">$ ' . number_format($row->precio * $row->cantidad, 0, ',', '.') . '</td>
+                    <td class="right">$ ' . number_format($row->precio/1.16, 0, ',', '.') . '</td>
+                    <td class="right">$ ' . number_format(($row->precio * $row->cantidad) /1.16, 0, ',', '.') . '</td>
                 </tr>';
             endforeach;
 
+                $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
+                <td class="center"></td>
+                    <td class="center">&nbsp;</td>
+                    <td></td>
+                    <td class="right"></td>
+                    <td class="right"></td>
+                </tr>';
+
+                $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
+                <td class="center"></td>
+                    <td class="center">&nbsp;</td>
+                    <td></td>
+                    <td class="right"></td>
+                    <td class="right"></td>
+                </tr>';
+
+                $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
+                <td class="center"></td>
+                    <td class="center">&nbsp;</td>
+                    <td></td>
+                    <td class="right"></td>
+                    <td class="right"></td>
+                </tr>';
+
                 echo $html;
             ?>
+
           </tbody>
       </table>
   </div>
@@ -340,15 +369,15 @@ tr.even{
           <table>
               <tr>
                   <td class="bg-rojo">SUBTOTAL</td>
-                  <td class="right">$100.222.233</td>
+                  <td class="right">$<?php echo number_format($valorSum-$ivaSum, 0, ',', '.')?></td>
               </tr>
               <tr>
                   <td class="bg-rojo">I.V.A</td>
-                  <td class="right">$333.223.233</td>
+                  <td class="right">$<?php echo number_format($ivaSum, 0, ',', '.')?></td>
               </tr>
               <tr>
                   <td class="bg-rojo">TOTAL</td>
-                  <td class="right">$223.232.232</td>
+                  <td class="right">$<?php echo number_format($valorSum, 0, ',', '.')?></td>
               </tr>
           </table>
       </div>

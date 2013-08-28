@@ -9,10 +9,10 @@
 <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery.validate.js"></script>
 
 <script data-jsfiddle="example1">
-
 var modificado = false; //si se ha modificado algo en la tabla
 var ini = true; //la aplicación ha sido cargada por primera ves
 var load_items = <?php echo json_encode($items);?>; //datos de los items
+console.log('items', load_items);
 var idItem = []; //id de los items
 var precreado = false; //ha sido precreada la página
 var $ht = $("#example1");  //la tabla
@@ -57,14 +57,16 @@ if(load_items.length > 0){
 	columnDef.push({data: 'item', type: {renderer: itemRender}});  
 	columnDef.push({data: 'cantidad', allowInvalid: false, type: {renderer: numberRender}});
 	var dSchema = {};
-	dSchema.item = null;
+	dSchema.item = '';
 	dSchema.cantidad = 1;  
 	colWidths = [100, 60];
 	$.each(load_items,function(i,e){
 		var curdata = [];
 		curdata['item'] = e.item;
-		if(!isNaN(parseFloat(e.cantidad)) && isFinite(e.cantidad))
+		if(!isNaN(parseInt(e.cantidad)) && isFinite(e.cantidad))
 			curdata['cantidad'] = parseInt(e.cantidad);
+		else 
+			curdata['cantidad'] = 0;
 		idItem[i] = e.id;
 		$.each(e.proveedores,function(i1,e1){
 			var formatProveedor = e1.proveedor.proveedor.replace(/[^a-z0-9\-]/ig," ");
@@ -73,8 +75,8 @@ if(load_items.length > 0){
 					+')" data-direccion="'+e1.proveedor.direccion+'" data-telefono="'+e1.proveedor.telefono+'" data-ciudad="'+
 				e1.proveedor.ciudad+'" data-eproveedor="'+e1.proveedor.email+'" value="'+formatProveedor+'" style="width: 75px;">');
 				proveedores.push(formatProveedor);
-				dSchema[formatProveedor] = {costo: null};
-				var cost = formatProveedor+'.costo';
+				dSchema[formatProveedor] = {costo: 0};
+				var cost = formatProveedor+'.costo'; 
 			    columnDef.push({data: cost, type: {renderer: selectRender}});
 
 			    var provData = [];
@@ -90,7 +92,8 @@ if(load_items.length > 0){
 			if(e1.elegido == 1)
 				seleccionados[i] = i1+2;
 			load_id_proveedor[i][i1+2] = e1.id;
-			curdata[formatProveedor] = {costo: parseFloat(e1.lp_valor)};
+			curdata[formatProveedor] = {costo: e1.lp_valor};
+			// console.log('costoCure data', i, e1.lp_valor);
 			if(e1.nota != null)
 				notas[i][i1+2] = e1.nota;
 
@@ -103,7 +106,10 @@ if(load_items.length > 0){
 
 		if(!isNaN(parseFloat(e.margen)) && isFinite(e.margen))
 			curdata['margen'] = parseFloat(e.margen);
-		curdata['precio'] = "";
+		else 
+			curdata['margen'] = 0;
+		curdata['precio'] = 0;
+		// console.log('curdata', i, curdata);
 		currentData[i] = curdata;
 	});
 	header.push("Margen LP(%)");
@@ -114,6 +120,8 @@ if(load_items.length > 0){
 	dSchema.precio = 0;	
 	colWidths.push(90);
 	colWidths.push(90);
+	// console.log('dSchema', dSchema);
+	// console.log('curdata', currentData);
 }else{
 	var notas = Create2DArray(100); 
 	var seleccionados = [];
@@ -280,12 +288,13 @@ $(document).ready(function() {
       }
       return $window.width();
     },
-    height: function () {
-      if (maxed && availableHeight === void 0) {
-        calculateSize();
-      }
-      return maxed ? availableHeight : 170;
-    },currentRowClassName: 'currentRow',
+    // height: function () {
+    //   if (maxed && availableHeight === void 0) {
+    //     calculateSize();
+    //   }
+    //   return maxed ? availableHeight : 200;
+    // },
+    currentRowClassName: 'currentRow',
   	currentColClassName: 'currentCol',
   	minSpareCols: 1,
   	minSpareRows: 1,
@@ -377,8 +386,8 @@ function agregar_columna(){
 			var cost = $proveedor+'.costo';
 			columnDef.splice(header.length-3,0,{data: cost, type: {renderer: selectRender}}); 
 			var currentData = htInstance.getData();
-			for (var i = 0; i < htInstance.countRows(); i++) {
-				currentData[i][$proveedor] = {costo: ""};
+			for (var i = 0; i < htInstance.countRows()-1; i++) {
+				currentData[i][$proveedor] = {costo: 0};
 			};
 			colWidths.splice(header.length-3,0,90); 
 			htInstance.updateSettings({
@@ -427,14 +436,14 @@ function sanitize_title_with_dashes($title) {
     return $title;
 }
 
-// function bindDumpButton() {
-// 	$('body').on('click', 'button[name=dump]', function () {
-// 		var dump = $(this).data('dump');
-// 		var $ht = $(dump);
-// 		console.log('data of ' + dump, $ht.handsontable('getData'));
-// 	});
-// }
-// bindDumpButton();
+function bindDumpButton() {
+	$('body').on('click', 'button[name=dump]', function () {
+		var dump = $(this).data('dump');
+		var $ht = $(dump);
+		console.log('data of ' + dump, $ht.handsontable('getData'));
+	});
+}
+bindDumpButton();
 
 //selecciona un item para el proveedor
 function seleccionar_item_proveedor(){
@@ -540,12 +549,12 @@ function motrar_cotizacion(){
 					proveedor = $(header[col]);
 					proveedor = proveedor.val();
 					$(item).remove('a.atooltip');
-					valorLP = numeral().unformat($(item).text());
+					valorLP = parseFloat(numeral().unformat($(item).text()));
 					if($(item).attr('data-iva'))
 						ivaAttr = parseFloat($(item).attr('data-iva').replace('%', ''));  
 				}
 			}else if(col == htInstance.countCols()-2 && itemVal != ''){
-				ganancia = parseInt($(item).text());
+				ganancia = parseFloat(numeral().unformat($(item).text()));
 			}
 		}
 		if(valorLP>0 && cantidad>0 && !isNaN(parseFloat(ganancia)) && isFinite(ganancia)){
@@ -731,7 +740,7 @@ function guardar(){
 		for (var col = 0; col < htInstance.countCols()-1 ; col++) {
 			if(col == 0){
 				var itemTD = htInstance.getCell(row, col);
-				item.item =  $(itemTD).text();
+				item.item =  htInstance.getDataAtCell(row, col);
 				item.id_item = $(itemTD).attr('data-id-item');
 			}else if(col == 1){
 				item.cantidad =  htInstance.getDataAtCell(row, col);
@@ -760,9 +769,13 @@ function guardar(){
 			}
 		}
 		item.proveedores = proveedores;
-		data[row] = item;
+		if(item.item == '')
+		item.item = ' ';
+			data[row] = item;
 	}
+	// console.log('sin json',data);
 	var data = $.toJSON( data );
+	// console.log('con json', data);
 	$.ajax({
 	    type: "POST",
 	    url: "<?php echo base_url(); ?>operacion/cotizaciones/guardar",

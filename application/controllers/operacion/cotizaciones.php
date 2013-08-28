@@ -105,6 +105,8 @@ class Cotizaciones extends CI_Controller {
                     $cantidad = $data[cantidad];
                     $elegido = $data[elegido];
                     $item = $data[item];
+                    if(empty($item))
+                        $item = ' ';
                     $margen = $data[margen];
                     $id_item = $data[id_item];
                     $Tcosto;
@@ -134,6 +136,8 @@ class Cotizaciones extends CI_Controller {
                         $proveedorCotizacionModel->nota = $ops[nota];
                         $proveedorCotizacionModel->elegido = $ops[elegido];
                         $proveedoresCot[$item][$provedor] = $proveedorCotizacionModel;
+
+                        // echo 'ITEM '.$item.' ID PROVEEDOR '.$proveedorModel->id.' LPVALOR '.$proveedorCotizacionModel->lp_valor.' IVA '.$proveedorCotizacionModel->iva.' NOTA '.$proveedorCotizacionModel->nota.' ELEGIDO '.$proveedorCotizacionModel->elegido.'<br/>';
 
                         if($ops[elegido] == true && isset($ops[elegido])){
                             $lp_valor = $ops[valorLP];
@@ -179,22 +183,28 @@ class Cotizaciones extends CI_Controller {
                 $cotizacionModel->cliente_iva = $Tcliente_iva;
                 $cotizacionModel->cliente_precio = $Tcliente_precio;
                 $cotizacionModel->ganancia = $Tganancia;
-                if($cotizacionModel->id)
+                if($cotizacionModel->id){
                     $cotizacionModel->actualizar();
-                else{    
+                    // echo 'ACTUALIZAR COTIZACION <BR/>';
+                }else{    
+                    // echo 'AGREGAR COTIZACION <BR/>';
                     $cotizacionModel->insertar();
                 }foreach ($itemsCot as $item) {
                     if($item->id){
+                        // echo 'ACTUALIZAR ITEM: '.json_encode($item).' <BR/>';
                         $item->actualizar();
                     }else{
                         $item->id_cotizacion = $cotizacionModel->id;
+                        // echo 'AGREGAR ITEM '.json_encode($item).'<BR/>';
                         $item->insertar();
                     }    
                     foreach ($proveedoresCot[$item->item] as $proveedor) {
                         if($proveedor->id){
+                            // echo 'ACTUALIZAR PROV: '.json_encode($proveedor).' <BR/>';
                             $proveedor->actualizar();
                         }else{   
                             $proveedor->id_item_cotizacion = $item->id; 
+                            // echo 'AGREGAR PROV '.json_encode($proveedor).'<BR/>';
                             $proveedor->insertar();
                         }
                     }
