@@ -153,6 +153,11 @@ font-size: 10px;
         <tr><td>&nbsp;</td><td>&nbsp;</td><td class="bordered"><strong>Total</strong></td><td class="bordered"><strong><?php echo '$'.number_format($orden_compra_model->total, 2, ',', '.')?></strong></td></tr>
       </tbody>
     </table>
+    <br/>
+    <p>
+      <h4>Obserservaciones</h4><br/>
+      <?php echo $orden_compra_model->observacion; ?>
+    </p>
     <br/><br/><br/><br/>
     <span><img src="<?php echo base_url();?>resources/images/correos/operaciones/cotizacion/firma_pacheco.jpg"><span><span class="span-firma" id="firma-fecha"><?php echo strftime("%B %d de %Y", strtotime($orden_compra_model->fecha))?></span>
     <hr align="left" id="firma">

@@ -603,6 +603,58 @@ class Usuario extends CI_Controller {
     function _generar_factura($refVenta, $mensaje = "") {
         setlocale(LC_ALL, 'es_ES');
         define("CHARSET", "iso-8859-1");
+        $this->load->library('phptopdf');
+        $this->load->model('refventa_model');
+        $this->load->model('usuario_model');
+        $this->load->helper('mail');
+        $destinatarios = array();
+        $venta = $this->refventa_model->dar_venta($refVenta);
+        $autopartes = $this->usuario_model->dar_carrito_compra_autopartes($venta->id_carrito_compra);
+        $ofertas = $this->usuario_model->dar_carrito_compra_ofertas($venta->id_carrito_compra);
+        $consecutivo = $this->usuario_model->agregar_consecutivo_compra($venta->id_carrito_compra);
+        $valorSum = 0;
+        $ivaSum = 0;
+        $data1['mensaje'] = $mensaje;
+        $data1['venta'] = $venta;
+        $data1['autopartes'] = $autopartes;
+        $data1['ofertas'] = $ofertas;
+        $data1['consecutivo'] = $consecutivo;
+        
+        $html = $this->load->view('factura/factura_pdf_view', $data1, true);
+        // echo $html;
+
+
+
+        $destinatario = new stdClass();
+        $destinatario->email = $venta->email;
+        $destinatarios[] = $destinatario;
+        $destinatario = new stdClass();
+        $destinatario->email = "tallerenlinea@laspartes.com.co";
+        $destinatarios[] = $destinatario;
+        $destinatario = new stdClass();
+        $destinatario->email = "ventas@laspartes.com.co";
+        // $destinatarios[] = $destinatario;
+        // $destinatario = new stdClass();
+        // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
+        // $destinatarios[] = $destinatario;
+        
+        ob_start();
+        
+        
+        $this->load->view('emails/recibo_compra_view', $data1);
+        $contenidoHTML = ob_get_contents();
+        ob_end_clean();
+        ob_flush();
+        
+        $filePath = 'resources/facturas/';
+        $fileName = 'factura-' . $refVenta . '.pdf';
+        $this->phptopdf->phptopdf_html($html, $filePath, $fileName);
+        send_mail($destinatarios, "Factura de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
+    }
+
+    function _generar_recibo($refVenta, $mensaje = "") {
+        setlocale(LC_ALL, 'es_ES');
+        define("CHARSET", "iso-8859-1");
         $this->load->library('pdf');
         $this->load->model('refventa_model');
         $this->load->model('usuario_model');

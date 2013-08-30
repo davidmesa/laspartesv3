@@ -25,6 +25,10 @@
   color: white;
 }
 
+#header-ops{
+  margin-bottom: 5px;
+}
+
 #cotizacion{
   border: 1px solid #ddd;
   border-collapse: separate;
@@ -99,6 +103,10 @@
 }
 
 #cancelar{
+  margin-right: 5px;
+}
+
+#actualizar{
   margin-right: 5px;
 }
 /*

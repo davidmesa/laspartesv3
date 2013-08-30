@@ -215,7 +215,6 @@ function crearLink(){
 	    	//hay que asociar la oferta con el link de pago
 	    	
 	    },error: function(data, status, e){
-	    	alert('no functiona esta shit');
 	    	$('.alert.alert-danger .alert-msg').text('Ocurrió un error al guardar la cotización, favor intentar más tarde.');
 	    	$('.alert.alert-danger').show();
 	    	$("body").scrollTop(0);

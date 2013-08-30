@@ -13,18 +13,28 @@
     Ocurrió un error al guardar la cotización, favor intentar más tarde.</div>
   <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>
     La cotización ha sido guardada.</div>
-  <form class="form-inline  proveedor"  role="form" id="agregarProveedor">
-    <div class="form-group">
-      <input type="text" name="proveedor" placeholder="Proveedor" class="form-control" id="input-proveedor"> 
+    <div class="row" id="header-ops">
+      <div class="col-xs-12 col-md-8">
+        <form class="form-inline  proveedor"  role="form" id="agregarProveedor">
+          <div class="form-group">
+            <input type="text" name="proveedor" placeholder="Proveedor" class="form-control" id="input-proveedor"> 
+          </div>
+          <div class="form-group">
+            <input type="text" name="email" placeholder="E-mail" class="form-control" id="input-eproveedor"> 
+          </div>
+          <div class="form-group">
+            <input type="submit" class="btn btn-default" value="agregar proveedor">
+          </div>
+        </form>
+      </div>
+      <div class="col-xs-6 col-md-4">
+        <div class="contro-group">
+          <a target="_blank" href="<?php echo base_url().'operacion/cotizaciones/mostrar_cotizaciones/'.$id_pipeline.'/'.$id_usuario?>" id="vista-completa" class="btn btn-default pull-right">Ver vista completa</a>
+          <input type="button" id="actualizar" onclick="location.reload()" class="btn btn-default pull-right" value="Actualizar">  
+        </div>  
+      </div>
     </div>
-    <div class="form-group">
-      <input type="text" name="email" placeholder="E-mail" class="form-control" id="input-eproveedor"> 
-    </div>
-    <div class="form-group">
-      <input type="submit" class="btn btn-default" value="agregar proveedor">
-    </div>
-  </form>
-  <span id="error-placement"></span>
+    <span id="error-placement"></span>
   
   <div class="form-group">
     <div class="bs-callout bs-callout-info"><button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -34,7 +44,7 @@
     </div>
     <div id="example1" style="overflow: auto;" class="handsontable"></div>
   </div>
-  <div class="form-group">
+  <!-- <div class="form-group">
     <p>
      <button name="dump" data-dump="#example1" title="Prints current data source to Firebug/Chrome Dev Tools">Dump
        data to console
@@ -45,7 +55,7 @@
      <button name="dump" onclick="motrar_cotizacion()">mostrar cotización</button>
    </p>
 
- </div>
+ </div> -->
 
  <div>
    <!-- <h3>Retenciones</h3>

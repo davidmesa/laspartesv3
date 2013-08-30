@@ -129,6 +129,9 @@ $route['operacion/linkPago/mostrar_links/(.+)/(\d+)/(.+)'] = "operacion/linkPago
 $route['operacion/linkPago/form_links/(.+)/(\d+)/(.+)'] = "operacion/linkPago/form_links/$1/$2/$3";
 $route['operacion/linkPago/editar_link/(\d+)/(\d+)'] = "operacion/linkPago/editar_link/$1/$2";
 $route['operacion/ordenRemision/mostrar_ordedes/(.+)/(\d+)/(.+)'] = "operacion/ordenRemision/mostrar_ordedes/$1/$2/$3";
+$route['operacion/facturacion/mostrar_facturacion/(.+)/(\d+)/(.+)'] = "operacion/facturacion/mostrar_facturacion/$1/$2/$3";
+$route['operacion/facturacion/form_factura/(.+)/(\d+)/(.+)'] = "operacion/facturacion/form_factura/$1/$2/$3";
+$route['operacion/facturacion/form_recibo/(.+)/(\d+)/(.+)'] = "operacion/facturacion/form_recibo/$1/$2/$3";
 /*fin link de pago */
 
 

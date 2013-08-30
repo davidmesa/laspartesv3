@@ -233,7 +233,7 @@ class Usuario_model extends CI_Model {
      * @param int $total
      * @return int $id_carrito_compra
      */
-    function agregar_carrito_compras($id_usuario, $estado, $total, $nombres = '', $ciudad = '', $telefono = '', $direccion = '', $email = '', $di = '', $carro = '', $placa = '') {
+    function agregar_carrito_compras($id_usuario, $estado, $total, $nombres = '', $ciudad = '', $telefono = '', $direccion = '', $email = '', $di = '', $carro = '', $placa = '', $fecha_pago = '') {
         $this->db->escape($id_usuario);
         $this->db->escape($estado);
         $this->db->escape($total);
@@ -244,6 +244,10 @@ class Usuario_model extends CI_Model {
         $this->db->set('estado', $estado);
         $this->db->set('total', $total);
         $this->db->set('fecha', 'curdate()', FALSE);
+        if ($fecha_pago != '')
+            $this->db->set('fecha_pago', $fecha_pago);
+        else
+            $this->db->set('fecha_pago', 'curdate()', FALSE);
         if ($nombres != '')
             $this->db->set('nombres', $nombres);
         if ($ciudad != '')
@@ -1716,6 +1720,19 @@ class Usuario_model extends CI_Model {
             $this->crm->agregar_carrito_compras_REST($params);
         }
         
+        return $id_consecutivo;
+    }
+
+    /**
+     * Agrega el id del carrito de compra y retorna el consecutivo de recibo
+     */
+    function agregar_consecutivo_recibo($id_carrito_compra) {
+        $this->db->escape($id_carrito_compra);
+        $this->db->set('id_carritos_compras', $id_carrito_compra);
+        $this->db->insert('consecutivo_recibos');
+        $id_consecutivo =  mysql_insert_id();
+        
+        $carritos = $this->usuario_model->dar_items_compra_idcarrito($id_carrito_compra);//el id está vacío
         return $id_consecutivo;
     }
 

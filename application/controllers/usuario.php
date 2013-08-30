@@ -29,7 +29,7 @@ class Usuario extends Laspartes_Controller {
         if ($estado == "email") {
             setlocale(LC_ALL, 'es_ES');
             define("CHARSET", "iso-8859-1");
-            $this->load->library('pdf');
+            $this->load->library('phptopdf');
             $this->load->model('refventa_model');
             $this->load->model('usuario_model');
             $this->load->helper('mail');
@@ -40,173 +40,14 @@ class Usuario extends Laspartes_Controller {
             $consecutivo = $this->usuario_model->agregar_consecutivo_compra($venta->id_carrito_compra);
             $valorSum = 0;
             $ivaSum = 0;
-            // set document information
-            $this->pdf->SetSubject('Factura de compra de laspartes.com');
 
-            // set font
-            $this->pdf->SetFont('times', '', 11);
-
-            // add a page
-            $this->pdf->AddPage();
-
-            $html = '<table>
-                <tr>
-                    <td width="30%">
-                        <img width="400" height="350" src="http://www.laspartes.com/resources/template/header/logo-laspartes.png" alt="laspartes.com" />
-                    </td>
-                    <td width="50%">
-                        LASPARTES.COM.CO LTDA.<br/>
-                        NIT 900216983-8<br/>
-                        Calle 98 # 18 - 71 Piso 2<br/>
-                        Tel: 1-6014826 | 1-3819790<br/>
-                        e-mail: contactenos@laspartes.com.co<br/>
-                        Bogotá, Colombia
-                    </td>
-                    <td width="3%">
-                    </td>
-                    <td width="17%" valign="top">
-                        <span style="color:#c60200;">RECIBO DE CAJA</span>
-                        <div style="color:white; background-color:#c60200; ">No.</div>
-                        <span style="border:1px solid #c60200; ">' . str_pad($consecutivo, 4, '0', STR_PAD_LEFT) . '</span><br/>
-                        <div style="color:white; background-color:#c60200; ">FECHA</div>
-                        <span style="border:1px solid #c60200; ">' . $venta->fecha . '</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <div style="border:5px solid #c60200;">
-                            <br/>&nbsp;&nbsp;CLIENTE: ' . $venta->nombre_apellido . ' <br/>
-                            &nbsp;&nbsp;DOCUMENTO: ' . $venta->documento . '<br/>
-                            &nbsp;&nbsp;CIUDAD: ' . $venta->ciudad . '<br/>
-                            &nbsp;&nbsp;DIRECCIÓN: ' . $venta->direccion . '<br/>
-                            &nbsp;&nbsp;TELEFONO: ' . $venta->telefono . '<br/>
-                            &nbsp;&nbsp;CARRO: ' . $venta->carro . '<br/>
-                            &nbsp;&nbsp;PLACA DEL CARRO: ' . $venta->placa . '<br/>
-                        </div>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        <div style="color:white; background-color:#c60200; ">FECHA DE PAGO</div>
-                        <span style="border:1px solid #c60200; ">' . $venta->fecha . '</span><br/>
-                        <div style="text-align:center;  font-size:100px;">
-                        </div>
-                    </td>
-                </tr>
-            </table>';
-
-            // output the HTML content
-            $this->pdf->writeHTML($html, true, false, true, false, '');
-
-            $html = '<table border="5" style="border-color:#c60200;">
-                <tr align="center" style="font-size:100px;">
-                    <th  width="20%" bgcolor="#c60200" style="color:white;">AUTOPARTE</th>
-                    <th  width="9%" bgcolor="#c60200" style="color:white;">CANT.</th>
-                    <th  width="45%" bgcolor="#c60200" style="color:white;">OBSERVACIÓN</th>
-                    <th  width="13%" bgcolor="#c60200" style="color:white;">PRECIO UNIT.</th>
-                    <th  width="13%" bgcolor="#c60200" style="color:white;">PRECIO TOTAL</th>
-                </tr>';
-            foreach ($autopartes as $row):
-                $destinatario = new stdClass();
-                $destinatario->email = $row->email;
-                $destinatarios[] = $destinatario;
-                $valorSum += $row->precio * $row->cantidad;
-                $ivaSum += round($row->precio - ($row->precio / 1.16)) * $row->cantidad;
-                $html .= '<tr style="font-size:90px;"><td> ' . $row->autoparte . ' <br/><br/>Taller responsable: ' . $row->establecimiento . '<br/>' . $row->direccion . '<br/>' . $row->telefonos . '</td><td style="text-align:center;">' . $row->cantidad . '</td><td>' . $row->observacion . '</td><td style="text-align:center;">$ ' . number_format($row->precio, 0, ',', '.') . '</td><td style="text-align:center;">$ ' . number_format($row->precio * $row->cantidad, 0, ',', '.') . '</td></tr>';
-            endforeach;
-            $html .='
-                </table>';
-            $this->pdf->writeHTML($html, true, false, true, false, '');
-
-            $html = '<table border="5" style="border-color:#c60200;">
-                <tr align="center" style="font-size:100px;">
-                    <th  width="20%" bgcolor="#c60200" style="color:white;">OFERTA</th>
-                    <th  width="9%" bgcolor="#c60200" style="color:white;">CANT.</th>
-                    <th  width="45%" bgcolor="#c60200" style="color:white;">INCLUYE</th>
-                    <th  width="13%" bgcolor="#c60200" style="color:white;">PRECIO UNIT.</th>
-                    <th  width="13%" bgcolor="#c60200" style="color:white;">PRECIO TOTAL</th>
-                </tr>';
-            foreach ($ofertas as $row1):
-                $destinatario = new stdClass();
-                $destinatario->email = $row1->email;
-                $destinatarios[] = $destinatario;
-                if ($row1->dco_feria != 0):
-                    $precio = $row1->precio;
-                    $iva = $row1->iva;
-                    $dco = $row1->dco_feria;
-                    $base = $precio - $iva;
-                    $ivaPorce = $iva / $base;
-                    $valorDco = $base * ((100 - $dco) / 100);
-                    $precionConDco = ($valorDco * (1 + $ivaPorce));
-                    $valorSum += $precionConDco * $row1->cantidad;
-                    $ivaSum += round($precionConDco - $valorDco) * $row1->cantidad;
-                    $html .= '<tr style="font-size:90px;"><td> ' . $row1->titulo . ' <br/><br/>Taller responsable: ' . $row1->establecimiento . '<br/>' . $row1->direccion . '<br/>' . $row1->telefonos . '</td><td style="text-align:center;">' . $row1->cantidad . '</td><td>' . $row1->incluye . '<br/><strong>Condiciones</strong><br/>' . $row1->condiciones . '</td><td style="text-align:center;">$ ' . number_format($precionConDco, 0, ',', '.') . '</td><td style="text-align:center;">$ ' . number_format($precionConDco * $row1->cantidad, 0, ',', '.') . '</td></tr>';
-                else:
-                    $ivaSum += round($row1->iva) * $row1->cantidad;
-                    $valorSum += $row1->precio * $row1->cantidad;
-                    $html .= '<tr style="font-size:90px;"><td> ' . $row1->titulo . ' <br/><br/>Taller responsable: ' . $row1->establecimiento . '<br/>' . $row1->direccion . '<br/>' . $row1->telefonos . '</td><td style="text-align:center;">' . $row1->cantidad . '</td><td>' . $row1->incluye . '<br/><strong>Condiciones</strong><br/>' . $row1->condiciones . '</td><td style="text-align:center;">$ ' . number_format($row1->precio, 0, ',', '.') . '</td><td style="text-align:center;">$ ' . number_format($row1->precio * $row1->cantidad, 0, ',', '.') . '</td></tr>';
-                endif;
-
-            endforeach;
-            $html .='
-                </table>';
-            $this->pdf->writeHTML($html, true, false, true, false, '');
-
-            $html = '<table cellpadding="0" cellspacing="0"border="0">
-                    <tr>
-                        <td width="70%">
-                            <div style="border:5px solid #c60200;">
-                                OBSERVACIONES<br/>
-                                La referencia de su pedido es: ' . $venta->referencia . '<br/>
-                                Costos de envío no están incluídos, dependen del peso y destino de la autoparte.<br/>
-                                Precios sujetos a disponibilidad.    
-                            </div>
-                        </td>
-                        <td width="3%">
-                        </td>
-                        <td width="15%" style="font-size:100px;">
-                           <div style="color:white; background-color:#c60200; ">
-                                SUBTOTAL
-                            </div> 
-                            <div style="color:white; background-color:#c60200; ">
-                                I.V.A
-                            </div> 
-                            <div style="color:white; background-color:#c60200; ">
-                                TOTAL
-                            </div> 
-                        </td>
-                        <td width="12%" style="font-size:100px;">
-                           <div style="border:1px solid #c60200; ">
-                                $' . number_format($valorSum - $ivaSum, 0, ',', '.') . '
-                            </div> 
-                            <div style="border:1px solid #c60200; ">
-                                $' . number_format($ivaSum, 0, ',', '.') . '
-                            </div> 
-                            <div style="border:1px solid #c60200; ">
-                                $' . number_format($valorSum, 0, ',', '.') . '
-                            </div> 
-                        </td>
-                    </tr>
-                </table';
-            $this->pdf->writeHTML($html, true, false, true, false, '');
-
-            $html = '<table>
-                    <tr>
-                        <td width="45%">
-                            <div style="border:5px solid #c60200;">
-                                ACEPTADO<br/>
-                            </div>
-                        </td>
-                        <td width="10%">
-                        </td>
-                        <td width="45%">
-                            <div style="border:5px solid #c60200;">
-                                VENDEDOR<br/>
-                            </div>
-                        </td>
-                    </tr>
-                </table';
-            $this->pdf->writeHTML($html, true, false, true, false, '');
+            $data1['mensaje'] = $mensaje;
+            $data1['venta'] = $venta;
+            $data1['autopartes'] = $autopartes;
+            $data1['ofertas'] = $ofertas;
+            $data1['consecutivo'] = $consecutivo;
+            
+            $html = $this->load->view('factura/factura_pdf_view', $data1, true);
 
             $destinatario = new stdClass();
             $destinatario->email = $venta->email;
@@ -216,13 +57,12 @@ class Usuario extends Laspartes_Controller {
             $destinatarios[] = $destinatario;
             $destinatario = new stdClass();
             $destinatario->email = "ventas@laspartes.com.co";
-            $destinatarios[] = $destinatario;
+            // $destinatarios[] = $destinatario;
+            // $destinatario = new stdClass();
+            // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
+            // $destinatarios[] = $destinatario;
             
             ob_start();
-            $data1['mensaje'] = $mensaje;
-            $data1['venta'] = $venta;
-            $data1['autopartes'] = $autopartes;
-            $data1['ofertas'] = $ofertas;
             
             
             $this->load->view('emails/recibo_compra_view', $data1);
@@ -230,10 +70,10 @@ class Usuario extends Laspartes_Controller {
             ob_end_clean();
             ob_flush();
             
-            $filePath = 'resources/facturas';
-            $fileName = 'recibo-' . $refVenta . '.pdf';
-            $this->pdf->Output($filePath . '/' . $fileName, 'F');
-            send_mail($destinatarios, "Recibo de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
+            $filePath = 'resources/facturas/';
+            $fileName = 'factura-' . $refVenta . '.pdf';
+            $this->phptopdf->phptopdf_html($html, $filePath, $fileName);
+            send_mail($destinatarios, "Factura de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
         } else if ($estado == "error") {
             $destinatarios = array();
             $destinatario = new stdClass();
@@ -2795,7 +2635,7 @@ class Usuario extends Laspartes_Controller {
             $data['iva'] = round($ivaTotal);
             $data['baseDevolucionIva'] = $precioTotal - $ivaTotal;
             $llave_encripcion = "13733cb5a73";
-            $urlPagosOnline = "https://gateway2.pagosonline.net/apps/gateway/index.html"; //https://gateway.pagosonline.net/apps/gateway/index.html para produccion
+            $urlPagosOnline = "https://gateway.pagosonline.net/apps/gateway/index.html"; //https://gateway.pagosonline.net/apps/gateway/index.html para produccion
             $usuarioId = 84442;
             $refVenta = 0;
             $this->load->model('refventa_model');
@@ -2807,7 +2647,7 @@ class Usuario extends Laspartes_Controller {
             $idUsuario = $this->session->userdata('id_usuario');
             $usuario = $this->usuario_model->dar_usuario($idUsuario);
             $emailComprador = $usuario->email;
-            $prueba = 1; //0 para produccion
+            $prueba = 0; //0 para produccion
             $moneda = "COP";
             $url_respuesta = base_url() . "usuario/pago_confirmacion";
             $url_confirmacion = base_url() . "usuario/confirmacion_pol";
@@ -5800,22 +5640,6 @@ class Usuario extends Laspartes_Controller {
      */
     function _ver_inspecciones($id_usuario_vehiculo){
         return $this->flota_model->dar_inspecciones($id_usuario_vehiculo);
-    }
-
-    function ver_factura(){
-        // error_reporting(E_ALL);
-        setlocale(LC_ALL, 'es_ES');
-        define("CHARSET", "iso-8859-1");
-        $this->load->library('phptopdf');
-        $this->load->model('refventa_model');
-        $this->load->model('usuario_model');
-        $data['venta'] = $this->refventa_model->dar_venta('8e92309371');
-        $data['autopartes'] = $this->usuario_model->dar_carrito_compra_autopartes($data['venta']->id_carrito_compra);
-        $data['ofertas'] = $this->usuario_model->dar_carrito_compra_ofertas($data['venta']->id_carrito_compra);
-        // $data['consecutivo'] = $this->usuario_model->agregar_consecutivo_compra($venta->id_carrito_compra);
-        $html = $this->load->view('factura/factura_pdf_view', $data, true);
-        echo $html;
-        // $this->phptopdf->phptopdf_html($html, 'resources/ordenCompra/', 'facturita.pdf');
     }
 
 }

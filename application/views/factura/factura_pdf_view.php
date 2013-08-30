@@ -221,7 +221,7 @@ tr.even{
               <span class="rojo">CLIENTE:</span> <span><?php echo $venta->nombre_apellido;?></span>
           </div>
           <div class="group">
-              <span class="rojo">NIT:</span> <span><?php echo $venta->documento;?></span>
+              <span class="rojo">NIT/CC:</span> <span><?php echo $venta->documento;?></span>
           </div>
           <div class="group">
               <span class="rojo">DIRECCIÓN:</span> <span><?php echo $venta->direccion;?></span>
@@ -235,15 +235,15 @@ tr.even{
       <h4 class="rojo">FACTURA DE VENTA</h4>
       <div class="caja caja-roja">
           <div class="titulo">No.</div>
-          <div class="contenido rojo">N. 0233</div>
+          <div class="contenido rojo">N. <?php echo str_pad($consecutivo, 4, '0', STR_PAD_LEFT)?></div>
       </div>
       <div class="caja caja-roja">
           <div class="titulo">FECHA</div>
-          <div class="contenido"><?php echo date('d/M/Y' ,strtotime($venta->fecha));?></div>
+          <div class="contenido"><?php  echo strftime('%d/%B/%Y' ,strtotime($venta->fecha));?></div>
       </div>
       <div class="caja caja-roja">
           <div class="titulo">FECHA DE PAGO</div>
-          <div class="contenido"><?php echo date('d/M/Y' ,strtotime($venta->fecha));?></div>
+          <div class="contenido"><?php if($venta->fecha_pago != null || $venta->fecha_pago !='') echo strftime('%d/%B/%Y' ,strtotime($venta->fecha_pago)); else echo strftime('%d/%B/%Y' ,strtotime($venta->fecha));?></div>
       </div>
       <div id="resoluciones">
           <div class="group center resolucion">

@@ -160,6 +160,9 @@ class OrdenCompra extends CI_Controller {
             $destinatario = new stdClass();
             $destinatario->email = "tallerenlinea@laspartes.com.co";
             $destinatarios[] = $destinatario;
+            $destinatario = new stdClass();
+            $destinatario->email = "ventas@laspartes.com.co";
+            $destinatarios[] = $destinatario;
             // $destinatario = new stdClass();
             // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
             // $destinatarios[] = $destinatario;
