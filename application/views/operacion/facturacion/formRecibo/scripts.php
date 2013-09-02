@@ -111,6 +111,10 @@ function generarRecibo(){
 	    	var data = $.parseJSON(data);
 	    	if(data.status){
 	    		window.location = '<?php echo base_url()."operacion/facturacion/mostrar_facturacion/".$id_pipeline."/".$id_usuario."/reciboScs";?>'
+	    	}else if(!data.status && !isEmpty(data.dbsesion)){
+	    		$('body').prepend('<div class="alert alert-danger" style="display: block;"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.dbsesion+' <a href="'+data.dburl+'" target="_blank">'+data.dburl+'</a></div>');
+	    		$('.modal').modal('hide');
+	    		$("body").scrollTop(0);
 	    	}else{
 	    		$('.alert.alert-danger .alert-msg').html(data.msg).show();
 	    		$('.alert.alert-danger').show();

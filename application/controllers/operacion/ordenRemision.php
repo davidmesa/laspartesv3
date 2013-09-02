@@ -1,10 +1,11 @@
 <?php
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+require_once($_SERVER['BASEPATH'].'application/controllers/dropbox_controller.php');
 /**
  * Clase que en link de pago
  */
-class OrdenRemision extends CI_Controller {
+class OrdenRemision extends Dropbox_Controller {
 
     /**
      * Constructor de la clase OrdenCompra
@@ -75,81 +76,87 @@ class OrdenRemision extends CI_Controller {
      */
     function generar_orden_remision() {
         if($this->hay_sesion_activa()){
-            $this->load->library('form_validation');
-            $reglas = array(
-                array(
-                    'field' => 'nombres',
-                    'label' => 'nombres',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'email',
-                    'label' => 'email',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'ciudadEnvio',
-                    'label' => 'ciudad',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'direccionEnvio',
-                    'label' => 'dirección',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'telefonoMovil',
-                    'label' => 'telefono',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'vehiculo_id',
-                    'label' => 'carro',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'id_talleres',
-                    'label' => 'taller',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'descripcion',
-                    'label' => 'descripción',
-                    'rules' => 'trim|required|xss_clean'
-                ),
-                array(
-                    'field' => 'id_pipeline',
-                    'label' => 'id pipeline',
-                    'rules' => 'trim|xss_clean'
-                ),
-                array(
-                    'field' => 'id_usuario',
-                    'label' => 'id usuario',
-                    'rules' => 'trim|xss_clean'
-                )
-            );
-            $this->form_validation->set_rules($reglas);
+            $respuestaRequest = $this->request_dropbox();
+            $jsonrespuestaRequest = json_decode($respuestaRequest);
+            if($jsonrespuestaRequest->status == true){
+                $this->load->library('form_validation');
+                $reglas = array(
+                    array(
+                        'field' => 'nombres',
+                        'label' => 'nombres',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'email',
+                        'label' => 'email',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'ciudadEnvio',
+                        'label' => 'ciudad',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'direccionEnvio',
+                        'label' => 'dirección',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'telefonoMovil',
+                        'label' => 'telefono',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'vehiculo_id',
+                        'label' => 'carro',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'id_talleres',
+                        'label' => 'taller',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'descripcion',
+                        'label' => 'descripción',
+                        'rules' => 'trim|required|xss_clean'
+                    ),
+                    array(
+                        'field' => 'id_pipeline',
+                        'label' => 'id pipeline',
+                        'rules' => 'trim|xss_clean'
+                    ),
+                    array(
+                        'field' => 'id_usuario',
+                        'label' => 'id usuario',
+                        'rules' => 'trim|xss_clean'
+                    )
+                );
+                $this->form_validation->set_rules($reglas);
 
-            if (!$this->form_validation->run()){
-                echo json_encode(array('status' => false, 'msg' => validation_errors()), JSON_HEX_QUOT | JSON_HEX_TAG);
-            }else {
-                $this->load->model('usuario_model');
-                $this->load->model('refventa_model');
-                $this->load->model('autoparte_model');
-                $this->load->model('refventa_model');
-                $this->load->model('promocion_model');
-                $id_usuario = $this->input->post('id_usuario');
-                $id_pipeline = $this->input->post('id_pipeline');
-                $nombres = $this->input->post('nombres');
-                $email = $this->input->post('email');
-                $ciudadEnvio = $this->input->post('ciudadEnvio');
-                $direccionEnvio = $this->input->post('direccionEnvio');
-                $telefonoMovil = $this->input->post('telefonoMovil');
-                $id_vehiculo = $this->input->post('vehiculo_id');
-                $id_taller = $this->input->post('id_talleres');
-                $bono = $this->input->post('descripcion');
-                $consecutivo = $this->usuario_model->agregar_bono_usuario($id_usuario, $id_taller, $id_vehiculo, $nombres, $email, $ciudadEnvio, $direccionEnvio, $telefonoMovil, $bono);
-                $this->_generar_orden_remision($consecutivo);
-                $orden_remision_model = new orden_remision_model();
-                $orden_remision_model->id_pipeline = $id_pipeline;
-                $orden_remision_model->id_bono = $consecutivo;
-                $orden_remision_model->insertar();
+                if (!$this->form_validation->run()){
+                    echo json_encode(array('status' => false, 'msg' => validation_errors()), JSON_HEX_QUOT | JSON_HEX_TAG);
+                }else {
+                    $this->load->model('usuario_model');
+                    $this->load->model('refventa_model');
+                    $this->load->model('autoparte_model');
+                    $this->load->model('refventa_model');
+                    $this->load->model('promocion_model');
+                    $id_usuario = $this->input->post('id_usuario');
+                    $id_pipeline = $this->input->post('id_pipeline');
+                    $nombres = $this->input->post('nombres');
+                    $email = $this->input->post('email');
+                    $ciudadEnvio = $this->input->post('ciudadEnvio');
+                    $direccionEnvio = $this->input->post('direccionEnvio');
+                    $telefonoMovil = $this->input->post('telefonoMovil');
+                    $id_vehiculo = $this->input->post('vehiculo_id');
+                    $id_taller = $this->input->post('id_talleres');
+                    $bono = $this->input->post('descripcion');
+                    $consecutivo = $this->usuario_model->agregar_bono_usuario($id_usuario, $id_taller, $id_vehiculo, $nombres, $email, $ciudadEnvio, $direccionEnvio, $telefonoMovil, $bono);
+                    $this->_generar_orden_remision($consecutivo);
+                    $orden_remision_model = new orden_remision_model();
+                    $orden_remision_model->id_pipeline = $id_pipeline;
+                    $orden_remision_model->id_bono = $consecutivo;
+                    $orden_remision_model->insertar();
 
-                echo json_encode(array('status' => true));
-            }
+                    echo json_encode(array('status' => true));
+                }
+            }else{
+                echo $respuestaRequest;
+            } 
         }else{
             echo json_encode(array('status' => false, 'msg' => 'Debes iniciar sesión como administrador'));
         }
@@ -279,6 +286,9 @@ class OrdenRemision extends CI_Controller {
         $destinatario = new stdClass();
         $destinatario->email = "ventas@laspartes.com.co";
         $destinatarios[] = $destinatario;
+        // $destinatario = new stdClass();
+        // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
+        // $destinatarios[] = $destinatario;
 
         $mensajeCorreo = 'A continuación puedes ver el resumen de tu orden de remisión:<br/><br/>
             Nombres: ' . $venta->nombres . '<br/>
@@ -292,6 +302,13 @@ class OrdenRemision extends CI_Controller {
         $fileName = 'orden-de-remision-' . $consecutivo . '.pdf';
         $this->pdf->Output($filePath . '/' . $fileName, 'F');
         send_mail($destinatarios, "Orden de remisión a través de LasPartes.com", $mensajeCorreo, "", $fileName, $filePath . '/');
+
+        //METODOS DE DROPBOX
+        $DropboxPath = '/CARPETA MAESTRA/REMISIONES/'.date('Y').'/';
+        $metadata = $this->dropbox->metadata($DropboxPath);
+        if(!$metadata->is_dir)
+            $this->dropbox->create_folder($DropboxPath);
+        $addResponse = $this->dropbox->add($DropboxPath, $filePath.'/'.$fileName);
     }
 
     //Valida si existe una sesion activa

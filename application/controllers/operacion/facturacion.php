@@ -1,10 +1,11 @@
 <?php
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+require_once($_SERVER['BASEPATH'].'application/controllers/dropbox_controller.php');
 /**
  * Clase que maneja la facturación
  */
-class Facturacion extends CI_Controller {
+class Facturacion extends Dropbox_Controller {
 
     /**
      * Constructor de la clase cotizaciones
@@ -33,7 +34,7 @@ class Facturacion extends CI_Controller {
             $this->load->model('promocion_model');
             $link_pago_model = $this->link_pago_model->dar_todos_filtros(array('id_pipeline' =>$id_pipeline)); 
             foreach ($link_pago_model as $key => $link) {
-                $link_pago_model[$key]->oferta = $this->promocion_model->dar_oferta($link->id_oferta);
+                $link_pago_model[$key]->oferta = $this->promocion_model->dar_oferta_sin_vigencia($link->id_oferta);
             }
             $data['facturas'] = $this->factura_model->dar_todos_filtros(array('id_pipeline' =>$id_pipeline)); 
             $data['recibos'] = $this->recibo_model->dar_todos_filtros(array('id_pipeline' =>$id_pipeline)); 
@@ -112,128 +113,134 @@ class Facturacion extends CI_Controller {
      */
     function generar_factura(){
         if($this->hay_sesion_activa()){
-            $this->load->library('form_validation');
-            $reglas = array(
-                array(
-                    'field' => 'nombres',
-                    'label' => 'nombres',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'documento',
-                    'label' => 'documento',
-                    'rules' => 'trim|xss_clean'
-                ), array(
-                    'field' => 'correo',
-                    'label' => 'correo electrónico',
-                    'rules' => 'trim|required|valid_email|xss_clean'
-                ), array(
-                    'field' => 'fechapago',
-                    'label' => 'fecha de pago',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'lugar',
-                    'label' => 'lugar',
-                    'rules' => 'trim|required|xss_clean'
-                ),
-                array(
-                    'field' => 'direccion',
-                    'label' => 'dirección',
-                    'rules' => 'trim|xss_clean'
-                ),
-                array(
-                    'field' => 'telefono',
-                    'label' => 'teléfono',
-                    'rules' => 'trim|xss_clean'
-                ),
-                array(
-                    'field' => 'carro',
-                    'label' => 'carro',
-                    'rules' => 'trim|numeric|xss_clean'
-                ),
-                array(
-                    'field' => 'placa',
-                    'label' => 'placa',
-                    'rules' => 'trim|xss_clean'
-                ),
-                array(
-                    'field' => 'ids',
-                    'label' => 'ids de ofertas',
-                    'rules' => 'trim|required|xss_clean'
-                ),
-                array(
-                    'field' => 'id_pipeline',
-                    'label' => 'id pipeline',
-                    'rules' => 'trim|required|xss_clean'
-                ),
-                array(
-                    'field' => 'id_usuario',
-                    'label' => 'id usuario',
-                    'rules' => 'trim|required|xss_clean'
-                )
-            );
-            $this->form_validation->set_rules($reglas);
+            $respuestaRequest = $this->request_dropbox();
+            $jsonrespuestaRequest = json_decode($respuestaRequest);
+            if($jsonrespuestaRequest->status == true){
+                $this->load->library('form_validation');
+                $reglas = array(
+                    array(
+                        'field' => 'nombres',
+                        'label' => 'nombres',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'documento',
+                        'label' => 'documento',
+                        'rules' => 'trim|xss_clean'
+                    ), array(
+                        'field' => 'correo',
+                        'label' => 'correo electrónico',
+                        'rules' => 'trim|required|valid_email|xss_clean'
+                    ), array(
+                        'field' => 'fechapago',
+                        'label' => 'fecha de pago',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'lugar',
+                        'label' => 'lugar',
+                        'rules' => 'trim|required|xss_clean'
+                    ),
+                    array(
+                        'field' => 'direccion',
+                        'label' => 'dirección',
+                        'rules' => 'trim|xss_clean'
+                    ),
+                    array(
+                        'field' => 'telefono',
+                        'label' => 'teléfono',
+                        'rules' => 'trim|xss_clean'
+                    ),
+                    array(
+                        'field' => 'carro',
+                        'label' => 'carro',
+                        'rules' => 'trim|numeric|xss_clean'
+                    ),
+                    array(
+                        'field' => 'placa',
+                        'label' => 'placa',
+                        'rules' => 'trim|xss_clean'
+                    ),
+                    array(
+                        'field' => 'ids',
+                        'label' => 'ids de ofertas',
+                        'rules' => 'trim|required|xss_clean'
+                    ),
+                    array(
+                        'field' => 'id_pipeline',
+                        'label' => 'id pipeline',
+                        'rules' => 'trim|required|xss_clean'
+                    ),
+                    array(
+                        'field' => 'id_usuario',
+                        'label' => 'id usuario',
+                        'rules' => 'trim|required|xss_clean'
+                    )
+                );
+                $this->form_validation->set_rules($reglas);
 
-            if (!$this->form_validation->run()){
-                echo json_encode(array('status' => false, 'msg' => validation_errors()), JSON_HEX_QUOT | JSON_HEX_TAG);
-            }else {
-                $this->load->model('usuario_model');
-                $this->load->model('refventa_model');
-                $this->load->model('autoparte_model');
-                $this->load->model('refventa_model');
-                $this->load->model('promocion_model');
-                $this->load->model('vehiculo_model');
-                $refVenta = $this->refventa_model->generar_RefVenta_Unico();
+                if (!$this->form_validation->run()){
+                    echo json_encode(array('status' => false, 'msg' => validation_errors()), JSON_HEX_QUOT | JSON_HEX_TAG);
+                }else {
+                    $this->load->model('usuario_model');
+                    $this->load->model('refventa_model');
+                    $this->load->model('autoparte_model');
+                    $this->load->model('refventa_model');
+                    $this->load->model('promocion_model');
+                    $this->load->model('vehiculo_model');
+                    $refVenta = $this->refventa_model->generar_RefVenta_Unico();
 
-                $id_pipeline = $this->input->post('id_pipeline');
-                $id_usuario = $this->input->post('id_usuario');
-                $id_ofertas = explode('-', $this->input->post('ids'));
-                $nombres = $this->input->post('nombres');
-                $documento = $this->input->post('documento');
-                $correo = $this->input->post('correo');
-                $lugar = $this->input->post('lugar');
-                $direccion = $this->input->post('direccion');
-                $telefono = $this->input->post('telefono');
-                $carroModel = $this->vehiculo_model->dar_vehiculo($this->input->post('carro'));
-                $carro = $carroModel->marca.' '.$carroModel->linea;
-                $placa = $this->input->post('placa');
-                $fecha_pago = $this->input->post('fechapago');
+                    $id_pipeline = $this->input->post('id_pipeline');
+                    $id_usuario = $this->input->post('id_usuario');
+                    $id_ofertas = explode('-', $this->input->post('ids'));
+                    $nombres = $this->input->post('nombres');
+                    $documento = $this->input->post('documento');
+                    $correo = $this->input->post('correo');
+                    $lugar = $this->input->post('lugar');
+                    $direccion = $this->input->post('direccion');
+                    $telefono = $this->input->post('telefono');
+                    $carroModel = $this->vehiculo_model->dar_vehiculo($this->input->post('carro'));
+                    $carro = $carroModel->marca.' '.$carroModel->linea;
+                    $placa = $this->input->post('placa');
+                    $fecha_pago = $this->input->post('fechapago');
 
-                $usuario = $this->usuario_model->dar_usuario($id_usuario);
-                $total = 0;
-                foreach ($id_ofertas as $index => $id_oferta):
-                    if ($id_oferta != 0) {
-                        $ofertamodel = $this->promocion_model->dar_oferta($id_oferta);
-                        if ($ofertamodel->dco_feria != 0):
-                            $precio = $ofertamodel->precio;
-                            $iva = round($ofertamodel->iva);
-                            $dco = $ofertamodel->dco_feria;
-                            $base = $precio - $iva;
-                            $ivaPorce = $iva / $base;
-                            $valorDco = $base * ((100 - $dco) / 100);
-                            $precionConDco = ($valorDco * (1 + $ivaPorce));
-                            $total += $precionConDco;
-                        else:
-                            $total += $ofertamodel->precio;
-                        endif;
-                    }
-                endforeach;
+                    $usuario = $this->usuario_model->dar_usuario($id_usuario);
+                    $total = 0;
+                    foreach ($id_ofertas as $index => $id_oferta):
+                        if ($id_oferta != 0) {
+                            $ofertamodel = $this->promocion_model->dar_oferta($id_oferta);
+                            if ($ofertamodel->dco_feria != 0):
+                                $precio = $ofertamodel->precio;
+                                $iva = round($ofertamodel->iva);
+                                $dco = $ofertamodel->dco_feria;
+                                $base = $precio - $iva;
+                                $ivaPorce = $iva / $base;
+                                $valorDco = $base * ((100 - $dco) / 100);
+                                $precionConDco = ($valorDco * (1 + $ivaPorce));
+                                $total += $precionConDco;
+                            else:
+                                $total += $ofertamodel->precio;
+                            endif;
+                        }
+                    endforeach;
 
-                $id_carrito = $this->usuario_model->agregar_carrito_compras($usuario->id_usuario, 'Transacción aprobada', round($total), $nombres, $lugar, $telefono, $direccion, $correo, $documento, $carro, $placa, $fecha_pago);
-                foreach ($id_ofertas as $index => $id_oferta):
-                    if ($id_oferta != 0)
-                        $this->usuario_model->agregar_carrito_compras_ofertas($id_carrito, $id_oferta, 1);
-                endforeach;
+                    $id_carrito = $this->usuario_model->agregar_carrito_compras($usuario->id_usuario, 'Transacción aprobada', round($total), $nombres, $lugar, $telefono, $direccion, $correo, $documento, $carro, $placa, $fecha_pago);
+                    foreach ($id_ofertas as $index => $id_oferta):
+                        if ($id_oferta != 0)
+                            $this->usuario_model->agregar_carrito_compras_ofertas($id_carrito, $id_oferta, 1);
+                    endforeach;
 
-                $this->refventa_model->agregar_RefVenta($refVenta, $id_carrito);
-                $facturaTemp = $this->_generar_factura($refVenta);
+                    $this->refventa_model->agregar_RefVenta($refVenta, $id_carrito);
+                    $facturaTemp = $this->_generar_factura($refVenta);
 
-                $factura_model = new factura_model();
-                $factura_model->id_consecutivo_factura = $facturaTemp['consecutivo'];
-                $factura_model->id_pipeline = $id_pipeline;
-                $factura_model->url = $facturaTemp['url'];
-                $factura_model->insertar();
-                echo json_encode(array('status' => true));
-            }
+                    $factura_model = new factura_model();
+                    $factura_model->id_consecutivo_factura = $facturaTemp['consecutivo'];
+                    $factura_model->id_pipeline = $id_pipeline;
+                    $factura_model->url = $facturaTemp['url'];
+                    $factura_model->insertar();
+                    echo json_encode(array('status' => true, 'facturaTemp' => $facturaTemp));
+                }
+            }else{
+                echo $respuestaRequest;
+            }  
         }else{
         echo json_encode(array('status' => false, 'msg' => 'Debes iniciar sesión como administrador'));
         }
@@ -291,7 +298,15 @@ class Facturacion extends CI_Controller {
         $fileName = 'factura-' . $refVenta . '.pdf';
         $this->phptopdf->phptopdf_html($html, $filePath, $fileName);
         send_mail($destinatarios, "Factura de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
-        return array('consecutivo' => $consecutivo, 'url' =>$filePath.$fileName, 'refventa' => $refVenta);
+
+        //METODOS DE DROPBOX
+        $DropboxPath = '/CARPETA MAESTRA/FACTURAS LP/'.date('Y').'/';
+        $metadata = $this->dropbox->metadata($DropboxPath);
+        if(!$metadata->is_dir)
+            $this->dropbox->create_folder($DropboxPath);
+        $addResponse = $this->dropbox->add($DropboxPath, $filePath.$fileName);
+
+        return array('consecutivo' => $consecutivo, 'url' =>$filePath.$fileName, 'refventa' => $refVenta, 'addResponse' => $addResponse);
     }
 
     /**
@@ -300,124 +315,130 @@ class Facturacion extends CI_Controller {
      */
     function generar_recibo(){
         if($this->hay_sesion_activa()){
-            $this->load->library('form_validation');
-            $reglas = array(
-                array(
-                    'field' => 'nombres',
-                    'label' => 'nombres',
-                    'rules' => 'trim|required|xss_clean'
-                ), array(
-                    'field' => 'documento',
-                    'label' => 'documento',
-                    'rules' => 'trim|xss_clean'
-                ), array(
-                    'field' => 'correo',
-                    'label' => 'correo electrónico',
-                    'rules' => 'trim|required|valid_email|xss_clean'
-                ), array(
-                    'field' => 'lugar',
-                    'label' => 'lugar',
-                    'rules' => 'trim|required|xss_clean'
-                ),
-                array(
-                    'field' => 'direccion',
-                    'label' => 'dirección',
-                    'rules' => 'trim|xss_clean'
-                ),
-                array(
-                    'field' => 'telefono',
-                    'label' => 'teléfono',
-                    'rules' => 'trim|xss_clean'
-                ),
-                array(
-                    'field' => 'carro',
-                    'label' => 'carro',
-                    'rules' => 'trim|numeric|xss_clean'
-                ),
-                array(
-                    'field' => 'placa',
-                    'label' => 'placa',
-                    'rules' => 'trim|xss_clean'
-                ),
-                array(
-                    'field' => 'ids',
-                    'label' => 'ids de ofertas',
-                    'rules' => 'trim|required|xss_clean'
-                ),
-                array(
-                    'field' => 'id_pipeline',
-                    'label' => 'id pipeline',
-                    'rules' => 'trim|required|xss_clean'
-                ),
-                array(
-                    'field' => 'id_usuario',
-                    'label' => 'id usuario',
-                    'rules' => 'trim|required|xss_clean'
-                )
-            );
-            $this->form_validation->set_rules($reglas);
+            $respuestaRequest = $this->request_dropbox();
+            $jsonrespuestaRequest = json_decode($respuestaRequest);
+            if($jsonrespuestaRequest->status == true){
+                $this->load->library('form_validation');
+                $reglas = array(
+                    array(
+                        'field' => 'nombres',
+                        'label' => 'nombres',
+                        'rules' => 'trim|required|xss_clean'
+                    ), array(
+                        'field' => 'documento',
+                        'label' => 'documento',
+                        'rules' => 'trim|xss_clean'
+                    ), array(
+                        'field' => 'correo',
+                        'label' => 'correo electrónico',
+                        'rules' => 'trim|required|valid_email|xss_clean'
+                    ), array(
+                        'field' => 'lugar',
+                        'label' => 'lugar',
+                        'rules' => 'trim|required|xss_clean'
+                    ),
+                    array(
+                        'field' => 'direccion',
+                        'label' => 'dirección',
+                        'rules' => 'trim|xss_clean'
+                    ),
+                    array(
+                        'field' => 'telefono',
+                        'label' => 'teléfono',
+                        'rules' => 'trim|xss_clean'
+                    ),
+                    array(
+                        'field' => 'carro',
+                        'label' => 'carro',
+                        'rules' => 'trim|numeric|xss_clean'
+                    ),
+                    array(
+                        'field' => 'placa',
+                        'label' => 'placa',
+                        'rules' => 'trim|xss_clean'
+                    ),
+                    array(
+                        'field' => 'ids',
+                        'label' => 'ids de ofertas',
+                        'rules' => 'trim|required|xss_clean'
+                    ),
+                    array(
+                        'field' => 'id_pipeline',
+                        'label' => 'id pipeline',
+                        'rules' => 'trim|required|xss_clean'
+                    ),
+                    array(
+                        'field' => 'id_usuario',
+                        'label' => 'id usuario',
+                        'rules' => 'trim|required|xss_clean'
+                    )
+                );
+                $this->form_validation->set_rules($reglas);
 
-            if (!$this->form_validation->run()){
-                echo json_encode(array('status' => false, 'msg' => validation_errors()), JSON_HEX_QUOT | JSON_HEX_TAG);
-            }else {
-                $this->load->model('usuario_model');
-                $this->load->model('refventa_model');
-                $this->load->model('autoparte_model');
-                $this->load->model('refventa_model');
-                $this->load->model('promocion_model');
-                $this->load->model('vehiculo_model');
-                $refVenta = $this->refventa_model->generar_RefVenta_Unico();
+                if (!$this->form_validation->run()){
+                    echo json_encode(array('status' => false, 'msg' => validation_errors()), JSON_HEX_QUOT | JSON_HEX_TAG);
+                }else {
+                    $this->load->model('usuario_model');
+                    $this->load->model('refventa_model');
+                    $this->load->model('autoparte_model');
+                    $this->load->model('refventa_model');
+                    $this->load->model('promocion_model');
+                    $this->load->model('vehiculo_model');
+                    $refVenta = $this->refventa_model->generar_RefVenta_Unico();
 
-                $id_pipeline = $this->input->post('id_pipeline');
-                $id_usuario = $this->input->post('id_usuario');
-                $id_ofertas = explode('-', $this->input->post('ids'));
-                $nombres = $this->input->post('nombres');
-                $documento = $this->input->post('documento');
-                $correo = $this->input->post('correo');
-                $lugar = $this->input->post('lugar');
-                $direccion = $this->input->post('direccion');
-                $telefono = $this->input->post('telefono');
-                $carroModel = $this->vehiculo_model->dar_vehiculo($this->input->post('carro'));
-                $carro = $carroModel->marca.' '.$carroModel->linea;
-                $placa = $this->input->post('placa');
-                $fecha_pago = $this->input->post('fechapago');
+                    $id_pipeline = $this->input->post('id_pipeline');
+                    $id_usuario = $this->input->post('id_usuario');
+                    $id_ofertas = explode('-', $this->input->post('ids'));
+                    $nombres = $this->input->post('nombres');
+                    $documento = $this->input->post('documento');
+                    $correo = $this->input->post('correo');
+                    $lugar = $this->input->post('lugar');
+                    $direccion = $this->input->post('direccion');
+                    $telefono = $this->input->post('telefono');
+                    $carroModel = $this->vehiculo_model->dar_vehiculo($this->input->post('carro'));
+                    $carro = $carroModel->marca.' '.$carroModel->linea;
+                    $placa = $this->input->post('placa');
+                    $fecha_pago = $this->input->post('fechapago');
 
-                $usuario = $this->usuario_model->dar_usuario($id_usuario);
-                $total = 0;
-                foreach ($id_ofertas as $index => $id_oferta):
-                    if ($id_oferta != 0) {
-                        $ofertamodel = $this->promocion_model->dar_oferta($id_oferta);
-                        if ($ofertamodel->dco_feria != 0):
-                            $precio = $ofertamodel->precio;
-                            $iva = round($ofertamodel->iva);
-                            $dco = $ofertamodel->dco_feria;
-                            $base = $precio - $iva;
-                            $ivaPorce = $iva / $base;
-                            $valorDco = $base * ((100 - $dco) / 100);
-                            $precionConDco = ($valorDco * (1 + $ivaPorce));
-                            $total += $precionConDco;
-                        else:
-                            $total += $ofertamodel->precio;
-                        endif;
-                    }
-                endforeach;
+                    $usuario = $this->usuario_model->dar_usuario($id_usuario);
+                    $total = 0;
+                    foreach ($id_ofertas as $index => $id_oferta):
+                        if ($id_oferta != 0) {
+                            $ofertamodel = $this->promocion_model->dar_oferta($id_oferta);
+                            if ($ofertamodel->dco_feria != 0):
+                                $precio = $ofertamodel->precio;
+                                $iva = round($ofertamodel->iva);
+                                $dco = $ofertamodel->dco_feria;
+                                $base = $precio - $iva;
+                                $ivaPorce = $iva / $base;
+                                $valorDco = $base * ((100 - $dco) / 100);
+                                $precionConDco = ($valorDco * (1 + $ivaPorce));
+                                $total += $precionConDco;
+                            else:
+                                $total += $ofertamodel->precio;
+                            endif;
+                        }
+                    endforeach;
 
-                $id_carrito = $this->usuario_model->agregar_carrito_compras($usuario->id_usuario, 'Transacción aprobada', round($total), $nombres, $lugar, $telefono, $direccion, $correo, $documento, $carro, $placa, $fecha_pago);
-                foreach ($id_ofertas as $index => $id_oferta):
-                    if ($id_oferta != 0)
-                        $this->usuario_model->agregar_carrito_compras_ofertas($id_carrito, $id_oferta, 1);
-                endforeach;
+                    $id_carrito = $this->usuario_model->agregar_carrito_compras($usuario->id_usuario, 'Transacción aprobada', round($total), $nombres, $lugar, $telefono, $direccion, $correo, $documento, $carro, $placa, $fecha_pago);
+                    foreach ($id_ofertas as $index => $id_oferta):
+                        if ($id_oferta != 0)
+                            $this->usuario_model->agregar_carrito_compras_ofertas($id_carrito, $id_oferta, 1);
+                    endforeach;
 
-                $this->refventa_model->agregar_RefVenta($refVenta, $id_carrito);
-                $reciboTemp = $this->_generar_recibo($refVenta);
+                    $this->refventa_model->agregar_RefVenta($refVenta, $id_carrito);
+                    $reciboTemp = $this->_generar_recibo($refVenta);
 
-                $recibo_model = new recibo_model();
-                $recibo_model->id_consecutivo_recibo = $reciboTemp['consecutivo'];
-                $recibo_model->id_pipeline = $id_pipeline;
-                $recibo_model->url = $reciboTemp['url'];
-                $recibo_model->insertar();
-                echo json_encode(array('status' => true));
-            }
+                    $recibo_model = new recibo_model();
+                    $recibo_model->id_consecutivo_recibo = $reciboTemp['consecutivo'];
+                    $recibo_model->id_pipeline = $id_pipeline;
+                    $recibo_model->url = $reciboTemp['url'];
+                    $recibo_model->insertar();
+                    echo json_encode(array('status' => true));
+                }
+            }else{
+                echo $respuestaRequest;
+            } 
         }else{
         echo json_encode(array('status' => false, 'msg' => 'Debes iniciar sesión como administrador'));
         }
@@ -613,6 +634,13 @@ class Facturacion extends CI_Controller {
         $fileName = 'recibo-' . $refVenta . '.pdf';
         $this->pdf->Output($filePath . $fileName, 'F');
         send_mail($destinatarios, "Recibo de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName, $filePath);
+
+        //METODOS DE DROPBOX
+        $DropboxPath = '/CARPETA MAESTRA/RECIBOS LP/'.date('Y').'/';
+        $metadata = $this->dropbox->metadata($DropboxPath);
+        if(!$metadata->is_dir)
+            $this->dropbox->create_folder($DropboxPath);
+        $addResponse = $this->dropbox->add($DropboxPath, $filePath.$fileName);
         return array('consecutivo' => $consecutivo, 'url' =>$filePath.$fileName, 'refventa' => $refVenta);
     }
 

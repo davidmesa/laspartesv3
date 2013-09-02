@@ -879,16 +879,26 @@ function generar_orden_compra(elem){
 	    'id_usuario': '<?php echo $id_usuario;?>'
 	    },success: function(data){
 	    	var data = $.parseJSON(data);
-	    	var div = $('<div>').addClass('alert').addClass('alert-success');
-	    	var btn = $('<button>').attr('type', 'button').addClass('close').attr('data-dismiss', 'alert').html('&times;');
-	    	var a = $('<a>').attr('href','<?php echo base_url();?>'+'resources/ordenCompra/'+data.pdf).attr('target','_blank').text(data.pdf);
-	    	div.append(btn);
-	    	div.append('La orden de compra fue generáda. ');
-	    	div.append(a);
-	    	$('body').prepend(div);
-	    	$(div).show();
-	    	$('.modal-orden-compra').has(elem).modal('hide');
-	    	agregar_a_ordenes_compra(data.id, data.pdf);
+	    	console.log(data);
+	    	if(data.status){
+		    	var div = $('<div>').addClass('alert').addClass('alert-success');
+		    	var btn = $('<button>').attr('type', 'button').addClass('close').attr('data-dismiss', 'alert').html('&times;');
+		    	var a = $('<a>').attr('href','<?php echo base_url();?>'+'resources/ordenCompra/'+data.pdf).attr('target','_blank').text(data.pdf);
+		    	div.append(btn);
+		    	div.append('La orden de compra fue generáda. ');
+		    	div.append(a);
+		    	$('body').prepend(div);
+		    	$(div).show();
+		    	$('.modal-orden-compra').has(elem).modal('hide');
+		    	agregar_a_ordenes_compra(data.id, data.pdf);
+	    	}else if(!data.status && !isEmpty(data.dbsesion)){
+	    		$('body').prepend('<div class="alert alert-danger" style="display: block;"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.dbsesion+' <a href="'+data.dburl+'" target="_blank">'+data.dburl+'</a></div>');
+	    		$('.modal').modal('hide');
+	    		$("body").scrollTop(0);
+	    	}else{
+	    		$('body').prepend(data.msg);
+	    		$("body").scrollTop(0);
+	    	}
 	    },error: function(XMLHttpRequest, textStatus, errorThrown){
 	    	mostrar_alerta('msjError');
 	    	$('.modal-orden-compra').has(elem).modal('hide');
@@ -911,16 +921,20 @@ function anular(id, elem){
 	    	'id': id,
 		    },success: function(data){
 		    	var data = $.parseJSON(data);
-		    	if(data.status == false)
-		        	alert(data.msg);
-		        else{
+		    	if(data.status == true){
 		        	var td = $('td').has(elem);
 		        	$(td).html('<span>Anulada</span>');
 		        	var td2 = $(td).prev(td);
 		        	var pdf = $('a', td2).text();
 		        	var split = pdf.split(".pdf");
 		        	$('a', td2).text(split[0]+'-anulado.pdf').attr('href', '<?php echo base_url()?>resources/ordenCompra/'+split[0]+'-anulado.pdf');
-		        }
+		        }else if(!data.status && !isEmpty(data.dbsesion)){
+		    		$('body').prepend('<div class="alert alert-danger" style="display: block;"><button type="button" class="close" data-dismiss="alert">&times;</button>'+data.dbsesion+' <a href="'+data.dburl+'" target="_blank">'+data.dburl+'</a></div>');
+		    		$('.modal').modal('hide');
+		    		$("body").scrollTop(0);
+		    	}else{
+		    		alert(data.msg);
+		    	}
 		    },error: function(XMLHttpRequest, textStatus, errorThrown){
 		    	mostrar_alerta('msjError');
 		    	$('.modal-orden-compra').has(elem).modal('hide');
@@ -942,7 +956,7 @@ function agregar_a_ordenes_compra(id, pdf){
 	var a = $('<a>').attr('href', '<?php echo base_url()?>resources/ordenCompra/'+pdf).attr('target', '_blank').text(pdf);
 	var td2 = $('<td>').append(a);
 	var td3 =$('<td>');
-	var button = $('<button>').addClass('btn').addClass('btn-link').attr('onclick', 'anular('+id+')').text('Anular'); 
+	var button = $('<button>').addClass('btn').addClass('btn-link').attr('onclick', 'anular('+id+', this)').text('Anular'); 
 	td3.append(button);
 	tr.append(td1);
 	tr.append(td2);
@@ -962,6 +976,10 @@ function cancelar(){
 	if (answer){
 		window.location = '<?php echo base_url()."operacion/cotizaciones/mostrar_cotizaciones/".$id_pipeline."/".$id_usuario;?>';
 	}
+}
+
+function isEmpty(str) {
+    return (!str || 0 === str.length);
 }
 
 //crea un array bi-dimensional

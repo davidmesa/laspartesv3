@@ -123,6 +123,25 @@ class Promocion_model extends CI_Model{
         $query = $this->db->get('establecimientos_ofertas');
         return $query->row(0);
     }
+
+    function dar_oferta_sin_vigencia($id_oferta){
+        $this->db->escape($id_oferta);
+        $this->db->select('oferta.id_oferta AS id_oferta,  oferta.titulo AS titulo, oferta.foto AS foto, oferta.plazo_uso AS plazo, oferta.margenLP,
+                oferta.precio AS precio, oferta.iva AS iva, oferta.dco_feria AS dco_feria,oferta.condiciones AS condiciones, oferta.incluye AS incluye, oferta.descripcion AS descripcion, 
+                oferta.vigencia AS vigencia, establecimientos_ofertas.id_establecimiento as id_establecimiento, establecimientos.telefonos AS telefonos,
+                establecimientos.nombre as establecimientoNombre, establecimientos.descripcion as establecimientoDescripcion, establecimientos.id_establecimiento,
+                establecimientos.direccion as direccion, establecimientos.logo_thumb_url as logo, establecimientos.web AS web,
+                count(distinct(establecimientos_comentarios.id_establecimiento_comentario)) as num_comentarios, 
+                avg(establecimientos_comentarios.calificacion) as calificacion');
+        $this->db->join('oferta','establecimientos_ofertas.id_oferta = oferta.id_oferta');
+        $this->db->join('servicios_categoria','establecimientos_ofertas.id_servicios_categoria = servicios_categoria.id_servicios_categoria');
+        $this->db->join('establecimientos','establecimientos_ofertas.id_establecimiento = establecimientos.id_establecimiento');
+        $this->db->join('establecimientos_comentarios', 'establecimientos_comentarios.id_establecimiento = establecimientos_ofertas.id_establecimiento', 'left');
+        $this->db->where('oferta.id_oferta', $id_oferta);
+        $this->db->group_by('oferta.id_oferta');
+        $query = $this->db->get('establecimientos_ofertas');
+        return $query->row(0);
+    }
     
     /**
      * Da los vehículos asociados a una autoparte
