@@ -15,6 +15,7 @@ class Facturacion extends Dropbox_Controller {
         $this->load->model('operacion/factura_model');
         $this->load->model('operacion/recibo_model');
         $this->load->model('operacion/link_pago_model');
+        $this->load->model('operacion/prov_cotizacion_link_pago_model');
         // error_reporting(E_ALL);
     }
 
@@ -206,7 +207,7 @@ class Facturacion extends Dropbox_Controller {
                     $total = 0;
                     foreach ($id_ofertas as $index => $id_oferta):
                         if ($id_oferta != 0) {
-                            $ofertamodel = $this->promocion_model->dar_oferta($id_oferta);
+                            $ofertamodel = $this->promocion_model->dar_oferta_sin_vigencia($id_oferta);
                             if ($ofertamodel->dco_feria != 0):
                                 $precio = $ofertamodel->precio;
                                 $iva = round($ofertamodel->iva);
@@ -263,6 +264,15 @@ class Facturacion extends Dropbox_Controller {
         $venta = $this->refventa_model->dar_venta($refVenta);
         $autopartes = $this->usuario_model->dar_carrito_compra_autopartes($venta->id_carrito_compra);
         $ofertas = $this->usuario_model->dar_carrito_compra_ofertas($venta->id_carrito_compra);
+        foreach ($ofertas as $index => $oferta) {
+            $link_pago_model = new link_pago_model();
+            $link_pago_model->id_oferta = $oferta->id_oferta;
+            $link_pago_model->dar_por_oferta();
+            $prov_cotizacion_link_pago_model = new prov_cotizacion_link_pago_model();
+            $pclpm = $prov_cotizacion_link_pago_model->dar_todos_filtros(array('id_link_pago' => $link_pago_model->id));
+            $ofertas[$index]->prov_cotizacion_link_pago_model = $pclpm;
+            $ofertas[$index]->link_pago_model = $link_pago_model;
+        }
         $consecutivo = $this->usuario_model->agregar_consecutivo_compra($venta->id_carrito_compra);
         $valorSum = 0;
         $ivaSum = 0;
@@ -272,7 +282,7 @@ class Facturacion extends Dropbox_Controller {
         $data1['consecutivo'] = $consecutivo;
 
         
-        $html = $this->load->view('factura/factura_pdf_view', $data1, true);
+        $html = $this->load->view('factura/factura_pdf_offline_view', $data1, true);
 
         $destinatario = new stdClass();
         $destinatario->email = $venta->email;
@@ -293,6 +303,7 @@ class Facturacion extends Dropbox_Controller {
         $this->load->view('emails/recibo_compra_view', $data1);
         $contenidoHTML = ob_get_contents();
         ob_end_clean();
+
         
         $filePath = 'resources/facturas/';
         $fileName = 'factura-' . $refVenta . '.pdf';
@@ -404,7 +415,7 @@ class Facturacion extends Dropbox_Controller {
                     $total = 0;
                     foreach ($id_ofertas as $index => $id_oferta):
                         if ($id_oferta != 0) {
-                            $ofertamodel = $this->promocion_model->dar_oferta($id_oferta);
+                            $ofertamodel = $this->promocion_model->dar_oferta_sin_vigencia($id_oferta);
                             if ($ofertamodel->dco_feria != 0):
                                 $precio = $ofertamodel->precio;
                                 $iva = round($ofertamodel->iva);

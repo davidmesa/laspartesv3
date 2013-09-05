@@ -140,7 +140,7 @@ $(document).ready(function() {
 function format_number(elem){
 	if($(elem).val() !== ""){
 		var numero = numeral().unformat($(elem).val());
-		$(elem).val(numeral(numero).format('0,0'));	
+		$(elem).val(numeral(numero).format('0,0.00'));	
 	}
 }
 
@@ -156,10 +156,14 @@ function crearLink(){
 		var margen = numeral().unformat($('#margen').val());
 	var vigencia = $('#vigencia').val();
 	var plazo = $('#plazo').val();
+	var iconDescuento = $('#descuento').next('.input-group-addon').text();
+	if(iconDescuento === '$')
+		fix_descuento($('#descuento').next('.input-group-addon'));
 	var descuento = $('#descuento').val();
 	var condiciones = $('#condiciones').val();
 	var incluye = $('#incluye').val();
 	var categoria_otra = $('#otro').val();
+	var motivo = $('#motivo').val();
 	var mySelections = [];
     $('#categoria option').each(function(i) {
         if (this.selected == true) {
@@ -195,6 +199,7 @@ function crearLink(){
 	    	'iva': iva,
 	    	'margen': margen,
 	    	'descuento': descuento,
+	    	'motivo': motivo,
 	    	'vigencia': vigencia,
 	    	'plazo': plazo,
 	    	'condiciones': condiciones,
@@ -228,5 +233,26 @@ function crearLink(){
 function cancelar(){
 	if(confirm('¿Está seguro de que desea cancelar el formulario?'))
 		window.location = '<?php echo base_url()."operacion/linkPago/mostrar_links/".$id_pipeline."/".$id_usuario;?>'
+}
+
+//cambia el descuento de % a valor y viceversa
+function fix_descuento(elem){
+	if($(elem).text() === '%'){
+		$(elem).text('$');
+		var precio = parseFloat($('#precio').val());
+		var iva = parseFloat($('#iva').val());
+		var base = parseFloat(precio - iva);
+		var dcto = numeral().unformat($('#descuento').val());
+		var valorDcto = base*(dcto/100);
+		$('#descuento').val(numeral(valorDcto).format('0,0.00'));
+	}else if($(elem).text() === '$'){
+		$(elem).text('%');
+		var precio = parseFloat($('#precio').val());
+		var iva = parseFloat($('#iva').val());
+		var base = parseFloat(precio - iva);
+		var valorDcto = numeral().unformat($('#descuento').val());
+		var dcto = (valorDcto/base)*100;
+		$('#descuento').val(numeral(dcto).format('0,0.00'));
+	}
 }
 </script>

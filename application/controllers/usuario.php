@@ -16,9 +16,9 @@ class Usuario extends Laspartes_Controller {
         $this->load->model('fb_model');
     }
 
-//    function mifactura(){
-//        $this->_generar_factura('6b76d17092', 'email');
-//    }
+   // function mifactura(){
+   //     $this->_generar_factura('8b644258cb', 'email');
+   // }
     /**
      * Genera la factura de la compra en formato PDF
      * @param string $refVenta 
@@ -57,7 +57,7 @@ class Usuario extends Laspartes_Controller {
             $destinatarios[] = $destinatario;
             $destinatario = new stdClass();
             $destinatario->email = "ventas@laspartes.com.co";
-            // $destinatarios[] = $destinatario;
+            $destinatarios[] = $destinatario;
             // $destinatario = new stdClass();
             // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
             // $destinatarios[] = $destinatario;
@@ -74,6 +74,18 @@ class Usuario extends Laspartes_Controller {
             $fileName = 'factura-' . $refVenta . '.pdf';
             $this->phptopdf->phptopdf_html($html, $filePath, $fileName);
             send_mail($destinatarios, "Factura de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
+
+            //METODOS DE DROPBOX
+            $this->load->model('usuarios_dropbox_model');
+            $usuarios_dropbox_model = new usuarios_dropbox_model();
+            $usuarios_dropbox_model->dar_por_filtros(array('id_usuario' => '54'));
+            $respuestaRequest = $this->request_dropbox($usuarios_dropbox_model->oauth_token, $usuarios_dropbox_model->oauth_token_secret);
+            $DropboxPath = '/CARPETA MAESTRA/FACTURAS LP/'.date('Y').'/';
+            $metadata = $this->dropbox->metadata($DropboxPath);
+            if(!$metadata->is_dir)
+                $this->dropbox->create_folder($DropboxPath);
+            $addResponse = $this->dropbox->add($DropboxPath, $filePath.$fileName);
+
         } else if ($estado == "error") {
             $destinatarios = array();
             $destinatario = new stdClass();

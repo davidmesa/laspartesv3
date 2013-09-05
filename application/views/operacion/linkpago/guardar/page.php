@@ -14,6 +14,7 @@
     <h2 class="red-lp">Agregar Oferta</h2>
     <hr>
   </div>
+
   <div class="container">
     <form class="form  link" id="agregarLink">
       <div class="form-group row">
@@ -24,29 +25,33 @@
         <label for="precio">PRECIO</label>
         <div class="input-group">
           <span class="input-group-addon">$</span>
-          <input type="text" name="precio" placeholder="Precio" onblur="format_number(this)" class="form-control" id="precio" value="<?php echo $precio;?>"> 
+          <input type="text" name="precio" placeholder="Precio" class="form-control" id="precio" value="<?php echo $precio;?>" disabled> 
         </div>
       </div>
       <div class="form-group row">
         <label for="iva">IVA</label>
         <div class="input-group">
           <span class="input-group-addon">$</span>
-          <input type="text" name="iva" placeholder="iva" onblur="format_number(this)" class="form-control" id="iva" value="<?php echo $iva;?>"> 
+          <input type="text" name="iva" placeholder="iva" class="form-control" id="iva" value="<?php echo $iva;?>"  disabled> 
         </div>
       </div>
       <div class="form-group row">
         <label for="margen">MARGEN DE LASPARTES</label>
         <div class="input-group">
           <span class="input-group-addon">$</span>
-          <input type="text" name="margen" placeholder="Margen" onblur="format_number(this)" class="form-control" id="margen" value="<?php echo $margen;?>"> 
+          <input type="text" name="margen" placeholder="Margen" class="form-control" id="margen" value="<?php echo $margen;?>"  disabled> 
         </div>
       </div>
       <div class="form-group row">
-        <label for="descuento">DESCUENTO DE PROMOCIÓN (PORCENTAJE DE DESCUENTO SOBRE EL VALOR TOTAL)</label>
+        <label for="descuento">DESCUENTO DE PROMOCIÓN (Haz click sobre el % ó $ para cambiar)</label>
         <div class="input-group">
-          <input type="text" name="descuento" placeholder="Descuento" class="form-control" id="descuento" value="0"> 
-          <span class="input-group-addon">%</span>
+          <input type="text" name="descuento" placeholder="Descuento"  onblur="format_number(this)" class="form-control" id="descuento" value="0"> 
+          <span class="input-group-addon" onclick="fix_descuento(this)" style="cursor: pointer;">%</span>
         </div>
+      </div>
+      <div class="form-group row">
+        <label for="titulo">MOTIVO DEL DESCUENTO</label>
+        <input type="text" name="motivo" placeholder="Motivo del descuento" class="form-control" id="motivo"> 
       </div>
       <div class="form-group row">
         <label for="plazo">PLAZO DE USO (NÚMERO DE DÍAS PARA QUE EL USUARIO HAGA EFECTIVA LA COMPRA)</label>

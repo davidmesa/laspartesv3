@@ -42,6 +42,18 @@ class link_pago_model extends CI_Model
     }
 
     /**
+     * da un dato según la oferta
+     * @return id
+     */
+    function dar_por_oferta() {
+        $this->db->where('id_oferta', $this->id_oferta);
+        $query = $this->db->get('op_link_pago', 1);
+        foreach ($query->row(0) as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
+    /**
      * actualizar dato
      * @return [type] [description]
      */

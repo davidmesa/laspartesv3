@@ -564,7 +564,7 @@ class Usuario_model extends CI_Model {
     function dar_carrito_compra_ofertas($id_carrito_compra) {
         $this->db->escape($id_carrito_compra);
         $this->db->select('cantidad, precio, oferta.titulo , oferta.descripcion, oferta.incluye, oferta.plazo_uso, oferta.iva, oferta.dco_feria,
-            oferta.condiciones, oferta.id_oferta, establecimientos.nombre AS establecimiento,
+            oferta.condiciones, oferta.id_oferta, motivo_dco, establecimientos.nombre AS establecimiento,
             establecimientos.direccion, establecimientos.telefonos, establecimientos.email');
         $this->db->join('oferta', 'oferta.id_oferta = carritos_compras_ofertas.id_oferta');
         $this->db->join('establecimientos_ofertas', 'oferta.id_oferta = establecimientos_ofertas.id_oferta');

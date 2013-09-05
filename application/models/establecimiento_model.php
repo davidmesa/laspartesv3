@@ -153,7 +153,7 @@ class Establecimiento_model extends CI_Model{
      * @param type $id_establecimiento
      * @param type $categorias 
      */ 
-    function actualizar_oferta($titulo, $precio, $condiciones, $incluye, $categorias, $id_oferta, $id_establecimiento, $vehiculos, $vigencia, $descripcion, $iva, $margen, $descuento, $plazo, $imagen = ''){
+    function actualizar_oferta($titulo, $precio, $condiciones, $incluye, $categorias, $id_oferta, $id_establecimiento, $vehiculos, $vigencia, $descripcion, $iva, $margen, $descuento, $plazo, $imagen = '', $motivo = ''){
         $this->db->escape($titulo);
         $this->db->escape($precio);
         $this->db->escape($condiciones);
@@ -173,6 +173,7 @@ class Establecimiento_model extends CI_Model{
         $this->db->set('iva', $iva);
         $this->db->set('margenLP', $margen);
         $this->db->set('dco_feria', $descuento);
+        $this->db->set('motivo_dco', $motivo);
         $this->db->set('plazo_uso', $plazo);
         $this->db->set('condiciones', $condiciones);
         $this->db->set('incluye', $incluye);
@@ -440,7 +441,7 @@ class Establecimiento_model extends CI_Model{
      * @param type $condiciones
      * @param type $incluye 
      */
-    function agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, $descripcion, $iva, $margen, $descuento , $plazo, $imagen = ''){
+    function agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, $descripcion, $iva, $margen, $descuento , $plazo, $imagen = '', $motivo = ''){
         $this->db->escape($titulo);
         $this->db->escape($precio);
         $this->db->escape($condiciones);
@@ -465,6 +466,7 @@ class Establecimiento_model extends CI_Model{
         $this->db->set('incluye', $incluye);
         $this->db->set('vigencia', $vigencia);
         $this->db->set('descripcion', $descripcion);
+        $this->db->set('motivo_dco', $motivo);
         if($imagen != '')
             $this->db->set('foto', $imagen);
         $this->db->insert('oferta');

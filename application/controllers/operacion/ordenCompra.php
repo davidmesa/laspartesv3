@@ -14,7 +14,7 @@ class OrdenCompra extends Dropbox_Controller {
         parent::__construct();
         $this->load->model('operacion/orden_compra_model');
         $this->load->model('operacion/item_orden_compra_model');
-        // error_reporting(E_ALL);
+        error_reporting(E_ALL);
     }
 
     function index() {

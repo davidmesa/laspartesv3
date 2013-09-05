@@ -25,29 +25,33 @@
         <label for="precio">PRECIO</label>
         <div class="input-group">
           <span class="input-group-addon">$</span>
-          <input type="text" name="precio" placeholder="Precio" onblur="format_number(this)" class="form-control" id="precio" value="<?php echo $oferta->precio;?>"> 
+          <input type="text" name="precio" placeholder="Precio" onblur="format_number(this)" class="form-control" id="precio" value="<?php echo number_format($oferta->precio, 0, ',', '.');?>" disabled> 
         </div>
       </div>
       <div class="form-group row">
         <label for="iva">IVA</label>
         <div class="input-group">
           <span class="input-group-addon">$</span>
-          <input type="text" name="iva" placeholder="iva" onblur="format_number(this)" class="form-control" id="iva" value="<?php echo $oferta->iva;?>"> 
+          <input type="text" name="iva" placeholder="iva" onblur="format_number(this)" class="form-control" id="iva" value="<?php echo number_format($oferta->iva, 2, ',', '.');;?>" disabled> 
         </div>
       </div>
       <div class="form-group row">
         <label for="margen">MARGEN DE LASPARTES</label>
         <div class="input-group">
           <span class="input-group-addon">$</span>
-          <input type="text" name="margen" placeholder="Margen" onblur="format_number(this)" class="form-control" id="margen" value="<?php echo $oferta->margenLP;?>"> 
+          <input type="text" name="margen" placeholder="Margen" onblur="format_number(this)" class="form-control" id="margen" value="<?php echo number_format($oferta->margenLP, 2, ',', '.');?>" disabled> 
         </div>
       </div>
       <div class="form-group row">
-        <label for="descuento">DESCUENTO DE PROMOCIÓN (PORCENTAJE DE DESCUENTO SOBRE EL VALOR TOTAL)</label>
+        <label for="descuento">DESCUENTO DE PROMOCIÓN (Haz click sobre el % ó $ para cambiar)</label>
         <div class="input-group">
-          <input type="text" name="descuento" placeholder="Descuento" class="form-control" id="descuento" value="<?php echo $oferta->dco_feria;?>"> 
-          <span class="input-group-addon">%</span>
+          <input type="text" name="descuento" placeholder="Descuento"  onblur="format_number(this)" class="form-control" id="descuento" value="<?php echo  number_format($oferta->dco_feria, 2, ',', '.');?>"> 
+          <span class="input-group-addon" onclick="fix_descuento(this)" style="cursor: pointer;">%</span>
         </div>
+      </div>
+      <div class="form-group row">
+        <label for="titulo">MOTIVO DEL DESCUENTO</label>
+        <input type="text" name="motivo" placeholder="Motivo del descuento" class="form-control" id="motivo"  value="<?php echo $oferta->motivo_dco;?>"> 
       </div>
       <div class="form-group row">
         <label for="plazo">PLAZO DE USO (NÚMERO DE DÍAS PARA QUE EL USUARIO HAGA EFECTIVA LA COMPRA)</label>

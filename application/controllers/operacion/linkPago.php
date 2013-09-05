@@ -84,19 +84,21 @@ class LinkPago extends CI_Controller {
                 $PC_model->item = $PC_model->dar_item_cotizacion();
                 $proveedores_cotizacion[] = $PC_model;
                 $titulo .= $PC_model->item->cantidad.' '.$PC_model->item->item.', ';
-                $precioTemp = $PC_model->item->cantidad*($PC_model->lp_valor*(1+($PC_model->item->margen/100)));
+                $precioTemp = round($PC_model->item->cantidad*($PC_model->lp_valor*(1+($PC_model->item->margen/100))));
                 $precio += $precioTemp;
-                $iva += $precioTemp - ( $precioTemp/ (1 + ($PC_model->iva/100) ) );
+                $ivaTemp = $precioTemp - ( $precioTemp/ (1 + ($PC_model->iva/100) ) );
+                $iva += $ivaTemp;
                 $baseLP = $PC_model->lp_valor/(1+($PC_model->iva/100))*$PC_model->item->cantidad;
                 $margen += $baseLP*($PC_model->item->margen/100);
+
             }
 
-            $data['precio'] = number_format(round($precio), 0, ',', '.');
+            $data['precio'] = number_format($precio, 0, ',', '.');
             $titulo = substr($titulo, 0, -2);
             $titulo.= ' por $'.$data['precio'];
             $data['titulo'] = $titulo;
-            $data['iva'] = number_format(round($iva), 0, ',', '.');
-            $data['margen'] = number_format(round($margen), 0, ',', '.');
+            $data['iva'] = number_format($iva, 2, ',', '.');
+            $data['margen'] = number_format($margen, 2, ',', '.');
             $data['proveedores_cotizacion'] = $proveedores_cotizacion;
             $data['servicios'] = $this->generico_model->dar_registros('servicios_categoria');
             $allvehiculos = $this->vehiculo_model->dar_vehiculos();
@@ -126,7 +128,7 @@ class LinkPago extends CI_Controller {
             $link_pago_model->id = $id_link;
             $link_pago_model->dar();
             $data['link_pago'] = $link_pago_model;
-            $data['oferta'] = $this->promocion_model->dar_oferta($id_oferta);
+            $data['oferta'] = $this->promocion_model->dar_oferta_sin_vigencia($id_oferta);
             $allvehiculos = $this->vehiculo_model->dar_vehiculos();
 
             $temp_where[] = 'id_oferta';
@@ -217,7 +219,7 @@ class LinkPago extends CI_Controller {
                 ), array(
                     'field' => 'descuento',
                     'label' => 'descuento de promoción',
-                    'rules' => 'trim|required|numeric|xss_clean'
+                    'rules' => 'trim|required|xss_clean'
                 ), array(
                     'field' => 'categoria',
                     'label' => 'categoria',
@@ -272,6 +274,7 @@ class LinkPago extends CI_Controller {
                 $iva = $this->input->post('iva', TRUE);
                 $margen = $this->input->post('margen', TRUE);
                 $descuento = $this->input->post('descuento', TRUE);
+                $motivo = $this->input->post('motivo', TRUE);
                 $plazo = $this->input->post('plazo', TRUE);
                 $incluye = $this->input->post('incluye', TRUE);
                 $categorias = explode(',', $this->input->post('categoria', TRUE));
@@ -297,14 +300,14 @@ class LinkPago extends CI_Controller {
 
                 if ($this->upload->do_upload('imagen')) {
                     $img = $this->upload->data();
-                    $id = $this->establecimiento_model->agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo, $upload_path . $img['file_name']);
+                    $id = $this->establecimiento_model->agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo, $upload_path . $img['file_name'], $motivo);
                     $url = 'promociones/' . $id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
                 } else {
                     if (!$imagen) {
-                        $id = $this->establecimiento_model->agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo);
+                        $id = $this->establecimiento_model->agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo, '', $motivo);
                         $url = 'promociones/' . $id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
                     } else {
-                        $id = $this->establecimiento_model->agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo);
+                        $id = $this->establecimiento_model->agregar_oferta($titulo, $precio, $condiciones, $incluye, $id_establecimiento, $categorias, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo, '', $motivo);
                         $url = 'promociones/' . $id . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
                     }
                 }
@@ -317,9 +320,23 @@ class LinkPago extends CI_Controller {
                 $link_pago_model->insertar();
 
                 foreach ($id_proveedor_cotizacion as $value) {
+                    $PC_model = new proveedor_cotizacion_model();
+                    $PC_model->id = $value;
+                    $PC_model->dar();
+                    $PC_model->item = $PC_model->dar_item_cotizacion();
+
+                    $precioTemp = round($PC_model->lp_valor*(1+($PC_model->item->margen/100)));
+                    $iva = round($precioTemp - ( $precioTemp/ (1 + ($PC_model->iva/100) ) ), 2);
+                    $base = $precioTemp - $iva;
+
                     $prov_cotizacion_link_pago_model = new prov_cotizacion_link_pago_model();
                     $prov_cotizacion_link_pago_model->id_link_pago = $link_pago_model->id;
                     $prov_cotizacion_link_pago_model->id_proveedor_cotizacion = $value;
+                    $prov_cotizacion_link_pago_model->item = $PC_model->item->item;
+                    $prov_cotizacion_link_pago_model->base = $base;
+                    $prov_cotizacion_link_pago_model->iva = $iva;
+                    $prov_cotizacion_link_pago_model->valor = $precioTemp;
+                    $prov_cotizacion_link_pago_model->cantidad = $PC_model->item->cantidad;
                     $prov_cotizacion_link_pago_model->insertar();
                 }
 
@@ -344,6 +361,9 @@ class LinkPago extends CI_Controller {
                 $destinatario = new stdClass();
                 $destinatario->email = "ventas@laspartes.com.co";
                 $destinatarios[] = $destinatario;
+                // $destinatario = new stdClass();
+                // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
+                // $destinatarios[] = $destinatario;
                 $this->load->helper('mail');
                 send_mail($destinatarios, "Link de pago - LasPartes.com", $html, "");
                 echo json_encode(array('status' => true));
@@ -388,7 +408,7 @@ class LinkPago extends CI_Controller {
                 ), array(
                     'field' => 'descuento',
                     'label' => 'descuento de promoción',
-                    'rules' => 'trim|required|numeric|xss_clean'
+                    'rules' => 'trim|required|xss_clean'
                 ), array(
                     'field' => 'categoria',
                     'label' => 'categoria',
@@ -442,6 +462,7 @@ class LinkPago extends CI_Controller {
                 $iva = $this->input->post('iva', TRUE);
                 $margen = $this->input->post('margen', TRUE);
                 $descuento = $this->input->post('descuento', TRUE);
+                $motivo = $this->input->post('motivo', TRUE);
                 $plazo = $this->input->post('plazo', TRUE);
                 $incluye = $this->input->post('incluye', TRUE);
                 $categorias = explode(',', $this->input->post('categoria', TRUE));
@@ -467,14 +488,14 @@ class LinkPago extends CI_Controller {
 
                 if ($this->upload->do_upload('imagen')) {
                     $img = $this->upload->data();
-                    $this->establecimiento_model->actualizar_oferta($titulo, $precio, $condiciones, $incluye, $categorias, $id_oferta, $id_establecimiento, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo, $upload_path . $img['file_name']);
+                    $this->establecimiento_model->actualizar_oferta($titulo, $precio, $condiciones, $incluye, $categorias, $id_oferta, $id_establecimiento, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo, $upload_path . $img['file_name'], $motivo);
                     $url = 'promociones/' . $id_oferta . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
                 } else {
                     if (!$imagen) {
-                        $this->establecimiento_model->actualizar_oferta($titulo, $precio, $condiciones, $incluye, $categorias, $id_oferta, $id_establecimiento, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo);
+                        $this->establecimiento_model->actualizar_oferta($titulo, $precio, $condiciones, $incluye, $categorias, $id_oferta, $id_establecimiento, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo, '', $motivo);
                         $url = 'promociones/' . $id_oferta . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
                     } else {
-                        $this->establecimiento_model->actualizar_oferta($titulo, $precio, $condiciones, $incluye, $categorias, $id_oferta, $id_establecimiento, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo);
+                        $this->establecimiento_model->actualizar_oferta($titulo, $precio, $condiciones, $incluye, $categorias, $id_oferta, $id_establecimiento, $vehiculos, $vigencia, '', $iva, $margen, $descuento, $plazo, '', $motivo);
                         $url = 'promociones/' . $id_oferta . '-' . preg_replace(array('/[^a-z0-9-]/i', '/[ ]{2,}/', '/[ ]/'), array(' ', ' ', '-'), $titulo);
                     }
                 }

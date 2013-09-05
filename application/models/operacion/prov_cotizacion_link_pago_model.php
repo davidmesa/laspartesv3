@@ -9,6 +9,11 @@ class prov_cotizacion_link_pago_model extends CI_Model
     var $id;
     var $id_link_pago;
     var $id_proveedor_cotizacion;
+    var $item = '';
+    var $base = 0;
+    var $iva = 0;
+    var $valor = 0;
+    var $cantidad = 0;
 
     /**
      * Constructor de la clase oferta link pago
@@ -37,6 +42,30 @@ class prov_cotizacion_link_pago_model extends CI_Model
         foreach ($query->row(0) as $key => $value) {
             $this->$key = $value;
         }
+    }
+
+    /**
+     * da el primer registro que concuerde con los parametros dados
+     * @return id
+     */
+    function dar_por_filtros($params) {
+        foreach ($params as $key => $value)
+            $this->db->where($key, $value);
+        $query = $this->db->get('op_prov_cotizacion_link_pago', 1);
+        foreach ($query->row(0) as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
+    /**
+     * dar todos las ordenes de compra
+     */
+    function dar_todos_filtros($params){
+        foreach ($params as $key => $value) {
+            $this->db->where($key, $value);
+        }
+        $query=$this->db->get('op_prov_cotizacion_link_pago');
+        return $query->result();
     }
 
     /**
