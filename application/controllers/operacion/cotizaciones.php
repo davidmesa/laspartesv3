@@ -322,53 +322,53 @@ class Cotizaciones extends CI_Controller {
         }
     }
 
-    function reindexar_op_proveedor_cotizacion(){
-        $q = $this->db->get('op_proveedor_cotizacion');
-        foreach ($q->result() as $obj) {
-            $nuevoBase =  round($obj->lp_base / (1 + ($obj->iva/100)), 2);
-            $this->db->set('lp_base', $nuevoBase);
-            $this->db->where('id', $obj->id);
-            $this->db->update('op_proveedor_cotizacion');
-        }
-    }
+    // function reindexar_op_proveedor_cotizacion(){
+    //     $q = $this->db->get('op_proveedor_cotizacion');
+    //     foreach ($q->result() as $obj) {
+    //         $nuevoBase =  round($obj->lp_base / (1 + ($obj->iva/100)), 2);
+    //         $this->db->set('lp_base', $nuevoBase);
+    //         $this->db->where('id', $obj->id);
+    //         $this->db->update('op_proveedor_cotizacion');
+    //     }
+    // }
 
-    function reindexar_op_item_cotizacion(){
-        error_reporting(E_ALL);
-        $cotizaciones = $this->cotizacion_model->dar_todos_por_filtros(array());
-        foreach ($cotizaciones as $cotizacion) {
-            $items = $cotizacion->dar_items_cotizacion();
-            foreach ($items as $item) {
-                $proovedores = $item->dar_proveedores_cotizacion();
-                foreach ($proovedores as $proveedor) {
-                    if($proveedor->elegido){
-                        $precio = (1+($item->margen)/100)*($proveedor->lp_base);
-                        $item->precio = $precio;
-                        $item->dco = 0;
-                        $item->precio_sin_dco = $proveedor->lp_base;
-                        print_r('precio: '.$precio.'<br/>');
-                        $item->actualizar();
-                    }
-                }
-            }
-        }
+    // function reindexar_op_item_cotizacion(){
+    //     error_reporting(E_ALL);
+    //     $cotizaciones = $this->cotizacion_model->dar_todos_por_filtros(array());
+    //     foreach ($cotizaciones as $cotizacion) {
+    //         $items = $cotizacion->dar_items_cotizacion();
+    //         foreach ($items as $item) {
+    //             $proovedores = $item->dar_proveedores_cotizacion();
+    //             foreach ($proovedores as $proveedor) {
+    //                 if($proveedor->elegido){
+    //                     $precio = (1+($item->margen)/100)*($proveedor->lp_base);
+    //                     $item->precio = $precio;
+    //                     $item->dco = 0;
+    //                     $item->precio_sin_dco = $proveedor->lp_base;
+    //                     print_r('precio: '.$precio.'<br/>');
+    //                     $item->actualizar();
+    //                 }
+    //             }
+    //         }
+    //     }
 
-    }
+    // }
 
-    function crearProveedores(){
-        $this->db->select('establecimientos.*, zonas.ciudad');
-        $this->db->from('establecimientos');
-        $this->db->join('zonas', 'establecimientos.id_zona = zonas.id_zona');
-        $q = $this->db->get();
+    // function crearProveedores(){
+    //     $this->db->select('establecimientos.*, zonas.ciudad');
+    //     $this->db->from('establecimientos');
+    //     $this->db->join('zonas', 'establecimientos.id_zona = zonas.id_zona');
+    //     $q = $this->db->get();
 
-        foreach ($q->result() as $obj) {
-            // var_dump($obj);
-            $this->db->set('proveedor', $obj->nombre);
-            $this->db->set('email', $obj->email);
-            $this->db->set('direccion', $obj->direccion);
-            $this->db->set('ciudad', $obj->ciudad);
-            $this->db->set('telefono', $obj->telefonos);
-            $this->db->insert('op_proveedores');
-        }
-    }
+    //     foreach ($q->result() as $obj) {
+    //         // var_dump($obj);
+    //         $this->db->set('proveedor', $obj->nombre);
+    //         $this->db->set('email', $obj->email);
+    //         $this->db->set('direccion', $obj->direccion);
+    //         $this->db->set('ciudad', $obj->ciudad);
+    //         $this->db->set('telefono', $obj->telefonos);
+    //         $this->db->insert('op_proveedores');
+    //     }
+    // }
 
 }
