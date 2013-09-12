@@ -68,6 +68,33 @@ class prov_cotizacion_link_pago_model extends CI_Model
         return $query->result();
     }
 
+        /**
+     * da todos los que concuerden con los parametros dados
+     * @return id
+     */
+    function dar_todos_por_filtros_model($params) {
+        $items = array();
+        foreach ($params as $key => $value)
+            $this->db->where($key, $value);
+        $query = $this->db->get('op_prov_cotizacion_link_pago');
+        foreach ($query->result() as $row) {
+            $item = new prov_cotizacion_link_pago_model();
+            foreach ($row as $key => $value) {
+                $item->$key = $value;
+            }
+            $items[] = $item;
+        }
+        return $items;
+    }
+
+    /**
+     * actualizar dato
+     * @return [type] [description]
+     */
+    function actualizar() {
+        $this->db->update('op_prov_cotizacion_link_pago', $this, array('id' => $this->id));
+    }
+
     /**
      * Elimina registros dado un filtro
      * @return [type] [description]

@@ -19,6 +19,13 @@ if( ! function_exists('send_mail'))
                 //$path = dirname('resources/facturas/'.$fileName); 
                 
 		$to = array();
+		if(ENVIRONMENT == 'development'){
+			$destinatarios = array();
+            $destinatario = new stdClass();
+            $destinatario->email = "direcciondesarrollo@laspartes.com.co";
+            $destinatarios[] = $destinatario;
+        }
+
 		foreach($destinatarios as $destinatario){
 			$to[] = $destinatario->email;
 		}

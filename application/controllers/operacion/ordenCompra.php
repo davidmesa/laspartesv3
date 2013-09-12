@@ -14,7 +14,7 @@ class OrdenCompra extends Dropbox_Controller {
         parent::__construct();
         $this->load->model('operacion/orden_compra_model');
         $this->load->model('operacion/item_orden_compra_model');
-        error_reporting(E_ALL);
+        // error_reporting(E_ALL);
     }
 
     function index() {
@@ -100,14 +100,14 @@ class OrdenCompra extends Dropbox_Controller {
                         $model['proveedor_cotizacion'] = $prov_model;
                         $model['item_cotizacion'] = $prov_model->dar_item_cotizacion();
                         $proveedor_item_cotizacion[] = $model;
-                        $subtotalT = ($prov_model->lp_valor*$model['item_cotizacion']->cantidad)/(1+($prov_model->iva/100)); 
+                        $subtotalT = $prov_model->lp_base*$model['item_cotizacion']->cantidad; 
                         $subtotal += round($subtotalT, 0);
-                        $totalT = ($prov_model->lp_valor * $model['item_cotizacion']->cantidad);
+                        $totalT = round(($prov_model->lp_base * (1+($prov_model->iva/100))) * $model['item_cotizacion']->cantidad, 0);
                         $total += $totalT;
-                        $impuestos +=  round(($totalT-$subtotalT), 0);
+                        $impuestos +=  ($totalT-$subtotalT);
                         $item_orden_compra_model->item = $model['item_cotizacion']->item;
                         $item_orden_compra_model->cantidad = $model['item_cotizacion']->cantidad;
-                        $item_orden_compra_model->precio_unidad = round($model['proveedor_cotizacion']->lp_valor/(1+($model['proveedor_cotizacion']->iva/100)), 0);
+                        $item_orden_compra_model->precio_unidad = round($model['proveedor_cotizacion']->lp_base, 0);
                         $item_orden_compra_model->precio_total = ($item_orden_compra_model->precio_unidad *$item_orden_compra_model->cantidad);
                         $items_orden[] = $item_orden_compra_model;
                     }
@@ -154,7 +154,6 @@ class OrdenCompra extends Dropbox_Controller {
                         $this->load->view('operacion/ordencompra/orden_compra_template', $data);
                         $html = ob_get_contents();
                     ob_end_clean();
-                    ob_flush();
                     $this->phptopdf->phptopdf_html($html, 'resources/ordenCompra/', $nombrePDF);
                     $this->load->helper('mail');
                     $destinatarios = array();
@@ -167,18 +166,17 @@ class OrdenCompra extends Dropbox_Controller {
                     $destinatario = new stdClass();
                     $destinatario->email = "ventas@laspartes.com.co";
                     $destinatarios[] = $destinatario;
-                    // $destinatario = new stdClass();
-                    // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
-                    // $destinatarios[] = $destinatario;
 
                     send_mail($destinatarios, "Orden de compra ".str_pad($data['orden_compra_model']->id, 4, '0', STR_PAD_LEFT)." - LasPartes.com - " . strftime("%B %d de %Y"), $html, "", $nombrePDF, 'resources/ordenCompra/');
 
                     //METODOS DE DROPBOX
-                    $DropboxPath = '/CARPETA MAESTRA/ORDENES DE COMPRA/'.date('Y');
-                    $metadata = $this->dropbox->metadata($DropboxPath);
-                    if(!$metadata->is_dir)
-                        $this->dropbox->create_folder($DropboxPath);
-                    $addResponse = $this->dropbox->add($DropboxPath, 'resources/ordenCompra/'.$nombrePDF);
+                    if(ENVIRONMENT == 'production'){
+                        $DropboxPath = '/CARPETA MAESTRA/ORDENES DE COMPRA/'.date('Y');
+                        $metadata = $this->dropbox->metadata($DropboxPath);
+                        if(!$metadata->is_dir)
+                            $this->dropbox->create_folder($DropboxPath);
+                        $addResponse = $this->dropbox->add($DropboxPath, 'resources/ordenCompra/'.$nombrePDF);
+                    }
                     echo json_encode(array('status' => true, 'pdf' => $nombrePDF, 'id' => $data['orden_compra_model']->id, 'addResponse' =>$addResponse));
                 }
             }else{
@@ -234,19 +232,18 @@ class OrdenCompra extends Dropbox_Controller {
                     $destinatario = new stdClass();
                     $destinatario->email = "ventas@laspartes.com.co";
                     $destinatarios[] = $destinatario;
-                    // $destinatario = new stdClass();
-                    // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
-                    // $destinatarios[] = $destinatario;
                     
                     $this->load->helper('mail');
                     send_mail($destinatarios, "Orden de compra ".str_pad($orden_compra_model->id, 4, '0', STR_PAD_LEFT)." anulado LasPartes.com - " . strftime("%B %d de %Y"), $html, "");
 
                     //METODOS DE DROPBOX
-                    $DropboxPath = '/CARPETA MAESTRA/ORDENES DE COMPRA/'.date('Y').'/';
-                    $metadata = $this->dropbox->metadata($DropboxPath.$orden_compra_model->url);
-                    if(!empty($metadata->rev)){
-                        $anulado = $this->dropbox->copy($DropboxPath.$orden_compra_model->url, $DropboxPath.$nueva_url[0].'-anulado.pdf');
-                        $eliminado = $this->dropbox->delete($DropboxPath.$orden_compra_model->url);
+                    if(ENVIRONMENT == 'production'){
+                        $DropboxPath = '/CARPETA MAESTRA/ORDENES DE COMPRA/'.date('Y').'/';
+                        $metadata = $this->dropbox->metadata($DropboxPath.$orden_compra_model->url);
+                        if(!empty($metadata->rev)){
+                            $anulado = $this->dropbox->copy($DropboxPath.$orden_compra_model->url, $DropboxPath.$nueva_url[0].'-anulado.pdf');
+                            $eliminado = $this->dropbox->delete($DropboxPath.$orden_compra_model->url);
+                        }
                     }
 
                     echo json_encode(array('status' => true, 'anulado' =>$anulado, 'eliminado' => $eliminado));

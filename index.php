@@ -12,6 +12,8 @@
  */
 	error_reporting(E_ERROR);
 
+	define('ENVIRONMENT', 'production');
+
 /*
  *---------------------------------------------------------------
  * SYSTEM FOLDER NAME

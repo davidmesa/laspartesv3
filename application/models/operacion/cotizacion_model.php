@@ -68,6 +68,33 @@ class cotizacion_model extends CI_Model
         $this->db->update('op_cotizacion', $this, array('id' => $this->id));
     }
 
+    /**
+     * dar todos las ordenes de compra
+     */
+    function dar_todos(){
+        $query=$this->db->get('op_cotizacion');
+        return $query->result();
+    }
+
+    /**
+     * da todos los que concuerden con los parametros dados
+     * @return id
+     */
+    function dar_todos_por_filtros($params) {
+        $items = array();
+        foreach ($params as $key => $value)
+            $this->db->where($key, $value);
+        $query = $this->db->get('op_cotizacion');
+        foreach ($query->result() as $row) {
+            $item = new cotizacion_model();
+            foreach ($row as $key => $value) {
+                $item->$key = $value;
+            }
+            $items[] = $item;
+        }
+        return $items;
+    }
+
 
     /**
      * da los items relacionados con la cotización

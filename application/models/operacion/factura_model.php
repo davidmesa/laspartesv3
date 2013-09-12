@@ -10,6 +10,7 @@ class factura_model extends CI_Model
     var $id_consecutivo_factura;
     var $id_pipeline;
     var $url;
+    var $anulado;
     
     /**
      * Constructor de la clase factura model
@@ -61,6 +62,13 @@ class factura_model extends CI_Model
         }
         $query=$this->db->get('op_factura');
         return $query->result();
+    }
+
+    /**
+     * actualizar un dato según filtros
+     */
+    function actualizar_filtros($id, $params) {
+        $this->db->update('op_factura', $params, array('id' => $id));
     }
 
     /**

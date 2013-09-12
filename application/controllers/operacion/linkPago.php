@@ -84,12 +84,12 @@ class LinkPago extends CI_Controller {
                 $PC_model->item = $PC_model->dar_item_cotizacion();
                 $proveedores_cotizacion[] = $PC_model;
                 $titulo .= $PC_model->item->cantidad.' '.$PC_model->item->item.', ';
-                $precioTemp = round($PC_model->item->cantidad*($PC_model->lp_valor*(1+($PC_model->item->margen/100))));
+                $precioTemp = round($PC_model->item->cantidad*($PC_model->item->precio));
                 $precio += $precioTemp;
                 $ivaTemp = $precioTemp - ( $precioTemp/ (1 + ($PC_model->iva/100) ) );
                 $iva += $ivaTemp;
-                $baseLP = $PC_model->lp_valor/(1+($PC_model->iva/100))*$PC_model->item->cantidad;
-                $margen += $baseLP*($PC_model->item->margen/100);
+                $baseLP = $precioTemp-$ivaTemp;
+                $margen += $baseLP-($PC_model->lp_base*$PC_model->item->cantidad);
 
             }
 
@@ -281,6 +281,7 @@ class LinkPago extends CI_Controller {
                 $vehiculos = explode(',', $this->input->post('vehiculo_id', TRUE));
                 $otra_categoria = $this->input->post('categoria_otra', TRUE);
                 $imagen = $this->input->post('imagen', TRUE);
+                $chkEmail = filter_var($this->input->post('chkEmail', TRUE), FILTER_VALIDATE_BOOLEAN);
                 if ($otra_categoria) {
                     $tempCat[] = 'nombre';
                     $tempCat[] = $otra_categoria;
@@ -325,7 +326,7 @@ class LinkPago extends CI_Controller {
                     $PC_model->dar();
                     $PC_model->item = $PC_model->dar_item_cotizacion();
 
-                    $precioTemp = round($PC_model->lp_valor*(1+($PC_model->item->margen/100)));
+                    $precioTemp = $PC_model->item->precio;
                     $iva = round($precioTemp - ( $precioTemp/ (1 + ($PC_model->iva/100) ) ), 2);
                     $base = $precioTemp - $iva;
 
@@ -345,27 +346,27 @@ class LinkPago extends CI_Controller {
                 $data['titulo'] = $titulo;
                 $data['vehiculos'] = $vehiculos;
                 $data['usuario'] = $this->usuario_model->dar_usuario($id_usuario);
-                ob_start();
-                    $this->load->view('emails/link_pago_view', $data);
-                    $html = ob_get_contents();
-                ob_end_clean();
-                ob_flush();
 
-                $destinatarios = array();
-                $destinatario = new stdClass();
-                $destinatario->email = $data['usuario']->email;
-                $destinatarios[] = $destinatario;
-                $destinatario = new stdClass();
-                $destinatario->email = "tallerenlinea@laspartes.com.co";
-                $destinatarios[] = $destinatario;
-                $destinatario = new stdClass();
-                $destinatario->email = "ventas@laspartes.com.co";
-                $destinatarios[] = $destinatario;
-                // $destinatario = new stdClass();
-                // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
-                // $destinatarios[] = $destinatario;
-                $this->load->helper('mail');
-                send_mail($destinatarios, "Link de pago - LasPartes.com", $html, "");
+                if($chkEmail){
+                    ob_start();
+                        $this->load->view('emails/link_pago_view', $data);
+                        $html = ob_get_contents();
+                    ob_end_clean();
+
+                    $destinatarios = array();
+                    $destinatario = new stdClass();
+                    $destinatario->email = $data['usuario']->email;
+                    $destinatarios[] = $destinatario;
+                    $destinatario = new stdClass();
+                    $destinatario->email = "tallerenlinea@laspartes.com.co";
+                    $destinatarios[] = $destinatario;
+                    $destinatario = new stdClass();
+                    $destinatario->email = "ventas@laspartes.com.co";
+                    $destinatarios[] = $destinatario;
+
+                    $this->load->helper('mail');
+                    send_mail($destinatarios, "Link de pago - LasPartes.com", $html, "");
+                }
                 echo json_encode(array('status' => true));
             }
         }else{
@@ -522,6 +523,32 @@ class LinkPago extends CI_Controller {
         echo json_encode(array('status' => false, 'msg' => 'Debes iniciar sesión como administrador'));
         }
     }
+
+    // function reindexar(){
+    //     for ($i=15; $i <= 35; $i++){
+
+            
+    //         $pclpTodos = $this->prov_cotizacion_link_pago_model->dar_todos_por_filtros_model(array('id_link_pago' => $i));
+    //         foreach ($pclpTodos as $key => $pclp) {
+    //             $PC_model = new proveedor_cotizacion_model();
+    //             $PC_model->id = $pclp->id_proveedor_cotizacion;
+    //             $PC_model->dar();
+    //             $PC_model->item = $PC_model->dar_item_cotizacion();
+
+    //             $precioTemp = round($PC_model->lp_valor*(1+($PC_model->item->margen/100)));
+    //             $iva = round($precioTemp - ( $precioTemp/ (1 + ($PC_model->iva/100) ) ), 2);
+    //             $base = $precioTemp - $iva;
+
+    //             $pclp->item = $PC_model->item->item;
+    //             $pclp->base = $base;
+    //             $pclp->iva = $iva;
+    //             $pclp->valor = $precioTemp;
+    //             $pclp->cantidad = $PC_model->item->cantidad;
+    //             $pclp->actualizar();
+    //         }
+            
+    //     }
+    // }
 
     
 

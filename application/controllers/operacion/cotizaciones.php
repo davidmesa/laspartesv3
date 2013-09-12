@@ -105,9 +105,13 @@ class Cotizaciones extends CI_Controller {
                     $cantidad = $data[cantidad];
                     $elegido = $data[elegido];
                     $item = $data[item];
+                    $precio = $data[precio];
                     if(empty($item))
                         $item = ' ';
                     $margen = $data[margen];
+                    $pSDco = $data[pSDco];
+                    $dco = $data[dco];
+                    $valido = $data[valido];
                     $id_item = $data[id_item];
                     $Tcosto;
                     $Tlp_iva;
@@ -131,7 +135,7 @@ class Cotizaciones extends CI_Controller {
                         }
 
                         $proveedorCotizacionModel->id_proveedor = $proveedorModel->id;
-                        $proveedorCotizacionModel->lp_valor = $ops[valorLP];
+                        $proveedorCotizacionModel->lp_base = $ops[baseLP];
                         $proveedorCotizacionModel->iva = $ops[iva];
                         $proveedorCotizacionModel->nota = $ops[nota];
                         $proveedorCotizacionModel->elegido = $ops[elegido];
@@ -140,13 +144,14 @@ class Cotizaciones extends CI_Controller {
                         // echo 'ITEM '.$item.' ID PROVEEDOR '.$proveedorModel->id.' LPVALOR '.$proveedorCotizacionModel->lp_valor.' IVA '.$proveedorCotizacionModel->iva.' NOTA '.$proveedorCotizacionModel->nota.' ELEGIDO '.$proveedorCotizacionModel->elegido.'<br/>';
 
                         if($ops[elegido] == true && isset($ops[elegido])){
-                            $lp_valor = $ops[valorLP];
                             $ivaTmp = $ops[iva];
-                            $costo = $lp_valor/(1+($ivaTmp/100));
+                            $costo = $ops[baseLP];
                             $ivaLP = $costo*($ivaTmp/100);
-                            $valor_antes_iva = $costo*(1+($margen/100));
-                            $cliente_iva = $valor_antes_iva*($ivaTmp/100);
-                            $cliente_precio = $valor_antes_iva + $cliente_iva;
+                            $lp_valor = $costo+$ivaLP;
+
+                            $cliente_precio = $precio;
+                            $cliente_iva = $precio - ($precio/(1+($ivaTmp/100)));
+                            $valor_antes_iva = $cliente_precio - $cliente_iva;
                             $ganancia = $valor_antes_iva-$costo;
                             // echo  'ITEM: '.$item.' MARGEN: '.$margen.' CANTIDAD: '.$cantidad.' VALORLP: '.$lp_valor. ' IVA: '.   $ivaTmp. ' COSTO: '.$costo. ' IVALP: '.$ivaLP. ' VALORANTES: '.$valor_antes_iva . ' PRECIOCLIENTE '.$cliente_precio.'<br/>------<br/>';
 
@@ -170,6 +175,10 @@ class Cotizaciones extends CI_Controller {
                     $itemCotizacionModel->item = $item;
                     $itemCotizacionModel->cantidad = $cantidad;
                     $itemCotizacionModel->margen = $margen;
+                    $itemCotizacionModel->dco = $dco;
+                    $itemCotizacionModel->precio_sin_dco = $pSDco;
+                    $itemCotizacionModel->precio = $precio;
+                    $itemCotizacionModel->valido = $valido;
                     $itemsCot[] = $itemCotizacionModel;
                 }
                 // echo  'COSTO: '.$Tcosto. ' LPIVA: '.   $Tlp_iva. ' LPVALOR: '.$Tlp_valor. ' IVACLIENTE: '.$Tcliente_iva. ' PRECIO: '.$Tcliente_precio . ' GANANCIA '.$Tganancia.'</br>';
@@ -185,26 +194,20 @@ class Cotizaciones extends CI_Controller {
                 $cotizacionModel->ganancia = $Tganancia;
                 if($cotizacionModel->id){
                     $cotizacionModel->actualizar();
-                    // echo 'ACTUALIZAR COTIZACION <BR/>';
                 }else{    
-                    // echo 'AGREGAR COTIZACION <BR/>';
                     $cotizacionModel->insertar();
                 }foreach ($itemsCot as $item) {
                     if($item->id){
-                        // echo 'ACTUALIZAR ITEM: '.json_encode($item).' <BR/>';
                         $item->actualizar();
                     }else{
                         $item->id_cotizacion = $cotizacionModel->id;
-                        // echo 'AGREGAR ITEM '.json_encode($item).'<BR/>';
                         $item->insertar();
                     }    
                     foreach ($proveedoresCot[$item->item] as $proveedor) {
                         if($proveedor->id){
-                            // echo 'ACTUALIZAR PROV: '.json_encode($proveedor).' <BR/>';
                             $proveedor->actualizar();
                         }else{   
                             $proveedor->id_item_cotizacion = $item->id; 
-                            // echo 'AGREGAR PROV '.json_encode($proveedor).'<BR/>';
                             $proveedor->insertar();
                         }
                     }
@@ -243,6 +246,70 @@ class Cotizaciones extends CI_Controller {
         }
     }
 
+    /**
+     * Envía la cotización en formato pdf al cliente
+     */
+    function enviar_cotizacion(){
+        if($this->hay_sesion_activa()){
+            $this->load->library('form_validation');
+            $reglas = array(
+                array(
+                    'field' => 'id_pipeline',
+                    'label' => 'id pipeline',
+                    'rules' => 'trim|required|xss_clean'
+                ),
+                array(
+                    'field' => 'id_usuario',
+                    'label' => 'id usuario',
+                    'rules' => 'trim|required|xss_clean'
+                )
+            );
+            $this->form_validation->set_rules($reglas);
+
+            if (!$this->form_validation->run()){
+                echo json_encode(array('status' => false, 'msg' => validation_errors()), JSON_HEX_QUOT | JSON_HEX_TAG);
+            }else {
+                $id_pipeline = $this->input->post('id_pipeline');
+                $id_usuario = $this->input->post('id_usuario');
+                setlocale(LC_ALL, 'es_ES');
+                define("CHARSET", "iso-8859-1");
+                $this->load->model('usuario_model');
+                $this->load->library('phptopdf');
+                $cotizacion_model = new cotizacion_model();
+                $cotizacion_model->id_pipeline = $id_pipeline;
+                $cotizacion_model->dar_por_pipeline();
+                $itemsCot = $cotizacion_model->dar_items_cotizacion();
+                foreach ($itemsCot as $key => $item) {
+                    $itemsCot[$key]->proveedores_cotizacion = $item->dar_proveedores_cotizacion();
+                }
+                $data['usuario'] = $this->usuario_model->dar_usuario($id_usuario);
+                $data['cotizacion_model'] = $cotizacion_model;
+                $data['itemsCot'] = $itemsCot;
+                $html = $this->load->view('emails/formato_cotizacion_view', $data, true);
+
+                $destinatarios = array();
+                $destinatario = new stdClass();
+                $destinatario->email = $venta->email;
+                $destinatarios[] = $destinatario;
+                $destinatario = new stdClass();
+                $destinatario->email = "tallerenlinea@laspartes.com.co";
+                $destinatarios[] = $destinatario;
+                $destinatario = new stdClass();
+                $destinatario->email = "ventas@laspartes.com.co";
+                $destinatarios[] = $destinatario;
+
+                $this->load->helper('mail');
+                $filePath = 'resources/cotizaciones/';
+                $fileName = 'cotizacion-'.$cotizacion_model->id.'.pdf';
+                $this->phptopdf->phptopdf_html($html, $filePath, $fileName);
+                send_mail($destinatarios, "Cotización de compra LasPartes.com ", $html, "", $fileName, $filePath);
+                echo json_encode(array('status' => true));
+            }
+        }else{
+        echo json_encode(array('status' => false, 'msg' => 'Debes iniciar sesión como administrador'));
+        }
+    }
+
      //Valida si existe una sesion activa
     //en caso de que la sesión este activa, retorna true, de lo contrario false
     function hay_sesion_activa(){
@@ -255,6 +322,37 @@ class Cotizaciones extends CI_Controller {
         }
     }
 
+    function reindexar_op_proveedor_cotizacion(){
+        $q = $this->db->get('op_proveedor_cotizacion');
+        foreach ($q->result() as $obj) {
+            $nuevoBase =  round($obj->lp_base / (1 + ($obj->iva/100)), 2);
+            $this->db->set('lp_base', $nuevoBase);
+            $this->db->where('id', $obj->id);
+            $this->db->update('op_proveedor_cotizacion');
+        }
+    }
+
+    function reindexar_op_item_cotizacion(){
+        error_reporting(E_ALL);
+        $cotizaciones = $this->cotizacion_model->dar_todos_por_filtros(array());
+        foreach ($cotizaciones as $cotizacion) {
+            $items = $cotizacion->dar_items_cotizacion();
+            foreach ($items as $item) {
+                $proovedores = $item->dar_proveedores_cotizacion();
+                foreach ($proovedores as $proveedor) {
+                    if($proveedor->elegido){
+                        $precio = (1+($item->margen)/100)*($proveedor->lp_base);
+                        $item->precio = $precio;
+                        $item->dco = 0;
+                        $item->precio_sin_dco = $proveedor->lp_base;
+                        print_r('precio: '.$precio.'<br/>');
+                        $item->actualizar();
+                    }
+                }
+            }
+        }
+
+    }
 
     function crearProveedores(){
         $this->db->select('establecimientos.*, zonas.ciudad');

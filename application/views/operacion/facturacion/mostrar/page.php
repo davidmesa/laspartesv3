@@ -50,6 +50,7 @@
 				<th>id</th>
 				<th>concecutivo</th>
 				<th>link de la factura</th>
+				<th>estado</th>
  			</thead>
 			<tbody>
 				<?php foreach ($facturas as $factura):?>
@@ -57,6 +58,7 @@
 					<td><?php echo $factura->id;?></td>
 					<td><?php echo $factura->id_consecutivo_factura;?></td>
 					<td><a href="<?php echo base_url().$factura->url;?>" target="_blank"><?php echo base_url().$factura->url;?></a></td>
+					<td><?php if($factura->anulado){echo 'Anulada';}else{?><button class="btn btn-link" onclick="anular(<?php echo $factura->id ?>, this, <?php echo $factura->id_consecutivo_factura; ?>)">Anular</button><?php }?></td>
 				</tr>
 				<?php endforeach;?>
 			</tbody>

@@ -12,7 +12,7 @@
 var modificado = false; //si se ha modificado algo en la tabla
 var ini = true; //la aplicación ha sido cargada por primera ves
 var load_items = <?php echo json_encode($items);?>; //datos de los items
-console.log('items', load_items);
+// console.log('items', load_items);
 var idItem = []; //id de los items
 var precreado = false; //ha sido precreada la página
 var $ht = $("#example1");  //la tabla
@@ -92,8 +92,7 @@ if(load_items.length > 0){
 			if(e1.elegido == 1)
 				seleccionados[i] = i1+2;
 			load_id_proveedor[i][i1+2] = e1.id;
-			curdata[formatProveedor] = {costo: e1.lp_valor};
-			// console.log('costoCure data', i, e1.lp_valor);
+			curdata[formatProveedor] = {costo: e1.lp_base};
 			if(e1.nota != null)
 				notas[i][i1+2] = e1.nota;
 
@@ -108,20 +107,37 @@ if(load_items.length > 0){
 			curdata['margen'] = parseFloat(e.margen);
 		else 
 			curdata['margen'] = 0;
-		curdata['precio'] = 0;
-		// console.log('curdata', i, curdata);
+
+		if(!isNaN(parseFloat(e.precio_sin_dco)) && isFinite(e.precio_sin_dco))
+			curdata['pSinDco'] = parseFloat(e.precio_sin_dco);
+		else 
+			curdata['pSinDco'] = 0;
+
+		if(!isNaN(parseFloat(e.dco)) && isFinite(e.dco))
+			curdata['dco'] = parseFloat(e.dco);
+		else 
+			curdata['dco'] = 0;
+
+		curdata['precio'] = e.precio;
 		currentData[i] = curdata;
 	});
+
+	header.push("Descuento LP(%)");
+	header.push("Precio sin Dco");
 	header.push("Margen LP(%)");
 	header.push("Precio al cliente");
-	columnDef.push({data: 'margen', allowInvalid: false, type: {renderer: numberRender}});  
-	columnDef.push({data: 'precio', type: {renderer: myAutocompleteRenderer}, readOnly: true});  
+	columnDef.push({data: 'dco', allowInvalid: false, type: {renderer: numberRender}});  
+	columnDef.push({data: 'pSinDco', allowInvalid: false, type: {renderer: numberRender}}); 
+	columnDef.push({data: 'margen', allowInvalid: false, type: {renderer: numberNegativoRender}}); 
+	columnDef.push({data: 'precio', type: {renderer: precioPublicoRender} });  
 	dSchema.margen = 0;
-	dSchema.precio = 0;	
+	dSchema.dco = 0;
+	dSchema.pSinDco = 0;
+	dSchema.precio = 0;
+	colWidths.push(90);	
 	colWidths.push(90);
 	colWidths.push(90);
-	// console.log('dSchema', dSchema);
-	// console.log('curdata', currentData);
+	colWidths.push(90);
 }else{
 	var notas = Create2DArray(100); 
 	var seleccionados = [];
@@ -129,18 +145,24 @@ if(load_items.length > 0){
 	var header = new Array();
 	header[0] = "Item";
 	header[1] = "Cantidad";
-	header[2] = "Margen LP(%)";
-	header[3] = "Precio al cliente";
+	header[2] = "Descuento LP(%)";
+	header[3] = "Precio sin Dco";
+	header[4] = "Margen LP(%)";
+	header[5] = "Precio al cliente";
 	var columnDef = new Array();
 	columnDef.push({data: 'item'});  
-	columnDef.push({data: 'cantidad', allowInvalid: false, type: {renderer: numberRender}});  
-	columnDef.push({data: 'margen', allowInvalid: false, type: {renderer: numberRender}});  
-	columnDef.push({data: 'precio', type: {renderer: myAutocompleteRenderer}, readOnly: true});  
+	columnDef.push({data: 'cantidad', allowInvalid: false, type: {renderer: numberRender}}); 
+	columnDef.push({data: 'dco', allowInvalid: false, type: {renderer: numberRender}});  
+	columnDef.push({data: 'pSinDco', allowInvalid: false, type: {renderer: numberRender}}); 
+	columnDef.push({data: 'margen', allowInvalid: false, type: {renderer: numberNegativoRender}}); 
+	columnDef.push({data: 'precio', type: {renderer: precioPublicoRender}});  
 	var dSchema = {};
 
 	dSchema.item = null;
 	dSchema.cantidad = 1;
 	dSchema.margen = 0;
+	dSchema.dco = 0;
+	dSchema.pSinDco = 0;
 	dSchema.precio = 0;	
 }
 
@@ -283,11 +305,11 @@ $(document).ready(function() {
   	scrollH: 'auto',
   	scrollV: 'auto',
   	width: function () {
-      if (maxed && availableWidth === void 0) {
-        calculateSize();
-      }
-      return $window.width();
-    },
+  		if (maxed && availableWidth === void 0) {
+  			calculateSize();
+  		}
+  		return $window.width();
+  	},
     // height: function () {
     //   if (maxed && availableHeight === void 0) {
     //     calculateSize();
@@ -295,63 +317,99 @@ $(document).ready(function() {
     //   return maxed ? availableHeight : 200;
     // },
     currentRowClassName: 'currentRow',
-  	currentColClassName: 'currentCol',
-  	minSpareCols: 1,
-  	minSpareRows: 1,
-  	colHeaders: header,
-  	columns: columnDef,
-  	autoWrapRow: true,
-  	contextMenu: {
-  		callback: function (key, options) {
-  			if (key === 'seleccionar') {
-  				seleccionar_item_proveedor();
-  			}else if(key === 'iva'){
-  				cambiar_iva();
-  				dar_mejor_cotizacion();
-  				motrar_cotizacion();
-  			}else if(key === 'nota'){
-  				editar_nota();
-  			}
-  		},items: {
-  			'nota':{name: "Nota", disabled: function () {
-            //if first, second column, disable this option
-            return ($ht.handsontable('getSelected')[1] === 0 || $ht.handsontable('getSelected')[1] === 1 || $ht.handsontable('getSelected')[1] === $ht.handsontable('countCols')-2 || $ht.handsontable('getSelected')[1] === $ht.handsontable('countCols')-1);
-        }
-    },
-    "hsep1": "---------",
-    'iva': {
-    	name: "IVA", disabled: function () {
-            //if first, second column, disable this option
-            return ($ht.handsontable('getSelected')[1] === 0 || $ht.handsontable('getSelected')[1] === 1 || $ht.handsontable('getSelected')[1] === $ht.handsontable('countCols')-2 || $ht.handsontable('getSelected')[1] === $ht.handsontable('countCols')-1);
-        }
-    },'seleccionar':{name: "Seleccionar", disabled: function () {
-	          //if first, second column, disable this option
-	          return ($ht.handsontable('getSelected')[1] === 0 || $ht.handsontable('getSelected')[1] === 1 || $ht.handsontable('getSelected')[1] === $ht.handsontable('countCols')-2 || $ht.handsontable('getSelected')[1] === $ht.handsontable('countCols')-1);
-	      }
-	  }
+    currentColClassName: 'currentCol',
+    minSpareCols: 1,
+    minSpareRows: 1,
+    colHeaders: header,
+    columns: columnDef,
+    autoWrapRow: true,
+    contextMenu: {
+    	callback: function (key, options) {
+    		if (key === 'seleccionar') {
+    			seleccionar_item_proveedor();
+    		}else if(key === 'iva'){
+    			cambiar_iva();
+    			dar_mejor_cotizacion();
+    			motrar_cotizacion();
+    		}else if(key === 'nota'){
+    			editar_nota();
+    		}else if(key === 'calcular'){
+    			calcular();
+    			dar_mejor_cotizacion();
+    			motrar_cotizacion();
+    		}else if(key === 'calcularPorDco'){
+    			calcular_segun_dco();
+    			dar_mejor_cotizacion();
+    			motrar_cotizacion();
+    		}else if(key === 'calcularPorMargen'){
+    			calcular_segun_margen();
+    			dar_mejor_cotizacion();
+    			motrar_cotizacion();
+    		}
+    	},items: {
+    		'calcular': {
+    			name: "Calcular", 
+    			disabled: function () {
+		            //if first, second column, disable this option
+		            return ($ht.handsontable('getSelected')[1] <= $ht.handsontable('countCols')-5);
+	        	}
+		    },
+		    'calcularPorDco': {
+    			name: "Calcular según Dco", 
+    			disabled: function () {
+		            return ($ht.handsontable('getSelected')[1] <= 1 || $ht.handsontable('getSelected')[1] > $ht.handsontable('countCols')-5);
+	        	}
+		    },
+		    'calcularPorMargen': {
+    			name: "Calcular según margen", 
+    			disabled: function () {
+		            return ($ht.handsontable('getSelected')[1] <= 1 || $ht.handsontable('getSelected')[1] > $ht.handsontable('countCols')-5);
+	        	}
+		    },
+	    	"hsep1": "---------",
+	    	'nota':{
+		    	name: "Nota", 
+		    	disabled: function () {
+		            //if first, second column, disable this option
+		            return ($ht.handsontable('getSelected')[1] <= 1 || $ht.handsontable('getSelected')[1] >= $ht.handsontable('countCols')-4 );
+	        	}
+	    	},
+	    	"hsep2": "---------",
+	    	'iva': {
+	    		name: "IVA", disabled: function () {
+		            //if first, second column, disable this option
+		            return ($ht.handsontable('getSelected')[1] <= 1 || $ht.handsontable('getSelected')[1] >= $ht.handsontable('countCols')-4 );
+		        }
+		    },'seleccionar':{
+		    	name: "Seleccionar", 
+		    	disabled: function () {
+		          //if first, second column, disable this option
+		          return ($ht.handsontable('getSelected')[1] <= 1 || $ht.handsontable('getSelected')[1] >= $ht.handsontable('countCols')-4 );
+		      }
+		 	}
+		}
+	},afterCreateRow: function(e){
+		var currentData = this.getData();
+
+		currentData[e]['item'] = "";
+		currentData[e]['cantidad'] = "";
+		for (var i = 0; i < proveedores.length; i++) {
+			var probTemp = proveedores[i];
+			currentData[e][probTemp] = {costo: ""};
+		};
+		currentData[e]['margen'] = "";
+		currentData[e]['precio'] = "";
+	},afterChange: function(c,s){
+		$ht.handsontable('render');
+		motrar_cotizacion();
+		if(!precreado)
+			dar_mejor_cotizacion();
+		precreado = false;
+
+		if(!ini)
+			modificado = true;	
+		ini = false;
 	}
-},afterCreateRow: function(e){
-	var currentData = this.getData();
-
-	currentData[e]['item'] = "";
-	currentData[e]['cantidad'] = "";
-	for (var i = 0; i < proveedores.length; i++) {
-		var probTemp = proveedores[i];
-		currentData[e][probTemp] = {costo: ""};
-	};
-	currentData[e]['margen'] = "";
-	currentData[e]['precio'] = "";
-},afterChange: function(c,s){
-	$ht.handsontable('render');
-	motrar_cotizacion();
-	if(!precreado)
-		dar_mejor_cotizacion();
-	precreado = false;
-
-	if(!ini)
-		modificado = true;	
-	ini = false;
-}
 });
 
 });
@@ -380,16 +438,16 @@ function agregar_columna(){
 			provData['telefono'] = $('#input-proveedor').attr('data-telefono');
 			proveedoresSelec.push(provData) ; 
 			proveedores.push($proveedor);
-			header.splice(header.length-2,0,'<input type="text" onclick="quitarSelect()" data-eproveedor="'+$eproveedor+'" onchange="cambiarHeader(this, '+(header.length-2)+')" value="'+$proveedor+'"  style="width: 75px;">');
+			header.splice(header.length-4,0,'<input type="text" onclick="quitarSelect()" data-eproveedor="'+$eproveedor+'" onchange="cambiarHeader(this, '+(header.length-4)+')" value="'+$proveedor+'"  style="width: 75px;">');
 			dSchema[$proveedor] = {costo: null};
 			var htInstance = $ht.handsontable('getInstance');
 			var cost = $proveedor+'.costo';
-			columnDef.splice(header.length-3,0,{data: cost, type: {renderer: selectRender}}); 
+			columnDef.splice(header.length-5,0,{data: cost, type: {renderer: selectRender}}); 
 			var currentData = htInstance.getData();
 			for (var i = 0; i < htInstance.countRows()-1; i++) {
 				currentData[i][$proveedor] = {costo: 0};
 			};
-			colWidths.splice(header.length-3,0,90); 
+			colWidths.splice(header.length-5,0,90); 
 			htInstance.updateSettings({
 				data: currentData,
 				colWidths: colWidths,
@@ -405,6 +463,7 @@ function agregar_columna(){
 			modificado = true;
 		}
 	}
+	$ht.handsontable('render');
 }
 
 
@@ -492,7 +551,7 @@ function dar_mejor_cotizacion(){
       //dar la celda
       for (var col = 2; col < htInstance.countCols()-2; col++) {
       	var costo = htInstance.getDataAtCell(i, col);
-      	if(costo != "" && costo != null){
+      	if(costo != "" && costo != null && costo > 0){
       		var td =  htInstance.getCell(i, col);
       		var cellMeta = htInstance.getCellMeta(i, col);
       		var prop = cellMeta.prop;
@@ -534,57 +593,65 @@ function motrar_cotizacion(){
 		var proveedor = 0;
 		var valor = 0;
 		var valorLP = 0;
+		var baseLP = 0;
 		var ganancia = 0;
 		var ivaAttr = 16;
 		var id_proveedor;
+		var precioCliente = 0;
+		var valid = false;
 		for (var col = 0; col < htInstance.countCols(); col++) {
 			var item =  htInstance.getCell(row, col);
 			if(col == 0){
 				var itemVal = $(item).text();
 			}else if(col == 1){
 				var cantidad = parseFloat($(item).text());
-			}else if(col < htInstance.countCols()-2){
+			}else if(col < htInstance.countCols()-4){
 				if($(item).hasClass('seleccionado') && itemVal != ''){
 					id_proveedor = $(item).attr('data-id-proveedor');
 					proveedor = $(header[col]);
 					proveedor = proveedor.val();
 					$(item).remove('a.atooltip');
-					valorLP = parseFloat(numeral().unformat($(item).text()));
+					baseLP = parseFloat(numeral().unformat($(item).text()));
 					if($(item).attr('data-iva'))
 						ivaAttr = parseFloat($(item).attr('data-iva').replace('%', ''));  
 				}
 			}else if(col == htInstance.countCols()-2 && itemVal != ''){
 				ganancia = parseFloat(numeral().unformat($(item).text()));
+			}else if(col == htInstance.countCols()-1 && itemVal != ''){
+				precio_cliente = parseFloat(numeral().unformat($(item).text()));
+				if($(item).hasClass('invalid'))
+					valid = false;
+				else
+					valid = true;
 			}
 		}
-		if(valorLP>0 && cantidad>0 && !isNaN(parseFloat(ganancia)) && isFinite(ganancia)){
-			costo = valorLP/(1+(ivaAttr/100));
-			var ivaLP = costo*(ivaAttr/100);
-
-			var valor_antes_iva = costo*cantidad*(1+(ganancia/100));
-			var ivaCliente = valor_antes_iva*(ivaAttr/100);
-			precio_cliente = valor_antes_iva + ivaCliente;
+		if(baseLP>0 && cantidad>0 && !isNaN(parseFloat(ganancia)) && isFinite(ganancia) && valid){
+			var ivaLP = baseLP*(ivaAttr/100);
+			var valorLP = baseLP+ivaLP;
+			
+			var ivaCliente = cantidad*(precio_cliente-(precio_cliente/(1+(ivaAttr/100))));
+			var valor_antes_iva = (precio_cliente * cantidad) - ivaCliente;
 
 			var inputChkbox = $('<input>').attr('type', 'checkbox').val(id_proveedor);
 			tr.append($('<td>').append(inputChkbox));
 			tr.append($('<td>').text(itemVal));
 			tr.append($('<td>').text(proveedor));
 			tr.append($('<td>').text(cantidad));
-			tr.append($('<td>').text(numeral(costo*cantidad).format('$0,0.00')));
+			tr.append($('<td>').text(numeral(baseLP*cantidad).format('$0,0.00')));
 			tr.append($('<td>').text(numeral(ivaLP*cantidad).format('$0,0.00')));
 			tr.append($('<td>').text(numeral(valorLP*cantidad).format('$0,0.00')));
-			tr.append('<td>'+numeral(precio_cliente-ivaCliente).format('$0,0.00') +'</td>');
+			tr.append('<td>'+numeral(valor_antes_iva).format('$0,0.00') +'</td>');
 			tr.append('<td>'+numeral(ivaCliente).format('$0,0.00') +'</td>');
-			tr.append($('<td>').text(numeral(precio_cliente).format('$0,0.00')));
-			tr.append($('<td>').text(numeral(valor_antes_iva-(costo*cantidad)).format('$0,0.00')));
+			tr.append($('<td>').text(numeral(precio_cliente*cantidad).format('$0,0.00')));
+			tr.append($('<td>').text(numeral(valor_antes_iva-(baseLP*cantidad)).format('$0,0.00')));
 			$('tbody', '#cotizacion').append(tr);
 			TIvaCliente += ivaCliente;
-			TBaseCliente += (precio_cliente-ivaCliente);
-			TCosto += (costo*cantidad);
+			TBaseCliente += ((precio_cliente*cantidad)-ivaCliente);
+			TCosto += (baseLP*cantidad);
 			TIVALP += (ivaLP*cantidad);
 			TValorLP += (valorLP*cantidad);
-			TPrecioCliente += precio_cliente;
-			TGanancia += valor_antes_iva-(costo*cantidad);
+			TPrecioCliente += precio_cliente*cantidad;
+			TGanancia += valor_antes_iva-(baseLP*cantidad);
 		}
 	}
 	
@@ -665,26 +732,57 @@ function selectRender(instance, td, row, col, prop, value, cellProperties) {
 }
 
 //funcion que muestra el precio del cliente
-function myAutocompleteRenderer(instance, td, row, col, prop, value, cellProperties) {
+function precioPublicoRender(instance, td, row, col, prop, value, cellProperties) {
 	Handsontable.TextCell.renderer.apply(this, arguments);
-	var htInstance = $ht.handsontable('getInstance');
-	var ganancia = htInstance.getDataAtCell(row, col-1);
-	var selected = htInstance.getDataAtCell(row, seleccionados[row]);
-	var cantidad = htInstance.getDataAtCell(row, 1);
-	var inner = Math.abs(cantidad*selected*(1+(ganancia/100)));
-	td.innerHTML = numeral(inner).format('$0,0[.]00'); 
-	return td;
+	var cRows = instance.countRows() -1;
+	var margen = instance.getDataAtCell(row, col-1);
+	var selected = instance.getDataAtCell(row, seleccionados[row]);
+	var inner = Math.abs(selected*(1+(margen/100))).toFixed(2);
+
+	// console.log('------------');
+	// console.log('inner - value', inner, value);
+	// console.log('roundTen', roundTen(inner), roundTen(value));
+	// console.log('ceilTen', ceilTen(inner), ceilTen(value));
+	if(roundTen(inner) != roundTen(value) && ceilTen(inner) != ceilTen(value) && row < cRows){
+		$(td).addClass('invalid');
+	}	
+	inner = numeral(value).format('$0,0[.]00');
+	td.innerHTML = inner;
 }
+
+//redondea a 10
+function roundTen(number)
+{
+  return Math.round(number/10)*10;
+}
+
+function ceilTen(number)
+{
+  return Math.ceil(number/10)*10;
+}
+
 
 //le da formato a la cantidad y la probabilidad
 function numberRender(instance, td, row, col, prop, value, cellProperties) {
 	Handsontable.TextCell.renderer.apply(this, arguments);
 	var inner = td.innerHTML;
 	inner = Math.abs(inner);
-	if(col != 1){
+	if(col == instance.countCols()-3){
+		inner = numeral(inner).format('$0,0[.]00');
+	}else if(col != 1){
 		inner = numeral(inner).format('0,0[.]00');
 	}else
 		inner = numeral(inner).format('0');
+	td.innerHTML = inner;
+	return td;
+}
+
+//le da el formato a un número sea negativo o positivo
+function numberNegativoRender(instance, td, row, col, prop, value, cellProperties) {
+	Handsontable.TextCell.renderer.apply(this, arguments);
+	var inner = td.innerHTML;
+	inner = inner;
+	inner = numeral(inner).format('0,0[.]00');
 	td.innerHTML = inner;
 	return td;
 }
@@ -737,14 +835,14 @@ function guardar(){
 		var item = {};
 		var proveedores = {};
 		var elegido;
-		for (var col = 0; col < htInstance.countCols()-1 ; col++) {
+		for (var col = 0; col < htInstance.countCols() ; col++) {
 			if(col == 0){
 				var itemTD = htInstance.getCell(row, col);
 				item.item =  htInstance.getDataAtCell(row, col);
 				item.id_item = $(itemTD).attr('data-id-item');
 			}else if(col == 1){
 				item.cantidad =  htInstance.getDataAtCell(row, col);
-			}else if(col > 1 &&  col < htInstance.countCols() -2){
+			}else if(col > 1 &&  col < htInstance.countCols() -4){
 				var ops = {};
 
 				ops.email = $(header[col]).attr('data-eproveedor');
@@ -752,10 +850,10 @@ function guardar(){
 				if(seleccionados[row] == col ){
 					ops.elegido = true;
 				}
-				ops.valorLP = htInstance.getDataAtCell(row, col);
+				ops.baseLP = htInstance.getDataAtCell(row, col);
 				var tdProveedor = htInstance.getCell(row, col);
-				if(ops.elegido && isNaN(parseFloat(ops.valorLP)) && !isFinite(ops.valorLP))
-					ops.valorLP = 0;
+				if(ops.elegido && isNaN(parseFloat(ops.baseLP)) && !isFinite(ops.baseLP))
+					ops.baseLP = 0;
 				ops.iva = 16;
 				if($(tdProveedor).attr('data-iva'))
 					ops.iva = $(tdProveedor).attr('data-iva').replace('%', '');
@@ -766,6 +864,15 @@ function guardar(){
 				proveedores[$(header[col]).val()] = ops;
 			}else if(col == htInstance.countCols()-2){
 				item.margen = htInstance.getDataAtCell(row, col);
+			}else if(col == htInstance.countCols()-3){
+				item.pSDco = htInstance.getDataAtCell(row, col);
+			}else if(col == htInstance.countCols()-4){
+				item.dco = htInstance.getDataAtCell(row, col);
+			}else if(col == htInstance.countCols()-1){
+				item.precio = htInstance.getDataAtCell(row, col);
+				item.valido = true;
+				if($(htInstance.getCell(row, col)).hasClass('invalid'))
+					item.valido = false;
 			}
 		}
 		item.proveedores = proveedores;
@@ -802,9 +909,9 @@ function guardar(){
 function mostrar_alerta(msj){
 	var msjTemp = '<?php echo $msj;?>';
 	if(msj == 'msjError' || msjTemp == 'msjError')
-		$('.alert-danger').show();
+		$('#danger-guardar').show();
 	else if(msj == 'msjExito'  || msjTemp == 'msjExito'){
-		$('.alert-success').show();
+		$('#success-guardar').show();
 	}
 }
 
@@ -879,7 +986,6 @@ function generar_orden_compra(elem){
 	    'id_usuario': '<?php echo $id_usuario;?>'
 	    },success: function(data){
 	    	var data = $.parseJSON(data);
-	    	console.log(data);
 	    	if(data.status){
 		    	var div = $('<div>').addClass('alert').addClass('alert-success');
 		    	var btn = $('<button>').attr('type', 'button').addClass('close').attr('data-dismiss', 'alert').html('&times;');
@@ -975,6 +1081,141 @@ function cancelar(){
 	var answer = confirm("¿Desea perder todos los cambios realizados?")
 	if (answer){
 		window.location = '<?php echo base_url()."operacion/cotizaciones/mostrar_cotizaciones/".$id_pipeline."/".$id_usuario;?>';
+	}
+}
+
+//calcula el precio, descuento, margen, costo según los valores suministrados
+function calcular(){
+	var htInstance = $('#example1').handsontable('getInstance');
+	var selected = htInstance.getSelected();
+	var row = selected[0];
+	var col = selected[1];
+	var td = htInstance.getCell(row, col);
+	var cols = htInstance.countCols() -1;
+
+
+	var costo = $(htInstance.getCell(row, seleccionados[row])).text();
+	costo = numeral().unformat(costo);
+
+	var dco = $(htInstance.getCell(row, cols-3)).text();
+	dco = numeral().unformat(dco);
+
+	var pSDco = $(htInstance.getCell(row, cols-2)).text();		
+	pSDco = numeral().unformat(pSDco);
+
+	var margen = $(htInstance.getCell(row, cols-1)).text();
+	margen = numeral().unformat(margen);
+
+	var precio = $(htInstance.getCell(row, cols)).text();		
+	precio = numeral().unformat(precio);
+
+	// var porcentajeCol = porcentajeSeleccionado[row];
+	// var porcentaje = $(htInstance.getCell(row, porcentajeCol)).text();
+	// porcentaje = numeral().unformat(porcentaje);
+
+	if(col == cols){//si es el precio del cliente
+		var inner = Math.abs(costo*(1+(margen/100))).toFixed(2);
+		htInstance.setDataAtCell(row, col, inner);	
+	}else if(selected[1] == cols-1){//si es la margen
+		if(precio > 0 && costo > 0)
+			var inner = (((precio/costo)-1)*100).toFixed(4);
+		else
+			var inner = 0;
+		htInstance.setDataAtCell(row, cols-1, inner);	
+	}else if(selected[1] == cols-2){//si es el precio sin descuento
+		var inner = Math.abs(costo*(1+(dco/100))).toFixed(2);
+		htInstance.setDataAtCell(row, cols-2, inner);	
+	}else if(selected[1] == cols-3){//si es el Descuento
+		var inner = Math.abs(((pSDco/costo)-1)*100).toFixed(4);
+		htInstance.setDataAtCell(row, cols-3, inner);	
+	}
+}
+
+//calcula el costo según el descuento suministrado
+function calcular_segun_dco(){
+	var htInstance = $('#example1').handsontable('getInstance');
+	var selected = htInstance.getSelected();
+	var row = selected[0];
+	var col = selected[1];
+	var td = htInstance.getCell(row, col);
+	var cols = htInstance.countCols() -1;
+
+	var dco = $(htInstance.getCell(row, cols-3)).text();
+	dco = numeral().unformat(dco);
+
+	var pSDco = $(htInstance.getCell(row, cols-2)).text();		
+	pSDco = numeral().unformat(pSDco);
+
+	var inner = Math.abs(pSDco/(1+(dco/100))).toFixed(2);
+	htInstance.setDataAtCell(row, col, inner);	
+}
+
+//calcula el costo según la margen suministrada
+function calcular_segun_margen(){
+	var htInstance = $('#example1').handsontable('getInstance');
+	var selected = htInstance.getSelected();
+	var row = selected[0];
+	var col = selected[1];
+	var td = htInstance.getCell(row, col);
+	var cols = htInstance.countCols() -1;
+
+	var precio = $(htInstance.getCell(row, cols)).text();		
+	precio = numeral().unformat(precio);
+
+	var margen = $(htInstance.getCell(row, cols-1)).text();
+	margen = numeral().unformat(margen);
+
+	var inner = Math.abs(precio/(1+(margen/100))).toFixed(2);
+	htInstance.setDataAtCell(row, col, inner);	
+}
+
+//selecciona el porcentaje deseado
+function select_porcentaje(){
+	var htInstance = $('#example1').handsontable('getInstance');
+	var selected = htInstance.getSelected();
+	var row = selected[0];
+	var col = selected[1];
+	porcentajeSeleccionado[row] = col;
+	$ht.handsontable('render');
+}
+
+//Envía la cotización al usuario asociado
+function enviar_cotizacion(elem){
+	var answer = confirm("¿Está seguro de que desea enviar la cotización al usuario?");
+	$(elem).attr('disabled', 'disabled');
+	$(elem).text('Enviando...');
+	if (answer){
+		$.ajax({
+		    type: "POST",
+		    url: "<?php echo base_url(); ?>operacion/cotizaciones/enviar_cotizacion",
+		    data: { 
+	    	'id_usuario': '<?php echo $id_usuario;?>',
+	    	'id_pipeline': '<?php echo $id_pipeline;?>',
+		    },success: function(data){
+		    	var data = $.parseJSON(data);
+		    	if(data.status == true){
+			    	$('#success-cotizacion').show();
+			    	$("body").scrollTop(0);
+			    	$(elem).text('Enviar cotización');
+			    	$(elem).removeAttr('disabled');
+		        }else{
+		    		$('#danger-cotizacion .alert-msg').html(data.msg);
+			    	$('#danger-cotizacion').show();
+			    	$("body").scrollTop(0);
+			    	$(elem).text('Enviar cotización');
+			    	$(elem).removeAttr('disabled');
+		    	}
+		    },error: function(XMLHttpRequest, textStatus, errorThrown){
+		    	$('#danger-cotizacion .alert-msg').html('Ocurrió un error al enviar la cotizacion, favor intentar más tarde.');
+		    	$('#danger-cotizacion').show();
+		    	$("body").scrollTop(0);
+		    	$(elem).text('Enviar cotización');
+		    	$(elem).removeAttr('disabled');
+		    }
+		});
+	}else{
+		$(elem).text('Enviar cotización');
+		$(elem).removeAttr('disabled');
 	}
 }
 

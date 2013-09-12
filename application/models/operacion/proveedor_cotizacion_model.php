@@ -13,7 +13,7 @@ class proveedor_cotizacion_model extends CI_Model
     var $id;
     var $id_item_cotizacion;
     var $id_proveedor;
-    var $lp_valor;
+    var $lp_base;
     var $iva;
     var $nota = '';
     var $elegido = 0;
@@ -53,6 +53,25 @@ class proveedor_cotizacion_model extends CI_Model
         foreach ($query->row(0) as $key => $value) {
             $this->$key = $value;
         }
+    }
+
+    /**
+     * da todos los que concuerden con los parametros dados
+     * @return id
+     */
+    function dar_todos_por_filtros($params) {
+        $items = array();
+        foreach ($params as $key => $value)
+            $this->db->where($key, $value);
+        $query = $this->db->get('op_proveedor_cotizacion');
+        foreach ($query->result() as $row) {
+            $item = new proveedor_cotizacion_model();
+            foreach ($row as $key => $value) {
+                $item->$key = $value;
+            }
+            $items[] = $item;
+        }
+        return $items;
     }
 
     /**

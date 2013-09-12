@@ -9,10 +9,15 @@
 <body>
 
 
-  <div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>
+  <div class="alert alert-danger" id="danger-guardar"><button type="button" class="close" data-dismiss="alert">&times;</button>
     Ocurrió un error al guardar la cotización, favor intentar más tarde.</div>
-  <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>
+  <div class="alert alert-success" id="success-guardar"><button type="button" class="close" data-dismiss="alert">&times;</button>
     La cotización ha sido guardada.</div>
+  <div class="alert alert-success" id="success-cotizacion"><button type="button" class="close" data-dismiss="alert">&times;</button>
+  La cotización ha sido enviada.</div>
+  <div class="alert alert-danger" id="danger-cotizacion"><button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div class="alert-msg"></div>
+  </div>
     <div class="row" id="header-ops">
       <div class="col-xs-12 col-md-8">
         <form class="form-inline  proveedor"  role="form" id="agregarProveedor">
@@ -39,7 +44,7 @@
   <div class="form-group">
     <div class="bs-callout bs-callout-info"><button type="button" class="close" data-dismiss="alert">&times;</button>
       <h4>Nota</h4>
-      <p>1. Recuerda que debes ingresar el Valor después de iva para los proveedores.<br/>
+      <p>1. Recuerda que debes ingresar todos los valores antes de iva.<br/>
       2. Para ingresar el iva de un proveedor, seleccionar un item o agregar una nota debes dar click derecho.</p>
     </div>
     <div id="example1" style="overflow: auto;" class="handsontable"></div>
@@ -101,6 +106,7 @@
  <button name="dump" class="btn btn-success pull-right" onclick="guardar()">Guardar</button>
  <button name="dump" id="cancelar" class="btn btn-default pull-right" onclick="cancelar()">Cancelar</button>
  <button name="dump" id="ordenCompra" class="btn btn-success pull-right" onclick="orden_compra()">Generar Orden de compra</button>
+ <button name="dump" id="ordenCompra" class="btn btn-success pull-right" onclick="enviar_cotizacion(this)">Enviar cotización</button>
 </fieldset>
 </div>
 
@@ -211,14 +217,6 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
-<div id="mialerta" class="modal hide fade">
-    <!-- dialog contents -->
-    <div class="modal-body">Hello world!</div>
-    <!-- dialog buttons -->
-    <div class="modal-footer"><a href="#" class="btn primary">OK</a></div>
-</div>
 
   <?php $this->load->view($nombrevista.'scripts')?>
 </body>

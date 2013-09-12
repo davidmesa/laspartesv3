@@ -33,10 +33,6 @@ class OrdenRemision extends Dropbox_Controller {
             $data['id_usuario'] = $id_usuario;
 
             $data['ordenes'] = $this->orden_remision_model->dar_todos_filtros(array('id_pipeline' => $id_pipeline));
-            // foreach ($data['ordenes'] as $index => $orden) {
-            //     $data['ordenes'][$index]->bono = $this->usuario_model->dar_bono($orden->id_bono);
-            // }
-            // var_dump($data['ordenes']);
             $data['nombrevista'] = 'operacion/ordenRemision/ordenes/';
             $this->load->view('operacion/ordenRemision/ordenes/page', $data);
         }else{
@@ -286,9 +282,6 @@ class OrdenRemision extends Dropbox_Controller {
         $destinatario = new stdClass();
         $destinatario->email = "ventas@laspartes.com.co";
         $destinatarios[] = $destinatario;
-        // $destinatario = new stdClass();
-        // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
-        // $destinatarios[] = $destinatario;
 
         $mensajeCorreo = 'A continuación puedes ver el resumen de tu orden de remisión:<br/><br/>
             Nombres: ' . $venta->nombres . '<br/>
@@ -304,11 +297,13 @@ class OrdenRemision extends Dropbox_Controller {
         send_mail($destinatarios, "Orden de remisión a través de LasPartes.com", $mensajeCorreo, "", $fileName, $filePath . '/');
 
         //METODOS DE DROPBOX
-        $DropboxPath = '/CARPETA MAESTRA/REMISIONES/'.date('Y').'/';
-        $metadata = $this->dropbox->metadata($DropboxPath);
-        if(!$metadata->is_dir)
-            $this->dropbox->create_folder($DropboxPath);
-        $addResponse = $this->dropbox->add($DropboxPath, $filePath.'/'.$fileName);
+        if(ENVIRONMENT == 'production'){
+            $DropboxPath = '/CARPETA MAESTRA/REMISIONES/'.date('Y').'/';
+            $metadata = $this->dropbox->metadata($DropboxPath);
+            if(!$metadata->is_dir)
+                $this->dropbox->create_folder($DropboxPath);
+            $addResponse = $this->dropbox->add($DropboxPath, $filePath.'/'.$fileName);
+        }
     }
 
     //Valida si existe una sesion activa

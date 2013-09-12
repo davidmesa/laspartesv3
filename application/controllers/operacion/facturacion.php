@@ -293,9 +293,6 @@ class Facturacion extends Dropbox_Controller {
         $destinatario = new stdClass();
         $destinatario->email = "ventas@laspartes.com.co";
         $destinatarios[] = $destinatario;
-        // $destinatario = new stdClass();
-        // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
-        // $destinatarios[] = $destinatario;
         
         ob_start();
         
@@ -311,11 +308,13 @@ class Facturacion extends Dropbox_Controller {
         send_mail($destinatarios, "Factura de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
 
         //METODOS DE DROPBOX
-        $DropboxPath = '/CARPETA MAESTRA/FACTURAS LP/'.date('Y').'/';
-        $metadata = $this->dropbox->metadata($DropboxPath);
-        if(!$metadata->is_dir)
-            $this->dropbox->create_folder($DropboxPath);
-        $addResponse = $this->dropbox->add($DropboxPath, $filePath.$fileName);
+        if(ENVIRONMENT == 'production'){
+            $DropboxPath = '/CARPETA MAESTRA/FACTURAS LP/'.date('Y').'/';
+            $metadata = $this->dropbox->metadata($DropboxPath);
+            if(!$metadata->is_dir)
+                $this->dropbox->create_folder($DropboxPath);
+            $addResponse = $this->dropbox->add($DropboxPath, $filePath.$fileName);
+        }
 
         return array('consecutivo' => $consecutivo, 'url' =>$filePath.$fileName, 'refventa' => $refVenta, 'addResponse' => $addResponse);
     }
@@ -455,6 +454,7 @@ class Facturacion extends Dropbox_Controller {
         }
     }
 
+    //genera la factura
     function _generar_recibo($refVenta) {
         setlocale(LC_ALL, 'es_ES');
         define("CHARSET", "iso-8859-1");
@@ -626,9 +626,6 @@ class Facturacion extends Dropbox_Controller {
         $destinatario = new stdClass();
         $destinatario->email = "ventas@laspartes.com.co";
         $destinatarios[] = $destinatario;
-        // $destinatario = new stdClass();
-        // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
-        // $destinatarios[] = $destinatario;
 
         ob_start();
         $data1['mensaje'] = $mensaje;
@@ -647,12 +644,95 @@ class Facturacion extends Dropbox_Controller {
         send_mail($destinatarios, "Recibo de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName, $filePath);
 
         //METODOS DE DROPBOX
-        $DropboxPath = '/CARPETA MAESTRA/RECIBOS LP/'.date('Y').'/';
-        $metadata = $this->dropbox->metadata($DropboxPath);
-        if(!$metadata->is_dir)
-            $this->dropbox->create_folder($DropboxPath);
-        $addResponse = $this->dropbox->add($DropboxPath, $filePath.$fileName);
+        if(ENVIRONMENT == 'production'){
+            $DropboxPath = '/CARPETA MAESTRA/RECIBOS LP/'.date('Y').'/';
+            $metadata = $this->dropbox->metadata($DropboxPath);
+            if(!$metadata->is_dir)
+                $this->dropbox->create_folder($DropboxPath);
+            $addResponse = $this->dropbox->add($DropboxPath, $filePath.$fileName);
+        }
         return array('consecutivo' => $consecutivo, 'url' =>$filePath.$fileName, 'refventa' => $refVenta);
+    }
+
+    /**
+     * Anula una orden de compra
+     * @return [type] [description]
+     */
+    function anular(){
+        if($this->hay_sesion_activa()){
+            $respuestaRequest = $this->request_dropbox();
+            $jsonrespuestaRequest = json_decode($respuestaRequest);
+            if($jsonrespuestaRequest->status == true){
+                $this->load->library('form_validation');
+                $reglas = array(
+                    array(
+                        'field' => 'id',
+                        'label' => 'id factura',
+                        'rules' => 'trim|xss_clean|required'
+                    )
+                );
+                $this->form_validation->set_rules($reglas);
+
+                if(!$this->form_validation->run()){
+                    $this->form_validation->set_error_delimiters('', '');
+                    echo json_encode(array('status' => false, 'msg' => validation_errors()));
+                }else{
+                    $this->load->model('usuario_model');
+                    $this->load->model('operacion/cotizacion_model');
+                    
+                    $factura_model = new factura_model();
+                    $factura_model->id = $this->input->post('id');
+                    $factura_model->dar();
+
+                    $cotizacion_model = new cotizacion_model();
+                    $cotizacion_model->id_pipeline = $factura_model->id_pipeline;
+                    $cotizacion_model->dar_por_pipeline();
+                    $data['usuario'] = $this->usuario_model->dar_usuario($cotizacion_model->id_usuario);
+
+                    $data['factura_model'] = $factura_model;
+                    $nueva_url = explode('.pdf', $factura_model->url);
+                    rename($factura_model->url, $nueva_url[0].'-anulado.pdf');
+                    $this->factura_model->actualizar_filtros($factura_model->id, array('anulado'=>1, 'url' => $nueva_url[0].'-anulado.pdf'));
+                    ob_start();
+                        $this->load->view('emails/anular_factura_view', $data);
+                        $html = ob_get_contents();
+                    ob_end_clean();
+                    ob_flush();
+                    $destinatarios = array();
+                    $destinatario = new stdClass();
+                    $destinatario->email = $data['usuario']->email;
+                    $destinatarios[] = $destinatario;
+                    $destinatario = new stdClass();
+                    $destinatario->email = "tallerenlinea@laspartes.com.co";
+                    $destinatarios[] = $destinatario;
+                    $destinatario = new stdClass();
+                    $destinatario->email = "ventas@laspartes.com.co";
+                    $destinatarios[] = $destinatario;
+                    
+                    $this->load->helper('mail');
+                    send_mail($destinatarios, "Factura de compra ".str_pad($factura_model->id_consecutivo_factura, 4, '0', STR_PAD_LEFT)." anulado LasPartes.com - " . strftime("%B %d de %Y"), $html, "");
+
+                    //METODOS DE DROPBOX
+                    if(ENVIRONMENT == 'production'){
+                        $DropboxPath = '/CARPETA MAESTRA/FACTURAS LP/'.date('Y').'/';
+                        $url_factura = str_replace('resources/facturas/', '', $factura_model->url);
+                        $url_factura_nueva = $nueva_url[0].'-anulado.pdf';
+                        $url_factura_nueva = str_replace('resources/facturas/', '', $url_factura_nueva);
+                        $metadata = $this->dropbox->metadata($DropboxPath.$url_factura);
+                        if(!empty($metadata->rev)){
+                            $anulado = $this->dropbox->copy($DropboxPath.$url_factura, $DropboxPath.$url_factura_nueva);
+                            $eliminado = $this->dropbox->delete($DropboxPath.$url_factura);
+                        }
+                    }
+
+                    echo json_encode(array('status' => true, 'anulado' =>$anulado, 'eliminado' => $eliminado));
+                }
+            }else{
+                echo $respuestaRequest;
+            } 
+        }else{
+            echo json_encode(array('status' => false, 'msg' => 'Debes iniciar sesión como administrador'));
+        }
     }
 
      //Valida si existe una sesion activa

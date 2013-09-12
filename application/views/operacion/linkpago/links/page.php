@@ -41,7 +41,7 @@
             $TPrecioCliente = 0;
             $TGanancia = 0;?>
       <?php foreach ($items as $item):?>
-        <?php foreach ($item->proveedores as $proveedor_cotizacion): if($proveedor_cotizacion->elegido == true):?>
+        <?php foreach ($item->proveedores as $proveedor_cotizacion): if($proveedor_cotizacion->elegido == true && $item->valido):?>
         <tr>
           <td>
             <input type="checkbox" value="<?php echo $proveedor_cotizacion->id;?>">
@@ -49,24 +49,24 @@
           <td><?php echo $item->item;?></td>
           <td><?php echo $item->cantidad;?></td>
           <td><?php echo $proveedor_cotizacion->proveedor->proveedor;?></td>
-          <td><?php  $costo = $proveedor_cotizacion->lp_valor/(1+($proveedor_cotizacion->iva/100)); echo '$'.number_format($costo*$item->cantidad, 2, ',', '.');?></td>
+          <td><?php  $costo = $proveedor_cotizacion->lp_base; echo '$'.number_format($costo*$item->cantidad, 2, ',', '.');?></td>
           <td><?php $ivaLP = $costo*($proveedor_cotizacion->iva/100); echo '$'.number_format($ivaLP*$item->cantidad, 2, ',', '.');?></td>
-          <td><?php echo '$'.number_format($proveedor_cotizacion->lp_valor*$item->cantidad, 2, ',', '.');?></td>
+          <td><?php echo '$'.number_format(($costo+$ivaLP)*$item->cantidad, 2, ',', '.');?></td>
           <td>
-            <?php $valor_antes_iva = $costo*$item->cantidad*(1+($item->margen/100));
-                  $ivaCliente = $valor_antes_iva*($proveedor_cotizacion->iva/100);
-                  $precio_cliente = $valor_antes_iva + $ivaCliente; ?>
+            <?php $ivaCliente = $item->cantidad*($item->precio-($item->precio/(1+($proveedor_cotizacion->iva/100))));
+                  $valor_antes_iva = ($item->precio * $item->cantidad) - $ivaCliente;
+             ?>
             <?php echo '$'.number_format($valor_antes_iva, 2, ',', '.'); ?>
           </td>
           <td><?php echo '$'.number_format($ivaCliente, 2, ',', '.');?></td>
-          <td><?php echo '$'.number_format($precio_cliente, 2, ',', '.');?></td>
+          <td><?php echo '$'.number_format($item->precio*$item->cantidad, 2, ',', '.');?></td>
           <td><?php echo '$'.number_format($valor_antes_iva-($costo*$item->cantidad), 2, ',', '.');?></td>
           <?php $TIvaCliente += $ivaCliente;
-                $TBaseCliente += ($precio_cliente-$ivaCliente);
+                $TBaseCliente += ($valor_antes_iva);
                 $TCosto += ($costo*$item->cantidad);
                 $TIVALP += ($ivaLP*$item->cantidad);
-                $TValorLP += ($proveedor_cotizacion->lp_valor*$item->cantidad);
-                $TPrecioCliente += $precio_cliente;
+                $TValorLP += (($costo+$ivaLP)*$item->cantidad);
+                $TPrecioCliente += $item->precio*$item->cantidad;
                 $TGanancia += $valor_antes_iva-($costo*$item->cantidad);?>
         </tr>
         <?php endif; endforeach;?>

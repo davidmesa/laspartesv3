@@ -110,6 +110,11 @@
         <p class="help-block">Seleccione los vehículos compatibles con esta oferta.</p>
         </div>
       </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="chkEmail" id="chkEmail" checked>  ENVIAR E-MAIL AL USUARIO
+        </label>
+      </div>
       <input class="btn btn-success pull-right" id="guardar" type="submit" value="GUARDAR OFERTA">
     </form>
     <button class="btn btn-default pull-right" id="cancelar" onclick="cancelar()">CANCELAR</button>

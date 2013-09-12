@@ -109,6 +109,11 @@
 #actualizar{
   margin-right: 5px;
 }
+
+.invalid{
+  background-color: red !important;
+  color: white;
+}
 /*
 .alert-success a{
   cursor: pointer;

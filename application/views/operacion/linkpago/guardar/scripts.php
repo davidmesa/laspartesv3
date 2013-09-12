@@ -184,6 +184,11 @@ function crearLink(){
     	}
     	$ids_pc = substr($ids_pc, 0, -1);?>
 	var carros = mySelections2;
+
+	var chkEmail = false;
+	if($('#chkEmail').is(':checked'))
+		var chkEmail = true;
+
 	$.ajaxFileUpload({
 	    type: "POST",
 	    url: "<?php echo base_url(); ?>operacion/linkPago/generar_link_pago/85",//cambiarlo por el controlador
@@ -207,6 +212,7 @@ function crearLink(){
 	    	'categoria_otra': categoria_otra,
 	    	'categoria': categoria,
 	    	'vehiculo_id': carros,
+	    	'chkEmail': chkEmail,
 	    },success: function(data, status){
 	    	if(data.status){
 	    		window.location = '<?php echo base_url()."operacion/linkPago/mostrar_links/".$id_pipeline."/".$id_usuario."/ofertaScs";?>'
