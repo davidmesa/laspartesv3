@@ -84,11 +84,11 @@ class LinkPago extends CI_Controller {
                 $PC_model->item = $PC_model->dar_item_cotizacion();
                 $proveedores_cotizacion[] = $PC_model;
                 $titulo .= $PC_model->item->cantidad.' '.$PC_model->item->item.', ';
-                $precioTemp = round($PC_model->item->cantidad*($PC_model->item->precio));
-                $precio += $precioTemp;
-                $ivaTemp = $precioTemp - ( $precioTemp/ (1 + ($PC_model->iva/100) ) );
+                $baseLP = round($PC_model->item->cantidad*($PC_model->item->precio));
+                $ivaTemp = round($baseLP* ($PC_model->iva/100)) ;
                 $iva += $ivaTemp;
-                $baseLP = $precioTemp-$ivaTemp;
+                $precioTemp = $baseLP+$ivaTemp;
+                $precio += $precioTemp;
                 $margen += $baseLP-($PC_model->lp_base*$PC_model->item->cantidad);
 
             }
@@ -326,9 +326,10 @@ class LinkPago extends CI_Controller {
                     $PC_model->dar();
                     $PC_model->item = $PC_model->dar_item_cotizacion();
 
-                    $precioTemp = $PC_model->item->precio;
-                    $iva = round($precioTemp - ( $precioTemp/ (1 + ($PC_model->iva/100) ) ), 2);
-                    $base = $precioTemp - $iva;
+                    $base = $PC_model->item->precio;
+                    $iva = round($base* ($PC_model->iva/100), 2);
+                    $precioTemp = $base+$iva;
+                    
 
                     $prov_cotizacion_link_pago_model = new prov_cotizacion_link_pago_model();
                     $prov_cotizacion_link_pago_model->id_link_pago = $link_pago_model->id;
@@ -347,16 +348,19 @@ class LinkPago extends CI_Controller {
                 $data['vehiculos'] = $vehiculos;
                 $data['usuario'] = $this->usuario_model->dar_usuario($id_usuario);
 
-                if($chkEmail){
+                
                     ob_start();
                         $this->load->view('emails/link_pago_view', $data);
                         $html = ob_get_contents();
                     ob_end_clean();
 
                     $destinatarios = array();
+                if($chkEmail){
                     $destinatario = new stdClass();
                     $destinatario->email = $data['usuario']->email;
                     $destinatarios[] = $destinatario;
+                    
+                }
                     $destinatario = new stdClass();
                     $destinatario->email = "tallerenlinea@laspartes.com.co";
                     $destinatarios[] = $destinatario;
@@ -366,7 +370,6 @@ class LinkPago extends CI_Controller {
 
                     $this->load->helper('mail');
                     send_mail($destinatarios, "Link de pago - LasPartes.com", $html, "");
-                }
                 echo json_encode(array('status' => true));
             }
         }else{

@@ -214,7 +214,7 @@ tr.even{
       </div>
   </div><!--end logo-->
   <div id="header-der" class="row pull-right">
-      <h4 class="rojo">COTIZACION</h4>
+      <h4 class="rojo">COTIZACIÓN</h4>
       <div class="caja caja-gris">
           <div class="titulo">No.</div>
           <div class="contenido rojo">N. <?php echo str_pad($cotizacion_model->id, 4, '0', STR_PAD_LEFT)?></div>
@@ -243,9 +243,9 @@ tr.even{
                 foreach ($itemsCot as $key => $item) {
                   foreach ($item->proveedores_cotizacion as $key => $pc) {
                       if($item->valido && $pc->elegido){ 
-                          $precioTemp = $item->precio * $item->cantidad;
-                          $baseTemp = $precioTemp / (1+($pc->iva/100));
-                          $ivaTemp = $precioTemp - $baseTemp;
+                          $baseTemp = $item->precio * $item->cantidad ;
+                          $ivaTemp = $baseTemp * ($pc->iva/100);
+                          $precioTemp = $baseTemp + $ivaTemp;
 
                           $precioSum += $precioTemp;
                           $base += $baseTemp;
@@ -256,7 +256,7 @@ tr.even{
                           <td class="center"></td>
                           <td class="center"> ' . $item->cantidad . '</td>
                           <td>' . $item->item . '</td>
-                          <td class="right">$ ' . number_format($baseTemp, 0, ',', '.') . '</td>
+                          <td class="right">$ ' . number_format($item->precio, 0, ',', '.') . '</td>
                           <td class="right">$ ' . number_format($baseTemp, 0, ',', '.') . '</td>
                           </tr>';
                       }

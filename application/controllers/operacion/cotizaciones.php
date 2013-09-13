@@ -105,6 +105,7 @@ class Cotizaciones extends CI_Controller {
                     $cantidad = $data[cantidad];
                     $elegido = $data[elegido];
                     $item = $data[item];
+                    $uIDItem = $this->create_guid();
                     $precio = $data[precio];
                     if(empty($item))
                         $item = ' ';
@@ -139,7 +140,7 @@ class Cotizaciones extends CI_Controller {
                         $proveedorCotizacionModel->iva = $ops[iva];
                         $proveedorCotizacionModel->nota = $ops[nota];
                         $proveedorCotizacionModel->elegido = $ops[elegido];
-                        $proveedoresCot[$item][$provedor] = $proveedorCotizacionModel;
+                        $proveedoresCot[$uIDItem][$provedor] = $proveedorCotizacionModel;//ud tiene el hp problema aquí yeahh
 
                         // echo 'ITEM '.$item.' ID PROVEEDOR '.$proveedorModel->id.' LPVALOR '.$proveedorCotizacionModel->lp_valor.' IVA '.$proveedorCotizacionModel->iva.' NOTA '.$proveedorCotizacionModel->nota.' ELEGIDO '.$proveedorCotizacionModel->elegido.'<br/>';
 
@@ -149,9 +150,9 @@ class Cotizaciones extends CI_Controller {
                             $ivaLP = $costo*($ivaTmp/100);
                             $lp_valor = $costo+$ivaLP;
 
-                            $cliente_precio = $precio;
-                            $cliente_iva = $precio - ($precio/(1+($ivaTmp/100)));
-                            $valor_antes_iva = $cliente_precio - $cliente_iva;
+                            $valor_antes_iva = $precio;
+                            $cliente_iva = $valor_antes_iva*($ivaTmp/100);
+                            $cliente_precio = $valor_antes_iva + $cliente_iva;
                             $ganancia = $valor_antes_iva-$costo;
                             // echo  'ITEM: '.$item.' MARGEN: '.$margen.' CANTIDAD: '.$cantidad.' VALORLP: '.$lp_valor. ' IVA: '.   $ivaTmp. ' COSTO: '.$costo. ' IVALP: '.$ivaLP. ' VALORANTES: '.$valor_antes_iva . ' PRECIOCLIENTE '.$cliente_precio.'<br/>------<br/>';
 
@@ -172,6 +173,7 @@ class Cotizaciones extends CI_Controller {
                         $itemCotizacionModel->id = $id_item;
                         $itemCotizacionModel->dar();
                     }
+                    $itemCotizacionModel->uIDItem = $uIDItem;
                     $itemCotizacionModel->item = $item;
                     $itemCotizacionModel->cantidad = $cantidad;
                     $itemCotizacionModel->margen = $margen;
@@ -197,13 +199,15 @@ class Cotizaciones extends CI_Controller {
                 }else{    
                     $cotizacionModel->insertar();
                 }foreach ($itemsCot as $item) {
+                    $uIDTemp = $item->uIDItem;
+                    unset($item->uIDItem);
                     if($item->id){
                         $item->actualizar();
                     }else{
                         $item->id_cotizacion = $cotizacionModel->id;
                         $item->insertar();
                     }    
-                    foreach ($proveedoresCot[$item->item] as $proveedor) {
+                    foreach ($proveedoresCot[$uIDTemp] as $proveedor) {
                         if($proveedor->id){
                             $proveedor->actualizar();
                         }else{   
@@ -319,6 +323,50 @@ class Cotizaciones extends CI_Controller {
             return true;
         }else {
             return false;
+        }
+    }
+
+    private function create_guid() {
+        $microTime = microtime();
+        list($a_dec, $a_sec) = explode(" ", $microTime);
+
+        $dec_hex = dechex($a_dec * 1000000);
+        $sec_hex = dechex($a_sec);
+
+        $this->ensure_length($dec_hex, 5);
+        $this->ensure_length($sec_hex, 6);
+
+        $guid = "";
+        $guid .= $dec_hex;
+        $guid .= $this->create_guid_section(3);
+        $guid .= '-';
+        $guid .= $this->create_guid_section(4);
+        $guid .= '-';
+        $guid .= $this->create_guid_section(4);
+        $guid .= '-';
+        $guid .= $this->create_guid_section(4);
+        $guid .= '-';
+        $guid .= $sec_hex;
+        $guid .= $this->create_guid_section(6);
+
+        return $guid;
+    }
+
+
+    private function create_guid_section($characters) {
+        $return = "";
+        for ($i = 0; $i < $characters; $i++) {
+            $return .= dechex(mt_rand(0, 15));
+        }
+        return $return;
+    }
+
+    private function ensure_length(&$string, $length) {
+        $strlen = strlen($string);
+        if ($strlen < $length) {
+            $string = str_pad($string, $length, "0");
+        } else if ($strlen > $length) {
+            $string = substr($string, 0, $length);
         }
     }
 

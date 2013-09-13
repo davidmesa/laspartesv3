@@ -53,13 +53,15 @@
           <td><?php $ivaLP = $costo*($proveedor_cotizacion->iva/100); echo '$'.number_format($ivaLP*$item->cantidad, 2, ',', '.');?></td>
           <td><?php echo '$'.number_format(($costo+$ivaLP)*$item->cantidad, 2, ',', '.');?></td>
           <td>
-            <?php $ivaCliente = $item->cantidad*($item->precio-($item->precio/(1+($proveedor_cotizacion->iva/100))));
-                  $valor_antes_iva = ($item->precio * $item->cantidad) - $ivaCliente;
+            <?php 
+                  $valor_antes_iva = $item->precio * $item->cantidad;
+                  $ivaCliente = $valor_antes_iva * ($proveedor_cotizacion->iva/100);
+                  $valor = $valor_antes_iva+$ivaCliente;
              ?>
             <?php echo '$'.number_format($valor_antes_iva, 2, ',', '.'); ?>
           </td>
           <td><?php echo '$'.number_format($ivaCliente, 2, ',', '.');?></td>
-          <td><?php echo '$'.number_format($item->precio*$item->cantidad, 2, ',', '.');?></td>
+          <td><?php echo '$'.number_format($valor, 2, ',', '.');?></td>
           <td><?php echo '$'.number_format($valor_antes_iva-($costo*$item->cantidad), 2, ',', '.');?></td>
           <?php $TIvaCliente += $ivaCliente;
                 $TBaseCliente += ($valor_antes_iva);

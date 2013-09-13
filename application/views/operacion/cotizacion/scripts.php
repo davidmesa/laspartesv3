@@ -12,7 +12,6 @@
 var modificado = false; //si se ha modificado algo en la tabla
 var ini = true; //la aplicación ha sido cargada por primera ves
 var load_items = <?php echo json_encode($items);?>; //datos de los items
-// console.log('items', load_items);
 var idItem = []; //id de los items
 var precreado = false; //ha sido precreada la página
 var $ht = $("#example1");  //la tabla
@@ -75,9 +74,8 @@ if(load_items.length > 0){
 					+')" data-direccion="'+e1.proveedor.direccion+'" data-telefono="'+e1.proveedor.telefono+'" data-ciudad="'+
 				e1.proveedor.ciudad+'" data-eproveedor="'+e1.proveedor.email+'" value="'+formatProveedor+'" style="width: 75px;">');
 				proveedores.push(formatProveedor);
-				dSchema[formatProveedor] = {costo: 0};
-				var cost = formatProveedor+'.costo'; 
-			    columnDef.push({data: cost, type: {renderer: selectRender}});
+				dSchema.formatProveedor = 0;
+			    columnDef.push({data: formatProveedor, type: {renderer: selectRender}});
 
 			    var provData = [];
 			    provData['id_proveedor'] = e1.proveedor.id;
@@ -92,7 +90,7 @@ if(load_items.length > 0){
 			if(e1.elegido == 1)
 				seleccionados[i] = i1+2;
 			load_id_proveedor[i][i1+2] = e1.id;
-			curdata[formatProveedor] = {costo: e1.lp_base};
+			curdata[formatProveedor] =  e1.lp_base;
 			if(e1.nota != null)
 				notas[i][i1+2] = e1.nota;
 
@@ -188,7 +186,7 @@ $(document).ready(function() {
 			proveedor: {
 				required: true
 				,minlength: 2
-				,maxlength: 40
+				,maxlength: 80
 			},email:{
 				required: true,
 				email: true,
@@ -200,7 +198,7 @@ $(document).ready(function() {
             },proveedor: {
                 required: "*Escriba un usuario",
                 minlength: "*El usuario debe contener al menos 5 caracteres",
-                maxlength: "*Porfavor no ingresar más de 20 caracteres"
+                maxlength: "*Porfavor no ingresar más de 80 caracteres"
             }
         },errorPlacement: function(error, element) {
             error.css('position', 'none');
@@ -389,19 +387,21 @@ $(document).ready(function() {
 		 	}
 		}
 	},afterCreateRow: function(e){
-		var currentData = this.getData();
+		// var currentData = this.getData();
 
-		currentData[e]['item'] = "";
-		currentData[e]['cantidad'] = "";
-		for (var i = 0; i < proveedores.length; i++) {
-			var probTemp = proveedores[i];
-			currentData[e][probTemp] = {costo: ""};
-		};
-		currentData[e]['margen'] = "";
-		currentData[e]['precio'] = "";
-	},afterChange: function(c,s){
+		// currentData[e]['item'] = " ";
+		// currentData[e]['cantidad'] = 0;
+		// for (var i = 0; i < proveedores.length; i++) {
+		// 	var probTemp = proveedores[i];
+		// 	currentData[e][probTemp] = 0;
+		// };
+		// currentData[e]['dco'] = 0;
+		// currentData[e]['pSinDco'] = 0;
+		// currentData[e]['margen'] = 0;
+		// currentData[e]['precio'] = 0;
+	},afterChange: function(changes,s){
 		$ht.handsontable('render');
-		motrar_cotizacion();
+		
 		if(!precreado)
 			dar_mejor_cotizacion();
 		precreado = false;
@@ -409,6 +409,8 @@ $(document).ready(function() {
 		if(!ini)
 			modificado = true;	
 		ini = false;
+
+		motrar_cotizacion();
 	}
 });
 
@@ -439,15 +441,14 @@ function agregar_columna(){
 			proveedoresSelec.push(provData) ; 
 			proveedores.push($proveedor);
 			header.splice(header.length-4,0,'<input type="text" onclick="quitarSelect()" data-eproveedor="'+$eproveedor+'" onchange="cambiarHeader(this, '+(header.length-4)+')" value="'+$proveedor+'"  style="width: 75px;">');
-			dSchema[$proveedor] = {costo: null};
+			dSchema[$proveedor] = 0;
 			var htInstance = $ht.handsontable('getInstance');
-			var cost = $proveedor+'.costo';
-			columnDef.splice(header.length-5,0,{data: cost, type: {renderer: selectRender}}); 
+			columnDef.splice(columnDef.length-4,0,{data: $proveedor, type: {renderer: selectRender}}); 
 			var currentData = htInstance.getData();
 			for (var i = 0; i < htInstance.countRows()-1; i++) {
-				currentData[i][$proveedor] = {costo: 0};
+				currentData[i][$proveedor] = 0;
 			};
-			colWidths.splice(header.length-5,0,90); 
+			colWidths.splice(header.length-4,0,90); 
 			htInstance.updateSettings({
 				data: currentData,
 				colWidths: colWidths,
@@ -458,8 +459,7 @@ function agregar_columna(){
 
 			$('#input-proveedor').val('');
 			$('#input-eproveedor').val('');
-			motrar_cotizacion();
-			dar_mejor_cotizacion();
+			// motrar_cotizacion();
 			modificado = true;
 		}
 	}
@@ -495,14 +495,14 @@ function sanitize_title_with_dashes($title) {
     return $title;
 }
 
-function bindDumpButton() {
-	$('body').on('click', 'button[name=dump]', function () {
-		var dump = $(this).data('dump');
-		var $ht = $(dump);
-		console.log('data of ' + dump, $ht.handsontable('getData'));
-	});
-}
-bindDumpButton();
+// function bindDumpButton() {
+// 	$('body').on('click', 'button[name=dump]', function () {
+// 		var dump = $(this).data('dump');
+// 		var $ht = $(dump);
+// 		console.log('data of ' + dump, $ht.handsontable('getData'));
+// 	});
+// }
+// bindDumpButton();
 
 //selecciona un item para el proveedor
 function seleccionar_item_proveedor(){
@@ -539,40 +539,40 @@ var seleccionarCotizados = function (instance, td, row, col, prop, value, cellPr
 
 //Muestra la cotización hecha para el cliente
 function dar_mejor_cotizacion(){
-	var htInstance = $ht.handsontable('getInstance');
-	var currentData = htInstance.getData();
-	var proveedorSelect = [];
-	for (var i = 0; i < htInstance.countRows(); i++) {
-		if(!seleccionados[i]){
-			var item = currentData[i]['item'];
-			var ganancia = -1;
-			var ivaTEMP = 0.16;
-			var colTemp = -1;
-      //dar la celda
-      for (var col = 2; col < htInstance.countCols()-2; col++) {
-      	var costo = htInstance.getDataAtCell(i, col);
-      	if(costo != "" && costo != null && costo > 0){
-      		var td =  htInstance.getCell(i, col);
-      		var cellMeta = htInstance.getCellMeta(i, col);
-      		var prop = cellMeta.prop;
-      		prop = prop.split(".");
-      		prov = prop[0];
-      		if($(td).attr('data-iva')){
-      			ivaTEMP = parseFloat($(td).attr('data-iva'));
-      		}
+	// var htInstance = $ht.handsontable('getInstance');
+	// var currentData = htInstance.getData();
+	// var proveedorSelect = [];
+	// for (var i = 0; i < htInstance.countRows(); i++) {
+	// 	if(!seleccionados[i]){
+	// 		var item = currentData[i]['item'];
+	// 		var ganancia = -1;
+	// 		var ivaTEMP = 0.16;
+	// 		var colTemp = -1;
+ //      //dar la celda
+ //      for (var col = 2; col < htInstance.countCols()-2; col++) {
+ //      	var costo = htInstance.getDataAtCell(i, col);
+ //      	if(costo != "" && costo != null && costo > 0){
+ //      		var td =  htInstance.getCell(i, col);
+ //      		var cellMeta = htInstance.getCellMeta(i, col);
+ //      		var prop = cellMeta.prop;
+ //      		prop = prop.split(".");
+ //      		prov = prop[0];
+ //      		if($(td).attr('data-iva')){
+ //      			ivaTEMP = parseFloat($(td).attr('data-iva'));
+ //      		}
 
-      		var iva = (costo -(costo/(1+ivaTEMP)));
-      		var costoTEMP = costo + iva;
-      		if(costoTEMP < ganancia || ganancia < 0){
-      			ganancia = costoTEMP;
-      			colTemp = col;
-      		}
-      	}
-        }//end if costo vacio 
-        var td =  htInstance.getCell(i, colTemp);
-        $(td).addClass('sugerido');
-    }
-  }//fin for rows
+ //      		var iva = (costo -(costo/(1+ivaTEMP)));
+ //      		var costoTEMP = costo + iva;
+ //      		if(costoTEMP < ganancia || ganancia < 0){
+ //      			ganancia = costoTEMP;
+ //      			colTemp = col;
+ //      		}
+ //      	}
+ //        }//end if costo vacio 
+ //        var td =  htInstance.getCell(i, colTemp);
+ //        $(td).addClass('sugerido');
+ //    }
+ //  }//fin for rows
 }
 
 //muestra un preview de la cotización
@@ -616,9 +616,9 @@ function motrar_cotizacion(){
 						ivaAttr = parseFloat($(item).attr('data-iva').replace('%', ''));  
 				}
 			}else if(col == htInstance.countCols()-2 && itemVal != ''){
-				ganancia = parseFloat(numeral().unformat($(item).text()));
+				ganancia = parseFloat(numeral().unformat(itemVal));
 			}else if(col == htInstance.countCols()-1 && itemVal != ''){
-				precio_cliente = parseFloat(numeral().unformat($(item).text()));
+				valor_antes_iva = parseFloat(numeral().unformat(itemVal));
 				if($(item).hasClass('invalid'))
 					valid = false;
 				else
@@ -629,8 +629,9 @@ function motrar_cotizacion(){
 			var ivaLP = baseLP*(ivaAttr/100);
 			var valorLP = baseLP+ivaLP;
 			
-			var ivaCliente = cantidad*(precio_cliente-(precio_cliente/(1+(ivaAttr/100))));
-			var valor_antes_iva = (precio_cliente * cantidad) - ivaCliente;
+			var valor_antes_iva = valor_antes_iva*cantidad;
+			var ivaCliente = valor_antes_iva*(ivaAttr/100);
+			var precio_cliente = valor_antes_iva+ivaCliente;
 
 			var inputChkbox = $('<input>').attr('type', 'checkbox').val(id_proveedor);
 			tr.append($('<td>').append(inputChkbox));
@@ -642,15 +643,15 @@ function motrar_cotizacion(){
 			tr.append($('<td>').text(numeral(valorLP*cantidad).format('$0,0.00')));
 			tr.append('<td>'+numeral(valor_antes_iva).format('$0,0.00') +'</td>');
 			tr.append('<td>'+numeral(ivaCliente).format('$0,0.00') +'</td>');
-			tr.append($('<td>').text(numeral(precio_cliente*cantidad).format('$0,0.00')));
+			tr.append($('<td>').text(numeral(precio_cliente).format('$0,0.00')));
 			tr.append($('<td>').text(numeral(valor_antes_iva-(baseLP*cantidad)).format('$0,0.00')));
 			$('tbody', '#cotizacion').append(tr);
 			TIvaCliente += ivaCliente;
-			TBaseCliente += ((precio_cliente*cantidad)-ivaCliente);
+			TBaseCliente += (precio_cliente-ivaCliente);
 			TCosto += (baseLP*cantidad);
 			TIVALP += (ivaLP*cantidad);
 			TValorLP += (valorLP*cantidad);
-			TPrecioCliente += precio_cliente*cantidad;
+			TPrecioCliente += precio_cliente;
 			TGanancia += valor_antes_iva-(baseLP*cantidad);
 		}
 	}
@@ -739,10 +740,6 @@ function precioPublicoRender(instance, td, row, col, prop, value, cellProperties
 	var selected = instance.getDataAtCell(row, seleccionados[row]);
 	var inner = Math.abs(selected*(1+(margen/100))).toFixed(2);
 
-	// console.log('------------');
-	// console.log('inner - value', inner, value);
-	// console.log('roundTen', roundTen(inner), roundTen(value));
-	// console.log('ceilTen', ceilTen(inner), ceilTen(value));
 	if(roundTen(inner) != roundTen(value) && ceilTen(inner) != ceilTen(value) && row < cRows){
 		$(td).addClass('invalid');
 	}	
@@ -880,9 +877,7 @@ function guardar(){
 		item.item = ' ';
 			data[row] = item;
 	}
-	// console.log('sin json',data);
 	var data = $.toJSON( data );
-	// console.log('con json', data);
 	$.ajax({
 	    type: "POST",
 	    url: "<?php echo base_url(); ?>operacion/cotizaciones/guardar",
@@ -1123,7 +1118,7 @@ function calcular(){
 			var inner = 0;
 		htInstance.setDataAtCell(row, cols-1, inner);	
 	}else if(selected[1] == cols-2){//si es el precio sin descuento
-		var inner = Math.abs(costo*(1+(dco/100))).toFixed(2);
+		var inner = Math.abs(costo/(1-(dco/100))).toFixed(2);
 		htInstance.setDataAtCell(row, cols-2, inner);	
 	}else if(selected[1] == cols-3){//si es el Descuento
 		var inner = Math.abs(((pSDco/costo)-1)*100).toFixed(4);
@@ -1146,7 +1141,7 @@ function calcular_segun_dco(){
 	var pSDco = $(htInstance.getCell(row, cols-2)).text();		
 	pSDco = numeral().unformat(pSDco);
 
-	var inner = Math.abs(pSDco/(1+(dco/100))).toFixed(2);
+	var inner = Math.abs(pSDco*(1-(dco/100))).toFixed(2);
 	htInstance.setDataAtCell(row, col, inner);	
 }
 

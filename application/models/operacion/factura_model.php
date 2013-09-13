@@ -10,7 +10,7 @@ class factura_model extends CI_Model
     var $id_consecutivo_factura;
     var $id_pipeline;
     var $url;
-    var $anulado;
+    var $anulado = 0;
     
     /**
      * Constructor de la clase factura model
