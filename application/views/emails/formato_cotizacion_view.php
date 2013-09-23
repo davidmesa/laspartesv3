@@ -172,6 +172,10 @@ tr.even{
   margin-top: 60px;
 }
 
+#observaciones{
+    width: 600px;
+}
+
 -->
 </style>
 </head>
@@ -203,13 +207,13 @@ tr.even{
       </div>
       <div id="datos-cliente" class="caja-especial">
           <div class="group">
-              <span class="rojo">CLIENTE:</span> <span><?php echo $usuario->nombres.' '.$usuario->apellidos;?></span>
+              <span class="rojo">CLIENTE:</span> <span><?php echo $nombres;?></span>
           </div>
           <div class="group">
-              <span class="rojo">NIT/CC:</span> <span><?php echo $usuario->documento;?></span>
+              <span class="rojo">NIT/CC:</span> <span><?php echo $documento;?></span>
           </div>
           <div class="group">
-              <span class="rojo">TELÉFONO:</span> <span><?php echo $usuario->telefonos;?></span>
+              <span class="rojo">TELÉFONO:</span> <span><?php echo $telefono;?></span>
           </div>
       </div>
   </div><!--end logo-->
@@ -241,27 +245,23 @@ tr.even{
                 $ivaSum = 0;
                 $precioSum = 0;
                 foreach ($itemsCot as $key => $item) {
-                  foreach ($item->proveedores_cotizacion as $key => $pc) {
-                      if($item->valido && $pc->elegido){ 
-                          $baseTemp = $item->precio * $item->cantidad ;
-                          $ivaTemp = $baseTemp * ($pc->iva/100);
-                          $precioTemp = $baseTemp + $ivaTemp;
+                  $pc = $item->pc;
+                  $baseTemp = $item->precio * $item->cantidad ;
+                  $ivaTemp = $baseTemp * ($pc->iva/100);
+                  $precioTemp = $baseTemp + $ivaTemp;
 
-                          $precioSum += $precioTemp;
-                          $base += $baseTemp;
-                          $ivaSum += $ivaTemp;
+                  $precioSum += $precioTemp;
+                  $base += $baseTemp;
+                  $ivaSum += $ivaTemp;
 
-                          $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  
-                          $html .='" >
-                          <td class="center"></td>
-                          <td class="center"> ' . $item->cantidad . '</td>
-                          <td>' . $item->item . '</td>
-                          <td class="right">$ ' . number_format($item->precio, 0, ',', '.') . '</td>
-                          <td class="right">$ ' . number_format($baseTemp, 0, ',', '.') . '</td>
-                          </tr>';
-                      }
-                  }
-                 
+                  $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  
+                  $html .='" >
+                  <td class="center"></td>
+                  <td class="center"> ' . $item->cantidad . '</td>
+                  <td>' . $item->item . '</td>
+                  <td class="right">$ ' . number_format($item->precio, 0, ',', '.') . '</td>
+                  <td class="right">$ ' . number_format($baseTemp, 0, ',', '.') . '</td>
+                  </tr>';
                 }
 
                 $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
@@ -295,6 +295,15 @@ tr.even{
       </table>
   </div>
   <div class="group btm-row" id=""> 
+      <div class="row" id="observaciones">
+          <div class="caja-especial">
+              <div>OBSERVACIONES</div>
+              <?php 
+                  echo $observaciones;
+              ?>
+              <br><br>
+          </div>
+      </div>
       <div class="row pull-right" id="totales">
           <table>
               <tr>

@@ -52,11 +52,11 @@
       </div>
       <div class="form-group row">
         <label for="descuento">DIRECCIÓN: (*OPCIONAL)</label>
-        <input type="text" name="descuento" placeholder="Dirección" class="form-control" id="direccion"> 
+        <input type="text" name="direccion" placeholder="Dirección" class="form-control" id="direccion"> 
       </div>
       <div class="form-group row">
         <label for="plazo">TELÉFONO: (*OPCIONAL)</label>
-        <input type="text" name="plazo" placeholder="Teléfono" class="form-control" id="telefono" value="<?php echo $usuario->telefonos?>"> 
+        <input type="text" name="telefono" placeholder="Teléfono" class="form-control" id="telefono" value="<?php echo $usuario->telefonos?>"> 
       </div>
       <div class="form-group row">
         <label for="carros">CARRO</label>
@@ -80,6 +80,7 @@
       <input class="btn btn-success pull-right" id="guardar" type="submit" value="GENERAR FACTURA">
     </form>
     <button class="btn btn-default pull-right" id="cancelar" onclick="window.location = '<?php echo base_url()?>operacion/facturacion/mostrar_facturacion/<?php echo $id_pipeline.'/'.$id_usuario?>'">CANCELAR</button>
+    <button class="btn btn-link" id="vista-preliminar" onclick="vista_preliminar()">Vista preliminar</button>
   </div>
   <?php $this->load->view($nombrevista.'scripts')?>
 </body>

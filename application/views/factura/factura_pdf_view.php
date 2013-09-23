@@ -250,13 +250,13 @@ tr.even{
               Resolución DIAN No.
           </div>
           <div class="group center resolucion">
-              320000967228
+              320001027921
           </div>
           <div class="group center resolucion">
-              12/08/2010
+              19/06/2013
           </div>
           <div class="group center resolucion">
-              Del No. 1 al No. 1.000
+              Del No. 1.001 al No. 4.000
           </div>
           <div class="group center resolucion">
               Autoriza
@@ -361,8 +361,11 @@ tr.even{
   <div class="group btm-row" id=""> 
       <div class="row" id="observaciones">
           <div class="caja-especial">
-              <div>OBSERVACIONES</div>
-              <br><br><br>
+              <div>OBSERVACIONES</div> 
+              <?php 
+                  echo '<strong>Vehículo: </strong> '.$venta->carro.'<br/><strong>Placa del vehículo:</strong> '.$venta->placa;
+              ?>
+              <br><br>
           </div>
       </div>
       <div class="row pull-right" id="totales">

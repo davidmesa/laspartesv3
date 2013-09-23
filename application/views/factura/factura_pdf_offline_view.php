@@ -135,7 +135,7 @@ td{
 }
 
 tr.odd{
-    background-color: white;
+    /*background-color: white;*/
 }
 
 tr.even{
@@ -187,10 +187,31 @@ tr.even{
 #clausulas{
     font-size: 10px;
 }
+
+#watermark {
+  color: #d0d0d0;
+  font-size: 130pt;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  z-index: -1;
+  /*left:-20px;*/
+  top:60px;
+}
 -->
 </style>
 </head>
 <body>
+
+<?php if($borrador):?>
+<div id="watermark">
+  <p>BORRADOR</p>
+</div>
+<?php endif;?>
+
     <div id="page">
       <div id="header-izq" class="row">
         <div class="row">
@@ -250,13 +271,13 @@ tr.even{
               Resolución DIAN No.
           </div>
           <div class="group center resolucion">
-              320000967228
+              320001027921
           </div>
           <div class="group center resolucion">
-              12/08/2010
+              19/06/2013
           </div>
           <div class="group center resolucion">
-              Del No. 1 al No. 1.000
+              Del No. 1.001 al No. 4.000
           </div>
           <div class="group center resolucion">
               Autoriza
@@ -367,7 +388,10 @@ tr.even{
       <div class="row" id="observaciones">
           <div class="caja-especial">
               <div>OBSERVACIONES</div>
-              <br><br><br>
+              <?php 
+                  echo '<strong>Vehículo: </strong> '.$venta->carro.'<br/><strong>Placa del vehículo:</strong> '.$venta->placa;
+              ?>
+              <br><br>
           </div>
       </div>
       <div class="row pull-right" id="totales">

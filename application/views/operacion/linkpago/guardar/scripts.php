@@ -140,7 +140,7 @@ $(document).ready(function() {
 function format_number(elem){
 	if($(elem).val() !== ""){
 		var numero = numeral().unformat($(elem).val());
-		$(elem).val(numeral(numero).format('0,0.00'));	
+		$(elem).val(numeral(numero).format('0,0.0000'));	
 	}
 }
 
@@ -159,7 +159,7 @@ function crearLink(){
 	var iconDescuento = $('#descuento').next('.input-group-addon').text();
 	if(iconDescuento === '$')
 		fix_descuento($('#descuento').next('.input-group-addon'));
-	var descuento = $('#descuento').val();
+	var descuento = numeral().unformat($('#descuento').val());
 	var condiciones = $('#condiciones').val();
 	var incluye = $('#incluye').val();
 	var categoria_otra = $('#otro').val();
@@ -245,20 +245,20 @@ function cancelar(){
 function fix_descuento(elem){
 	if($(elem).text() === '%'){
 		$(elem).text('$');
-		var precio = parseFloat($('#precio').val());
-		var iva = parseFloat($('#iva').val());
+		var precio = parseFloat(numeral().unformat($('#precio').val()));
+		var iva = parseFloat(numeral().unformat($('#iva').val()));
 		var base = parseFloat(precio - iva);
 		var dcto = numeral().unformat($('#descuento').val());
-		var valorDcto = base*(dcto/100);
+		var valorDcto = base*(dcto/100); console.log('base', base, 'dco', dcto/100);
 		$('#descuento').val(numeral(valorDcto).format('0,0.00'));
 	}else if($(elem).text() === '$'){
 		$(elem).text('%');
-		var precio = parseFloat($('#precio').val());
-		var iva = parseFloat($('#iva').val());
+		var precio = parseFloat(numeral().unformat($('#precio').val()));
+		var iva = parseFloat(numeral().unformat($('#iva').val()));
 		var base = parseFloat(precio - iva);
 		var valorDcto = numeral().unformat($('#descuento').val());
 		var dcto = (valorDcto/base)*100;
-		$('#descuento').val(numeral(dcto).format('0,0.00'));
+		$('#descuento').val(numeral(dcto).format('0,0.00000'));
 	}
 }
 </script>

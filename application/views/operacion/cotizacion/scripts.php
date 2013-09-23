@@ -616,9 +616,16 @@ function motrar_cotizacion(){
 						ivaAttr = parseFloat($(item).attr('data-iva').replace('%', ''));  
 				}
 			}else if(col == htInstance.countCols()-2 && itemVal != ''){
-				ganancia = parseFloat(numeral().unformat(itemVal));
+				var gananciaTemp = $(item).text();
+				ganancia = numeral().unformat(gananciaTemp);
 			}else if(col == htInstance.countCols()-1 && itemVal != ''){
-				valor_antes_iva = parseFloat(numeral().unformat(itemVal));
+				var valor_antes_ivaTemp = $(item).text();
+
+				if(valor_antes_ivaTemp)
+					valor_antes_iva = numeral().unformat(valor_antes_ivaTemp);
+				else
+					valor_antes_iva = 0;
+
 				if($(item).hasClass('invalid'))
 					valid = false;
 				else
@@ -824,8 +831,8 @@ function agregar_nota(row, col){
 //guarda la cotización
 function guardar(){
 	modificado = false;
-	$('#fs-btns').attr('disabled', 'disabled');
-	$('#fs-btns').val('Cargando...');
+	$('#guardarCotizacion').attr('disabled', 'disabled');
+	$('#guardarCotizacion').text('Guardando...');
 	var data = {};
 	var htInstance = $ht.handsontable('getInstance');
 	for (var row = 0; row < htInstance.countRows()-1 ; row++) {
@@ -897,7 +904,7 @@ function guardar(){
 	    }
 	});
 
-	$('#fs-btns').removeAttr('disabled');
+	$('#guardarCotizacion').removeAttr('disabled');
 }
 
 //muestra la alerta
@@ -997,8 +1004,9 @@ function generar_orden_compra(elem){
 	    		$('.modal').modal('hide');
 	    		$("body").scrollTop(0);
 	    	}else{
-	    		$('body').prepend(data.msg);
-	    		$("body").scrollTop(0);
+	    		alert(data.msg);
+	    		$('.submit-oc', elem).val('Generar');
+	    		$('.submit-oc').removeAttr('disabled');
 	    	}
 	    },error: function(XMLHttpRequest, textStatus, errorThrown){
 	    	mostrar_alerta('msjError');
@@ -1174,44 +1182,80 @@ function select_porcentaje(){
 	$ht.handsontable('render');
 }
 
-//Envía la cotización al usuario asociado
-function enviar_cotizacion(elem){
-	var answer = confirm("¿Está seguro de que desea enviar la cotización al usuario?");
-	$(elem).attr('disabled', 'disabled');
-	$(elem).text('Enviando...');
-	if (answer){
-		$.ajax({
-		    type: "POST",
-		    url: "<?php echo base_url(); ?>operacion/cotizaciones/enviar_cotizacion",
-		    data: { 
-	    	'id_usuario': '<?php echo $id_usuario;?>',
-	    	'id_pipeline': '<?php echo $id_pipeline;?>',
-		    },success: function(data){
-		    	var data = $.parseJSON(data);
-		    	if(data.status == true){
-			    	$('#success-cotizacion').show();
-			    	$("body").scrollTop(0);
-			    	$(elem).text('Enviar cotización');
-			    	$(elem).removeAttr('disabled');
-		        }else{
-		    		$('#danger-cotizacion .alert-msg').html(data.msg);
-			    	$('#danger-cotizacion').show();
-			    	$("body").scrollTop(0);
-			    	$(elem).text('Enviar cotización');
-			    	$(elem).removeAttr('disabled');
-		    	}
-		    },error: function(XMLHttpRequest, textStatus, errorThrown){
-		    	$('#danger-cotizacion .alert-msg').html('Ocurrió un error al enviar la cotizacion, favor intentar más tarde.');
-		    	$('#danger-cotizacion').show();
-		    	$("body").scrollTop(0);
-		    	$(elem).text('Enviar cotización');
-		    	$(elem).removeAttr('disabled');
-		    }
-		});
+function mostrar_modal_cotizacion(elem){
+	var mostrado = false;
+	if(modificado){
+		alert('Debes guardar primero');
 	}else{
-		$(elem).text('Enviar cotización');
-		$(elem).removeAttr('disabled');
+		mostrado = false;
+		var modalClone = $('#modal-cotizacion-pdf').clone();
+		var id_proveedor_cot = [];
+		$.each($('#cotizacion tbody tr'), function (i1, object1) {
+			var tds = $('td', object1);
+			if( $('input:checked',tds[0]).val()){
+				id_proveedor_cot.push($('input:checked',tds[0]).val());
+			}
+		});
+		if(id_proveedor_cot.length>0){ 
+			id_proveedor_cot = $.toJSON( id_proveedor_cot );
+
+			// var modalClone = $(modalCloneOriginal).clone();
+			$('.form-cotizacion', modalClone).submit(function(e){
+				e.preventDefault();
+				enviar_cotizacion(this);
+			});
+			$('.c-id-proveedor', modalClone).val(id_proveedor_cot);
+			$('.c-nombres', modalClone).val('<?php echo $usuario->nombres." ".$usuario->apellidos;?>');
+			$('.c-email', modalClone).val('<?php echo $usuario->email;?>');
+			$('.c-documento', modalClone).val('<?php echo $usuario->documento;?>');
+			$('.c-telefono', modalClone).val('<?php echo $usuario->telefonos;?>');
+			modalClone.modal('show');
+			mostrado = true;
+		}
 	}
+	if(!mostrado && !modificado){//si no se ha mostrado ningún modal, le muestra una alerta
+		alert('Debes escoger un al menos un item para enviar la cotización');
+	}
+}
+
+//Envía la cotización al usuario asociado
+function enviar_cotizacion(elem){ console.log('entra a enviar');	
+	$('.submit-c', elem).attr('disabled', 'disabled');
+	$('.submit-c', elem).val('Enviando...');
+	$.ajax({
+	    type: "POST",
+	    url: "<?php echo base_url(); ?>operacion/cotizaciones/enviar_cotizacion",
+	    data: { 
+    	ids_pc: $('.c-id-proveedor',elem).val(),
+    	'id_usuario': '<?php echo $id_usuario;?>',
+    	'id_pipeline': '<?php echo $id_pipeline;?>',
+    	nombres: $('.c-nombres', elem).val(),
+    	email: $('.c-email', elem).val(),
+    	documento: $('.c-documento', elem).val(),
+    	telefono: $('.c-telefono', elem).val(),
+    	obsevaciones: $('.c-observaciones',elem).val()
+	    },success: function(data){
+	    	var data = $.parseJSON(data);
+	    	if(data.status == true){
+		    	$('#success-cotizacion').show();
+		    	$("body").scrollTop(0);
+		    	$('.submit-c', elem).val('Enviar');
+		    	$('.submit-c', elem).removeAttr('disabled');
+	    		$('.modal-cotizacion-pdf').has(elem).modal('hide');
+	        }else{
+	    		alert(data.msg);
+		    	$('.submit-c', elem).val('Enviar');
+		    	$('.submit-c', elem).removeAttr('disabled');
+	    	}
+	    },error: function(XMLHttpRequest, textStatus, errorThrown){
+	    	$('#danger-cotizacion .alert-msg').html('Ocurrió un error al enviar la cotizacion, favor intentar más tarde.');
+	    	$('#danger-cotizacion').show();
+	    	$("body").scrollTop(0);
+	    	$('.submit-c', elem).val('Enviar');
+	    	$('.submit-c', elem).removeAttr('disabled');
+	    	$('.modal-cotizacion-pdf').has(elem).modal('hide');
+	    }
+	});
 }
 
 function isEmpty(str) {

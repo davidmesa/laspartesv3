@@ -5,6 +5,13 @@
 <link href="<?php echo base_url(); ?>resources/css/halflings.css" rel="stylesheet" type="text/css" media="screen">
 
 <style>
+.margin-auto{
+  margin-right: auto;
+  margin-left: auto;
+  display: table;
+  content: " ";
+  clear: both;
+}
 .handsontable .currentRow {
   background-color: #E7E8EF;
 }

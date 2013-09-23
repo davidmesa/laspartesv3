@@ -132,6 +132,7 @@ $route['operacion/ordenRemision/mostrar_ordedes/(.+)/(\d+)/(.+)'] = "operacion/o
 $route['operacion/facturacion/mostrar_facturacion/(.+)/(\d+)/(.+)'] = "operacion/facturacion/mostrar_facturacion/$1/$2/$3";
 $route['operacion/facturacion/form_factura/(.+)/(\d+)/(.+)'] = "operacion/facturacion/form_factura/$1/$2/$3";
 $route['operacion/facturacion/form_recibo/(.+)/(\d+)/(.+)'] = "operacion/facturacion/form_recibo/$1/$2/$3";
+$route['operacion/facturacion/vista_preliminar/(\d+)/(.+)'] = "operacion/facturacion/vista_preliminar/$1/$2";
 /*fin link de pago */
 
 

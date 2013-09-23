@@ -45,7 +45,7 @@
       <div class="form-group row">
         <label for="descuento">DESCUENTO DE PROMOCIÓN (Haz click sobre el % ó $ para cambiar)</label>
         <div class="input-group">
-          <input type="text" name="descuento" placeholder="Descuento"  onblur="format_number(this)" class="form-control" id="descuento" value="<?php echo  number_format($oferta->dco_feria, 2, ',', '.');?>"> 
+          <input type="text" name="descuento" placeholder="Descuento"  onblur="format_number(this)" class="form-control" id="descuento" value="<?php echo  number_format($oferta->dco_feria, 5, ',', '.');?>"> 
           <span class="input-group-addon" onclick="fix_descuento(this)" style="cursor: pointer;">%</span>
         </div>
       </div>

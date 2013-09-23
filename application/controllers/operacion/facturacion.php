@@ -735,6 +735,57 @@ class Facturacion extends Dropbox_Controller {
         }
     }
 
+
+    function vista_preliminar($id_usuario, $ids){
+        $this->load->model('vehiculo_model');
+        $this->load->model('promocion_model');
+        $id_usuario = $id_usuario;
+        $id_ofertas = explode('-', $ids); 
+        $nombres = $this->input->post('nombres');
+        $documento = $this->input->post('documento');
+        $correo = $this->input->post('correo');
+        $lugar = $this->input->post('lugar');
+        $direccion = $this->input->post('direccion');
+        $telefono = $this->input->post('telefono');
+        $carroModel = $this->vehiculo_model->dar_vehiculo($this->input->post('carros'));
+        $carro = $carroModel->marca.' '.$carroModel->linea;
+        $placa = $this->input->post('placa');
+        $fecha_pago = $this->input->post('fechapago');
+
+        $result = $this->db->query("SHOW TABLE STATUS LIKE 'consecutivo_factura'");
+        $row = $result->result_array(); 
+        $data['consecutivo'] = $row[0]['Auto_increment'];  
+
+        $data['venta']->nombre_apellido = $nombres;
+        $data['venta']->documento = $documento;
+        $data['venta']->direccion = $direccion;
+        $data['venta']->telefono = $telefono;
+        $data['venta']->fecha = date('Y-m-d'); 
+        $data['venta']->fecha_pago = $fecha_pago;
+        $data['venta']->carro = $carroModel->marca.' '.$carroModel->linea;
+        $data['venta']->placa = $placa;
+
+        $total = 0;
+        $ofertas = array();
+        foreach ($id_ofertas as $index => $id_oferta):
+            $ofertamodel = $this->promocion_model->dar_oferta_sin_vigencia($id_oferta);
+            $ofertamodel->cantidad = 1;
+            $link_pago_model = new link_pago_model();
+            $link_pago_model->id_oferta = $id_oferta;
+            $link_pago_model->dar_por_oferta();
+            $prov_cotizacion_link_pago_model = new prov_cotizacion_link_pago_model();
+            $pclpm = $prov_cotizacion_link_pago_model->dar_todos_filtros(array('id_link_pago' => $link_pago_model->id));
+            $ofertamodel->prov_cotizacion_link_pago_model = $pclpm;
+            $ofertamodel->link_pago_model = $link_pago_model;
+            $ofertas[] = $ofertamodel;
+        endforeach;
+        $data['ofertas'] = $ofertas;
+        $data['borrador'] = true;
+
+        // var_dump($_POST);
+        $this->load->view('factura/factura_pdf_offline_view', $data);
+    }
+
      //Valida si existe una sesion activa
     //en caso de que la sesión este activa, retorna true, de lo contrario false
     function hay_sesion_activa(){

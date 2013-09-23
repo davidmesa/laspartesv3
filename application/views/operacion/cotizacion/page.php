@@ -18,7 +18,7 @@
   <div class="alert alert-danger" id="danger-cotizacion"><button type="button" class="close" data-dismiss="alert">&times;</button>
     <div class="alert-msg"></div>
   </div>
-    <div class="row" id="header-ops">
+    <div class="row" id="header-ops" style="margin-left:0;">
       <div class="col-xs-12 col-md-8">
         <form class="form-inline  proveedor"  role="form" id="agregarProveedor">
           <div class="form-group">
@@ -103,10 +103,10 @@
 
 <div id="row">
 <fieldset id="fs-btns">
- <button name="dump" class="btn btn-success pull-right" onclick="guardar()">Guardar</button>
+ <button name="dump" class="btn btn-success pull-right" id="guardarCotizacion" onclick="guardar()">Guardar</button>
  <button name="dump" id="cancelar" class="btn btn-default pull-right" onclick="cancelar()">Cancelar</button>
  <button name="dump" id="ordenCompra" class="btn btn-success pull-right" onclick="orden_compra()">Generar Orden de compra</button>
- <button name="dump" id="ordenCompra" class="btn btn-success pull-right" onclick="enviar_cotizacion(this)">Enviar cotización</button>
+ <button name="dump" id="ordenCompra" class="btn btn-success pull-right" onclick="mostrar_modal_cotizacion(this)">Enviar cotización</button>
 </fieldset>
 </div>
 
@@ -212,6 +212,58 @@
         <div class="modal-footer">
           <a href="#" class="btn btn-default" data-dismiss="modal">Cerrar</a>
           <input type="submit" class="btn btn-primary submit-oc" value="Generar">
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade modal-cotizacion-pdf" id="modal-cotizacion-pdf">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Generar cotización</h4>
+      </div>
+
+      <form class="form-horizontal form-cotizacion">
+        <input type="hidden" class="c-id-proveedor" data-modificado="false">
+        <div class="modal-body">
+          <input type="hidden" class="oc-id-proveedores-cot">
+          <div class="form-group">
+            <label for="inputEmail" class="col-lg-2 control-label">Nombres:</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control input-sm c-nombres" placeholder="Nombres">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail" class="col-lg-2 control-label">Email:</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control input-sm c-email" placeholder="Email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail" class="col-lg-2 control-label">Documento:</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control input-sm c-documento" placeholder="Nombres">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail" class="col-lg-2 control-label">Teléfono:</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control input-sm c-telefono" placeholder="Nombres">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="inputObservaciones" class="col-lg-3 control-label">Observaciones:</label>
+            <div class="col-lg-9">
+              <textarea name="" class="form-control c-observaciones" id="" cols="20" rows="7"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn btn-default" data-dismiss="modal">Cerrar</a>
+          <input type="submit" class="btn btn-primary submit-c" value="Enviar">
         </div>
       </form>
     </div><!-- /.modal-content -->

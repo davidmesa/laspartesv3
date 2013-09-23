@@ -58,9 +58,6 @@ class Usuario extends Laspartes_Controller {
             $destinatario = new stdClass();
             $destinatario->email = "ventas@laspartes.com.co";
             $destinatarios[] = $destinatario;
-            // $destinatario = new stdClass();
-            // $destinatario->email = "direcciondesarrollo@laspartes.com.co";
-            // $destinatarios[] = $destinatario;
             
             ob_start();
             
@@ -76,16 +73,17 @@ class Usuario extends Laspartes_Controller {
             send_mail($destinatarios, "Factura de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
 
             //METODOS DE DROPBOX
-            $this->load->model('usuarios_dropbox_model');
-            $usuarios_dropbox_model = new usuarios_dropbox_model();
-            $usuarios_dropbox_model->dar_por_filtros(array('id_usuario' => '54'));
-            $respuestaRequest = $this->request_dropbox($usuarios_dropbox_model->oauth_token, $usuarios_dropbox_model->oauth_token_secret);
-            $DropboxPath = '/CARPETA MAESTRA/FACTURAS LP/'.date('Y').'/';
-            $metadata = $this->dropbox->metadata($DropboxPath);
-            if(!$metadata->is_dir)
-                $this->dropbox->create_folder($DropboxPath);
-            $addResponse = $this->dropbox->add($DropboxPath, $filePath.$fileName);
-
+            if(ENVIRONMENT == 'production'){
+                $this->load->model('usuarios_dropbox_model');
+                $usuarios_dropbox_model = new usuarios_dropbox_model();
+                $usuarios_dropbox_model->dar_por_filtros(array('id_usuario' => '54'));
+                $respuestaRequest = $this->request_dropbox($usuarios_dropbox_model->oauth_token, $usuarios_dropbox_model->oauth_token_secret);
+                $DropboxPath = '/CARPETA MAESTRA/FACTURAS LP/'.date('Y').'/';
+                $metadata = $this->dropbox->metadata($DropboxPath);
+                if(!$metadata->is_dir)
+                    $this->dropbox->create_folder($DropboxPath);
+                $addResponse = $this->dropbox->add($DropboxPath, $filePath.$fileName);
+            }
         } else if ($estado == "error") {
             $destinatarios = array();
             $destinatario = new stdClass();
@@ -2659,7 +2657,9 @@ class Usuario extends Laspartes_Controller {
             $idUsuario = $this->session->userdata('id_usuario');
             $usuario = $this->usuario_model->dar_usuario($idUsuario);
             $emailComprador = $usuario->email;
-            $prueba = 0; //0 para produccion
+            $prueba = 1;
+            if(ENVIRONMENT == 'production')
+                $prueba = 0; //0 para produccion
             $moneda = "COP";
             $url_respuesta = base_url() . "usuario/pago_confirmacion";
             $url_confirmacion = base_url() . "usuario/confirmacion_pol";
@@ -2821,7 +2821,7 @@ class Usuario extends Laspartes_Controller {
      */
     function pago_confirmacion() {
         $llave = "13733cb5a73";
-        $uri = $_SERVER['REQUEST_URI'];
+        $uri = $_SERVER['REQUEST_URI']; 
         list($ur, $usu, $datos) = split('/', $uri);
         $uri = $datos;
         list($l1, $l2) = split('\?', $uri);

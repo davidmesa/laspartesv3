@@ -68,7 +68,7 @@
                 $TCosto += ($costo*$item->cantidad);
                 $TIVALP += ($ivaLP*$item->cantidad);
                 $TValorLP += (($costo+$ivaLP)*$item->cantidad);
-                $TPrecioCliente += $item->precio*$item->cantidad;
+                $TPrecioCliente += $valor;
                 $TGanancia += $valor_antes_iva-($costo*$item->cantidad);?>
         </tr>
         <?php endif; endforeach;?>

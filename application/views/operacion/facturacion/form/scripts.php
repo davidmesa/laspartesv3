@@ -140,4 +140,32 @@ function generarFactura(){
 	});
 }
 
+//vista preliminar de la factura
+function vista_preliminar(){
+	var carro = $('#carros','#generarFactura').val();
+	var lugar = $('#lugar','#generarFactura').val();
+	var form = $('#generarFactura').clone();
+	$('#carros',form).val(carro);
+	$('#lugar',form).val(lugar);
+	$(form).attr("id", "previsualizarForm");
+	$(form).attr("method", "post");
+	$(form).css("display", "none");
+	$(form).attr("action", '<?php echo base_url()?>operacion/facturacion/vista_preliminar/<?php echo $id_usuario?>/<?php echo $ids?>');
+
+	// setting form target to a window named 'formresult'
+	$(form).attr("target", "formresult");
+
+	$('body').append(form);
+
+	// creating the 'formresult' window with custom features prior to submitting the form
+	window.open('<?php echo base_url()?>operacion/facturacion/vista_preliminar/<?php echo $id_usuario?>/<?php echo $ids?>', 'formresult', 'scrollbars=no,menubar=no,height=800,width=850,resizable=yes,toolbar=no,status=no');
+
+	$(form).submit();
+}
+
+function valid(string) {
+ string =  string.replace(/[^a-zA-Z0-9]/g,'_');
+ return string
+}
+
 </script>

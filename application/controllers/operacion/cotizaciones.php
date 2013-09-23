@@ -28,9 +28,11 @@ class Cotizaciones extends CI_Controller {
      */
     function mostrar_cotizaciones($id_pipeline, $id_usuario, $msj = ''){
         if($this->hay_sesion_activa()){
+            $this->load->model('usuario_model');
             $this->load->model('operacion/orden_compra_model');
             $data['id_pipeline'] = $id_pipeline;
             $data['id_usuario'] = $id_usuario;
+            $data['usuario'] = $this->usuario_model->dar_usuario($id_usuario);
             $cotizacionModel = new cotizacion_model();
             $cotizacionModel->id_pipeline = $id_pipeline;
             $cotizacionModel->dar_por_pipeline();
@@ -201,14 +203,14 @@ class Cotizaciones extends CI_Controller {
                 }foreach ($itemsCot as $item) {
                     $uIDTemp = $item->uIDItem;
                     unset($item->uIDItem);
-                    if($item->id){
+                    if(!empty($item->id)){
                         $item->actualizar();
                     }else{
                         $item->id_cotizacion = $cotizacionModel->id;
                         $item->insertar();
                     }    
                     foreach ($proveedoresCot[$uIDTemp] as $proveedor) {
-                        if($proveedor->id){
+                        if(!empty($proveedor->id)){
                             $proveedor->actualizar();
                         }else{   
                             $proveedor->id_item_cotizacion = $item->id; 
@@ -261,20 +263,51 @@ class Cotizaciones extends CI_Controller {
                     'field' => 'id_pipeline',
                     'label' => 'id pipeline',
                     'rules' => 'trim|required|xss_clean'
-                ),
-                array(
+                ),array(
                     'field' => 'id_usuario',
                     'label' => 'id usuario',
+                    'rules' => 'trim|required|xss_clean'
+                ),array(
+                    'field' => 'nombres',
+                    'label' => 'nombres',
+                    'rules' => 'trim|required|xss_clean'
+                ),array(
+                    'field' => 'email',
+                    'label' => 'email',
+                    'rules' => 'trim|required|xss_clean'
+                ),array(
+                    'field' => 'documento',
+                    'label' => 'documento',
+                    'rules' => 'trim|xss_clean'
+                ),array(
+                    'field' => 'telefono',
+                    'label' => 'teléfono',
+                    'rules' => 'trim|xss_clean'
+                ),array(
+                    'field' => 'obsevaciones',
+                    'label' => 'observaciones',
+                    'rules' => 'trim|xss_clean'
+                ),array(
+                    'field' => 'ids_pc',
+                    'label' => 'items seleccionados',
                     'rules' => 'trim|required|xss_clean'
                 )
             );
             $this->form_validation->set_rules($reglas);
 
             if (!$this->form_validation->run()){
+                $this->form_validation->set_error_delimiters('', '');
                 echo json_encode(array('status' => false, 'msg' => validation_errors()), JSON_HEX_QUOT | JSON_HEX_TAG);
             }else {
+                $this->load->model('operacion/item_orden_compra_model');
                 $id_pipeline = $this->input->post('id_pipeline');
                 $id_usuario = $this->input->post('id_usuario');
+                $nombres = $this->input->post('nombres');
+                $email = $this->input->post('email');
+                $documento = $this->input->post('documento');
+                $telefono = $this->input->post('telefono');
+                $observaciones = $this->input->post('obsevaciones');
+                $ids_pc = json_decode($this->input->post('ids_pc'), true);
                 setlocale(LC_ALL, 'es_ES');
                 define("CHARSET", "iso-8859-1");
                 $this->load->model('usuario_model');
@@ -282,18 +315,28 @@ class Cotizaciones extends CI_Controller {
                 $cotizacion_model = new cotizacion_model();
                 $cotizacion_model->id_pipeline = $id_pipeline;
                 $cotizacion_model->dar_por_pipeline();
-                $itemsCot = $cotizacion_model->dar_items_cotizacion();
-                foreach ($itemsCot as $key => $item) {
-                    $itemsCot[$key]->proveedores_cotizacion = $item->dar_proveedores_cotizacion();
+                $items = array();
+                foreach ($ids_pc as $id) {
+                    $item_orden_compra_model = new item_orden_compra_model();
+                    $prov_model = new proveedor_cotizacion_model();
+                    $prov_model->id = $id;
+                    $prov_model->dar();
+                    $item = $prov_model->dar_item_cotizacion();
+                    $item->pc = $prov_model;
+                    $items[] = $item;
                 }
+                $data['nombres'] = $nombres;
+                $data['email'] = $email;
+                $data['documento'] = $documento;
+                $data['telefono'] = $telefono;
+                $data['observaciones'] = $observaciones;
                 $data['usuario'] = $this->usuario_model->dar_usuario($id_usuario);
                 $data['cotizacion_model'] = $cotizacion_model;
-                $data['itemsCot'] = $itemsCot;
+                $data['itemsCot'] = $items;
                 $html = $this->load->view('emails/formato_cotizacion_view', $data, true);
-
                 $destinatarios = array();
                 $destinatario = new stdClass();
-                $destinatario->email = $venta->email;
+                $destinatario->email = $email;
                 $destinatarios[] = $destinatario;
                 $destinatario = new stdClass();
                 $destinatario->email = "tallerenlinea@laspartes.com.co";
