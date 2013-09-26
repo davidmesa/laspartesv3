@@ -213,12 +213,6 @@ class OrdenRemision extends Dropbox_Controller {
                     </td>
                     <td>
                     </td>
-                    <td>
-                        <div style="color:white; background-color:#c60200; ">FECHA DE PAGO</div>
-                        <span style="border:1px solid #c60200; ">' . $venta->fecha . '</span><br/>
-                        <div style="text-align:center;  font-size:100px;">
-                        </div>
-                    </td>
                 </tr>
             </table>';
 
