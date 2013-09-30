@@ -42,11 +42,11 @@
     <span id="error-placement"></span>
   
   <div class="form-group">
-    <div class="bs-callout bs-callout-info"><button type="button" class="close" data-dismiss="alert">&times;</button>
+    <!-- <div class="bs-callout bs-callout-info"><button type="button" class="close" data-dismiss="alert">&times;</button>
       <h4>Nota</h4>
       <p>1. Recuerda que debes ingresar todos los valores antes de iva.<br/>
       2. Para ingresar el iva de un proveedor, seleccionar un item o agregar una nota debes dar click derecho.</p>
-    </div>
+    </div> -->
     <div id="example1" style="overflow: auto;" class="handsontable"></div>
   </div>
   <!-- <div class="form-group">

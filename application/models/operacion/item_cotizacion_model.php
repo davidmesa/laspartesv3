@@ -18,6 +18,7 @@ class item_cotizacion_model extends CI_Model
     var $dco = 0;
     var $precio_sin_dco = 0;
     var $precio = 0;
+    var $iva = 0;
     var $valido = 0;
     var $id_orden_compra = 0;
     

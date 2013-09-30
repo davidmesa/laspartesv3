@@ -341,7 +341,7 @@ class Crm {
      * @param int $id_usuario
      * @return string uID
      */
-    private function dar_uID_REST($id_usuario) {
+    public function dar_uID_REST($id_usuario) {
         if(ENVIRONMENT == 'production'):
             $user_id = $this->session_id;
        

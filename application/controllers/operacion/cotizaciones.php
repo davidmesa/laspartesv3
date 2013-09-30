@@ -19,7 +19,7 @@ class Cotizaciones extends CI_Controller {
     }
 
     function index() {
-
+        
     }
 
     /**
@@ -109,6 +109,7 @@ class Cotizaciones extends CI_Controller {
                     $item = $data[item];
                     $uIDItem = $this->create_guid();
                     $precio = $data[precio];
+                    $ivaprecio = $data[iva];
                     if(empty($item))
                         $item = ' ';
                     $margen = $data[margen];
@@ -153,7 +154,7 @@ class Cotizaciones extends CI_Controller {
                             $lp_valor = $costo+$ivaLP;
 
                             $valor_antes_iva = $precio;
-                            $cliente_iva = $valor_antes_iva*($ivaTmp/100);
+                            $cliente_iva = $valor_antes_iva*($ivaprecio/100);
                             $cliente_precio = $valor_antes_iva + $cliente_iva;
                             $ganancia = $valor_antes_iva-$costo;
                             // echo  'ITEM: '.$item.' MARGEN: '.$margen.' CANTIDAD: '.$cantidad.' VALORLP: '.$lp_valor. ' IVA: '.   $ivaTmp. ' COSTO: '.$costo. ' IVALP: '.$ivaLP. ' VALORANTES: '.$valor_antes_iva . ' PRECIOCLIENTE '.$cliente_precio.'<br/>------<br/>';
@@ -182,6 +183,7 @@ class Cotizaciones extends CI_Controller {
                     $itemCotizacionModel->dco = $dco;
                     $itemCotizacionModel->precio_sin_dco = $pSDco;
                     $itemCotizacionModel->precio = $precio;
+                    $itemCotizacionModel->iva = $ivaprecio;
                     $itemCotizacionModel->valido = $valido;
                     $itemsCot[] = $itemCotizacionModel;
                 }

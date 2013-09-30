@@ -55,7 +55,7 @@
           <td>
             <?php 
                   $valor_antes_iva = $item->precio * $item->cantidad;
-                  $ivaCliente = $valor_antes_iva * ($proveedor_cotizacion->iva/100);
+                  $ivaCliente = $valor_antes_iva * ($item->iva/100);
                   $valor = $valor_antes_iva+$ivaCliente;
              ?>
             <?php echo '$'.number_format($valor_antes_iva, 2, ',', '.'); ?>

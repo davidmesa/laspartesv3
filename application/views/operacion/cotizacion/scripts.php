@@ -11,6 +11,7 @@
 <script data-jsfiddle="example1">
 var modificado = false; //si se ha modificado algo en la tabla
 var ini = true; //la aplicación ha sido cargada por primera ves
+var invalid = []; //filas que son invalidas
 var load_items = <?php echo json_encode($items);?>; //datos de los items
 var idItem = []; //id de los items
 var precreado = false; //ha sido precreada la página
@@ -41,6 +42,7 @@ var autocompleteProveedor = $('#input-proveedor').typeahead({
 
 
 var load_iva = Create2DArray(100);
+var load_iva_precio = [];
 var load_id_proveedor = Create2DArray(100);
 if(load_items.length > 0){
 	precreado = true;
@@ -62,6 +64,7 @@ if(load_items.length > 0){
 	$.each(load_items,function(i,e){
 		var curdata = [];
 		curdata['item'] = e.item;
+		load_iva_precio[i] = e.iva;
 		if(!isNaN(parseInt(e.cantidad)) && isFinite(e.cantidad))
 			curdata['cantidad'] = parseInt(e.cantidad);
 		else 
@@ -123,7 +126,7 @@ if(load_items.length > 0){
 	header.push("Descuento LP(%)");
 	header.push("Precio sin Dco");
 	header.push("Margen LP(%)");
-	header.push("Precio al cliente");
+	header.push("Precio al cliente antes de iva");
 	columnDef.push({data: 'dco', allowInvalid: false, type: {renderer: numberRender}});  
 	columnDef.push({data: 'pSinDco', allowInvalid: false, type: {renderer: numberRender}}); 
 	columnDef.push({data: 'margen', allowInvalid: false, type: {renderer: numberNegativoRender}}); 
@@ -146,7 +149,7 @@ if(load_items.length > 0){
 	header[2] = "Descuento LP(%)";
 	header[3] = "Precio sin Dco";
 	header[4] = "Margen LP(%)";
-	header[5] = "Precio al cliente";
+	header[5] = "Precio al cliente antes de iva";
 	var columnDef = new Array();
 	columnDef.push({data: 'item'});  
 	columnDef.push({data: 'cantidad', allowInvalid: false, type: {renderer: numberRender}}); 
@@ -308,12 +311,12 @@ $(document).ready(function() {
   		}
   		return $window.width();
   	},
-    // height: function () {
-    //   if (maxed && availableHeight === void 0) {
-    //     calculateSize();
-    //   }
-    //   return maxed ? availableHeight : 200;
-    // },
+    height: function () {
+      if (maxed && availableHeight === void 0) {
+        calculateSize();
+      }
+      return maxed ? availableHeight : 400;
+    },
     currentRowClassName: 'currentRow',
     currentColClassName: 'currentCol',
     minSpareCols: 1,
@@ -328,21 +331,23 @@ $(document).ready(function() {
     		}else if(key === 'iva'){
     			cambiar_iva();
     			dar_mejor_cotizacion();
-    			motrar_cotizacion();
+    			mostrar_cotizacion();
+    		}else if(key == 'ivaprecio'){
+    			cambiar_iva_precio();
     		}else if(key === 'nota'){
     			editar_nota();
     		}else if(key === 'calcular'){
     			calcular();
     			dar_mejor_cotizacion();
-    			motrar_cotizacion();
+    			mostrar_cotizacion();
     		}else if(key === 'calcularPorDco'){
     			calcular_segun_dco();
     			dar_mejor_cotizacion();
-    			motrar_cotizacion();
+    			mostrar_cotizacion();
     		}else if(key === 'calcularPorMargen'){
     			calcular_segun_margen();
     			dar_mejor_cotizacion();
-    			motrar_cotizacion();
+    			mostrar_cotizacion();
     		}
     	},items: {
     		'calcular': {
@@ -374,11 +379,18 @@ $(document).ready(function() {
 	    	},
 	    	"hsep2": "---------",
 	    	'iva': {
-	    		name: "IVA", disabled: function () {
+	    		name: "IVA costo", disabled: function () {
 		            //if first, second column, disable this option
 		            return ($ht.handsontable('getSelected')[1] <= 1 || $ht.handsontable('getSelected')[1] >= $ht.handsontable('countCols')-4 );
 		        }
-		    },'seleccionar':{
+		    },"hsep2": "---------",
+		    	'ivaprecio': {
+	    		name: "IVA precio", disabled: function () {
+		            //if first, second column, disable this option
+		            return ($ht.handsontable('getSelected')[1] < $ht.handsontable('countCols')-1 );
+		        }
+		    },
+		    'seleccionar':{
 		    	name: "Seleccionar", 
 		    	disabled: function () {
 		          //if first, second column, disable this option
@@ -410,7 +422,7 @@ $(document).ready(function() {
 			modificado = true;	
 		ini = false;
 
-		motrar_cotizacion();
+		mostrar_cotizacion();
 	}
 });
 
@@ -459,7 +471,7 @@ function agregar_columna(){
 
 			$('#input-proveedor').val('');
 			$('#input-eproveedor').val('');
-			// motrar_cotizacion();
+			// mostrar_cotizacion();
 			modificado = true;
 		}
 	}
@@ -525,7 +537,7 @@ function seleccionar_item_proveedor(){
 
 		htInstance.render();
 		dar_mejor_cotizacion();
-		motrar_cotizacion();
+		mostrar_cotizacion();
 		modificado = true;
 	}
 }
@@ -576,7 +588,7 @@ function dar_mejor_cotizacion(){
 }
 
 //muestra un preview de la cotización
-function motrar_cotizacion(){
+function mostrar_cotizacion(){
 	$('tbody', '#cotizacion').empty();
 	var TIvaCliente = 0;
 	var TBaseCliente = 0;
@@ -596,40 +608,44 @@ function motrar_cotizacion(){
 		var baseLP = 0;
 		var ganancia = 0;
 		var ivaAttr = 16;
+		var ivaAttrPrecio = 16;
 		var id_proveedor;
 		var precioCliente = 0;
 		var valid = false;
 		for (var col = 0; col < htInstance.countCols(); col++) {
-			var item =  htInstance.getCell(row, col);
+			var itemData = htInstance.getDataAtCell(row, col);
 			if(col == 0){
-				var itemVal = $(item).text();
+				var itemVal = itemData;
+				// console.log('itemVal', itemVal);
 			}else if(col == 1){
-				var cantidad = parseFloat($(item).text());
+				var cantidad = parseFloat(itemData);
+				// console.log('cantidad', cantidad);
 			}else if(col < htInstance.countCols()-4){
-				if($(item).hasClass('seleccionado') && itemVal != ''){
-					id_proveedor = $(item).attr('data-id-proveedor');
+				if(seleccionados[row] == col && itemVal != ''){
+					id_proveedor = load_id_proveedor[row][col];
 					proveedor = $(header[col]);
 					proveedor = proveedor.val();
-					$(item).remove('a.atooltip');
-					baseLP = parseFloat(numeral().unformat($(item).text()));
-					if($(item).attr('data-iva'))
-						ivaAttr = parseFloat($(item).attr('data-iva').replace('%', ''));  
+					baseLP = parseFloat(itemData);
+					if(load_iva[row][col])
+						ivaAttr = parseFloat(load_iva[row][col].replace('%', ''));  
+					// console.log('baseLP', baseLP);
+					// console.log('ivaAttr', ivaAttr);
 				}
 			}else if(col == htInstance.countCols()-2 && itemVal != ''){
-				var gananciaTemp = $(item).text();
-				ganancia = numeral().unformat(gananciaTemp);
+				var gananciaTemp = parseFloat(itemData);
+				// console.log('gananciaTemp', gananciaTemp);
 			}else if(col == htInstance.countCols()-1 && itemVal != ''){
-				var valor_antes_ivaTemp = $(item).text();
+				valor_antes_iva = parseFloat(itemData);
+				// console.log('valor_antes_ivaTemp', valor_antes_ivaTemp);
+				if(load_iva_precio[row])
+						ivaAttrPrecio = parseFloat(load_iva_precio[row].replace('%', ''));  
 
-				if(valor_antes_ivaTemp)
-					valor_antes_iva = numeral().unformat(valor_antes_ivaTemp);
-				else
-					valor_antes_iva = 0;
-
-				if($(item).hasClass('invalid'))
+				if(invalid[row] == 'invalid')
 					valid = false;
 				else
 					valid = true;
+
+				// console.log('valid', valid);
 			}
 		}
 		if(baseLP>0 && cantidad>0 && !isNaN(parseFloat(ganancia)) && isFinite(ganancia) && valid){
@@ -637,7 +653,7 @@ function motrar_cotizacion(){
 			var valorLP = baseLP+ivaLP;
 			
 			var valor_antes_iva = valor_antes_iva*cantidad;
-			var ivaCliente = valor_antes_iva*(ivaAttr/100);
+			var ivaCliente = valor_antes_iva*(ivaAttrPrecio/100);
 			var precio_cliente = valor_antes_iva+ivaCliente;
 
 			var inputChkbox = $('<input>').attr('type', 'checkbox').val(id_proveedor);
@@ -681,24 +697,36 @@ function motrar_cotizacion(){
 function cambiar_iva(){
 	var htInstance = $ht.handsontable('getInstance');
 	var selected = htInstance.getSelected();
-	var td = htInstance.getCell(selected[0], selected[1]);
+	var row = selected[0];
+	var col = selected[1];
 	var ivaTemp = 16;
-	if($(td).attr('data-iva'))
-		ivaTemp = $(td).attr('data-iva');
+	if(load_iva[row][col])
+		ivaTemp = load_iva[row][col];
 	var iva = prompt("Ingresa el IVA(escala de 0 a 100): ", ivaTemp);
-	
-	if(iva != null){
-		$(td).attr('data-iva', iva);     
+	if(iva){
+		load_iva[row][col] = iva;
+		modificado = true;
 	}
-	modificado = true;
+}
+
+//cambia el iva del precio de un item
+function cambiar_iva_precio(){
+	var htInstance = $ht.handsontable('getInstance');
+	var selected = htInstance.getSelected();
+	var row = selected[0];
+	var ivaTemp = 16;
+	if(load_iva_precio[row])
+		ivaTemp = load_iva_precio[row];
+	var iva = prompt("Ingresa el IVA(escala de 0 a 100): ", ivaTemp);
+	if(iva){
+		load_iva_precio[row] = iva;
+		modificado = true;
+	}
 }
 
 //funcion que muestra el precio del cliente
 function itemRender(instance, td, row, col, prop, value, cellProperties) {
 	Handsontable.TextCell.renderer.apply(this, arguments);
-	var id = idItem[row];
-	if(id)
-		$(td).attr('data-id-item',id);
 	return td;
 }
 
@@ -728,13 +756,8 @@ function selectRender(instance, td, row, col, prop, value, cellProperties) {
 
 	//ingresa el iva si tiene
 	var iva = load_iva[row][col];
-	if(iva)
-		$(td).attr('data-iva', iva);
-
-	//ingresa el id-proveedor si existe
-	var proveedor = load_id_proveedor[row][col];
-	if(proveedor)
-		$(td).attr('data-id-proveedor', proveedor);
+	if(!iva)
+		load_iva[row][col] = '16';
 
 	return td;
 }
@@ -747,9 +770,16 @@ function precioPublicoRender(instance, td, row, col, prop, value, cellProperties
 	var selected = instance.getDataAtCell(row, seleccionados[row]);
 	var inner = Math.abs(selected*(1+(margen/100))).toFixed(2);
 
+	//ingresa el iva si tiene
+	var iva = load_iva_precio[row];
+	if(!iva)
+		load_iva_precio[row] = '16';
+
 	if(roundTen(inner) != roundTen(value) && ceilTen(inner) != ceilTen(value) && row < cRows){
+		invalid[row] = 'invalid';
 		$(td).addClass('invalid');
-	}	
+	}else
+		invalid[row] = 'valid';
 	inner = numeral(value).format('$0,0[.]00');
 	td.innerHTML = inner;
 }
@@ -798,7 +828,7 @@ function cambiarHeader(elem, index){
 	var currentData = htInstance.getData();
 	var prov = $(elem).val();
 	header[index] = '<input type="text" onclick="quitarSelect()" data-eproveedor="'+$(elem).attr('data-eproveedor')+'" onchange="cambiarHeader(this, '+(header.length-2)+')" value="'+prov+'"  style="width: 75px;">';
-	motrar_cotizacion();
+	mostrar_cotizacion();
 }
 
 //función que quita todas las seldas seleccionadas
@@ -812,7 +842,7 @@ function editar_nota(){
 	var htInstance = $ht.handsontable('getInstance');
 	var selected = htInstance.getSelected();
 	var td = htInstance.getCell(selected[0], selected[1]);
-	var nota = $(td).attr('data-nota');
+	var nota = notas[selected[0]][selected[1]];
 	$('#mymodal textarea').val(nota);
 	$('#agregar-nota').attr('onclick', 'agregar_nota('+selected[0]+','+selected[1]+')');
 	htInstance.deselectCell();
@@ -841,30 +871,28 @@ function guardar(){
 		var elegido;
 		for (var col = 0; col < htInstance.countCols() ; col++) {
 			if(col == 0){
-				var itemTD = htInstance.getCell(row, col);
 				item.item =  htInstance.getDataAtCell(row, col);
-				item.id_item = $(itemTD).attr('data-id-item');
+				item.id_item = idItem[row];
 			}else if(col == 1){
 				item.cantidad =  htInstance.getDataAtCell(row, col);
 			}else if(col > 1 &&  col < htInstance.countCols() -4){
 				var ops = {};
 
-				ops.email = $(header[col]).attr('data-eproveedor');
+				ops.email = proveedoresSelec[col-2]['email'];
 				ops.elegido = false;
 				if(seleccionados[row] == col ){
 					ops.elegido = true;
 				}
 				ops.baseLP = htInstance.getDataAtCell(row, col);
-				var tdProveedor = htInstance.getCell(row, col);
 				if(ops.elegido && isNaN(parseFloat(ops.baseLP)) && !isFinite(ops.baseLP))
 					ops.baseLP = 0;
 				ops.iva = 16;
-				if($(tdProveedor).attr('data-iva'))
-					ops.iva = $(tdProveedor).attr('data-iva').replace('%', '');
-				if($(tdProveedor).attr('data-id-proveedor'))
-					ops.id_proveedor_cotizacion = $(tdProveedor).attr('data-id-proveedor');
-				if($('a', tdProveedor))
-					ops.nota = $('a', tdProveedor).attr('data-original-title');
+				if(load_iva[row][col])
+					ops.iva = load_iva[row][col].replace('%', '');
+				if(load_id_proveedor[row][col])
+					ops.id_proveedor_cotizacion = load_id_proveedor[row][col];
+				if(notas[row][col])
+					ops.nota = notas[row][col];
 				proveedores[$(header[col]).val()] = ops;
 			}else if(col == htInstance.countCols()-2){
 				item.margen = htInstance.getDataAtCell(row, col);
@@ -873,9 +901,10 @@ function guardar(){
 			}else if(col == htInstance.countCols()-4){
 				item.dco = htInstance.getDataAtCell(row, col);
 			}else if(col == htInstance.countCols()-1){
+				item.iva = load_iva_precio[row].replace('%', '');
 				item.precio = htInstance.getDataAtCell(row, col);
 				item.valido = true;
-				if($(htInstance.getCell(row, col)).hasClass('invalid'))
+				if(invalid[row] == 'invalid')
 					item.valido = false;
 			}
 		}
@@ -885,6 +914,7 @@ function guardar(){
 			data[row] = item;
 	}
 	var data = $.toJSON( data );
+	// console.log(data);
 	$.ajax({
 	    type: "POST",
 	    url: "<?php echo base_url(); ?>operacion/cotizaciones/guardar",
@@ -1093,28 +1123,17 @@ function calcular(){
 	var selected = htInstance.getSelected();
 	var row = selected[0];
 	var col = selected[1];
-	var td = htInstance.getCell(row, col);
 	var cols = htInstance.countCols() -1;
 
 
-	var costo = $(htInstance.getCell(row, seleccionados[row])).text();
-	costo = numeral().unformat(costo);
+	var costo = htInstance.getDataAtCell(row, seleccionados[row]);
 
-	var dco = $(htInstance.getCell(row, cols-3)).text();
-	dco = numeral().unformat(dco);
+	var dco = htInstance.getDataAtCell(row, cols-3);
 
-	var pSDco = $(htInstance.getCell(row, cols-2)).text();		
-	pSDco = numeral().unformat(pSDco);
+	var pSDco = htInstance.getDataAtCell(row, cols-2);
 
-	var margen = $(htInstance.getCell(row, cols-1)).text();
-	margen = numeral().unformat(margen);
-
-	var precio = $(htInstance.getCell(row, cols)).text();		
-	precio = numeral().unformat(precio);
-
-	// var porcentajeCol = porcentajeSeleccionado[row];
-	// var porcentaje = $(htInstance.getCell(row, porcentajeCol)).text();
-	// porcentaje = numeral().unformat(porcentaje);
+	var margen = htInstance.getDataAtCell(row, cols-1);
+	var precio = htInstance.getDataAtCell(row, cols);	
 
 	if(col == cols){//si es el precio del cliente
 		var inner = Math.abs(costo*(1+(margen/100))).toFixed(2);
@@ -1140,14 +1159,11 @@ function calcular_segun_dco(){
 	var selected = htInstance.getSelected();
 	var row = selected[0];
 	var col = selected[1];
-	var td = htInstance.getCell(row, col);
 	var cols = htInstance.countCols() -1;
 
-	var dco = $(htInstance.getCell(row, cols-3)).text();
-	dco = numeral().unformat(dco);
+	var dco = htInstance.getDataAtCell(row, cols-3);
 
-	var pSDco = $(htInstance.getCell(row, cols-2)).text();		
-	pSDco = numeral().unformat(pSDco);
+	var pSDco = htInstance.getDataAtCell(row, cols-2);	
 
 	var inner = Math.abs(pSDco*(1-(dco/100))).toFixed(2);
 	htInstance.setDataAtCell(row, col, inner);	
@@ -1159,14 +1175,11 @@ function calcular_segun_margen(){
 	var selected = htInstance.getSelected();
 	var row = selected[0];
 	var col = selected[1];
-	var td = htInstance.getCell(row, col);
 	var cols = htInstance.countCols() -1;
 
-	var precio = $(htInstance.getCell(row, cols)).text();		
-	precio = numeral().unformat(precio);
+	var precio = htInstance.getDataAtCell(row, cols);
 
-	var margen = $(htInstance.getCell(row, cols-1)).text();
-	margen = numeral().unformat(margen);
+	var margen = htInstance.getDataAtCell(row, cols-1);
 
 	var inner = Math.abs(precio/(1+(margen/100))).toFixed(2);
 	htInstance.setDataAtCell(row, col, inner);	
@@ -1219,7 +1232,7 @@ function mostrar_modal_cotizacion(elem){
 }
 
 //Envía la cotización al usuario asociado
-function enviar_cotizacion(elem){ console.log('entra a enviar');	
+function enviar_cotizacion(elem){
 	$('.submit-c', elem).attr('disabled', 'disabled');
 	$('.submit-c', elem).val('Enviando...');
 	$.ajax({

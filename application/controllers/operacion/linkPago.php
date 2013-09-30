@@ -85,7 +85,7 @@ class LinkPago extends CI_Controller {
                 $proveedores_cotizacion[] = $PC_model;
                 $titulo .= $PC_model->item->cantidad.' '.$PC_model->item->item.', ';
                 $baseLP = round($PC_model->item->cantidad*($PC_model->item->precio));
-                $ivaTemp = round($baseLP* ($PC_model->iva/100)) ;
+                $ivaTemp = round($baseLP* ($PC_model->item->iva/100)) ;
                 $iva += $ivaTemp;
                 $precioTemp = $baseLP+$ivaTemp;
                 $precio += $precioTemp;
