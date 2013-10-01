@@ -338,6 +338,8 @@ $(document).ready(function() {
     			mostrar_cotizacion();
     		}else if(key == 'ivaprecio'){
     			cambiar_iva_precio();
+    			dar_mejor_cotizacion();
+    			mostrar_cotizacion();
     		}else if(key === 'nota'){
     			editar_nota();
     		}else if(key === 'calcular'){
