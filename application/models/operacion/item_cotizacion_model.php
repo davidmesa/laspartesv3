@@ -18,7 +18,7 @@ class item_cotizacion_model extends CI_Model
     var $dco = 0;
     var $precio_sin_dco = 0;
     var $precio = 0;
-    var $iva = 0;
+    var $iva = 16;
     var $valido = 0;
     var $id_orden_compra = 0;
     
@@ -57,6 +57,25 @@ class item_cotizacion_model extends CI_Model
         foreach ($query->row(0) as $key => $value) {
             $this->$key = $value;
         }
+    }
+
+    /**
+     * da todos los que concuerden con los parametros dados
+     * @return id
+     */
+    function dar_todos_por_filtros($params) {
+        $items = array();
+        foreach ($params as $key => $value)
+            $this->db->where($key, $value);
+        $query = $this->db->get('op_item_cotizacion');
+        foreach ($query->result() as $row) {
+            $item = new item_cotizacion_model();
+            foreach ($row as $key => $value) {
+                $item->$key = $value;
+            }
+            $items[] = $item;
+        }
+        return $items;
     }
 
     /**

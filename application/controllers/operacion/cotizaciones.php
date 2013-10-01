@@ -175,6 +175,11 @@ class Cotizaciones extends CI_Controller {
                     if($id_item){
                         $itemCotizacionModel->id = $id_item;
                         $itemCotizacionModel->dar();
+                    }else{
+                        $itemCotizacionModel->descartado = false;
+                        $items = $this->item_cotizacion_model->dar_todos_por_filtros(array('item'=>$item));
+                        if(sizeof($items)>0)
+                            $itemCotizacionModel->descartado = true;
                     }
                     $itemCotizacionModel->uIDItem = $uIDItem;
                     $itemCotizacionModel->item = $item;
@@ -185,7 +190,8 @@ class Cotizaciones extends CI_Controller {
                     $itemCotizacionModel->precio = $precio;
                     $itemCotizacionModel->iva = $ivaprecio;
                     $itemCotizacionModel->valido = $valido;
-                    $itemsCot[] = $itemCotizacionModel;
+                    if(!isset($itemsCot[$item]))
+                        $itemsCot[$item] = $itemCotizacionModel;
                 }
                 // echo  'COSTO: '.$Tcosto. ' LPIVA: '.   $Tlp_iva. ' LPVALOR: '.$Tlp_valor. ' IVACLIENTE: '.$Tcliente_iva. ' PRECIO: '.$Tcliente_precio . ' GANANCIA '.$Tganancia.'</br>';
                 $cotizacionModel = new cotizacion_model();
@@ -203,23 +209,26 @@ class Cotizaciones extends CI_Controller {
                 }else{    
                     $cotizacionModel->insertar();
                 }foreach ($itemsCot as $item) {
-                    $uIDTemp = $item->uIDItem;
-                    unset($item->uIDItem);
-                    if(!empty($item->id)){
-                        $item->actualizar();
-                    }else{
-                        $item->id_cotizacion = $cotizacionModel->id;
-                        $item->insertar();
-                    }    
-                    foreach ($proveedoresCot[$uIDTemp] as $proveedor) {
-                        if(!empty($proveedor->id)){
-                            $proveedor->actualizar();
-                        }else{   
-                            $proveedor->id_item_cotizacion = $item->id; 
-                            $proveedor->insertar();
+                    if(!$item->descartado){
+                        $uIDTemp = $item->uIDItem;
+                        unset($item->uIDItem);
+                        if(!empty($item->id)){
+                            $item->actualizar();
+                        }else{
+                            $item->id_cotizacion = $cotizacionModel->id;
+                            $item->insertar();
+                        }    
+                        foreach ($proveedoresCot[$uIDTemp] as $proveedor) {
+                            if(!empty($proveedor->id)){
+                                $proveedor->actualizar();
+                            }else{   
+                                $proveedor->id_item_cotizacion = $item->id; 
+                                $proveedor->insertar();
+                            }
                         }
                     }
                 }
+                $this->guardarLog('cotizacion', 'ID PIPELINE: '.$id_pipeline.' ID USUARIO: '.$id_usuario.' Items: '.json_encode($dataTemp). "\n---------------------------------------------\n\n");
                 echo json_encode(array('status' => true));
             }
         }else{
@@ -384,13 +393,9 @@ class Cotizaciones extends CI_Controller {
         $guid = "";
         $guid .= $dec_hex;
         $guid .= $this->create_guid_section(3);
-        $guid .= '-';
         $guid .= $this->create_guid_section(4);
-        $guid .= '-';
         $guid .= $this->create_guid_section(4);
-        $guid .= '-';
         $guid .= $this->create_guid_section(4);
-        $guid .= '-';
         $guid .= $sec_hex;
         $guid .= $this->create_guid_section(6);
 
@@ -413,6 +418,34 @@ class Cotizaciones extends CI_Controller {
         } else if ($strlen > $length) {
             $string = substr($string, 0, $length);
         }
+    }
+
+    /**
+     * Metodo que escribe un log en la dirección resources/logs/..
+     * @param type $tipo tipo de log que se quiere escribir.
+     * @param type $log mensaje que se desea escribir.
+     */
+    function guardarLog($tipo, $log){
+        $this->load->helper('date');
+        setlocale(LC_ALL,'es_ES');
+        
+        $fecha = 'realizado el: '.strftime("%B %d de %Y").' ';
+        $fecha = $fecha.$log; 
+        $log = $fecha;
+        if($tipo == "kilometraje"){
+            $myFile = "resources/logs/kilometraje.txt";
+        }else if($tipo == "legales"){
+            $myFile = "resources/logs/legales.txt";
+        }else if($tipo == "tareas"){
+            $myFile = "resources/logs/tareas.txt";
+        }else if($tipo == "noticias"){
+            $myFile = "resources/logs/noticias.txt";
+        }else{
+            $myFile = "resources/logs/".$tipo.".txt";
+        }
+        $fh = fopen($myFile, 'a+') or die("No se pudo abrir el archivo");
+        fwrite($fh, $log);
+        fclose($fh);
     }
 
     // function reindexar_op_proveedor_cotizacion(){

@@ -14,6 +14,7 @@ var ini = true; //la aplicación ha sido cargada por primera ves
 var invalid = []; //filas que son invalidas
 var load_items = <?php echo json_encode($items);?>; //datos de los items
 var idItem = []; //id de los items
+var nombreItems = [];
 var precreado = false; //ha sido precreada la página
 var $ht = $("#example1");  //la tabla
 var colWidths = [100, 60, 90, 90]; //el ancho de cada una de las columnas
@@ -151,7 +152,7 @@ if(load_items.length > 0){
 	header[4] = "Margen LP(%)";
 	header[5] = "Precio al cliente antes de iva";
 	var columnDef = new Array();
-	columnDef.push({data: 'item'});  
+	columnDef.push({data: 'item', type: {renderer: itemRender}});  
 	columnDef.push({data: 'cantidad', allowInvalid: false, type: {renderer: numberRender}}); 
 	columnDef.push({data: 'dco', allowInvalid: false, type: {renderer: numberRender}});  
 	columnDef.push({data: 'pSinDco', allowInvalid: false, type: {renderer: numberRender}}); 
@@ -168,6 +169,9 @@ if(load_items.length > 0){
 }
 
 $(document).ready(function() {
+	 $(window).on("cut paste",function(e) {
+                e.preventDefault();
+      });
 	//mensaje de comfirmación antes de abandonar la página
 	$(window).bind('beforeunload', function(){
 	    if( modificado ){
@@ -398,6 +402,23 @@ $(document).ready(function() {
 		      }
 		 	}
 		}
+	},
+	beforeChange: function (changes, source) {
+		for (var i = changes.length - 1; i >= 0; i--) {
+	      if (changes[i][3] === "" && changes[i][3] === " ") {
+	        changes.splice(i, 1); //gently don't accept the word "foo" (remove the change at index i)
+	      }else if (changes[i][1] === 'item') {
+			 //capitalise first letter in column 1 and 2
+	      	var cambios = changes[i][3];
+		    var mydata = this.getData();
+			for (var j = mydata.length - 1; j >= 0; j--) {
+				if(mydata[j].item === changes[i][3] && changes[i][0] != j){
+					alert('El item '+changes[i][3]+' ya existe!');
+					changes.splice(i, 1);
+				}
+			}
+	      }
+	    }
 	},afterCreateRow: function(e){
 		// var currentData = this.getData();
 
@@ -616,10 +637,8 @@ function mostrar_cotizacion(){
 			var itemData = htInstance.getDataAtCell(row, col);
 			if(col == 0){
 				var itemVal = itemData;
-				// console.log('itemVal', itemVal);
 			}else if(col == 1){
 				var cantidad = parseFloat(itemData);
-				// console.log('cantidad', cantidad);
 			}else if(col < htInstance.countCols()-4){
 				if(seleccionados[row] == col && itemVal != ''){
 					id_proveedor = load_id_proveedor[row][col];
@@ -628,15 +647,11 @@ function mostrar_cotizacion(){
 					baseLP = parseFloat(itemData);
 					if(load_iva[row][col])
 						ivaAttr = parseFloat(load_iva[row][col].replace('%', ''));  
-					// console.log('baseLP', baseLP);
-					// console.log('ivaAttr', ivaAttr);
 				}
 			}else if(col == htInstance.countCols()-2 && itemVal != ''){
 				var gananciaTemp = parseFloat(itemData);
-				// console.log('gananciaTemp', gananciaTemp);
 			}else if(col == htInstance.countCols()-1 && itemVal != ''){
 				valor_antes_iva = parseFloat(itemData);
-				// console.log('valor_antes_ivaTemp', valor_antes_ivaTemp);
 				if(load_iva_precio[row])
 						ivaAttrPrecio = parseFloat(load_iva_precio[row].replace('%', ''));  
 
@@ -644,8 +659,6 @@ function mostrar_cotizacion(){
 					valid = false;
 				else
 					valid = true;
-
-				// console.log('valid', valid);
 			}
 		}
 		if(baseLP>0 && cantidad>0 && !isNaN(parseFloat(ganancia)) && isFinite(ganancia) && valid){
@@ -667,6 +680,7 @@ function mostrar_cotizacion(){
 			tr.append('<td>'+numeral(valor_antes_iva).format('$0,0.00') +'</td>');
 			tr.append('<td>'+numeral(ivaCliente).format('$0,0.00') +'</td>');
 			tr.append($('<td>').text(numeral(precio_cliente).format('$0,0.00')));
+			tr.append($('<td>').text(numeral(gananciaTemp/100).format('0,0.00%')));
 			tr.append($('<td>').text(numeral(valor_antes_iva-(baseLP*cantidad)).format('$0,0.00')));
 			$('tbody', '#cotizacion').append(tr);
 			TIvaCliente += ivaCliente;
@@ -688,6 +702,7 @@ function mostrar_cotizacion(){
 		tr.append($('<td>').text(numeral(TBaseCliente).format('$0,0.00')));
 		tr.append('<td>'+numeral(TIvaCliente).format('$0,0.00') +'</td>');
 		tr.append($('<td>').text(numeral(TPrecioCliente).format('$0,0.00')));
+		tr.append($('<td>').text(numeral(((TBaseCliente / TCosto)-1)).format('%0,0.00'))); //(((precio/costo)-1)*100).toFixed(4)
 		tr.append($('<td>').text(numeral(TGanancia).format('$0,0.00')));
 		$('tbody', '#cotizacion').append(tr);
 	}
@@ -727,7 +742,17 @@ function cambiar_iva_precio(){
 //funcion que muestra el precio del cliente
 function itemRender(instance, td, row, col, prop, value, cellProperties) {
 	Handsontable.TextCell.renderer.apply(this, arguments);
-	return td;
+	// var existe = false;
+	
+	// for (var i=0;i<instance.countRows();i++){
+	// 	if(instance.getDataAtCell(i, 0) == value && i != row)
+	// 		existe = true;
+	// }
+	// if(existe)
+	// 	alert('El item ya existe');
+	// else{
+		return td;
+	// }
 }
 
 //funcion que renderisa el valor del cliente y muestra el seleccionado
@@ -740,24 +765,34 @@ function selectRender(instance, td, row, col, prop, value, cellProperties) {
 		$(td).addClass('seleccionado');
 	}
 
-	value = Math.abs(value);
 	value = numeral(value).format('$0,0[.]00');
 	td.innerHTML = value;
 
-	//ingresa una nota si tiene
-	var nota = notas[row][col];
-	if(nota){
-		var a = $('<a>').attr('href', '#').attr('rel', 'tooltip').addClass('atooltip').attr('title', nota).html('&nbsp;');
-		$(td).append(a);
-		$(a).tooltip({
-			placement: 'right'
-		});
-	}
-
-	//ingresa el iva si tiene
-	var iva = load_iva[row][col];
-	if(!iva)
-		load_iva[row][col] = '16';
+	
+	try {
+	  if(typeof notas[row][col] != 'undefined'){
+	  	//ingresa una nota si tiene
+  		var nota = notas[row][col];
+		if(nota){
+			var a = $('<a>').attr('href', '#').attr('rel', 'tooltip').addClass('atooltip').attr('title', nota).html('&nbsp;');
+			$(td).append(a);
+			$(a).tooltip({
+				placement: 'right'
+			});
+		}
+	  }
+	} 
+	catch (error){ /* ignore */ }
+	
+	try {
+	  if(typeof load_iva[row][col] != 'undefined') {
+	  	//ingresa el iva si tiene
+		var iva = load_iva[row][col];
+		if(!iva)
+			load_iva[row][col] = '16';
+		  }
+	} 
+	catch (error){ /* ignore */ }
 
 	return td;
 }

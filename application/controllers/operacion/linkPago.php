@@ -84,12 +84,12 @@ class LinkPago extends CI_Controller {
                 $PC_model->item = $PC_model->dar_item_cotizacion();
                 $proveedores_cotizacion[] = $PC_model;
                 $titulo .= $PC_model->item->cantidad.' '.$PC_model->item->item.', ';
-                $baseLP = round($PC_model->item->cantidad*($PC_model->item->precio));
-                $ivaTemp = round($baseLP* ($PC_model->item->iva/100)) ;
+                $baseLP = $PC_model->item->cantidad*round(($PC_model->item->precio), 0);
+                $ivaTemp = round($baseLP* (round($PC_model->item->iva, 0)/100), 0);
                 $iva += $ivaTemp;
                 $precioTemp = $baseLP+$ivaTemp;
                 $precio += $precioTemp;
-                $margen += $baseLP-($PC_model->lp_base*$PC_model->item->cantidad);
+                $margen += round($baseLP-($PC_model->lp_base*$PC_model->item->cantidad),0);
 
             }
 
@@ -97,8 +97,8 @@ class LinkPago extends CI_Controller {
             $titulo = substr($titulo, 0, -2);
             $titulo.= ' por $'.$data['precio'];
             $data['titulo'] = $titulo;
-            $data['iva'] = number_format($iva, 2, ',', '.');
-            $data['margen'] = number_format($margen, 2, ',', '.');
+            $data['iva'] = number_format($iva, 0, ',', '.');
+            $data['margen'] = number_format($margen, 0, ',', '.');
             $data['proveedores_cotizacion'] = $proveedores_cotizacion;
             $data['servicios'] = $this->generico_model->dar_registros('servicios_categoria');
             $allvehiculos = $this->vehiculo_model->dar_vehiculos();
@@ -326,8 +326,8 @@ class LinkPago extends CI_Controller {
                     $PC_model->dar();
                     $PC_model->item = $PC_model->dar_item_cotizacion();
 
-                    $base = $PC_model->item->precio;
-                    $iva = round($base* ($PC_model->iva/100), 2);
+                    $base = round($PC_model->item->precio, 0);
+                    $iva = round($base* (round($PC_model->iva, 0)/100), 0);
                     $precioTemp = $base+$iva;
                     
 

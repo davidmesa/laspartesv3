@@ -336,8 +336,8 @@ tr.even{
                             <td class="center"></td>
                             <td class="center"> ' . $pclp_model->cantidad . '</td>
                             <td>' . $pclp_model->item . '</td>
-                            <td class="right">$ ' . number_format(round($pclp_model->base, 0), 0, ',', '.') . '</td>
-                            <td class="right">$ ' . number_format(round($pclp_model->base, 0) * $pclp_model->cantidad, 0, ',', '.') . '</td>
+                            <td class="right">$ ' . number_format($pclp_model->base, 0, ',', '.') . '</td>
+                            <td class="right">$ ' . number_format($pclp_model->base * $pclp_model->cantidad, 0, ',', '.') . '</td>
                             </tr>';
                             
                         }
