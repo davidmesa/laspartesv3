@@ -73,6 +73,7 @@ class Cotizaciones extends CI_Controller {
             foreach ($q->relationship_list[0]->link_list[0]->records as $i => $record)
             {
                 $vehiculos[$i]->marca =  $record->link_value->name->value;
+                $vehiculos[$i]->placa =  $record->link_value->placa->value;
                 $vehiculos[$i]->modelo =  $record->link_value->modelo->value;
                 $vehiculos[$i]->kilometraje =  $record->link_value->kilometraje->value;
                 $vehiculos[$i]->cilindraje =  $record->link_value->cilindraje->value;

@@ -846,6 +846,7 @@ class Crm {
                                     'modelo', 
                                     'kilometraje', 
                                     'cilindraje', 'nro_vin', 
+                                    'placa'
                                ),
                           ),
                      ),

@@ -12,6 +12,7 @@
       <thead>
         <tr>          
           <th>Auto</th>
+          <th>Placa</th>
           <th>Modelo</th>          
           <th>Kilometraje</th>          
           <th>Cilindraje</th>          
@@ -24,6 +25,7 @@
         <?php foreach ($vehiculos as $i => $vehiculo):?>
           <tr>          
             <td><?php echo($vehiculo->marca); ?> </td>                   
+            <td><?php echo($vehiculo->placa); ?> </td>                   
             <td><?php echo($vehiculo->modelo); ?> </td>          
             <td><?php echo($vehiculo->kilometraje); ?> </td>          
             <td><?php echo($vehiculo->cilindraje); ?> </td>          
