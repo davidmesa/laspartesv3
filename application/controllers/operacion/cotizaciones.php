@@ -126,6 +126,9 @@ class Cotizaciones extends CI_Controller {
                 $id_pipeline = $this->input->post('id_pipeline');
                 $itemsCot = array();
                 $proveedoresCot = array();
+                $cotizacionModel = new cotizacion_model();
+                $cotizacionModel->id_pipeline = $id_pipeline;
+                $cotizacionModel->dar_por_pipeline();
                 foreach ($dataTemp as $data) {
                     $cantidad = $data[cantidad];
                     $elegido = $data[elegido];
@@ -200,8 +203,10 @@ class Cotizaciones extends CI_Controller {
                         $itemCotizacionModel->dar();
                     }else{
                         $itemCotizacionModel->descartado = false;
-                        $items = $this->item_cotizacion_model->dar_todos_por_filtros(array('item'=>$item));
-                        if(sizeof($items)>0)
+                        if($cotizacionModel->id){
+                            $items = $this->item_cotizacion_model->dar_todos_por_filtros(array('id_cotizacion' => $cotizacionModel->id,'item'=>$item));
+                        }
+                        if(sizeof($items)>0 && isset($items) )
                             $itemCotizacionModel->descartado = true;
                     }
                     $itemCotizacionModel->uIDItem = $uIDItem;
@@ -217,9 +222,7 @@ class Cotizaciones extends CI_Controller {
                         $itemsCot[$item] = $itemCotizacionModel;
                 }
                 // echo  'COSTO: '.$Tcosto. ' LPIVA: '.   $Tlp_iva. ' LPVALOR: '.$Tlp_valor. ' IVACLIENTE: '.$Tcliente_iva. ' PRECIO: '.$Tcliente_precio . ' GANANCIA '.$Tganancia.'</br>';
-                $cotizacionModel = new cotizacion_model();
-                $cotizacionModel->id_pipeline = $id_pipeline;
-                $cotizacionModel->dar_por_pipeline();
+
                 $cotizacionModel->id_usuario = $id_usuario;
                 $cotizacionModel->costo = $Tcosto;
                 $cotizacionModel->lp_iva = $Tlp_iva;
@@ -235,6 +238,7 @@ class Cotizaciones extends CI_Controller {
                     if(!$item->descartado){
                         $uIDTemp = $item->uIDItem;
                         unset($item->uIDItem);
+                        unset($item->descartado);
                         if(!empty($item->id)){
                             $item->actualizar();
                         }else{
