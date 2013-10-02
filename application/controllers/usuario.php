@@ -2158,11 +2158,6 @@ class Usuario extends Laspartes_Controller {
         echo $this->usuario_model->modificar_placa_vehiculo($id_usuario_vehiculo, $placa);
     }
 
-    function temp123(){
-        $this->load->model('usuario_model');
-        $existe = $this->usuario_model->existe_usuario_Referencia_CRM('ascomputadores');
-        var_dump($existe);
-    }
     /**
      * Registra un nuevo usuario por ajax
      */
@@ -2232,17 +2227,21 @@ class Usuario extends Laspartes_Controller {
             $email = strtolower($this->input->post('input_registrate_email', TRUE));
             list($usuario, $dominio) = split('@', $email);
             $this->load->model('usuario_model');
-            $existe = $this->usuario_model->existe_email_usuario_Referencia_CRM($email);//cuando el usuario y el usuario del correo no es el mismo, intenta crear al usuario denuevo
-            if ($existe !== false && $existe !== true){
-                $usuarioPrecreado = $existe;
+            $existeEmail = $this->usuario_model->existe_email_usuario_Referencia_CRM($email);
+            if($existeEmail !== false && $existeEmail !== true){
+                $usuarioPrecreado = $existeEmail;
                 $id_usuario = $usuarioPrecreado->id_usuario; 
             }
+
+            $existe = $this->usuario_model->existe_usuario_Referencia_CRM($usuario);
+            if ($existe === true)
+                $usuario = $this->_generar_usuario($usuario);
+            
                 
             $telefono = $this->input->post('input_registrate_telefono', TRUE);
             $ciudad = $this->input->post('ciudad_registrarse', TRUE);
             $contrasena_simple = $this->input->post('input_registrate_contrasena', TRUE);
             $contrasena = sha1($this->input->post('input_registrate_contrasena', TRUE));
-            echo $usuarioPrecreado;
             if(isset($usuarioPrecreado)){
                 $this->usuario_model->actualizar_usuario($usuarioPrecreado->id_usuario, $usuarioPrecreado->usuario, $nombre, $apellidos, $email, $ciudad, 'CRM_Activo', 'Activo');
                 $this->usuario_model->actualizar_usuario_contrasena($id_usuario, $contrasena);
