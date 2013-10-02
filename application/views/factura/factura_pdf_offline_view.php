@@ -261,7 +261,7 @@ tr.even{
       </div>
       <div class="caja caja-roja">
           <div class="titulo">FECHA</div>
-          <div class="contenido"><?php  echo strftime('%d/%B/%Y' ,strtotime($venta->fecha));?></div>
+          <div class="contenido"><?php  echo '30/septiembre/2013';?></div>
       </div>
       <div class="caja caja-roja">
           <div class="titulo">FECHA DE PAGO</div>

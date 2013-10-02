@@ -986,6 +986,23 @@ class Usuario_model extends CI_Model {
     }
 
     /**
+     * Verifica si existe un usuario
+     * @param String $usuario
+     * @return boolean $existe true si existe
+     */
+    function existe_email_usuario_Referencia_CRM($email) {
+        $this->db->escape($email);
+        $this->db->where('email', $email);
+        $query = $this->db->get('usuarios');
+        if($query->row(0)->referenciado == 'CRM')
+            return $query->row(0);
+        else if ($query->num_rows() != 0)
+            return TRUE;
+        else
+            return FALSE;
+    }
+
+    /**
      * Verifica si existe un email
      * @param String $email
      * @return boolean $existe true si existe
