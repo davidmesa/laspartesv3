@@ -3,6 +3,8 @@
 <link href="<?php echo base_url(); ?>resources/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen">
 <link href="<?php echo base_url(); ?>resources/css/datepicker.css" rel="stylesheet" type="text/css" media="screen">
 <link href="<?php echo base_url(); ?>resources/css/halflings.css" rel="stylesheet" type="text/css" media="screen">
+<link href="<?php echo base_url(); ?>resources/css/jquery.fixedheadertable.defaultTheme.css" rel="stylesheet" type="text/css" media="screen">
+<link href="<?php echo base_url(); ?>resources/css/jquery.fixedheadertable.css" rel="stylesheet" type="text/css" media="screen">
 
 <style>
 .margin-auto{
@@ -121,6 +123,11 @@
   background-color: red !important;
   color: white;
 }
+
+#div-tabla-vehiculos{
+  margin-bottom: 5px;
+}
+    
 /*
 .alert-success a{
   cursor: pointer;

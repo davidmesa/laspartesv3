@@ -15,7 +15,7 @@ class Cotizaciones extends CI_Controller {
         $this->load->model('operacion/cotizacion_model');
         $this->load->model('operacion/item_cotizacion_model');
         $this->load->model('operacion/proveedor_model');
-        // error_reporting(E_ALL);
+         //error_reporting(E_ALL);
     }
 
     function index() {
@@ -61,7 +61,30 @@ class Cotizaciones extends CI_Controller {
             }
             $data['msj'] = $msj;
             $data['nombrevista'] = 'operacion/cotizacion/';
+
+            //Comunicación con librería de CRM para obtener los vehículos asociados a la cotización
+            $this->load->library('crm');            
+            $q = $this->crm->dar_vehiculos_de_pipeline($id_pipeline); 
+
+            $data['vehiculos_pipeline'] = $q->relationship_list[0]->link_list[0];
+
+            $vehiculos;
+            
+            foreach ($q->relationship_list[0]->link_list[0]->records as $i => $record)
+            {
+                $vehiculos[$i]->marca =  $record->link_value->name->value;
+                $vehiculos[$i]->modelo =  $record->link_value->modelo->value;
+                $vehiculos[$i]->kilometraje =  $record->link_value->kilometraje->value;
+                $vehiculos[$i]->cilindraje =  $record->link_value->cilindraje->value;
+                $vehiculos[$i]->nro_vin =  $record->link_value->nro_vin->value;
+            }
+
+            
+
+            $data['vehiculos'] = $vehiculos;
+            
             $this->load->view('operacion/cotizacion/page', $data);
+            
         }else{
             echo 'Debes iniciar sesion como administrador';
         }

@@ -7,8 +7,10 @@
 <script src="<?php echo base_url(); ?>resources/js/jquery.json-2.4.min.js"></script>
 <script src="<?php echo base_url(); ?>resources/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery.validate.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>resources/js/jquery.fixedheadertable.min.js"></script>
 
 <script data-jsfiddle="example1">
+
 var modificado = false; //si se ha modificado algo en la tabla
 var ini = true; //la aplicación ha sido cargada por primera ves
 var invalid = []; //filas que son invalidas
@@ -184,6 +186,17 @@ $(document).ready(function() {
 	
 	//setea el datepicker
 	$('.date-picker').datepicker();
+
+	
+
+$('#mt').fixedHeaderTable({
+	altClass: 'odd',
+	footer: true,
+	fixedColumns: 1,
+	height: 110,
+	width: "100%",
+});
+
 
 
 

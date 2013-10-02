@@ -7,7 +7,34 @@
 </head>
 
 <body>
+  <div id="div-tabla-vehiculos">
+    <table class="fancyTable" id="mt" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>          
+          <th>Auto</th>
+          <th>Modelo</th>          
+          <th>Kilometraje</th>          
+          <th>Cilindraje</th>          
+          <th>VIN</th>          
+        </tr>
+      </thead>
 
+      <tbody> 
+
+        <?php foreach ($vehiculos as $i => $vehiculo):?>
+          <tr>          
+            <td><?php echo($vehiculo->marca); ?> </td>                   
+            <td><?php echo($vehiculo->modelo); ?> </td>          
+            <td><?php echo($vehiculo->kilometraje); ?> </td>          
+            <td><?php echo($vehiculo->cilindraje); ?> </td>          
+            <td><?php echo($vehiculo->nro_vin); ?> </td>          
+          </tr>
+        <?php endforeach;?>
+      </tbody>
+    </table>
+  </div>
+  
+  
 
   <div class="alert alert-danger" id="danger-guardar"><button type="button" class="close" data-dismiss="alert">&times;</button>
     Ocurrió un error al guardar la cotización, favor intentar más tarde.</div>

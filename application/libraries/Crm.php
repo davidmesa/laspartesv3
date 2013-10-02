@@ -23,6 +23,7 @@ class Crm {
 
     public function __construct() {
         $this->_CI = & get_instance();
+
         if(!isset($this->session_id) && ENVIRONMENT == 'production'){ //se verifica que la id sesion alla sido solo 1 ves inicializada
             $login_parameters = array(
                  "user_auth"=>array(
@@ -377,8 +378,8 @@ class Crm {
             $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
 
             $entry_list = $get_entry_list_result->entry_list;
-
-            return $entry_list[0]->id;
+            echo $user_id.'<br/>';
+            //return $entry_list[0]->id;
         endif;
     }
 
@@ -730,6 +731,210 @@ class Crm {
 
             return $entry_list;
         endif;
+    }
+
+    /**
+     * Retorna el id del usuario, asociado al pipeline cuyo id es ingresado como parámentro
+     * @param type $id_pipeline
+     * @return int id del usuario
+     */
+    private function dar_uID_de_pipeline($id_pipeline) {
+        if(ENVIRONMENT == 'production'):
+            $this->_db_crm->select('id');
+            $this->_db_crm->where('id_vehiculo', $id_pipeline);
+            $q = $this->_db_crm->get('ve111_marcalinea');
+            return $q->row(0)->id;
+        endif;
+    }
+
+    /**
+     * Retorna el id del usuario, asociado al pipeline cuyo id es ingresado como parámentro
+     * @param type $id_pipeline
+     * @return int id del usuario
+     */
+    private function dar_id_usuario_pipeline_REST($id_pipeline)  {
+        if(ENVIRONMENT == 'production'):
+            $user_id = $this->session_id;
+            
+            //get list of records --------------------------------
+           
+            $get_entry_list_parameters = array(
+
+                 //session id
+                 'session' => $user_id,
+
+                 //The name of the module from which to retrieve records
+                 'module_name' => 'Opportunities',
+
+                 //The SQL WHERE clause without the word "where".
+                 'query' => "opportunities.id = '".$id_pipeline."'",
+
+                 //The SQL ORDER BY clause without the phrase "order by".
+                 'order_by' => "",
+
+                 //The record offset from which to start.
+                 'offset' => '0',
+
+                 //Optional. A list of fields to include in the results.
+                 'select_fields' => array(
+                      'id',
+                      'name',
+                 ),
+
+                 'link_name_to_fields_array' => array(
+                          array(
+                               'name' => 'contacts',
+                               'value' => array(
+                                    'id',
+                                    'name',                                   
+                               ),
+                          ),
+                     ),
+
+
+                 //The maximum number of results to return.
+                 'max_results' => '1',
+            );
+    
+
+            $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url)->relationship_list[0]->link_list[0]->records[0]->link_value->id->value;
+            return $get_entry_list_result;
+        endif;
+    }
+
+    /**
+     * Retona los vehículos de un usuario, cuyo nombre es ingresado como parámetro
+     * @param  string $id_usuario
+     * @return array de vehículos
+     */
+    private function dar_vehiculos_usuario_REST($id_usuario)  {
+        if(ENVIRONMENT == 'production'):
+            $user_id = $this->session_id;       
+
+            //get list of records --------------------------------
+           
+            $get_entry_list_parameters = array(
+
+                 //session id
+                 'session' => $user_id,
+
+                 //The name of the module from which to retrieve records
+                 'module_name' => 'Contacts',
+
+                 //The SQL WHERE clause without the word "where".
+
+                 'query' => "contacts.id = '".$id_usuario."'",
+
+                 //The SQL ORDER BY clause without the phrase "order by".
+                 'order_by' => "",
+
+                 //The record offset from which to start.
+                 'offset' => '0',
+
+                 //Optional. A list of fields to include in the results.
+                 'select_fields' => array(
+                      'id',
+                      'name',
+                 ),
+
+                 'link_name_to_fields_array' => array(
+                          array(
+                               'name' => 've111_vehiculos_contacts',
+                               'value' => array(
+                                    'id',
+                                    'name', 
+                                    'modelo', 
+                                    'kilometraje', 
+                                    'cilindraje', 'nro_vin', 
+                               ),
+                          ),
+                     ),
+
+                 
+
+
+                 //The maximum number of results to return.
+                 'max_results' => '10000',
+            );
+
+            $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
+            return $get_entry_list_result;
+        endif;
+    }
+
+    /**
+     * Retona la marca y la línea de  un vehículo, cuyo nombre es ingresado como parámetro
+     * @param  string $id_vehiculo
+     * @return marca y línea
+     */
+    public function dar_marca_linea_vehiculo_REST($id_vehiculos)  {
+        if(ENVIRONMENT == 'production'):
+            $user_id = $this->session_id;  
+            $query = '';    
+            foreach ($id_vehiculos as $id_vehiculo) {
+                $query .= " ve111_vehiculos.id = ".$id_vehiculo.'  ||';
+            }
+            $query = substr($query, 0, -2); 
+
+            //get list of records --------------------------------
+           
+            $get_entry_list_parameters = array(
+
+                 //session id
+                 'session' => $user_id,
+
+                 //The name of the module from which to retrieve records
+                 'module_name' => 've111_vehiculos',
+
+                 //The SQL WHERE clause without the word "where".
+
+                 'query' => $query,
+
+                 //The SQL ORDER BY clause without the phrase "order by".
+                 'order_by' => "",
+
+                 //The record offset from which to start.
+                 'offset' => '0',
+
+                 //Optional. A list of fields to include in the results.
+                 'select_fields' => array(
+                      'id',
+                      'name',
+                 ),
+
+                 'link_name_to_fields_array' => array(
+                          array(
+                               'name' => 've111_marcalinea',
+                               'value' => array(
+                                    'id',
+                                    'name', 
+                                    'marca', 
+                                    'linea',                                     
+                               ),
+                          ),
+                     ),
+
+                 
+
+
+                 //The maximum number of results to return.
+                 'max_results' => '100000',
+            );
+
+            $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
+            return $get_entry_list_result;
+        endif;
+    }
+
+    /**
+     * Retona los vehículos del usuario asociado a un pipeline
+     * @param  string $id_pipeline
+     * @return array de vehículos
+     */
+    public function dar_vehiculos_de_pipeline($id_pipeline)
+    {
+        $nombre_usuario = $this->dar_id_usuario_pipeline_REST($id_pipeline);
+        return $this->dar_vehiculos_usuario_REST($nombre_usuario);
     }
 
     /**
