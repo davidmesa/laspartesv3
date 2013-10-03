@@ -33,7 +33,7 @@ class RefVenta_model extends CI_Model{
     function dar_Venta($refVenta){
         $this->db->escape($refVenta);
         $this->db->select('carritos_refVentas.refVenta AS referencia, carritos_compras.total AS total, carritos_compras.nombres as nombre_apellido, carritos_compras.email, carritos_compras.direccion, carritos_compras.telefono, carritos_compras.ciudad, 
-            carritos_compras.fecha, carritos_compras.fecha_pago, carritos_compras.id_carrito_compra, usuarios.usuario, carritos_compras.documento, carritos_compras.carro, carritos_compras.placa');
+            carritos_compras.fecha, carritos_compras.fecha_pago, carritos_compras.id_carrito_compra, usuarios.usuario, carritos_compras.documento, carritos_compras.carro, carritos_compras.placa, carritos_compras.observaciones');
         $this->db->from('carritos_refVentas');
         $this->db->join('carritos_compras', 'carritos_refVentas.id_carritos_compras = carritos_compras.id_carrito_compra');
         $this->db->join('usuarios', 'carritos_compras.id_usuario = usuarios.id_usuario');

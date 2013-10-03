@@ -74,6 +74,10 @@
         <input type="text" name="placa" placeholder="Placas" class="form-control" id="placa"> 
       </div>
       <div class="form-group row">
+        <label for="plazo">Observaciones</label>
+        <textarea name="observaciones" placeholder="Observaciones" class="form-control" id="observaciones"> </textarea>
+      </div>
+      <div class="form-group row">
         <label for="titulo">FECHA DE PAGO</label>
         <input data-placement="top" class="form-control date-picker oc-enviar" name="fechapago" id="fechapago" size="16" type="text" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd" value="<?php echo date('Y-m-d');?>">
       </div>

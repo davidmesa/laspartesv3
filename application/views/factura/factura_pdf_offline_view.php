@@ -129,6 +129,7 @@ table th{
 }
 
 td{
+    vertical-align:top;
     border-left: 2px solid #FC0309;
     border-right: 2px solid #FC0309;
     font-size: 12px;
@@ -319,27 +320,30 @@ tr.even{
                         $ivaTemp = round($precionConDco - $valorDco) * $row1->cantidad;
                         $ivaSum += $ivaTemp;
                         foreach ($row1->prov_cotizacion_link_pago_model as $key => $pclp_model) {
-                          $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
-                            <td class="center"></td>
-                            <td class="center"> ' . $pclp_model->cantidad . '</td>
-                            <td>' . $pclp_model->item . '</td>
-                            <td class="right">$ ' . number_format(round($pclp_model->base, 0), 0, ',', '.') . '</td>
-                            <td class="right">$ ' . number_format(round($pclp_model->base, 0) * $pclp_model->cantidad, 0, ',', '.') . '</td>
-                            </tr>';
-                            $itemsSum += (round($pclp_model->base, 0) * $pclp_model->cantidad);
+                          if($pclp_model->pagina == $pagina){
+                            $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
+                              <td class="center"></td>
+                              <td class="center"> ' . $pclp_model->cantidad . '</td>
+                              <td>' . $pclp_model->item . '</td>
+                              <td class="right">$ ' . number_format(round($pclp_model->base, 0), 0, ',', '.') . '</td>
+                              <td class="right">$ ' . number_format(round($pclp_model->base, 0) * $pclp_model->cantidad, 0, ',', '.') . '</td>
+                              </tr>';
+                              $itemsSum += (round($pclp_model->base, 0) * $pclp_model->cantidad);
+                            }
                         }
                     else:
                         $ivaSum += round($row1->iva) * $row1->cantidad;
                         $valorSum += $row1->precio * $row1->cantidad;
                         foreach ($row1->prov_cotizacion_link_pago_model as $key => $pclp_model) {
-                          $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
-                            <td class="center"></td>
-                            <td class="center"> ' . $pclp_model->cantidad . '</td>
-                            <td>' . $pclp_model->item . '</td>
-                            <td class="right">$ ' . number_format($pclp_model->base, 0, ',', '.') . '</td>
-                            <td class="right">$ ' . number_format($pclp_model->base * $pclp_model->cantidad, 0, ',', '.') . '</td>
-                            </tr>';
-                            
+                          if($pclp_model->pagina == $pagina){
+                            $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
+                              <td class="center"></td>
+                              <td class="center"> ' . $pclp_model->cantidad . '</td>
+                              <td>' . $pclp_model->item . '</td>
+                              <td class="right">$ ' . number_format($pclp_model->base, 0, ',', '.') . '</td>
+                              <td class="right">$ ' . number_format($pclp_model->base * $pclp_model->cantidad, 0, ',', '.') . '</td>
+                              </tr>';
+                          }    
                         }
                     endif;
 
@@ -390,7 +394,8 @@ tr.even{
           <div class="caja-especial">
               <div>OBSERVACIONES</div>
               <?php 
-                  echo '<strong>Vehículo: </strong> '.$venta->carro.'<br/><strong>Placa del vehículo:</strong> '.$venta->placa;
+                  echo '<strong>Vehículo: </strong> '.$venta->carro.'<br/><strong>Placa del vehículo:</strong> '.$venta->placa.'<br/><br/>';
+                  echo $venta->observaciones;
               ?>
               <br><br>
           </div>

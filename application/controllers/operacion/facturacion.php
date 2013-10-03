@@ -161,6 +161,11 @@ class Facturacion extends Dropbox_Controller {
                         'rules' => 'trim|xss_clean'
                     ),
                     array(
+                        'field' => 'observaciones',
+                        'label' => 'observaciones',
+                        'rules' => 'trim|xss_clean'
+                    ),
+                    array(
                         'field' => 'ids',
                         'label' => 'ids de ofertas',
                         'rules' => 'trim|required|xss_clean'
@@ -201,6 +206,7 @@ class Facturacion extends Dropbox_Controller {
                     $carroModel = $this->vehiculo_model->dar_vehiculo($this->input->post('carro'));
                     $carro = $carroModel->marca.' '.$carroModel->linea;
                     $placa = $this->input->post('placa');
+                    $observaciones = $this->input->post('observaciones');
                     $fecha_pago = $this->input->post('fechapago');
 
                     $usuario = $this->usuario_model->dar_usuario($id_usuario);
@@ -223,7 +229,7 @@ class Facturacion extends Dropbox_Controller {
                         }
                     endforeach;
 
-                    $id_carrito = $this->usuario_model->agregar_carrito_compras($usuario->id_usuario, 'Transacción aprobada', round($total), $nombres, $lugar, $telefono, $direccion, $correo, $documento, $carro, $placa, $fecha_pago);
+                    $id_carrito = $this->usuario_model->agregar_carrito_compras($usuario->id_usuario, 'Transacción aprobada', round($total), $nombres, $lugar, $telefono, $direccion, $correo, $documento, $carro, $placa, $fecha_pago, $observaciones);
                     foreach ($id_ofertas as $index => $id_oferta):
                         if ($id_oferta != 0)
                             $this->usuario_model->agregar_carrito_compras_ofertas($id_carrito, $id_oferta, 1);
@@ -276,14 +282,30 @@ class Facturacion extends Dropbox_Controller {
         $consecutivo = $this->usuario_model->agregar_consecutivo_compra($venta->id_carrito_compra);
         $valorSum = 0;
         $ivaSum = 0;
+        $lineas = 0;
+        $pagina = 1;
+        foreach ($ofertas as $index => $row1):
+            foreach ($row1->prov_cotizacion_link_pago_model as $key => $pclp_model) {
+                $item = $pclp_model->item;
+                $lineas += floor(strlen($item)/80)+1;
+                if($lineas > 30){
+                    $pagina ++;
+                    $lineas = 0;
+                }
+                $ofertas[$index]->prov_cotizacion_link_pago_model[$key]->pagina = $pagina;
+            }
+        endforeach;
+
+
         $data1['venta'] = $venta;
         $data1['autopartes'] = $autopartes;
         $data1['ofertas'] = $ofertas;
         $data1['consecutivo'] = $consecutivo;
 
-        
-        $html = $this->load->view('factura/factura_pdf_offline_view', $data1, true);
-
+        for ($i=1; $i <= $pagina; $i++) { 
+            $data1['pagina'] = $i;
+            $html .= $this->load->view('factura/factura_pdf_offline_view', $data1, true);
+        }
         $destinatario = new stdClass();
         $destinatario->email = $venta->email;
         $destinatarios[] = $destinatario;
@@ -747,6 +769,7 @@ class Facturacion extends Dropbox_Controller {
         $lugar = $this->input->post('lugar');
         $direccion = $this->input->post('direccion');
         $telefono = $this->input->post('telefono');
+        $observaciones = $this->input->post('observaciones');
         $carroModel = $this->vehiculo_model->dar_vehiculo($this->input->post('carros'));
         $carro = $carroModel->marca.' '.$carroModel->linea;
         $placa = $this->input->post('placa');
@@ -760,6 +783,7 @@ class Facturacion extends Dropbox_Controller {
         $data['venta']->documento = $documento;
         $data['venta']->direccion = $direccion;
         $data['venta']->telefono = $telefono;
+        $data['venta']->observaciones = $observaciones;
         $data['venta']->fecha = date('Y-m-d'); 
         $data['venta']->fecha_pago = $fecha_pago;
         $data['venta']->carro = $carroModel->marca.' '.$carroModel->linea;

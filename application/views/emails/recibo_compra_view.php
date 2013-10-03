@@ -52,7 +52,7 @@
                                         <strong>Carro:</strong> <?php echo $venta->carro; ?><br />
                                         <strong>Placa del carro:</strong> <?php echo $venta->placa; ?><br />
                                         <strong>Precio:</strong> $<?php echo number_format($venta->total, 0, ',', '.'); ?><br/><br/>
-                                        <strong>Items ordenados:</strong><br/>
+                                        <!-- <strong>Items ordenados:</strong><br/>
                                         <ul style="padding-left:25px; color:#404040; font-size:13px;">
                                             <?php foreach ($autopartes as $row): ?>
                                                 <li style="font-size: 16px;">
@@ -83,7 +83,7 @@
                                             endforeach;
                                             ?>
 
-                                        </ul>
+                                        </ul> -->
                                     </td>
                                 </tr>
                             </tbody>

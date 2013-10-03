@@ -97,6 +97,7 @@ function generarFactura(){
 	var telefono = $('#telefono').val();
 	var carro = $('#carros').val();
 	var placa = $('#placa').val();
+	var observaciones = $('#observaciones').val();
 	var fechapago = $('#fechapago').val();
 	$.ajax({
 		type: "POST",
@@ -113,6 +114,7 @@ function generarFactura(){
 	    	telefono: telefono,
 	    	carro: carro,
 	    	placa: placa,
+	    	observaciones: observaciones,
 	    	fechapago: fechapago
 	    },success: function(data, status){
 	    	var data = $.parseJSON(data);
@@ -144,9 +146,11 @@ function generarFactura(){
 function vista_preliminar(){
 	var carro = $('#carros','#generarFactura').val();
 	var lugar = $('#lugar','#generarFactura').val();
+	var observaciones = $('#observaciones').val();
 	var form = $('#generarFactura').clone();
 	$('#carros',form).val(carro);
 	$('#lugar',form).val(lugar);
+	$('#observaciones',form).val(observaciones);
 	$(form).attr("id", "previsualizarForm");
 	$(form).attr("method", "post");
 	$(form).css("display", "none");

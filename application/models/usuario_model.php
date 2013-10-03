@@ -233,7 +233,7 @@ class Usuario_model extends CI_Model {
      * @param int $total
      * @return int $id_carrito_compra
      */
-    function agregar_carrito_compras($id_usuario, $estado, $total, $nombres = '', $ciudad = '', $telefono = '', $direccion = '', $email = '', $di = '', $carro = '', $placa = '', $fecha_pago = '') {
+    function agregar_carrito_compras($id_usuario, $estado, $total, $nombres = '', $ciudad = '', $telefono = '', $direccion = '', $email = '', $di = '', $carro = '', $placa = '', $fecha_pago = '', $observaciones = '') {
         $this->db->escape($id_usuario);
         $this->db->escape($estado);
         $this->db->escape($total);
@@ -264,6 +264,8 @@ class Usuario_model extends CI_Model {
             $this->db->set('carro', $carro);
         if ($placa != '')
             $this->db->set('placa', $placa);
+        if($observaciones != '')
+            $this->db->set('observaciones', $observaciones);
         
         $this->db->insert('carritos_compras');
         return mysql_insert_id();
