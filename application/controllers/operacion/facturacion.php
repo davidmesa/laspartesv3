@@ -406,7 +406,8 @@ class Facturacion extends Dropbox_Controller {
 
         
         $filePath = 'resources/facturas/';
-        $fileName = 'factura-' . $refVenta . '.pdf';
+        $nombreFormat = str_replace(' ', '-', convert_accented_characters($venta->nombre_apellido));
+        $fileName = $consecutivo.strftime("-%d-%b-").$nombreFormat.'-factura'. '.pdf';
         $this->phptopdf->phptopdf_html($html, $filePath, $fileName);
         send_mail($destinatarios, "Factura de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
 
@@ -420,6 +421,14 @@ class Facturacion extends Dropbox_Controller {
         }
 
         return array('consecutivo' => $consecutivo, 'url' =>$filePath.$fileName, 'refventa' => $refVenta, 'addResponse' => $addResponse);
+    }
+
+    function fix_caracteres($string){
+        $string = htmlentities($string, ENT_QUOTES, 'UTF-8');
+        htmlspecialchars_decode($string, ENT_NOQUOTES);
+        
+        return $string;
+        
     }
 
     /**
