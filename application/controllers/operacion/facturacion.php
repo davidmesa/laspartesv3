@@ -253,6 +253,86 @@ class Facturacion extends Dropbox_Controller {
         }
     }
 
+    function factura_refVenta(){
+        // $this->_generar_factura_manual('4fe99cd0e4');
+    }
+
+    /**
+     * Genera la factura en pdf
+     * @param  [type] $refVenta [description]
+     * @param  string $mensaje  [description]
+     * @return [type]           [description]
+     */
+    function _generar_factura_manual($refVenta) {
+        // setlocale(LC_ALL, 'es_ES');
+        // define("CHARSET", "iso-8859-1");
+        // $this->load->library('phptopdf');
+        // $this->load->model('refventa_model');
+        // $this->load->model('usuario_model');
+        // $this->load->helper('mail');
+        // $destinatarios = array();
+        // $venta = $this->refventa_model->dar_venta($refVenta);
+        // $autopartes = $this->usuario_model->dar_carrito_compra_autopartes($venta->id_carrito_compra);
+        // $ofertas = $this->usuario_model->dar_carrito_compra_ofertas($venta->id_carrito_compra);
+        // foreach ($ofertas as $index => $oferta) {
+        //     $link_pago_model = new link_pago_model();
+        //     $link_pago_model->id_oferta = $oferta->id_oferta;
+        //     $link_pago_model->dar_por_oferta();
+        //     $prov_cotizacion_link_pago_model = new prov_cotizacion_link_pago_model();
+        //     $pclpm = $prov_cotizacion_link_pago_model->dar_todos_filtros(array('id_link_pago' => $link_pago_model->id));
+        //     $ofertas[$index]->prov_cotizacion_link_pago_model = $pclpm;
+        //     $ofertas[$index]->link_pago_model = $link_pago_model;
+        // }
+        // $consecutivo = 1245;
+        // $valorSum = 0;
+        // $ivaSum = 0;
+        // $lineas = 0;
+        // $pagina = 1;
+        // foreach ($ofertas as $index => $row1):
+        //     foreach ($row1->prov_cotizacion_link_pago_model as $key => $pclp_model) {
+        //         $item = $pclp_model->item;
+        //         $lineas += floor(strlen($item)/80)+1;
+        //         if($lineas > 30){
+        //             $pagina ++;
+        //             $lineas = 0;
+        //         }
+        //         $ofertas[$index]->prov_cotizacion_link_pago_model[$key]->pagina = $pagina;
+        //     }
+        // endforeach;
+
+
+        // $data1['venta'] = $venta;
+        // $data1['autopartes'] = $autopartes;
+        // $data1['ofertas'] = $ofertas;
+        // $data1['consecutivo'] = $consecutivo;
+        // $data1['numpaginas'] = $pagina;
+        // for ($i=1; $i <= $pagina; $i++) { 
+        //     $data1['pagina'] = $i;
+        //     $html .= $this->load->view('factura/factura_pdf_offline_view', $data1, true);
+        // }
+        // $destinatario = new stdClass();
+        // $destinatario->email = "tallerenlinea@laspartes.com.co";
+        // $destinatarios[] = $destinatario;
+        // $destinatario = new stdClass();
+        // $destinatario->email = "ventas@laspartes.com.co";
+        // $destinatarios[] = $destinatario;
+
+        // ob_start();
+        
+        
+        // $this->load->view('emails/recibo_compra_view', $data1);
+        // $contenidoHTML = ob_get_contents();
+        // ob_end_clean();
+
+        
+        // $filePath = 'resources/facturas/';
+        // $fileName = 'factura-' . $refVenta . '.pdf';
+        // $this->phptopdf->phptopdf_html($html, $filePath, $fileName);
+        // send_mail($destinatarios, "Factura de compra LasPartes.com - " . strftime("%B %d de %Y"), $contenidoHTML, "", $fileName);
+
+        // return array('consecutivo' => $consecutivo, 'url' =>$filePath.$fileName, 'refventa' => $refVenta, 'addResponse' => $addResponse);
+    }
+
     /**
      * Genera la factura en pdf
      * @param  [type] $refVenta [description]
@@ -301,7 +381,8 @@ class Facturacion extends Dropbox_Controller {
         $data1['autopartes'] = $autopartes;
         $data1['ofertas'] = $ofertas;
         $data1['consecutivo'] = $consecutivo;
-
+        
+        $data1['numpaginas'] = $pagina;
         for ($i=1; $i <= $pagina; $i++) { 
             $data1['pagina'] = $i;
             $html .= $this->load->view('factura/factura_pdf_offline_view', $data1, true);

@@ -261,7 +261,7 @@ tr.even{
       </div>
       <div class="caja caja-roja">
           <div class="titulo">FECHA</div>
-          <div class="contenido"><?php  echo '30/septiembre/2013';?></div>
+          <div class="contenido"><?php  echo strftime('%d/%B/%Y' ,strtotime($venta->fecha)); //echo '03/octubre/2013';?></div>
       </div>
       <div class="caja caja-roja">
           <div class="titulo">FECHA DE PAGO</div>
@@ -328,8 +328,8 @@ tr.even{
                               <td class="right">$ ' . number_format(round($pclp_model->base, 0), 0, ',', '.') . '</td>
                               <td class="right">$ ' . number_format(round($pclp_model->base, 0) * $pclp_model->cantidad, 0, ',', '.') . '</td>
                               </tr>';
-                              $itemsSum += (round($pclp_model->base, 0) * $pclp_model->cantidad);
                             }
+                            $itemsSum += (round($pclp_model->base, 0) * $pclp_model->cantidad);
                         }
                     else:
                         $ivaSum += round($row1->iva) * $row1->cantidad;
@@ -348,7 +348,7 @@ tr.even{
                     endif;
 
 
-                    if($valorDco > 0):
+                    if($valorDco > 0 && $pagina == $numpaginas):
                     $html .= '<tr class="'; if($odd){ $html .="odd"; $odd = false;} else{ $html .= "even"; $odd = true;}  $html .='" >
                         <td class="center">Dcto.</td>
                         <td class="center"> 1</td>
