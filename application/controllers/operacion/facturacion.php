@@ -126,7 +126,7 @@ class Facturacion extends Dropbox_Controller {
                     ), array(
                         'field' => 'documento',
                         'label' => 'documento',
-                        'rules' => 'trim|xss_clean'
+                        'rules' => 'trim|required|xss_clean'
                     ), array(
                         'field' => 'correo',
                         'label' => 'correo electrónico',
@@ -449,7 +449,7 @@ class Facturacion extends Dropbox_Controller {
                     ), array(
                         'field' => 'documento',
                         'label' => 'documento',
-                        'rules' => 'trim|xss_clean'
+                        'rules' => 'trim|required|xss_clean'
                     ), array(
                         'field' => 'correo',
                         'label' => 'correo electrónico',

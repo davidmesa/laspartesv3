@@ -42,6 +42,8 @@ $("form#generarFactura").validate({
 			number: true
 		},fechapago: {
 			required: true
+		},documento:{
+			required: true
 		}
 	},messages: {
 		nombres: "*Debes escribir el nombre a quien va radicada la factura"
@@ -54,6 +56,8 @@ $("form#generarFactura").validate({
 			number: "*Debes seleccionar un carro"
 		},fechapago: {
 			required: "*Debes seleccionar la fecha de pago de la factura"
+		},documento: {
+			required: "*Debes escribir el documento"
 		}
 	},highlight: function(element, errorClass) {
 		var formGroup = $('.form-group').has(element);

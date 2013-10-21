@@ -86,7 +86,7 @@
                     <input type="text" name="direccionEnvio" id="direccionEnvio"/>
                     <label>Teléfono de contacto:</label>
                     <input type="text" name="telefonoMovil" id="telefonoMovil"/>
-                    <label>Documento de identidad: (*opcional)</label>
+                    <label>Documento de identidad:</label>
                     <input type="text" name="di" id="di"/>
                     <label>Marca y línea del vehículo: (*opcional)</label>
                     <input type="text" name="carro" id="carro" value="<?php echo $vehiculo->marca . ' ' . $vehiculo->linea ?>"/>

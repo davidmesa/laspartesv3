@@ -102,6 +102,7 @@ font-size: 10px;
     <a href="<?php echo base_url();?>"><img src="<?php echo base_url();?>resources/template/header/logo-laspartes.png"></a>
     <div id="info-LP">
       <p>
+        <span class="block">NIT 900.216.983 - 8</span>
         <span class="block">Carrera 16 # 80 - 11 Oficina 602</span>
         <span class="block">Edificio El Escorial</span>
         <span class="block">Bogotá, Cundinamarca, Colombia</span>

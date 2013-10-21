@@ -20,6 +20,8 @@
                         },
                         telefonoMovil: {
                             required: true
+                        },di:{
+                            required: true
                         }
                     },
                     messages: {
@@ -38,6 +40,9 @@
                         },
                         telefonoMovil: {
                             required: "*Debes escribir tu telefono de contacto"
+                        },
+                        di: {
+                            required: "*Debes escribir tu documento de identidad"
                         }
                     },
                     invalidHandler: function(form, validator){

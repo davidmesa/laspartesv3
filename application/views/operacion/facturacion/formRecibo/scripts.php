@@ -39,6 +39,8 @@ $("form#generarRecibo").validate({
 			required: true
 		},carro: {
 			number: true
+		},documento:{
+			required: true
 		}
 	},messages: {
 		nombres: "*Debes escribir el nombre a quien va radicada la factura"
@@ -49,6 +51,8 @@ $("form#generarRecibo").validate({
 			required: "*Debes seleccionar el lugar"
 		},carro: {
 			number: "*Debes seleccionar un carro"
+		},documento: {
+			required: "*Debes escribir el documento de identidad"
 		}
 	},highlight: function(element, errorClass) {
 		var formGroup = $('.form-group').has(element);

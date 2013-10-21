@@ -21,7 +21,7 @@
         <input type="text" name="nombres" placeholder="Nombres" class="form-control" id="nombres" value="<?php echo $usuario->nombres.' '.$usuario->apellidos;?>"> 
       </div>
       <div class="form-group row">
-        <label for="precio">DOCUMENTO DE IDENTIDAD: (*OPCIONAL)</label>
+        <label for="precio">DOCUMENTO DE IDENTIDAD:</label>
         <div class="input-group">
           <span class="input-group-addon">CC/NIT</span>
           <input type="text" name="documento" placeholder="CC o Nit" class="form-control" id="documento" value="<?php echo $usuario->documento;?>"> 
