@@ -320,7 +320,7 @@ class Usuario_model extends CI_Model {
      * @param int $tipo
      * @return int $id_usuario
      */
-    function agregar_usuario($nombre, $apellidos, $usuario, $email, $contrasena, $lugar, $tipo, $referenciado = "", $pais = "Colombia", $telefono = "") {
+    function agregar_usuario($nombre, $apellidos, $usuario, $email, $contrasena, $lugar, $tipo, $referenciado = "", $pais = "Colombia", $telefono = "", $estado = 'Activo') {
         $this->db->escape($nombre);
         $this->db->escape($apellidos);
         $this->db->escape($usuario);
@@ -347,6 +347,7 @@ class Usuario_model extends CI_Model {
         $this->db->set('tipo', $tipo);
         $this->db->set('referenciado', $referenciado);
         $this->db->set('pais', $pais);
+        $this->db->set('estado', $estado);
         $this->db->set('fecha_creacion', 'curdate()', FALSE);
         $this->db->insert('usuarios');
         $insertedID = mysql_insert_id();

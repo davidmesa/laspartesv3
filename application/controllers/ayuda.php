@@ -173,8 +173,69 @@ class Ayuda extends Laspartes_Controller {
                 $destinatario->email = 'ventas@laspartes.com.co';
                 $destinatarios[] = $destinatario;
                 send_mail($destinatarios, "[LasPartes.com] Gracias por enviar tu solicitud", $contenidoHTML, "", $fileName);
+
+
+                //-----------CREAR PIPELINE-------------------
+                $this->load->model('usuario_model');
+                $usuarioOBJ = $this->usuario_model->dar_usuario_segun_mail($data['email']);
+                if($usuarioOBJ)
+                    $id_usuario = $usuarioOBJ->id_usuario;
+                else{
+                    list($usuario, $dominio) = split('@', $data['email']);
+                    $existe = $this->usuario_model->existe_usuario_Referencia_CRM($usuario);
+                    if ($existe === true)
+                        $usuario = $this->_generar_usuario($usuario);
+                    $id_usuario = $this->usuario_model->agregar_usuario($data['nombre'], '', $usuario, $data['email'], '', $data['ciudad'], '30', 'CRM', 'Colombia', $data['telefono'], 'precreado');
+                }
+                 
+                $params['name'] = 'Cotizacion de '.$data['nombre'].' para '.$data['vehiculo']->marca.' '.$data['vehiculo']->linea.' modelo: '.$data['modelo'];
+                $params['description'] = $data['solicitud_mensaje'];
+                $params['lead_source'] = 'ContactUS';
+                $params['sales_stage'] = 'Proposal/Price Quote';
+                $params['probability'] = '25';
+                $params['vehiculo_c'] = $data['vehiculo']->marca.' '.$data['vehiculo']->linea.' modelo: '.$data['modelo'].' kilometraje: '.$data['kilometraje'];
+                $params['assigned_user_id'] = '221ae831-3e81-7963-a8db-5194020c679b';
+                $params['assigned_user_name'] = 'Felipe Pacheco';
+                $params['next_step'] = 'Clasificarlo';
+                // $params['fechallamada_c'] = '2013-05-25 22:00:00';
+                // $params['date_closed'] = date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")+5, date("Y")));
+                // $params['contact_id_c'] = $uID;
+                $params['contact_name_c'] = $data['nombre'];
+                $this->crearPipeLineAyuda($params, $id_usuario);
+
+
+
+
+                //---------------------
                 $this->index('<div class="mensaje-informativo">Tu solicitud ha sido enviada</div>');
         } 
+    }
+
+    /**
+     * Crea un pipeline basado en el formulario de pedir cotizacion
+     * @param  array $params  
+     * @param  int $id_usuario id del usuario precreado o existente
+     */
+    private function crearPipeLineAyuda($params, $id_usuario){
+        
+        $uID = $this->crm->dar_uID_REST($id_usuario);
+        $params['contact_id_c'] = $uID;
+        $this->crm->agregar_pipeline_REST($params);
+    }
+
+    /**
+     * Genera un usuario aleatorio a partir del usuario dado
+     * @param type $usuario
+     */
+    function _generar_usuario($usuario) {
+        $code = md5(uniqid(rand(), true));
+        $code = substr($code, 0, 5);
+
+        $existe = $this->usuario_model->existe_usuario($usuario);
+        if (!$existe)
+            return $usuario;
+        else
+            return $this->_generar_usuario($usuario . $code);
     }
 
 }

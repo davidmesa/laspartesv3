@@ -24,6 +24,9 @@ class Crm {
     public function __construct() {
         $this->_CI = & get_instance();
 
+        if(ENVIRONMENT == 'development')
+            $this->url = "http://dev.crm.laspartes.com/service/v4/rest.php";
+
         if(!isset($this->session_id) && ENVIRONMENT == 'production'){ //se verifica que la id sesion alla sido solo 1 ves inicializada
             $login_parameters = array(
                  "user_auth"=>array(
@@ -378,8 +381,7 @@ class Crm {
             $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
 
             $entry_list = $get_entry_list_result->entry_list;
-            echo $user_id.'<br/>';
-            //return $entry_list[0]->id;
+            return $entry_list[0]->id;
         endif;
     }
 
@@ -1438,6 +1440,25 @@ class Crm {
             }
             $this->agregar_marcalineas_REST($arrayParams);
         endif;
+    }
+
+    public function agregar_pipeline_REST($params){
+        $name_value_list = array();
+            foreach($params as $key => $value) {
+                   array_push($name_value_list, array("name" => $key, "value" => $value));
+            }
+            $user_id = $this->session_id;
+            $set_entry_parameters = array(
+                 //session id
+                 "session" => $user_id,
+
+                 //The name of the module from which to retrieve records.
+                 "module_name" => "Opportunities",
+
+                 //Record attributes
+                 "name_value_list" => $name_value_list,
+            );
+            $set_entry_result = $this->call("set_entry", $set_entry_parameters, $this->url);
     }
 
     /* fin de Metodos de popular la DB */
