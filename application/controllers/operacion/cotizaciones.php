@@ -22,9 +22,6 @@ class Cotizaciones extends CI_Controller {
         $this->load->library('crm');
         $uID_usuario = $this->crm->dar_id_usuario_pipeline_REST('1616e167-b243-3b55-2a06-52095df805fc');
         $vehiculos = $this->crm->prueba($uID_usuario);
-        echo $uID_usuario.'<br/>';
-        $objEncode = json_encode($vehiculos);
-        echo '<script>console.log('.$objEncode.')</script>';
     }
     /**
      * Muestra el iFrame para realizar cotizaciones

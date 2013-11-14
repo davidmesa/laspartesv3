@@ -37,5 +37,11 @@ define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 
+/*
+|Permisos para testing
+ */
+define('ACCESO_CRM', true);
+
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

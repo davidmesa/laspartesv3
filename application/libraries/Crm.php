@@ -24,10 +24,10 @@ class Crm {
     public function __construct() {
         $this->_CI = & get_instance();
 
-        if(ENVIRONMENT == 'development')
+        if(ENVIRONMENT != 'production')
             $this->url = "http://dev.crm.laspartes.com/service/v4/rest.php";
 
-        if(!isset($this->session_id) && ENVIRONMENT == 'production'){ //se verifica que la id sesion alla sido solo 1 ves inicializada
+        if(!isset($this->session_id) && ACCESO_CRM){ //se verifica que la id sesion alla sido solo 1 ves inicializada
             $login_parameters = array(
                  "user_auth"=>array(
                       "user_name"=>'admin',
@@ -57,7 +57,7 @@ class Crm {
      * 
      */
     public function agregar_usuario($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
             $uID = $this->create_guid();
             $this->_db_crm->set('id', $uID);
@@ -93,7 +93,7 @@ class Crm {
      * 
      */
     public function agregar_usuario_REST($params){
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_value_list = array();
             array_push($name_value_list, array("name" => "estadoHook", "value" => true));
             foreach($params as $key => $value) {
@@ -127,7 +127,7 @@ class Crm {
      * 
      */
     private function crear_cuenta_REST($params){
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_value_list = array();
             // if(!empty($params['first_name']) ){
             array_push($name_value_list, array("name" => "estadoHook", "value" => true));
@@ -162,7 +162,7 @@ class Crm {
      * 
      */
     public function agregar_usuarios_REST($params){
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_values_list = array();
             foreach ($params as $array) {
                 $name_value_list = array();
@@ -200,7 +200,7 @@ class Crm {
      * @param int $params[phone_home] teléfono de contacte del usuario
      */
     private function crear_cuentas_REST($params){
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_values_list = array();
             foreach ($params as $array) {
                 if(!empty($array['first_name']) ){
@@ -232,7 +232,7 @@ class Crm {
      * @param email $email email del usuario a agregar
      */
     private function agregar_email_usuario($uID, $email) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $email_addrs_uID = $this->create_guid();
             $this->_db_crm->set('id', $email_addrs_uID);
             $this->_db_crm->set('email_address', $email);
@@ -261,7 +261,7 @@ class Crm {
      * 
      */
     public function actualizar_usuario($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
             $uID = $this->dar_uID($params['laspartes_id_usuario_c']);
             foreach ($params as $key => $value) {
@@ -288,7 +288,7 @@ class Crm {
      * 
      */
     public function actualizar_usuario_REST($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_value_list = array();
             $uID = $this->dar_uID_REST($params['laspartes_id_usuario_c']);
             array_push($name_value_list, array("name" => "estadoHook", "value" => true));
@@ -318,7 +318,7 @@ class Crm {
      * @return string uID
      */
     private function dar_vehiculo_uID($id_usuario_vehiculo) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm->select('id');
             $this->_db_crm->where('id_usuario_vehiculo', $id_usuario_vehiculo);
             $query = $this->_db_crm->get('ve111_vehiculos');
@@ -332,7 +332,7 @@ class Crm {
      * @return string uID
      */
     private function dar_uID($id_usuario) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm->select('id_c');
             $this->_db_crm->where('laspartes_id_usuario_c', $id_usuario);
             $query = $this->_db_crm->get('contacts_cstm');
@@ -346,7 +346,7 @@ class Crm {
      * @return string uID
      */
     public function dar_uID_REST($id_usuario) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $user_id = $this->session_id;
        
 
@@ -391,7 +391,7 @@ class Crm {
      * @return string uID
      */
     private function dar_uIDs_REST($id_usuarios) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $user_id = $this->session_id;
 
             $query  = '';
@@ -449,7 +449,7 @@ class Crm {
      * @param email $correo
      */
     private function actualizar_correo_usuario($uID, $correo) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm->select('email_address_id');
             $this->_db_crm->where('bean_id', $uID);
             $q = $this->_db_crm->get('email_addr_bean_rel');
@@ -473,7 +473,7 @@ class Crm {
      * @param string $params[id_usuario_vehiculo] id del carro
      */
     function agregar_vehiculo_REST($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_value_list = array();
 
             array_push($name_value_list, array("name" => "estadoHook", "value" => true));
@@ -514,7 +514,7 @@ class Crm {
      * @param string $params[id_usuario_vehiculo] id del carro
      */
     function agregar_vehiculos_REST($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_values_list = array();
             $marcalineas = array();
             $contactos = array();
@@ -588,7 +588,7 @@ class Crm {
      * @param string $params[id_usuario_vehiculo] id del carro
      */
     function agregar_vehiculo($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
             $uID_usuario = $this->dar_uID($params['id_usuario']);
             $uID = $this->create_guid();
@@ -613,7 +613,7 @@ class Crm {
      * @param string $uID_marcalinea
      */
     private function agregar_marcalinea_vehiculo($uID_vehiculo, $uID_marcalinea) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $uID = $this->create_guid();
             $this->_db_crm->set('id', $uID);
             $this->_db_crm->set('ve111_marcalinea_ve111_vehiculosve111_marcalinea_ida', $uID_marcalinea);
@@ -628,7 +628,7 @@ class Crm {
      * @return int id
      */
     private function dar_marcalinea_uID($id_vehiculo) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm->select('id');
             $this->_db_crm->where('id_vehiculo', $id_vehiculo);
             $q = $this->_db_crm->get('ve111_marcalinea');
@@ -642,7 +642,7 @@ class Crm {
      * @return int id
      */
     private function dar_marcalinea_uID_REST($id_vehiculo) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
 
             $user_id = $this->session_id;
             //get list of records --------------------------------
@@ -688,7 +688,7 @@ class Crm {
      * @return array uids
      */
     private function dar_marcalinea_uIDs_REST($id_vehiculos) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
 
             $user_id = $this->session_id;
             $query  = '';
@@ -741,7 +741,7 @@ class Crm {
      * @return int id del usuario
      */
     private function dar_uID_de_pipeline($id_pipeline) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm->select('id');
             $this->_db_crm->where('id_vehiculo', $id_pipeline);
             $q = $this->_db_crm->get('ve111_marcalinea');
@@ -755,7 +755,7 @@ class Crm {
      * @return int id del usuario
      */
     private function dar_id_usuario_pipeline_REST($id_pipeline)  {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $user_id = $this->session_id;
             
             //get list of records --------------------------------
@@ -810,7 +810,7 @@ class Crm {
      * @return array de vehículos
      */
     private function dar_vehiculos_usuario_REST($id_usuario)  {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $user_id = $this->session_id;       
 
             //get list of records --------------------------------
@@ -871,7 +871,7 @@ class Crm {
      * @return marca y línea
      */
     public function dar_marca_linea_vehiculo_REST($id_vehiculos)  {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $user_id = $this->session_id;  
             $query = '';    
             foreach ($id_vehiculos as $id_vehiculo) {
@@ -946,7 +946,7 @@ class Crm {
      * @param string $uID_vehiculo
      */
     private function agregar_vehiculo_usuario($uID_usuario, $uID_vehiculo) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $uID = $this->create_guid();
             $this->_db_crm->set('id', $uID);
             $this->_db_crm->set('ve111_vehiculos_contactsve111_vehiculos_idb', $uID_vehiculo);
@@ -962,7 +962,7 @@ class Crm {
      * @param string $linea
      */
     function agregar_marcalinea($id_vehiculo, $marca, $linea) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
 
             $uID = $this->create_guid();
@@ -984,7 +984,7 @@ class Crm {
      * @param string $linea
      */
     function agregar_marcalineas_REST($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_values_list = array();
 
             foreach ($params as $array) {
@@ -1023,7 +1023,7 @@ class Crm {
      * @param string $linea
      */
     function agregar_marcalinea_REST($id_vehiculo, $marca, $linea) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_value_list = array();
 
             array_push($name_value_list, array("name" => "estadoHook", "value" => true));
@@ -1060,7 +1060,7 @@ class Crm {
      * @param string $params[id_usuario_vehiculo] id del carro
      */
     function actualizar_vehiculo($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
 
             $this->_db_crm->set('name', $params['marca'] . ' ' . $params['linea']);
@@ -1105,7 +1105,7 @@ class Crm {
      * @param string $params[recibo] url donde se encuentra el recibo de compra
      */
     public function agregar_carrito_compras_REST($params){
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_value_list = array();
             $uID_usuario = $this->dar_uID_REST($params['id_usuario']);
             array_push($name_value_list, array("name" => 'venta_compra_contactscontacts_ida', "value" => $uID_usuario)); 
@@ -1143,7 +1143,7 @@ class Crm {
      * @param string $params[recibo] url donde se encuentra el recibo de compra
      */
     public function agregar_llamada_venta_REST($params){
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_value_list = array();
             array_push($name_value_list, array("name" => "estadoHook", "value" => true));
             array_push($name_value_list, array("name" => "name", "value" => 'Llamada postventa'));
@@ -1188,7 +1188,7 @@ class Crm {
      * @param string $params[recibo] url donde se encuentra el recibo de compra
      */
     function agregar_carrito_compras($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
             $uID_usuario = $this->dar_uID($params['id_usuario']);
             $uID = $this->create_guid();
@@ -1210,7 +1210,7 @@ class Crm {
      * @param string $uID_compra
      */
     private function agregar_carrito_compras_usuario($uID_usuario, $uID_compra) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $uID = $this->create_guid();
             $this->_db_crm->set('id', $uID);
             $this->_db_crm->set('venta_compra_contactsventa_compra_idb', $uID_compra);
@@ -1233,7 +1233,7 @@ class Crm {
      * @param string $params[remisionurl] url donde se encuentra la remisión en pdf
      */
     public function agregar_remision_REST($params){
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $name_value_list = array();
             $uID_usuario = $this->dar_uID_REST($params['id_usuario']);
             array_push($name_value_list, array("name" => "venta_remision_contactscontacts_ida", "value" => $uID_usuario));
@@ -1269,7 +1269,7 @@ class Crm {
      * Contributor(s): ______________________________________..
      */
     public function create_guid() {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $microTime = microtime();
             list($a_dec, $a_sec) = explode(" ", $microTime);
 
@@ -1297,7 +1297,7 @@ class Crm {
     }
 
     public function create_guid_section($characters) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $return = "";
             for ($i = 0; $i < $characters; $i++) {
                 $return .= dechex(mt_rand(0, 15));
@@ -1334,7 +1334,7 @@ class Crm {
      * @param string $params[id_usuario_vehiculo] id del carro
      */
     public function migrar_usuarios($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             // $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
             $arrayParams = array();
             foreach ($params as $usuario) {
@@ -1365,7 +1365,7 @@ class Crm {
      * @param string $params[id_usuario_vehiculo] id del carro
      */
     public function migrar_usuarios_vehiculos($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
             $arrayParams = array();
             foreach ($params as $vehiculo) {
@@ -1403,7 +1403,7 @@ class Crm {
      * @param string $params[recibo] url donde se encuentra el recibo de compra
      */
     public function migrar_usuarios_compras($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $this->_db_crm = $this->_CI->load->database('CRM', TRUE);
             foreach ($params as $carrito) {
                 $params = array();
@@ -1428,7 +1428,7 @@ class Crm {
      * @param type $params
      */
     public function migrar_marcalinea($params) {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             $arrayParams = array();
             foreach ($params as $vehiculo) {
                 $temp = array();
@@ -1466,7 +1466,7 @@ class Crm {
     //function to make cURL request
     private function call($method, $parameters, $url)
     {
-        if(ENVIRONMENT == 'production'):
+        if(ACCESO_CRM):
             ob_start();
             $curl_request = curl_init();
 

@@ -182,7 +182,7 @@ class Ayuda extends Laspartes_Controller {
                     $id_usuario = $usuarioOBJ->id_usuario;
                 else{
                     list($usuario, $dominio) = split('@', $data['email']);
-                    $existe = $this->usuario_model->existe_usuario_Referencia_CRM($usuario);
+                    $existe = $this->usuario_model->existe_usuario($usuario);
                     if ($existe === true)
                         $usuario = $this->_generar_usuario($usuario);
                     $id_usuario = $this->usuario_model->agregar_usuario($data['nombre'], '', $usuario, $data['email'], '', $data['ciudad'], '30', 'CRM', 'Colombia', $data['telefono'], 'precreado');
@@ -199,7 +199,6 @@ class Ayuda extends Laspartes_Controller {
                 $params['next_step'] = 'Clasificarlo';
                 // $params['fechallamada_c'] = '2013-05-25 22:00:00';
                 // $params['date_closed'] = date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")+5, date("Y")));
-                // $params['contact_id_c'] = $uID;
                 $params['contact_name_c'] = $data['nombre'];
                 $this->crearPipeLineAyuda($params, $id_usuario);
 
@@ -227,10 +226,10 @@ class Ayuda extends Laspartes_Controller {
      * Genera un usuario aleatorio a partir del usuario dado
      * @param type $usuario
      */
-    function _generar_usuario($usuario) {
+    private function _generar_usuario($usuario) {
         $code = md5(uniqid(rand(), true));
         $code = substr($code, 0, 5);
-
+        $this->load->model('usuario_model');
         $existe = $this->usuario_model->existe_usuario($usuario);
         if (!$existe)
             return $usuario;
