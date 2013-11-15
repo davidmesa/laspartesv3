@@ -433,10 +433,10 @@ class Crm {
             );
 
             $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
-            echo "<pre>";
+            // echo "<pre>";
 
-            print_r(sizeof($id_usuarios));
-            echo "</pre>";
+            // print_r(sizeof($id_usuarios));
+            // echo "</pre>";
             $entry_list = $get_entry_list_result->entry_list;
 
             return $entry_list;
@@ -543,9 +543,9 @@ class Crm {
             $ids_usuarios = $this->dar_uIDs_REST($contactos);
             $ids_marcalineas = $this->dar_marcalinea_uIDs_REST($marcalineas);
 
-            echo sizeof($name_values_list).'<br/>';
-            echo sizeof($ids_usuarios).'<br/>';
-            echo sizeof($ids_marcalineas).'<br/>';
+            // echo sizeof($name_values_list).'<br/>';
+            // echo sizeof($ids_usuarios).'<br/>';
+            // echo sizeof($ids_marcalineas).'<br/>';
 
             // echo "<pre>";
 
@@ -755,7 +755,7 @@ class Crm {
      * @return int id del usuario
      */
     private function dar_id_usuario_pipeline_REST($id_pipeline)  {
-        if(ACCESO_CRM):
+        if(ACCESO_CRM): 
             $user_id = $this->session_id;
             
             //get list of records --------------------------------
@@ -779,18 +779,10 @@ class Crm {
 
                  //Optional. A list of fields to include in the results.
                  'select_fields' => array(
-                      'id',
-                      'name',
+                      'contact_id_c',
                  ),
 
                  'link_name_to_fields_array' => array(
-                          array(
-                               'name' => 'contacts',
-                               'value' => array(
-                                    'id',
-                                    'name',                                   
-                               ),
-                          ),
                      ),
 
 
@@ -799,7 +791,11 @@ class Crm {
             );
     
 
-            $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url)->relationship_list[0]->link_list[0]->records[0]->link_value->id->value;
+            // $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url)->relationship_list[0]->link_list[0]->records[0]->link_value->id->value;
+            $get_entry_list_result = $this->call('get_entry_list', $get_entry_list_parameters, $this->url);
+
+            $get_entry_list_result = $get_entry_list_result->entry_list[0]->name_value_list->contact_id_c->value;  
+            
             return $get_entry_list_result;
         endif;
     }
@@ -810,7 +806,7 @@ class Crm {
      * @return array de vehículos
      */
     private function dar_vehiculos_usuario_REST($id_usuario)  {
-        if(ACCESO_CRM):
+        if(ACCESO_CRM): 
             $user_id = $this->session_id;       
 
             //get list of records --------------------------------
@@ -996,10 +992,10 @@ class Crm {
                 array_push($name_values_list, $name_value_list);
             }
 
-            echo "<pre>";
+            // echo "<pre>";
 
-            print_r($name_values_list);
-            echo "</pre>";
+            // print_r($name_values_list);
+            // echo "</pre>";
 
             $user_id = $this->session_id;
             $set_entry_parameters = array(
@@ -1417,7 +1413,7 @@ class Crm {
                 $params['fecha_compra'] = $carrito->fecha;
                 $params['recibo'] = base_url() . 'usuario/recibo/' . $carrito->refVenta;
                 $this->agregar_carrito_compras($params);
-                echo '';
+                // echo '';
             }
             $this->_CI->load->database('default', TRUE);
         endif;

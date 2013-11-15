@@ -189,7 +189,7 @@ class Ayuda extends Laspartes_Controller {
                 }
                  
                 $params['name'] = 'Cotizacion de '.$data['nombre'].' para '.$data['vehiculo']->marca.' '.$data['vehiculo']->linea.' modelo: '.$data['modelo'];
-                $params['description'] = $data['solicitud_mensaje'];
+                $params['description'] = 'Número de contacto: '.$data['telefono'].' --- Necesidad: '.$data['solicitud_mensaje'];
                 $params['lead_source'] = 'ContactUS';
                 $params['sales_stage'] = 'Proposal/Price Quote';
                 $params['probability'] = '25';
