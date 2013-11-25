@@ -197,6 +197,7 @@ class Ayuda extends Laspartes_Controller {
                 $params['assigned_user_id'] = '221ae831-3e81-7963-a8db-5194020c679b';
                 $params['assigned_user_name'] = 'Felipe Pacheco';
                 $params['next_step'] = 'Clasificarlo';
+                $params['ciudad_origen_c'] = $data['ciudad'];
                 // $params['fechallamada_c'] = '2013-05-25 22:00:00';
                 // $params['date_closed'] = date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")+5, date("Y")));
                 $params['contact_name_c'] = $data['nombre'];
@@ -219,6 +220,7 @@ class Ayuda extends Laspartes_Controller {
         
         $uID = $this->crm->dar_uID_REST($id_usuario);
         $params['contact_id_c'] = $uID;
+        $params['contact_id'] = $uID;
         $this->crm->agregar_pipeline_REST($params);
     }
 
